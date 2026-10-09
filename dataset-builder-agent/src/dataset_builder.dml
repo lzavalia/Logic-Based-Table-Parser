@@ -32,7 +32,8 @@
 
 % The workspace is mounted at /workspace inside DeepClause's Prolog engine.
 % Loading dataset_pipeline.pl through a search-path alias makes it a real
-% Prolog module whose predicates (esearch_ids/2, esummary_lines/2,
+% Prolog module whose predicates (esearch_ids/2, verified_search_lines/3,
+% reset_search_provenance/0, filter_search_selected_ids/3,
 % download_status/2, pause/1, process_paper/4) run as ordinary compiled Prolog. A plain consult/1, or a
 % use_module/1 with a file path, would instead hand the code to DML's
 % meta-interpreter, which keeps only the first solution of a clause body.
@@ -78,7 +79,8 @@ pmc_search(Query, Results) :-
            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pmc&retmode=json&id=~w",
            [Ids]),
     ncbi_fetch(SummaryUrl, "dataset/cache/esummary.json"),
-    esummary_lines("/workspace/dataset/cache/esummary.json", Results),
+    verified_search_lines("/workspace/dataset/cache/esearch.json",
+                          "/workspace/dataset/cache/esummary.json", Results),
     Results \== "".
 
 % --- Downloads (rate-limited) ---
@@ -214,6 +216,7 @@ download_and_process(Id, Line) :-
 
 agent_main(Topic) :-
     max_papers(Max),
+    reset_search_provenance,
 
     system("You select research papers for a dataset of tables.
 - Use search_pmc to find open-access PubMed Central papers on the topic.
@@ -229,7 +232,19 @@ agent_main(Topic) :-
 Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567) in PaperIds.", [Topic, Max]),
     task(SelectTask, string(PaperIds)),
 
-    parse_pmc_ids(PaperIds, Max, Ids),
+    % Validate against the union of actually displayed search results,
+    % *before* applying max_papers: fabricated IDs must not displace real
+    % candidates when the model returns more than Max values.
+    parse_pmc_ids(PaperIds, 1000000, ProposedIds),
+    filter_search_selected_ids(ProposedIds, VerifiedIds, RejectedIds),
+    (   RejectedIds == []
+    ->  true
+    ;   format(string(Warning),
+               "Ignoring PMC ids not present in this run's search results: ~w",
+               [RejectedIds]),
+        output(Warning)
+    ),
+    take(Max, VerifiedIds, Ids),
     Ids \== [],
 
     output("Phase 2: Extracting, rasterizing and validating tables..."),
@@ -241,5 +256,5 @@ Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567)
 
 % Fallback
 agent_main(Topic) :-
-    format(string(Msg), "Could not build a dataset for '~w': no usable PMC ids were selected. Please try a more specific topic or check your connection.", [Topic]),
+    format(string(Msg), "Could not build a dataset for '~w': no PMC ids verified against this run's search results were selected. Please try a more specific topic or check your connection.", [Topic]),
     answer(Msg).

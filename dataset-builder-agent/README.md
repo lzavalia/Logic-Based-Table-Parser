@@ -172,6 +172,17 @@ overwrite one another. Reprocessing an ID replaces its entire published paper
 directory: old `annotated_tableN.html` files from larger previous runs do not
 survive. The article title is available in `metadata.json` instead of the path.
 
+**Search provenance (F06).** Paper selection is fail-closed. At the start of each
+`agent_main` run, the in-memory PMC-ID allowlist is cleared. Each successful
+`search_pmc` call records only canonical IDs present in **both** its NCBI
+ESearch ID list and the ESummary entries actually shown to the model. The
+model's final list is deduplicated and intersected with this allowlist **before**
+the paper limit is applied or downloads begin. Unverified IDs are reported and
+ignored; a run with no verified selection downloads nothing. IDs from multiple
+successful searches in the same run remain eligible, but prior runs do not.
+This prevents fabricated or unobserved IDs; it does **not** independently
+prove that a returned paper is scientifically relevant to the topic.
+
 Paper output is first written in a hidden staging directory under
 `dataset/papers/`. The old complete version remains untouched on normal
 processing failures; a successful rerun moves it to a temporary backup and

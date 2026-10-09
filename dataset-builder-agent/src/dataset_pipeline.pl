@@ -35,6 +35,9 @@
 :- module(dataset_pipeline, [
       esearch_ids/2,
       esummary_lines/2,
+      reset_search_provenance/0,
+      verified_search_lines/3,
+      filter_search_selected_ids/3,
       download_status/2,
       pause/1,
       process_paper/4,
@@ -57,6 +60,11 @@
 :- consult(parse_constraints).
 :- consult(table_annotator).
 
+% Only IDs actually displayed by this run's successful search_pmc calls
+% may be downloaded. Kept in the compiled module so tool calls and the main
+% DML predicate share one source of truth. Cleared at the start of each run.
+:- dynamic observed_search_pmc/1.
+
 % --- search results --------------------------------------------------------
 
 esearch_ids(File, Ids) :-
@@ -71,6 +79,64 @@ esummary_lines(File, Lines) :-
    atomic_list_concat(LineList, '\n', LinesAtom),
    atom_string(LinesAtom, Lines).
 
+% Clear the candidate allowlist *before* invoking the model. Search results
+% from previous agent_main invocations must not authorize new selections.
+reset_search_provenance :-
+   retractall(observed_search_pmc(_)).
+
+% Build a trusted list of selectable PMC IDs from one paired ESearch /
+% ESummary response. ESummary UIDs MUST also be in this ESearch ID list.
+% Only IDs that are actually rendered into the returned tool text are
+% recorded. A failed or empty search records nothing; previous successful
+% searches in this run remain eligible.
+verified_search_lines(SearchFile, SummaryFile, Lines) :-
+   read_json_file(SearchFile, SearchJson),
+   read_json_file(SummaryFile, SummaryJson),
+   Search = SearchJson.esearchresult,
+   is_list(Search.idlist),
+   findall(Id,
+           ( member(Value, Search.idlist), canonical_search_id(Value, Id) ),
+           SearchIds0),
+   sort(SearchIds0, SearchIds),
+   Result = SummaryJson.result,
+   is_list(Result.uids),
+   findall(Id-Line,
+           ( member(Uid, Result.uids),
+             canonical_search_id(Uid, Id),
+             memberchk(Id, SearchIds),
+             summary_line(Result, Uid, Line) ),
+           Pairs0),
+   list_to_set(Pairs0, Pairs),
+   Pairs \== [],
+   findall(Line, member(_-Line, Pairs), VisibleLines),
+   atomic_list_concat(VisibleLines, '\n', Text),
+   atom_string(Text, Lines),
+   forall(member(Id-_, Pairs),
+          ( observed_search_pmc(Id) -> true
+          ; assertz(observed_search_pmc(Id)) )).
+
+% Canonicalize numeric UIDs to remove leading zero aliases and reject
+% empty, negative, nonnumeric or otherwise unsafe values.
+canonical_search_id(Value, Digits) :-
+   canonical_pmc_name(Value, Name),
+   sub_string(Name, 3, _, 0, Digits).
+
+% Preserve the model's preference order but never process an ID not seen
+% in this run's search tool output. Report rejected candidates separately.
+filter_search_selected_ids(Proposed, Approved, Rejected) :-
+   filter_search_selected_ids_(Proposed, RawApproved, Rejected),
+   list_to_set(RawApproved, Approved).
+
+filter_search_selected_ids_([], [], []).
+filter_search_selected_ids_([Candidate|Rest], Approved, Rejected) :-
+   ( canonical_search_id(Candidate, Id), observed_search_pmc(Id)
+   -> Approved = [Id|MoreApproved],
+      Rejected = MoreRejected
+   ;  Approved = MoreApproved,
+      Rejected = [Candidate|MoreRejected]
+   ),
+   filter_search_selected_ids_(Rest, MoreApproved, MoreRejected).
+
 read_json_file(File, Json) :-
    setup_call_cleanup(
       open(File, read, In, [encoding(utf8)]),
@@ -79,12 +145,15 @@ read_json_file(File, Json) :-
    ).
 
 summary_line(Result, Uid, Line) :-
-   atom_string(Key, Uid),
+   canonical_search_id(Uid, Digits),
+   ( string(Uid) -> atom_string(Key, Uid)
+   ; atom(Uid) -> Key = Uid
+   ; integer(Uid) -> number_string(Uid, S), atom_string(Key, S) ),
    get_dict(Key, Result, Doc),
    field(Doc, pubdate, Date),
    field(Doc, fulljournalname, Journal),
    field(Doc, title, Title),
-   format(string(Line), "PMC~w | ~w | ~w | ~w", [Uid, Date, Journal, Title]).
+   format(string(Line), "PMC~s | ~w | ~w | ~w", [Digits, Date, Journal, Title]).
 
 field(Doc, Key, Value) :-
    (  get_dict(Key, Doc, V), V \== ""
