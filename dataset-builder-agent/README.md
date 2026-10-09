@@ -63,7 +63,12 @@ deepclause --version    # 0.0.86
 ```
 
 The version is pinned because DeepClause is pre-1.0 and this is the release the
-agent was developed against.
+agent was developed against. **Python 3** must also be available as `python3`
+in the DeepClause **host shell** (not only inside a Prolog environment): the
+F14 host helper uses Python's `time.sleep` to wait without spinning when the
+WebAssembly Prolog engine lacks `sleep/1`. The built-in `bash` runtime tool
+must be enabled; this project does not execute arbitrary model-provided shell
+commands. Check with `python3 --version`.
 
 ### 3. Get the code
 
@@ -234,6 +239,23 @@ request *reservations* immediately preceding `url_fetch`, not guaranteed
 HTTP arrival times. It cannot enforce an IP-wide limit across unrelated
 workspaces or servers; use one shared workspace/host limiter for those runs.
 
+**Non-spinning waits (F14).** In the DeepClause agent, `ncbi_fetch` invokes
+`exec(bash(...))` to run `python3 ncbi_wait.py reserve dataset/cache 0.4`
+before a request, and `python3 ncbi_wait.py wait <seconds>` for transient
+response backoff. The helper uses `time.sleep` (not wall-clock polling), and
+uses the **same** `.ncbi-request.lock` directory and `.ncbi-last-request`
+file as native SWI-Prolog, so mixed host/native workers remain coordinated.
+Any missing host tool, missing Python, invalid timestamp, or failed sleep
+**aborts the request** rather than silently bypassing throttling. Internal
+arguments are numeric and range-checked; the shell never sees LLM-provided
+queries, URLs or article IDs. Host-side `bash` must run in the same workspace
+as the mounted `/workspace` Prolog filesystem. `pause/1` in standalone
+SWI-Prolog uses native `sleep/1` and raises an explicit error if the timed
+wait is unavailable; it never busy-spins. The host helper intentionally
+adds an external process for each request, trading a little overhead for
+safety and low CPU use. Run `python3 -m unittest -v
+ncbi_wait_regression_tests` from `src/` to verify its CPU use and locking.
+
 An exclusive `dataset/raw/.PMC<id>.ingest.lock` covers an individual paper's
 raw XML download **and subsequent processing**; a competing ingest for the
 same ID fails explicitly instead of overwriting XML still being parsed. Other
@@ -347,6 +369,10 @@ label for a scientific table.
 - **`Could not build a dataset ... no usable PMC ids were selected`** with no
   error before it: the model did not return any PMC ids. Try a more specific
   prompt, or a model with reliable tool calling.
+- **`host_wait_failed(...)` / `NCBI host wait failed`**: DeepClause could not
+  run its Python host timer/limiter or the timer rejected shared state. Verify
+  `python3 --version`, the built-in `bash` tool, and ownership of
+  `dataset/cache/`. Do not bypass the limiter to make the run proceed.
 - **`concurrent_lock_busy(...)` / `pmc_ingest_busy(...)`**: another run
   owns a workspace-level request lock or the same paper's raw XML. Retry
   after the other run finishes; after a crash, verify no worker owns the

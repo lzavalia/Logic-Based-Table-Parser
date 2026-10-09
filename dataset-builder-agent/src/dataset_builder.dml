@@ -97,6 +97,41 @@ pmc_search_files(Query, SearchSave, SearchMounted,
     verified_search_lines(SearchMounted, SummaryMounted, Results),
     Results \== "".
 
+% --- Non-spinning host waits and shared request reservations (F14) ---
+%
+% The Prolog module runs inside DeepClause's WebAssembly runtime, where
+% sleep/1 can throw. exec(bash/1) crosses to the host and suspends the WASM
+% engine while an ordinary OS timer waits, rather than burning CPU.
+% Python3 is required in the DeepClause host workspace. Commands contain
+% *only* fixed literals and validated, formatted numeric values; never
+% interpolate a model-provided URL, query, ID or file path into the shell.
+% ncbi_wait.py uses the SAME .ncbi-request.lock and .ncbi-last-request files
+% as native Prolog's ncbi_rate_limit_at/3, preserving cross-worker spacing.
+host_ncbi_reserve(Gap) :-
+    ( number(Gap), Gap >= 0.34, Gap =< 60
+    -> true
+    ;  throw(error(domain_error(ncbi_request_gap_0_34_to_60, Gap),
+                   context(host_ncbi_reserve/1, 'Invalid host request spacing'))) ),
+    format(string(Command), "python3 ncbi_wait.py reserve dataset/cache ~6f", [Gap]),
+    exec(bash(command: Command), Result),
+    host_wait_success(Result, "RESERVED").
+
+host_pause(Seconds) :-
+    ( number(Seconds), Seconds >= 0, Seconds =< 300
+    -> true
+    ;  throw(error(domain_error(pause_seconds_0_to_300, Seconds),
+                   context(host_pause/1, 'Invalid host wait duration'))) ),
+    format(string(Command), "python3 ncbi_wait.py wait ~6f", [Seconds]),
+    exec(bash(command: Command), Result),
+    host_wait_success(Result, "SLEPT").
+
+host_wait_success(Result, Expected) :-
+    ( get_dict(stdout, Result, Stdout),
+      normalize_space(string(Marker), Stdout), Marker == Expected
+    -> true
+    ;  throw(error(host_wait_failed(Expected, Result),
+                   context(host_wait_success/2, 'Host wait helper did not report success'))) ).
+
 % --- Downloads (rate-limited) ---
 
 % ncbi_fetch(+Url, +File): validate the downloaded body before trusting it.
@@ -115,7 +150,7 @@ ncbi_fetch(Url, File, Kind) :-
 
 ncbi_fetch(Url, File, Kind, Waits) :-
     ncbi_request_gap(Gap),
-    reserve_ncbi_request(Gap),
+    host_ncbi_reserve(Gap),
     ( exists_file(File) -> delete_file(File) ; true ),
     exec(url_fetch(url: Url, save_to: File), _),
     format(string(MountedFile), "/workspace/~w", [File]),
@@ -126,7 +161,7 @@ ncbi_fetch(Url, File, Kind, Waits) :-
     -> ( Waits = [Wait|MoreWaits]
        -> format(string(Msg), "NCBI transient response (~w); retrying after ~w s", [Status, Wait]),
           output(Msg),
-          pause(Wait),
+          host_pause(Wait),
           ncbi_fetch(Url, File, Kind, MoreWaits)
        ;  ( exists_file(File) -> delete_file(File) ; true ),
           throw(error(ncbi_download_invalid(Kind, retries_exhausted(Status)),

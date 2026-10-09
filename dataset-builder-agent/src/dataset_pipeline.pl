@@ -21,7 +21,7 @@
 %       Status is rate_limited if File holds NCBI's "API rate limit exceeded"
 %       reply instead of the requested data, and ok otherwise.
 %   pause(+Seconds)
-%       Wait for Seconds.
+%       Native SWI-Prolog OS-backed sleep (WASM callers use the host helper).
 %   process_paper(+PmcId, +File, +DatasetDir, -Summary)
 %       Extract every <table> of the full text File, rasterize it with
 %       table_layout_generator.pl, check every header boundary against
@@ -391,19 +391,22 @@ article_front_pmc_id(element(article, _, Children), PmcName) :-
    ; Digits = Upper ),
    canonical_pmc_name(Digits, PmcName).
 
-% sleep/1 is not available in DeepClause's WebAssembly engine (it raises a
-% JavaScript error there), so pause/1 falls back to watching the clock.
+% This predicate is for standalone/native Prolog (including plunit tests).
+% DeepClause's WebAssembly Prolog may lack sleep/1. Never spin on get_time/1
+% as a fallback: that burns CPU and can prevent the host from servicing work.
+% The DML agent instead delegates both request reservations and retries to
+% the host through ncbi_wait.py, which uses an OS-backed timed wait.
 pause(Seconds) :-
-   get_time(Start),
-   catch(sleep(Seconds), _, true),
-   End is Start + Seconds,
-   wait_until(End).
-
-wait_until(End) :-
-   repeat,
-   get_time(Now),
-   Now >= End,
-   !.
+   ( number(Seconds), Seconds >= 0, Seconds =< 300
+   -> true
+   ;  throw(error(domain_error(pause_seconds_0_to_300, Seconds),
+                  context(pause/1, 'Expected a nonnegative number of seconds <= 300'))) ),
+   ( Seconds =:= 0
+   -> true
+   ;  catch(sleep(Seconds), Error,
+             throw(error(timed_wait_unavailable(Seconds, Error),
+                         context(pause/1, 'Use host sleep from DML when running in WebAssembly'))))
+   ).
 
 % --- table pipeline --------------------------------------------------------
 

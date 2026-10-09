@@ -111,3 +111,15 @@ Normal exceptions release locks; stale locks after crashes require operator
 inspection. The limiter coordinates a single shared workspace, not distinct
 IP-sharing hosts, and request start times may vary after reservation due to
 DML scheduling. See `src/concurrency_regression_tests.pl` for offline tests.
+
+### F14 — Non-spinning waits
+
+DeepClause's WASM Prolog engine can reject native `sleep/1`. The agent now
+calls the host `bash` tool to execute `ncbi_wait.py`, a Python 3 helper using
+`time.sleep` for rate reservations, contention, and retry delays. It shares
+the existing F13 on-disk lock and timestamp with native Prolog. The native
+`pause/1` uses `sleep/1` and fails explicitly if it is unavailable instead of
+busy-polling with `get_time`. The 11 offline Python regressions cover elapsed
+time, CPU utilization, concurrency, invalid inputs, and lock cleanup; the new
+native Prolog tests require SWI-Prolog. **Python3 and DeepClause's `bash`
+tool are required for the production DML runtime.**
