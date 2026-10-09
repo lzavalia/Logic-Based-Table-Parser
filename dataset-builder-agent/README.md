@@ -198,6 +198,34 @@ swipl -g 'use_module(dataset_pipeline),
           writeln(Summary)' -t halt
 ```
 
+### Boundary contract and regression tests
+
+The table validator now returns boundaries only for rectangular rasters with at
+least two rows and two columns. A boundary `(Hmd, Vmd)` must leave at least
+one horizontal-metadata row, one vertical-metadata column **below** the
+horizontal header, and a nonempty data region:
+
+```text
+0 <= Hmd < number_of_rows - 1
+0 <= Vmd < number_of_columns - 1
+```
+
+Tables without such a partition are saved uncolored (the existing abstention
+behavior). Both forms of `omni_validate` enforce the same domain. The
+four-argument form reports `some(invalid_boundary)` for out-of-domain
+coordinates or malformed/undersized rasters; structural failures continue
+to report `some(0)` through `some(6)`.
+
+Run the offline boundary regressions from `dataset-builder-agent/src`:
+
+```bash
+swipl -q -s boundary_regression_tests.pl -g run_tests -t halt
+```
+
+This check needs SWI-Prolog but no network access or LLM. A valid structural
+partition is still only a *candidate interpretation*, not a verified semantic
+label for a scientific table.
+
 ## Files
 
 | File | Purpose |
@@ -207,6 +235,7 @@ swipl -g 'use_module(dataset_pipeline),
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
+| `src/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 
 ## Troubleshooting

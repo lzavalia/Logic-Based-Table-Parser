@@ -26,6 +26,34 @@ until(Low, High, X) :-
    First is Low, Last is High - 1,
    between(First, Last, X).
 
+% A boundary denotes the *last* HMD row and the *last* VMD column.
+% All three regions (HMD, VMD and data) must contain at least one cell.
+% In particular, the data region starts at (HmdBoundary+1,VmdBoundary+1),
+% which must be an actual raster slot.  This is a structural contract, not
+% evidence that those cells are semantically headers.
+%
+% Treat malformed/degenerate rasters as having no admissible boundaries.
+% Checking every row also prevents constraints from silently succeeding when
+% a purportedly rectangular raster is ragged.
+valid_raster_shape(Raster, NumRows, NumCols) :-
+   is_list(Raster),
+   Raster = [FirstRow|_],
+   is_list(FirstRow),
+   length(Raster, NumRows),
+   length(FirstRow, NumCols),
+   NumRows >= 2,
+   NumCols >= 2,
+   forall(member(Row, Raster), (is_list(Row), length(Row, NumCols))).
+
+valid_boundary_domain(Raster, HmdBoundary, VmdBoundary) :-
+   integer(HmdBoundary),
+   integer(VmdBoundary),
+   valid_raster_shape(Raster, NumRows, NumCols),
+   HmdBoundary >= 0,
+   VmdBoundary >= 0,
+   HmdBoundary < NumRows - 1,
+   VmdBoundary < NumCols - 1.
+
 % --- constraint 0 ----------------------------------------------------------
 
 vertical_no_merged_cell_bisections(Raster, HmdBoundary, VmdBoundary) :-
@@ -115,30 +143,38 @@ constraint(5, vertical_no_inverted_hierarchies).
 constraint(6, horizontal_key_value_property).
 
 % omni_validate(+Raster, +Hmd, +Vmd, -Offending)
-% Always succeeds. Offending = none if every constraint holds, otherwise
-% some(N) where N is the first violated constraint (getOffendingConstraint).
+% Always succeeds.  Offending = none if the boundary is in the valid domain
+% and every constraint holds; some(invalid_boundary) if the raster is
+% degenerate/ragged or coordinates are invalid; otherwise some(N) where N is
+% the first violated structural constraint (getOffendingConstraint).
 omni_validate(Raster, HmdBoundary, VmdBoundary, Offending) :-
-   (  constraint(N, Validator),
+   (  \+ valid_boundary_domain(Raster, HmdBoundary, VmdBoundary)
+   -> Offending = some(invalid_boundary)
+   ;  constraint(N, Validator),
       \+ call(Validator, Raster, HmdBoundary, VmdBoundary)
    -> Offending = some(N)
    ;  Offending = none
    ).
 
-% omni_validate(+Raster, +Hmd, +Vmd): succeeds iff all constraints hold.
+% omni_validate(+Raster, +Hmd, +Vmd): succeeds iff the boundary is in the
+% domain and all seven constraints hold.
 omni_validate(Raster, HmdBoundary, VmdBoundary) :-
    omni_validate(Raster, HmdBoundary, VmdBoundary, none).
 
 % --- boundary search -------------------------------------------------------
 
 % valid_boundaries(+Raster, -Boundaries): every (HmdBoundary, VmdBoundary)
-% pair inside the raster for which omni_validate/3 holds, i.e. all seven
-% constraints are satisfied. Each pair is a dict json{hmd: Hmd, vmd: Vmd}.
+% pair with nonempty HMD, VMD and data regions for which all seven
+% constraints hold.  An undersized or malformed raster produces [].
+% Each pair is a dict json{hmd: Hmd, vmd: Vmd}.
 valid_boundaries(Raster, Boundaries) :-
-   raster_dimensions(Raster, NumRows, NumCols),
    findall(
       json{hmd: Hmd, vmd: Vmd},
-      ( until(0, NumRows, Hmd),
-        until(0, NumCols, Vmd),
+      ( valid_raster_shape(Raster, NumRows, NumCols),
+        MaxHmd is NumRows - 2,
+        MaxVmd is NumCols - 2,
+        between(0, MaxHmd, Hmd),
+        between(0, MaxVmd, Vmd),
         omni_validate(Raster, Hmd, Vmd) ),
       Boundaries
    ).
