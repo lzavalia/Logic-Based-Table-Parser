@@ -1,0 +1,33 @@
+name: Offline regression tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: SWI-Prolog and Python regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install SWI-Prolog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends swi-prolog-nox
+          swipl --version
+      - name: Syntax-check harness and Python sources
+        run: |
+          sh -n dataset-builder-agent/src/run_regression_tests.sh
+          python3 -m compileall -q dataset-builder-agent/src dataset-builder-agent/tools
+      - name: Test regression runner behavior
+        run: python3 -m unittest discover -v -s dataset-builder-agent/tools -p 'test_*.py'
+      - name: Run all offline regressions
+        run: ./dataset-builder-agent/src/run_regression_tests.sh --all
