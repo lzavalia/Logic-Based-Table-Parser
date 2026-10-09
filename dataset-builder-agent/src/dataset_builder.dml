@@ -21,7 +21,8 @@
 %   dataset/papers/PMC<id>/annotated_tableN.html  one annotated table per file
 %   dataset/papers/PMC<id>/metadata.json      article title and table counts
 %   dataset/raw/PMC<id>.xml                    validated JATS full text as downloaded
-%   dataset/cache/                             last search responses
+%   dataset/cache/requests/                    temporary per-search responses
+%   dataset/cache/.ncbi-last-request          shared request-limiter state
 %
 % Usage (run from the directory that holds the .pl files):
 %   agent_main("CRISPR base editing")
@@ -45,8 +46,9 @@ user:file_search_path(workspace, '/workspace').
 % Maximum number of papers processed per run.
 max_papers(20).
 
-% NCBI allows 3 requests per second without an API key. Every request is
-% preceded by this many seconds of waiting, which keeps the run under that.
+% NCBI's no-key request budget is shared by all local workers using the
+% same workspace. Each request reserves a slot under an OS-atomic directory
+% lock; 0.4 seconds is deliberately slower than 3 requests per second.
 ncbi_request_gap(0.4).
 
 % If NCBI still answers "API rate limit exceeded", the run pauses and tries
@@ -66,21 +68,33 @@ tool(search_pmc(Query, Results),
 
 % --- Search (NCBI E-utilities, no LLM) ---
 
+% ESearch and ESummary live in one unique temporary directory per tool
+% invocation. The last successful search IDs are retained in the verified
+% provenance allowlist, not in shared JSON filenames.
 pmc_search(Query, Results) :-
+    allocate_search_cache("/workspace", SearchSave, SearchMounted,
+                          SummarySave, SummaryMounted),
+    setup_call_cleanup(
+       true,
+       pmc_search_files(Query, SearchSave, SearchMounted,
+                        SummarySave, SummaryMounted, Results),
+       cleanup_search_cache(SearchMounted)).
+
+pmc_search_files(Query, SearchSave, SearchMounted,
+                 SummarySave, SummaryMounted, Results) :-
     format(string(Term), "(~w) AND open access[filter]", [Query]),
     url_encode(Term, EncodedTerm),
     format(string(SearchUrl),
            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&retmode=json&sort=relevance&retmax=15&term=~w",
            [EncodedTerm]),
-    ncbi_fetch(SearchUrl, "dataset/cache/esearch.json"),
-    esearch_ids("/workspace/dataset/cache/esearch.json", Ids),
+    ncbi_fetch(SearchUrl, SearchSave, esearch_json),
+    esearch_ids(SearchMounted, Ids),
     Ids \== "",
     format(string(SummaryUrl),
            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pmc&retmode=json&id=~w",
            [Ids]),
-    ncbi_fetch(SummaryUrl, "dataset/cache/esummary.json"),
-    verified_search_lines("/workspace/dataset/cache/esearch.json",
-                          "/workspace/dataset/cache/esummary.json", Results),
+    ncbi_fetch(SummaryUrl, SummarySave, esummary_json),
+    verified_search_lines(SearchMounted, SummaryMounted, Results),
     Results \== "".
 
 % --- Downloads (rate-limited) ---
@@ -93,12 +107,15 @@ ncbi_fetch(Url, File) :-
     ( sub_string(File, _, _, 0, ".xml") -> Kind = jats_xml
     ; sub_string(File, _, _, _, "esummary") -> Kind = esummary_json
     ; Kind = esearch_json ),
+    ncbi_fetch(Url, File, Kind).
+
+ncbi_fetch(Url, File, Kind) :-
     ncbi_retry_waits(Waits),
     ncbi_fetch(Url, File, Kind, Waits).
 
 ncbi_fetch(Url, File, Kind, Waits) :-
     ncbi_request_gap(Gap),
-    pause(Gap),
+    reserve_ncbi_request(Gap),
     ( exists_file(File) -> delete_file(File) ; true ),
     exec(url_fetch(url: Url, save_to: File), _),
     format(string(MountedFile), "/workspace/~w", [File]),
@@ -212,7 +229,16 @@ process_papers([Id|Ids], [Line|Lines]) :-
 %   parse_constraints.pl       ->  header boundaries that satisfy omni_validate/3
 %   table_annotator.pl         ->  the table colored as HMD / VMD / data
 % and saves it under dataset/papers/PMC<id>/ after full-paper staging.
+% Serializes each PMC ID's raw download and subsequent parsing. The raw
+% filename is stable, so holding only the publication lock would be too late.
+% setup_call_cleanup ensures that exceptions do not strand the ingest lock.
 download_and_process(Id, Line) :-
+    acquire_paper_ingest_lock(Id, LockDir),
+    setup_call_cleanup(true,
+                       download_and_process_locked(Id, Line),
+                       release_paper_ingest_lock(LockDir)).
+
+download_and_process_locked(Id, Line) :-
     format(string(Url),
            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=~w",
            [Id]),

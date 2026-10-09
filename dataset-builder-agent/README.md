@@ -27,8 +27,9 @@ There is nothing else to install. In particular:
 - The Prolog code uses only libraries bundled with SWI-Prolog (`sgml`,
   `sgml_write`, `json`, `assoc`, `apply`, `lists`, `readutil`, `filesex`). No
   packs are needed.
-- No NCBI API key is needed. The agent stays under NCBI's keyless limit of 3
-  requests per second.
+- No NCBI API key is needed. Workers sharing a filesystem workspace coordinate
+  their request reservations with a 0.4-second minimum gap. This does not
+  coordinate requests from other workspaces or machines sharing an IP.
 
 Developed and tested on macOS (Apple Silicon).
 
@@ -165,7 +166,8 @@ Each run writes a `dataset/` directory inside `src/`:
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
 | `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
-| `dataset/cache/` | The last PubMed Central search responses. |
+| `dataset/cache/requests/` | Private, temporary ESearch/ESummary pairs; removed after each search. |
+| `dataset/cache/.ncbi-last-request` | Persistent timestamp for workspace-wide request throttling. |
 
 `dataset/` is retained between runs. Paper outputs are keyed by **canonical PMC ID**
 (rather than article title), so papers with equal or truncated titles cannot
@@ -219,6 +221,29 @@ manually only after confirming no other run is active, and inspect any stale
 paper concurrently. A hard crash can leave that lock behind: manually remove
 it only after verifying the earlier process is no longer running.
 
+**Concurrent runs (F13).** Search responses are allocated in private
+`dataset/cache/requests/.search.stage.*` directories, cleaned up after each
+`search_pmc` call. Both ESearch and ESummary are read from the same pair, so
+one worker cannot overwrite another's selection evidence. Before each NCBI
+request, workers using the **same `/workspace` filesystem** acquire
+`dataset/cache/.ncbi-request.lock`, honor a 0.4-second gap since the previous
+reservation, and update `.ncbi-last-request`. The atomic directory lock also
+serializes concurrent writers to the shared timestamp. A normal exception
+releases the rate lock; a hard crash may leave it behind. The limiter gates
+request *reservations* immediately preceding `url_fetch`, not guaranteed
+HTTP arrival times. It cannot enforce an IP-wide limit across unrelated
+workspaces or servers; use one shared workspace/host limiter for those runs.
+
+An exclusive `dataset/raw/.PMC<id>.ingest.lock` covers an individual paper's
+raw XML download **and subsequent processing**; a competing ingest for the
+same ID fails explicitly instead of overwriting XML still being parsed. Other
+paper IDs can proceed. A crash may leave ingest or request lock directories;
+inspect running workers before removing them. Do not delete these locks just
+because they appear old. Retrying failed same-ID papers after the other run
+finishes is safe. These changes do not make two-rename paper publication fully
+crash-atomic (see above), or make a dynamic allowlist thread-local within a
+single shared Prolog engine; the DeepClause CLI runs in separate processes.
+
 **Migration:** directories produced by older versions at
 `dataset/<sanitized article title>/` are left untouched to avoid accidental
 delete/misattribution of files already affected by title collisions. Review
@@ -230,7 +255,7 @@ and archive or remove those legacy directories manually; new output is under
 | Setting | Where | Default |
 |---|---|---|
 | Papers per run | `max_papers/1` in `dataset_builder.dml` | 20 |
-| Delay between NCBI requests (s) | `ncbi_request_gap/1` in `dataset_builder.dml` | 0.4 |
+| Shared minimum gap between NCBI request reservations (s) | `ncbi_request_gap/1` in `dataset_builder.dml` | 0.4 |
 | Waits before retrying a rate-limited request (s) | `ncbi_retry_waits/1` in `dataset_builder.dml` | 2, 5, 10, 20, 30 |
 | Model | `deepclause set-model`, or `--model` for one run | chosen in step 5 |
 
@@ -322,6 +347,10 @@ label for a scientific table.
 - **`Could not build a dataset ... no usable PMC ids were selected`** with no
   error before it: the model did not return any PMC ids. Try a more specific
   prompt, or a model with reliable tool calling.
+- **`concurrent_lock_busy(...)` / `pmc_ingest_busy(...)`**: another run
+  owns a workspace-level request lock or the same paper's raw XML. Retry
+  after the other run finishes; after a crash, verify no worker owns the
+  lock before removing a stale `.lock` directory.
 - **`NCBI rate limit reached; pausing ...`**: expected now and then. The request
   is retried up to five times before that paper is reported as failed.
 - **A paper reports `0 table(s)`**: its tables are published as images, or NCBI

@@ -42,7 +42,14 @@
       download_status/3,
       pause/1,
       process_paper/4,
-      format_paper_failure/4
+      format_paper_failure/4,
+      allocate_search_cache/5,
+      cleanup_search_cache/1,
+      reserve_ncbi_request/1,
+      ncbi_rate_limit_at/3,
+      acquire_paper_ingest_lock/2,
+      acquire_paper_ingest_lock_at/3,
+      release_paper_ingest_lock/1
    ]).
 
 % library(json) only exists in recent SWI-Prolog; DeepClause's bundled engine
@@ -162,6 +169,121 @@ field(Doc, Key, Value) :-
    -> Value = V
    ;  Value = "?"
    ).
+
+% --- Concurrent search / request coordination (F13) -----------------------
+%
+% Each search gets its own exclusively created directory. ESearch and
+% ESummary must be read from the SAME private directory so a concurrent
+% DeepClause run can never swap their contents between requests. Files are
+% temporary: selectable PMC IDs remain in this engine's per-run allowlist.
+%
+% allocate_search_cache(+Workspace, -SearchSaveTo, -SearchMounted,
+%                       -SummarySaveTo, -SummaryMounted)
+% SaveTo paths are relative to the DeepClause workspace (url_fetch input);
+% Mounted paths are absolute, for use by the compiled Prolog module.
+allocate_search_cache(Workspace, SearchSave, SearchMounted,
+                      SummarySave, SummaryMounted) :-
+   directory_file_path(Workspace, 'dataset/cache/requests', RequestRoot),
+   make_directory_path(RequestRoot),
+   fresh_staging_directory(RequestRoot, 'search', SearchDir),
+   file_base_name(SearchDir, Name),
+   format(string(SearchSave), 'dataset/cache/requests/~w/esearch.json', [Name]),
+   format(string(SummarySave), 'dataset/cache/requests/~w/esummary.json', [Name]),
+   directory_file_path(SearchDir, 'esearch.json', SearchMounted),
+   directory_file_path(SearchDir, 'esummary.json', SummaryMounted).
+
+% Cleanup takes a path returned by allocate_search_cache/5, never a
+% model-provided path. It is invoked even when downloading/parsing fails.
+cleanup_search_cache(SearchMounted) :-
+   file_directory_name(SearchMounted, SearchDir),
+   ( exists_directory(SearchDir)
+   -> delete_directory_and_contents(SearchDir)
+   ;  true ).
+
+% Shared host/workspace limiter, not a per-agent sleep. All DeepClause
+% processes working in the same /workspace/dataset/cache reserve request
+% start times under one OS-atomic mkdir lock. A lock holder sleeps *inside*
+% the critical section; other workers cannot reserve conflicting times.
+% The gap governs reservations immediately before url_fetch, not HTTP
+% completion, since DeepClause's url_fetch is outside the Prolog module.
+reserve_ncbi_request(Gap) :-
+   ncbi_rate_limit_at('/workspace/dataset/cache', Gap, _).
+
+ncbi_rate_limit_at(CacheRoot, Gap, ReservedAt) :-
+   ( number(Gap), Gap >= 0.34
+   -> true
+   ;  throw(error(domain_error(ncbi_minimum_request_gap, Gap),
+                  context(ncbi_rate_limit_at/3, 'Require at least 0.34 seconds without an API key'))) ),
+   make_directory_path(CacheRoot),
+   directory_file_path(CacheRoot, '.ncbi-request.lock', LockDir),
+   acquire_directory_lock(LockDir, 300),
+   setup_call_cleanup(
+      true,
+      rate_limit_under_lock(CacheRoot, Gap, ReservedAt),
+      delete_directory(LockDir)).
+
+rate_limit_under_lock(CacheRoot, Gap, ReservedAt) :-
+   directory_file_path(CacheRoot, '.ncbi-last-request', StampFile),
+   ( exists_file(StampFile)
+   -> read_file_to_string(StampFile, Text, [encoding(utf8)]),
+      normalize_space(string(Trim), Text),
+      ( catch(number_string(Last, Trim), _, fail), number(Last)
+      -> true
+      ;  throw(error(ncbi_invalid_rate_state(StampFile),
+                     context(ncbi_rate_limit_at/3, 'Invalid shared timestamp'))) )
+   ;  Last = 0 ),
+   get_time(Now),
+   ( Last > Now + 60
+   -> throw(error(ncbi_rate_clock_skew(Last, Now),
+                  context(ncbi_rate_limit_at/3, 'Clock moved backwards')))
+   ;  true ),
+   Delay is max(0, Last + Gap - Now),
+   pause(Delay),
+   get_time(ReservedAt),
+   % The directory mutex guards the timestamp update, while a temporary
+   % file + rename prevents truncated shared state after ordinary failures.
+   directory_file_path(CacheRoot, '.ncbi-last-request.new', TempFile),
+   setup_call_cleanup(
+      open(TempFile, write, Stream, [encoding(utf8)]),
+      format(Stream, '~16f~n', [ReservedAt]),
+      close(Stream)),
+   rename_file(TempFile, StampFile).
+
+% Only the expected 'already locked' case is retried, and lock acquisition
+% times out instead of racing the critical section. Crashed-process locks
+% are deliberately NOT removed based on age: another process may be slow.
+acquire_directory_lock(LockDir, Remaining) :-
+   ( catch(make_directory(LockDir), Error,
+           ( exists_directory(LockDir) -> fail ; throw(Error) ))
+   -> true
+   ;  ( Remaining > 0
+      -> pause(0.1), Next is Remaining - 1,
+         acquire_directory_lock(LockDir, Next)
+      ;  throw(error(concurrent_lock_busy(LockDir),
+                     context(acquire_directory_lock/2, 'Remove a stale lock only after verifying no owner is running'))) ) ).
+
+% Raw/PMC<ID>.xml is a shared, stable file. Serialize the *entire* download
+% and process step (not merely the download) for identical PMC IDs so that
+% another worker cannot replace the XML while process_paper/4 reads it.
+acquire_paper_ingest_lock(Id, LockDir) :-
+   acquire_paper_ingest_lock_at('/workspace/dataset', Id, LockDir).
+
+acquire_paper_ingest_lock_at(DatasetRoot, Id, LockDir) :-
+   canonical_pmc_name(Id, Name),
+   directory_file_path(DatasetRoot, 'raw', RawDir),
+   make_directory_path(RawDir),
+   format(string(LockName), '.~s.ingest.lock', [Name]),
+   directory_file_path(RawDir, LockName, LockDir),
+   % Fail closed when another ingest has this ID. Concurrent different IDs
+   % proceed independently. Do not auto-delete possibly live locks.
+   ( catch(make_directory(LockDir), Error,
+           ( exists_directory(LockDir) -> fail ; throw(Error) ))
+   -> true
+   ;  throw(error(pmc_ingest_busy(Name),
+                  context(acquire_paper_ingest_lock/2, 'Raw download already in progress'))) ).
+
+release_paper_ingest_lock(LockDir) :-
+   delete_directory(LockDir).
 
 % --- downloads -------------------------------------------------------------
 
@@ -540,9 +662,7 @@ fresh_staging_directory(PapersDir, PaperName, StageDir) :-
    between(0, 9999, Attempt),
    format(string(StageName), ".~s.stage.~d.~d", [PaperName, Stamp, Attempt]),
    directory_file_path(PapersDir, StageName, Candidate),
-   \+ exists_directory(Candidate),
-   \+ exists_file(Candidate),
-   make_directory(Candidate),
+   catch(make_directory(Candidate), _, fail),
    StageDir = Candidate,
    !.
 

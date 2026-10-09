@@ -100,3 +100,14 @@ table is not published, and the previous complete output is retained. Ragged
 rows and valid `rowspan="0"` remain supported; synthetic gaps are distinct
 from actual source cells. The offline regression suite is
 `src/raster_integrity_regression_tests.pl`.
+
+### Concurrent search and request isolation (F13)
+
+Search pairs now use separate, temporary ESearch/ESummary directories; the
+verified ID allowlist remains process-local. A workspace-level mkdir lock
+serializes request reservations with a 0.4-second minimum interval, and a
+per-PMC ingest lock protects the shared raw XML while downloading and parsing.
+Normal exceptions release locks; stale locks after crashes require operator
+inspection. The limiter coordinates a single shared workspace, not distinct
+IP-sharing hosts, and request start times may vary after reservation due to
+DML scheduling. See `src/concurrency_regression_tests.pl` for offline tests.
