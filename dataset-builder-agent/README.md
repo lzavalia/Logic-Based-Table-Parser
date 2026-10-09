@@ -291,6 +291,47 @@ and archive or remove those legacy directories manually; new output is under
 | Waits before retrying a rate-limited request (s) | `ncbi_retry_waits/1` in `dataset_builder.dml` | 2, 5, 10, 20, 30 |
 | Model | `deepclause set-model`, or `--model` for one run | chosen in step 5 |
 
+## Offline testing and CI (F16)
+
+The repository runs its **network-free regression tests on each push and pull
+request** using `.github/workflows/regression.yml`. CI installs SWI-Prolog and
+Python 3.12 and requires all Prolog and Python suites to pass; the job fails on
+missing interpreters, missing test suites, load errors, assertions, or other
+nonzero test exits. No API key, NCBI access, or DeepClause installation is
+needed. Different Prolog suites run in separate interpreters to avoid shared
+fixture-predicate name collisions.
+
+From **any directory**, run the portable harness:
+
+```sh
+/path/to/Logic-Based-Table-Parser-main/dataset-builder-agent/src/run_regression_tests.sh --all
+# Alternatives:
+./dataset-builder-agent/src/run_regression_tests.sh --list
+./dataset-builder-agent/src/run_regression_tests.sh --prolog-only
+./dataset-builder-agent/src/run_regression_tests.sh --python-only
+```
+
+`--all` is also the default. Prolog suite files matching
+`src/*_regression_tests.pl` and Python suite files matching
+`src/*_regression_tests.py` are discovered automatically. The selected
+interpreter must be installed: `swipl` (SWI-Prolog 9+) or `python3` (Python
+3.10+). Set `SWIPL=/path/to/swipl` or `PYTHON=/path/to/python3` to select
+alternatives. **No suites are silently skipped.** The `--python-only` option
+is useful on hosts without SWI-Prolog but is not a substitute for the complete
+CI run.
+
+To test the harness itself without SWI-Prolog, run:
+
+```sh
+python3 -m unittest discover -v -s dataset-builder-agent/tools -p 'test_*.py'
+```
+
+These harness tests use mock executables to verify discovery, working-directory
+independence, and failure propagation. CI does **not** run the live DeepClause
+agent or NCBI network integration; those still require separate integration
+validation. The independent Python geometry and boundary-model scripts under
+`tools/` are supplementary checks, not native Prolog coverage.
+
 ## Running the table logic without the agent
 
 These need SWI-Prolog (step 6) but no API key, no DeepClause and no network.

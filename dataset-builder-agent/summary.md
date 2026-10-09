@@ -123,3 +123,13 @@ busy-polling with `get_time`. The 11 offline Python regressions cover elapsed
 time, CPU utilization, concurrency, invalid inputs, and lock cleanup; the new
 native Prolog tests require SWI-Prolog. **Python3 and DeepClause's `bash`
 tool are required for the production DML runtime.**
+
+## Offline regression CI (F16)
+
+`.github/workflows/regression.yml` installs SWI-Prolog and Python on
+GitHub Actions, tests the regression harness, and runs all standalone offline
+Prolog and Python regression suites on pushes and pull requests.
+`src/run_regression_tests.sh` discovers suites and fails closed on missing
+runtimes, missing suites, or test failures. It supports `--list`,
+`--prolog-only`, and `--python-only`. The workflow does not validate a live
+DeepClause/NCBI round trip.

@@ -74,19 +74,28 @@ class HostTimedWaitTests(unittest.TestCase):
             self.assertAlmostEqual(float((root / ".ncbi-last-request").read_text()), second, places=3)
 
     def test_independent_workers_coordinate_reservations(self):
+        # Measure the reservation timestamp *inside each child*, not its
+        # subprocess-exit/completion timestamp. OS scheduling and process
+        # teardown can reorder completions and make their gaps appear shorter
+        # than the rate limiter's guaranteed interval (flaky on CI workers).
         with tempfile.TemporaryDirectory() as temp:
-            def reserve_one(_: int) -> tuple[subprocess.CompletedProcess[str], float]:
-                result = invoke("reserve", temp, "0.35")
-                return result, time.monotonic()
+            def reserve_one(_: int) -> subprocess.CompletedProcess[str]:
+                return subprocess.run(
+                    [sys.executable, "-c",
+                     "import sys; from pathlib import Path; import ncbi_wait; "
+                     "print(repr(ncbi_wait.reserve(Path(sys.argv[1]), 0.35)))",
+                     temp],
+                    cwd=str(SCRIPT.parent), capture_output=True, text=True,
+                    check=False, timeout=10,
+                )
 
             with ThreadPoolExecutor(max_workers=3) as executor:
-                completions = list(executor.map(reserve_one, range(3)))
-            for completed, _ in completions:
-                self.assertEqual(completed.returncode, 0, completed.stderr)
-                self.assertEqual(completed.stdout.strip(), "RESERVED")
-            finished = sorted(at for _, at in completions)
-            for a, b in zip(finished, finished[1:]):
-                self.assertGreaterEqual(b - a, 0.31)
+                completed = list(executor.map(reserve_one, range(3)))
+            for result in completed:
+                self.assertEqual(result.returncode, 0, result.stderr)
+            reserved_at = sorted(float(result.stdout.strip()) for result in completed)
+            for earlier, later in zip(reserved_at, reserved_at[1:]):
+                self.assertGreaterEqual(later - earlier, 0.345)
             self.assertFalse((Path(temp) / ".ncbi-request.lock").exists())
 
     def test_broken_timestamp_preserves_state_and_releases_lock(self):
