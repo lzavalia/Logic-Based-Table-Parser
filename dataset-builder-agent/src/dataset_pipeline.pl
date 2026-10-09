@@ -1172,14 +1172,18 @@ ensure_candidate_output_budget(Raster, Boundaries) :-
    ).
 
 save_candidates_stream(Stream, Context, Table, _, []) :- !,
-   table_html(Table, Html),
+   safe_table_dom(Table, SafeTable),
+   table_html(SafeTable, Html),
    save_annotated_candidates(Stream, Context, [], [Html]).
 save_candidates_stream(Stream, Context, Table, Raster, Boundaries) :-
-   maplist(save_candidate_stream(Stream, Context, Table, Raster), Boundaries).
+   % Sanitize once per table, before any candidate is annotated. Trusted
+   % background-color styles are introduced only after untrusted CSS is gone.
+   safe_table_dom(Table, SafeTable),
+   maplist(save_candidate_stream(Stream, Context, SafeTable, Raster), Boundaries).
 
 save_candidate_stream(Stream, Context, Table, Raster, Boundary) :-
    Boundary = json{hmd:Hmd,vmd:Vmd},
-   annotate_table_element_raster(Hmd, Vmd, Table, Raster, Annotated),
+   annotate_precleaned_table_raster(Hmd, Vmd, Table, Raster, Annotated),
    table_html(Annotated, Html),
    save_annotated_candidate(Stream, Context, Boundary, Html).
 
@@ -1222,7 +1226,8 @@ contextual_table_annotation(Context, TableHtml, Html) :-
 note_list_item(Note, element(li, [], [Note])).
 
 table_annotations(Table, [], [Html]) :- !,
-   table_html(Table, Html).
+   safe_table_dom(Table, SafeTable),
+   table_html(SafeTable, Html).
 table_annotations(Table, Boundaries, Annotations) :-
    % findall/3 silently drops candidates whose annotation fails. A table
    % with valid candidate boundaries must render exactly one result per

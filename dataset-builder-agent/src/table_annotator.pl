@@ -23,6 +23,7 @@
 :- use_module(library(assoc)).
 :- use_module(library(apply)).
 :- use_module(library(lists)).
+:- consult(table_html_sanitizer).
 
 region_color(hmd,  springgreen).
 region_color(vmd,  skyblue).
@@ -47,8 +48,15 @@ annotate_table_element(Hmd, Vmd, Table, Annotated) :-
 % Reuse the already-validated raster when producing several HTML views of
 % the same table. The source raster is identical to the one checked by the
 % structural solver; no per-candidate rasterization or span allocation.
-annotate_table_element_raster(Hmd, Vmd, element(table, Attrs, Children),
-                              Raster, element(table, Attrs, NewChildren)) :-
+% Public annotation entry points always sanitize the source before emitting
+% a browser-facing DOM. Pipeline code can use the precleaned helper to avoid
+% repeating the walk for every boundary of an ambiguous table.
+annotate_table_element_raster(Hmd, Vmd, Table, Raster, Annotated) :-
+   safe_table_dom(Table, CleanTable),
+   annotate_precleaned_table_raster(Hmd, Vmd, CleanTable, Raster, Annotated).
+
+annotate_precleaned_table_raster(Hmd, Vmd, element(table, Attrs, Children),
+                                Raster, element(table, Attrs, NewChildren)) :-
    cell_colors(Raster, Hmd, Vmd, Colors),
    first_cell_ids(Children, Ids0),
    annotate_children(Children, Colors, Ids0, _, NewChildren).

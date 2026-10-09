@@ -198,9 +198,30 @@ represent unavailable context for tables without a wrapping element.
 
 The displayed HTML uses normalized context text, while the structured
 metadata retains the original context-element markup. This does not claim
-that table headers are semantically
-correct or that the exported HTML is safe to open when its source XML is
-untrusted; the latter remains a separate audit finding (F17).
+that table headers are semantically correct. Source markup is preserved only
+in the structured JSON/JSONL records, not inserted verbatim into inspection HTML.
+
+### HTML inspection safety (original audit F17)
+
+Before serializing browser-facing tables, `table_html_sanitizer.pl` recursively
+removes active elements and their subtrees (scripts, embeds, media, forms, SVG,
+MathML, styles, images). Harmless unsupported inline tags are replaced by inert
+`span` elements so the scientific text remains visible. A fixed table/inline
+allowlist preserves table structure and harmless formatting; source attributes
+(including styles, classes, event handlers, URLs, `srcdoc` and XML namespaces)
+are discarded. Only validated `rowspan`/`colspan`/`scope` values survive. The
+label colors are applied **after** sanitization, so source CSS cannot override
+them. This also addresses the original audit F18 CSS-precedence issue for the
+inspection views.
+
+`annotated_tableN.html` is for review, not a byte-for-byte reproduction of
+the source. `metadata.json` and `tables.jsonl` intentionally retain the raw
+serialized table and context fields for research; keep these JSON files under
+`application/json` if serving them and NEVER insert their raw markup into a
+web page without sanitizing again. If deploying a viewer, use an appropriate
+Content Security Policy and test it independently.
+
+The offline security suite is `src/html_sanitization_regression_tests.pl`.
 
 **PMC query encoding (F15).** Search terms are encoded in
 `src/pmc_query_encoding.pl`, which converts each Unicode scalar value to
@@ -443,6 +464,7 @@ label for a scientific table.
 | `src/table_machine_records.pl` | Canonical JSONL schema, deterministic cell provenance and candidate labels. |
 | `src/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
+| `src/table_html_sanitizer.pl` | Removes executable markup from browser-facing table views while keeping source records unchanged. |
 | `src/parse_constraints.pl` | The seven reference constraints and public boundary validator. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
