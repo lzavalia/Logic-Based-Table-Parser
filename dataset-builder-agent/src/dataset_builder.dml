@@ -40,6 +40,7 @@
 % meta-interpreter, which keeps only the first solution of a clause body.
 user:file_search_path(workspace, '/workspace').
 :- use_module(workspace(dataset_pipeline)).
+:- use_module(workspace(pmc_query_encoding)).
 
 % --- Settings ---
 
@@ -171,31 +172,8 @@ ncbi_fetch(Url, File, Kind, Waits) :-
                    context(ncbi_fetch/2, Url)))
     ).
 
-% url_encode(+Text, -Encoded): percent-encode everything except ASCII letters
-% and digits, so the model's query can never alter the URL. Non-ASCII
-% characters are dropped.
-url_encode(Text, Encoded) :-
-    string_codes(Text, Codes),
-    encode_codes(Codes, EncodedCodes),
-    string_codes(Encoded, EncodedCodes).
-
-encode_codes([], []).
-encode_codes([C|Cs], Out) :-
-    (   C >= 128
-    ->  Out = Rest
-    ;   code_type(C, alnum)
-    ->  Out = [C|Rest]
-    ;   Hi is C >> 4,
-        Lo is C /\ 15,
-        hex_code(Hi, H),
-        hex_code(Lo, L),
-        Out = [37, H, L|Rest]          % 37 is the code of '%'
-    ),
-    encode_codes(Cs, Rest).
-
-hex_code(N, Code) :-
-    string_codes("0123456789ABCDEF", Hex),
-    nth0(N, Hex, Code).
+% Query encoding is implemented in pmc_query_encoding.pl (shared with native
+% regression tests). Unicode must be encoded as UTF-8 bytes, not dropped.
 
 % --- Paper ids ---
 

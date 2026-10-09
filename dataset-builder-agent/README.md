@@ -202,6 +202,16 @@ that table headers are semantically
 correct or that the exported HTML is safe to open when its source XML is
 untrusted; the latter remains a separate audit finding (F17).
 
+**PMC query encoding (F15).** Search terms are encoded in
+`src/pmc_query_encoding.pl`, which converts each Unicode scalar value to
+UTF-8 bytes and percent-encodes all bytes except ASCII letters and digits.
+Accents, non-Latin scripts, and emoji therefore survive the trip to NCBI
+instead of being removed. PubMed operators such as `[`/`]` are percent-encoded
+in transit and interpreted as part of the `term` query parameter rather than
+as URL delimiters. Unsupported scalar values fail explicitly. Run
+`swipl -q -s pmc_query_encoding_regression_tests.pl -g run_tests -t halt`
+from `src/` for the targeted offline regression suite.
+
 **Search provenance (F06).** Paper selection is fail-closed. At the start of each
 `agent_main` run, the in-memory PMC-ID allowlist is cleared. Each successful
 `search_pmc` call records only canonical IDs present in **both** its NCBI
@@ -343,6 +353,8 @@ label for a scientific table.
 
 | File | Purpose |
 |---|---|
+| `src/pmc_query_encoding.pl` | Unicode-safe UTF-8 query-component encoder used by the agent. |
+| `src/pmc_query_encoding_regression_tests.pl` | Offline tests for Unicode, reserved URL characters, and edge cases. |
 | `src/dataset_builder.dml` | The agent: paper selection (model), NCBI search and download, and the per-paper loop. |
 | `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects parsers, constraints, annotations, and staged JSONL/HTML output. |
 | `src/table_machine_records.pl` | Canonical JSONL schema, deterministic cell provenance and candidate labels. |
