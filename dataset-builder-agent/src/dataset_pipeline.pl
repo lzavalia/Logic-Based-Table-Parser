@@ -132,7 +132,7 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    read_file_to_string(File, Text, [encoding(utf8)]),
    parse_html(Text, Dom),
    extract_tables(Dom, Tables),
-   maplist(rasterize_table, Tables, Rasters),
+   rasterize_tables_bounded(Tables, Rasters),
    ( paper_title(Dom, Title) -> true ; Title = "" ),
    directory_file_path(DatasetDir, 'papers', PapersDir),
    make_directory_path(PapersDir),
@@ -142,6 +142,33 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    format(string(Summary),
           "~s: ~d table(s), ~d with a valid header boundary -> papers/~s/",
           [PaperName, NumTables, NumParsed, PaperName]).
+
+% Per-paper budgets bound the number and combined raster area of tables
+% retained in memory before paper publication. A violation is an exception,
+% so F03's previous completed paper remains untouched (no partial outputs).
+paper_raster_limit(max_tables, 256).
+paper_raster_limit(max_total_slots, 250000).
+
+ensure_paper_limit(Name, Actual) :-
+   paper_raster_limit(Name, Maximum),
+   (  Actual =< Maximum -> true
+   ;  throw(error(paper_raster_limit_exceeded(Name, Maximum, Actual),
+                  context(process_paper/4, 'Paper exceeds raster limits')))
+   ).
+
+rasterize_tables_bounded(Tables, Rasters) :-
+   length(Tables, NumTables),
+   ensure_paper_limit(max_tables, NumTables),
+   rasterize_tables_bounded(Tables, 0, Rasters).
+
+rasterize_tables_bounded([], _, []).
+rasterize_tables_bounded([Table|Tables], Used0, [Raster|Rasters]) :-
+   rasterize_table(Table, Raster),
+   length(Raster, Rows),
+   ( Raster = [FirstRow|_] -> length(FirstRow, Cols) ; Cols = 0 ),
+   Used is Used0 + Rows * Cols,
+   ensure_paper_limit(max_total_slots, Used),
+   rasterize_tables_bounded(Tables, Used, Rasters).
 
 % The agent supplies digit strings. Also accept atoms and positive integers in
 % local Prolog calls, but never allow unchecked path fragments or alternate

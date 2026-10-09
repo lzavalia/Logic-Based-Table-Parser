@@ -52,12 +52,66 @@ sub_table(element(_, _, Children), Table) :-
 
 % --- 3) rasterization ------------------------------------------------------
 
+% These limits apply to untrusted <td>/<th> spans BEFORE any rectangle or
+% dense raster is allocated. Change them together with the per-paper limits
+% in dataset_pipeline.pl when processing unusually large trusted tables.
+% max_claims also limits work spent on overlapping (malformed) cell spans.
+table_raster_limit(max_rows,     1000).
+table_raster_limit(max_columns,   256).
+table_raster_limit(max_colspan,   256).
+table_raster_limit(max_cells,   10000).
+table_raster_limit(max_claims, 100000).
+table_raster_limit(max_slots,  100000).
+table_raster_limit(max_span_chars, 32).
+
+ensure_table_limit(Name, Actual) :-
+   table_raster_limit(Name, Maximum),
+   (  Actual =< Maximum -> true
+   ;  throw(error(table_raster_limit_exceeded(Name, Maximum, Actual),
+                  context(rasterize_table/2, 'Untrusted table exceeds raster limits')))
+   ).
+
+% Preflight checks all spans and caps the total number of attempted slot
+% claims, including collisions. It does NOT build a list of raster slots.
+% This is important even when an attacker uses thousands of modest spans.
+preflight_sections(Sections, Height) :-
+   preflight_sections(Sections, 0, 0, 0, Height, _, _).
+
+preflight_sections([], Height, Cells, Claims, Height, Cells, Claims).
+preflight_sections([Rows|Sections], H0, C0, S0, Height, Cells, Claims) :-
+   length(Rows, SectionHeight),
+   H1 is H0 + SectionHeight,
+   ensure_table_limit(max_rows, H1),
+   preflight_rows(Rows, 0, SectionHeight, C0, S0, C1, S1),
+   preflight_sections(Sections, H1, C1, S1, Height, Cells, Claims).
+
+preflight_rows([], _, _, Cells, Claims, Cells, Claims).
+preflight_rows([Row|Rows], I, SectionHeight, C0, S0, Cells, Claims) :-
+   row_cells(Row, RowCells),
+   preflight_cells(RowCells, I, SectionHeight, C0, S0, C1, S1),
+   Next is I + 1,
+   preflight_rows(Rows, Next, SectionHeight, C1, S1, Cells, Claims).
+
+preflight_cells([], _, _, Cells, Claims, Cells, Claims).
+preflight_cells([Cell|Rest], I, SectionHeight, C0, S0, Cells, Claims) :-
+   C1 is C0 + 1,
+   ensure_table_limit(max_cells, C1),
+   cell_spans(Cell, I, SectionHeight, ColSpan, RowSpan),
+   ensure_table_limit(max_colspan, ColSpan),
+   S1 is S0 + ColSpan * RowSpan,
+   ensure_table_limit(max_claims, S1),
+   preflight_cells(Rest, I, SectionHeight, C1, S1, Cells, Claims).
+
 % rasterize_table(+TableElement, -Raster)
 rasterize_table(Table, Raster) :-
    table_sections(Table, Sections),
+   preflight_sections(Sections, Height),
    empty_assoc(Grid0),
    place_sections(Sections, 0, 0, Grid0, NumCells, Height, Grid),
    grid_width(Grid, Width),
+   ensure_table_limit(max_columns, Width),
+   Slots is Height * Width,
+   ensure_table_limit(max_slots, Slots),
    build_raster(Grid, Height, Width, NumCells, Raster).
 
 % table_sections(+Table, -Sections): each section is a list of <tr>
@@ -124,21 +178,39 @@ place_cells([], _, _, _, _, Id, Grid, Id, Grid).
 place_cells([Cell|Cells], Row, Col0, I, NumRows, Id0, Grid0, Id, Grid) :-
    cell_spans(Cell, I, NumRows, ColSpan, RowSpan),
    first_free_col(Grid0, Row, Col0, Col),
+   EndCol is Col + ColSpan,
+   ensure_table_limit(max_columns, EndCol),
    LastRow is Row + RowSpan - 1,
-   LastCol is Col + ColSpan - 1,
-   findall(R-C, (between(Row, LastRow, R), between(Col, LastCol, C)), Slots),
-   foldl(claim_slot(Id0), Slots, Grid0, Grid1),
+   LastCol is EndCol - 1,
+   claim_rectangle(Id0, Row, LastRow, Col, LastCol, Grid0, Grid1),
    Id1 is Id0 + 1,
    Col1 is Col + ColSpan,
    place_cells(Cells, Row, Col1, I, NumRows, Id1, Grid1, Id, Grid).
 
-% Skip slots already covered by a rowspan from an earlier row.
+% Skip slots already covered by a rowspan from an earlier row. Bound the
+% search too: a fully occupied row must not scan arbitrary column offsets.
 first_free_col(Grid, Row, Col0, Col) :-
+   CandidateWidth is Col0 + 1,
+   ensure_table_limit(max_columns, CandidateWidth),
    (  get_assoc(Row-Col0, Grid, _)
    -> Col1 is Col0 + 1,
       first_free_col(Grid, Row, Col1, Col)
    ;  Col = Col0
    ).
+
+% Stream rectangle cells directly into the grid; do not allocate a
+% findall/3 list of Row-Col pairs (even for a bounded 100,000-slot span).
+claim_rectangle(_, R, LastRow, _, _, Grid, Grid) :- R > LastRow, !.
+claim_rectangle(Id, R, LastRow, FirstCol, LastCol, Grid0, Grid) :-
+   claim_rectangle_row(Id, R, FirstCol, LastCol, Grid0, Grid1),
+   NextRow is R + 1,
+   claim_rectangle(Id, NextRow, LastRow, FirstCol, LastCol, Grid1, Grid).
+
+claim_rectangle_row(_, _, C, LastCol, Grid, Grid) :- C > LastCol, !.
+claim_rectangle_row(Id, R, C, LastCol, Grid0, Grid) :-
+   claim_slot(Id, R-C, Grid0, Grid1),
+   NextCol is C + 1,
+   claim_rectangle_row(Id, R, NextCol, LastCol, Grid1, Grid).
 
 % If spans overlap (malformed table), the earlier cell keeps the slot.
 claim_slot(Id, Slot, Grid0, Grid) :-
@@ -169,8 +241,14 @@ span_attr(Name, Attrs, N) :-
 to_integer(Value, N) :-
    (  integer(Value)
    -> N = Value
-   ;  catch(atom_number(Value, N), _, fail),
-      integer(N)
+   ;  atom(Value)
+   -> atom_length(Value, Size),
+      ensure_table_limit(max_span_chars, Size),
+      catch(atom_number(Value, N), _, fail), integer(N)
+   ;  string(Value)
+   -> string_length(Value, Size),
+      ensure_table_limit(max_span_chars, Size),
+      catch(number_string(N, Value), _, fail), integer(N)
    ).
 
 grid_width(Grid, Width) :-

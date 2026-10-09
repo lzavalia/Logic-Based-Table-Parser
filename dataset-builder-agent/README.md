@@ -287,3 +287,35 @@ label for a scientific table.
   is retried up to five times before that paper is reported as failed.
 - **A paper reports `0 table(s)`**: its tables are published as images, or NCBI
   does not provide its full text as XML.
+
+### Table raster resource limits (F04)
+
+Untrusted table spans are validated **before** grid slots are allocated. The
+rasterizer raises a structured `table_raster_limit_exceeded(Name, Limit, Actual)`
+exception (wrapped in `error/2`) rather than accepting oversized input or
+silently truncating column spans. Such a failure aborts the paper and, thanks
+to staged paper publication, leaves any previously published results unchanged.
+
+| Budget | Default | Configured in |
+|---|---:|---|
+| Rows per table | 1,000 | `table_layout_generator.pl:table_raster_limit/2` |
+| Columns / colspan per table | 256 | same |
+| Real cells per table | 10,000 | same |
+| Total cell-slot claim attempts per table | 100,000 | same |
+| Total dense slots (`rows * columns`) per table | 100,000 | same |
+| Span attribute characters | 32 | same |
+| Tables extracted per paper | 256 | `dataset_pipeline.pl:paper_raster_limit/2` |
+| Combined dense raster slots per paper | 250,000 | same |
+
+The rasterizer writes claimed slots incrementally instead of allocating a
+second `findall/3` list for each merged-cell rectangle. Its existing rules for
+`rowspan="0"` and clipping rowspans to the table section remain unchanged.
+Change budgets only for **trusted** oversized tables with adequate memory.
+These checks protect the rasterization stage; they do not cap XML download
+sizes, DOM parsing allocations or the later number of annotations generated.
+
+Run the standalone offline regression suite from `dataset-builder-agent/src`:
+
+```bash
+swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
+```
