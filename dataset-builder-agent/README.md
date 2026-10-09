@@ -282,6 +282,48 @@ delete/misattribution of files already affected by title collisions. Review
 and archive or remove those legacy directories manually; new output is under
 `dataset/papers/`.
 
+### Optional table-level recovery (post-F16)
+
+**Default behavior is unchanged.** The DeepClause agent calls
+`process_paper/4`, which fails the entire paper on any invalid table; an
+existing published snapshot is retained. Native SWI-Prolog callers may
+*explicitly* opt into quarantine for known table-local geometry errors:
+
+```prolog
+?- use_module(dataset_pipeline).
+?- process_paper("123", "dataset/raw/PMC123.xml", "dataset",
+                 [on_table_error(quarantine)], Summary).
+```
+
+For each source table, `tables.jsonl` still has an entry with the **original
+zero-based table index**. A quarantined table has `status: "quarantined"`,
+`raster: null`, no cell/candidate labels, and an `error` object with a stable
+code and reason. Its `annotated_tableN.html` **does not exist**, rather than
+containing a misleading annotation. All successful tables keep their original
+numbered HTML files. The `metadata.json` file includes `status: "partial"`,
+`table_count` (total), `parsed_table_count` (usable tables with a valid
+boundary), and `quarantined_table_count`. Partial snapshots use schema `1.1`;
+fully successful snapshots retain schema `1.0` (with an extra zero count in
+the opt-in path). Summaries and attempt records explicitly say `partial`.
+
+Quarantine applies only to known invalid spans/overlaps, table raster limits,
+missing raster-cell mappings, and per-table candidate-output budgets. XML
+parsing, PMC identity, per-paper resource limits, disk/permission errors,
+serialization errors, and unexpected exceptions **abort** and preserve the
+previous snapshot. If *all* source tables are quarantined, no replacement is
+published. Quarantine is not enabled automatically in DeepClause, because
+consumers must explicitly understand that a `partial` dataset contains
+rejected tables. Use `[on_table_error(fail)]` for the strict /5 equivalent.
+
+The offline suite `paper_recovery_regression_tests.pl` checks partial
+snapshot consistency, retained indices, strict-by-default semantics,
+whole-paper failure and corruption detection. Run it through the existing
+`run_regression_tests.sh --all` CI harness.
+
+**Security note:** The original audit's F17 refers to browser sanitization
+of annotated HTML. That issue is distinct from this follow-up recovery task
+and remains unresolved.
+
 ### Settings
 
 | Setting | Where | Default |

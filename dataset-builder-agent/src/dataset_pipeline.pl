@@ -42,6 +42,7 @@
       download_status/3,
       pause/1,
       process_paper/4,
+      process_paper/5,
       format_paper_failure/4,
       allocate_search_cache/5,
       cleanup_search_cache/1,
@@ -437,6 +438,43 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
           [PaperName, NumTables, NumParsed, PaperName]).
 
 
+% process_paper(+PmcId, +File, +DatasetDir, +Options, -Summary)
+% Optional *explicit* per-table recovery. /4 remains strict, including in
+% dataset_builder.dml. Quarantine is only for recognized, table-local geometry
+% or candidate-budget errors; it never hides XML/identity, paper budget, file
+% system, or publication failures. Failed tables retain their original indices
+% in tables.jsonl and metadata; they do NOT get a fake HTML annotation.
+process_paper(PmcId, File, DatasetDir, Options, Summary) :-
+   ( Options == [on_table_error(fail)]
+   -> process_paper(PmcId, File, DatasetDir, Summary)
+   ; Options == [on_table_error(quarantine)]
+   -> process_paper_quarantine(PmcId, File, DatasetDir, Summary)
+   ; throw(error(domain_error(paper_processing_options, Options),
+                 context(process_paper/5, 'Use [on_table_error(fail|quarantine)]')))
+   ).
+
+process_paper_quarantine(PmcId, File, DatasetDir, Summary) :-
+   canonical_pmc_name(PmcId, PaperName),
+   read_file_to_string(File, Text, [encoding(utf8)]),
+   parse_jats_xml(Text, Dom),
+   verify_jats_pmc_id(Dom, PaperName),
+   jats_table_records(Dom, Records),
+   length(Records, NumTables),
+   ensure_paper_limit(max_tables, NumTables),
+   ( paper_title(Dom, Title) -> true ; Title = "" ),
+   directory_file_path(DatasetDir, 'papers', PapersDir),
+   make_directory_path(PapersDir),
+   with_paper_output_staging(PapersDir, PaperName,
+                             write_recoverable_paper(PaperName, Title, Records,
+                                                     NumParsed, NumRejected)),
+   ( NumRejected =:= 0 -> Status = "complete" ; Status = "partial" ),
+   format(string(Detail), '~d table(s), ~d parsed, ~d quarantined',
+          [NumTables, NumParsed, NumRejected]),
+   ignore(catch(record_paper_attempt(DatasetDir, PaperName, Status, Detail), _, fail)),
+   format(string(Summary), '~s: ~s (~s) -> papers/~s/',
+          [PaperName, Status, Detail, PaperName]).
+
+
 % --- JATS table provenance and context (F09) ------------------------------
 %
 % A table-wrap is a sibling container: its <label>, <caption> and
@@ -719,6 +757,214 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
    Next is N + 1,
    save_numbered_records(StageDir, PaperName, Rest, Rasters, Next,
                          JsonlStream, MoreBoundaries, MoreMeta).
+
+
+% Opt-in recovery writes a JSONL entry for EVERY input table, including
+% rejected tables. This preserves source indices and makes omissions visible.
+% A paper with no successfully processed tables is NOT published as partial.
+write_recoverable_paper(PaperName, Title, Records, NumParsed, NumRejected,
+                        StageDir) :-
+   directory_file_path(StageDir, 'tables.jsonl', RecordsFile),
+   setup_call_cleanup(
+      open(RecordsFile, write, Out, [encoding(utf8)]),
+      save_recoverable_records(Records, PaperName, StageDir, Out,
+                               0, 0, 0, 0, NumParsed, NumRejected, TableMetadata),
+      close(Out)),
+   length(Records, NumTables),
+   NumKept is NumTables - NumRejected,
+   ( NumTables > 0, NumKept =:= 0
+   -> throw(error(all_tables_quarantined(NumTables),
+                  context(process_paper/5, 'No usable tables; snapshot retained')))
+   ; true ),
+   ( NumRejected =:= 0 -> Status = "complete", Version = "1.0"
+   ; Status = "partial", Version = "1.1" ),
+   directory_file_path(StageDir, 'metadata.json', MetadataFile),
+   setup_call_cleanup(
+      open(MetadataFile, write, Stream, [encoding(utf8)]),
+      json_write_dict(Stream,
+                      json{pmc_id:PaperName, title:Title, status:Status,
+                           schema_version:Version, jsonl_file:"tables.jsonl",
+                           table_count:NumTables, parsed_table_count:NumParsed,
+                           quarantined_table_count:NumRejected, tables:TableMetadata}),
+      close(Stream)),
+   validate_recoverable_stage(StageDir, NumTables, NumParsed, NumRejected).
+
+save_recoverable_records([], _, _, _, _, _, Parsed, Rejected,
+                         Parsed, Rejected, []).
+save_recoverable_records([table_record(Table, Context)|Rest], PaperName,
+                         StageDir, Out, Index, Used0, Parsed0, Rejected0,
+                         Parsed, Rejected, [Metadata|Metadatas]) :-
+   try_recoverable_raster(Table, Index, RasterResult),
+   ( RasterResult = ok(Raster)
+   -> length(Raster, Rows),
+      ( Raster = [FirstRow|_] -> length(FirstRow, Cols) ; Cols = 0 ),
+      Used is Used0 + Rows * Cols,
+      % An aggregate budget breach is a PAPER error; never quarantine it.
+      catch(ensure_paper_limit(max_total_slots, Used), error(Formal, _),
+            throw(error(Formal, context(table_index(Index), 'Paper slot budget')))),
+      try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
+                                 Raster, AnnotationResult)
+   ; Used = Used0, AnnotationResult = RasterResult ),
+   ( AnnotationResult = ok(Boundaries, Record, Metadata)
+   -> ( Boundaries == [] -> Parsed1 = Parsed0 ; Parsed1 is Parsed0 + 1 ),
+      Rejected1 = Rejected0
+   ; AnnotationResult = rejected(Code, Message),
+     quarantined_machine_record(PaperName, Index, Context, Code, Message,
+                                Record, Metadata),
+     Parsed1 = Parsed0, Rejected1 is Rejected0 + 1 ),
+   atom_json_dict(JsonLine, Record, [width(0)]),
+   format(Out, '~w~n', [JsonLine]),
+   Next is Index + 1,
+   save_recoverable_records(Rest, PaperName, StageDir, Out,
+                            Next, Used, Parsed1, Rejected1,
+                            Parsed, Rejected, Metadatas).
+
+try_recoverable_raster(Table, Index, Result) :-
+   catch(( rasterize_table(Table, Raster)
+         -> Result = ok(Raster)
+         ; Result = rejected("rasterization_failed", "Rasterizer returned failure") ),
+         Error,
+         ( recoverable_table_error(Error, Code, Message)
+         -> Result = rejected(Code, Message)
+         ; throw(error(table_processing_failure(Index, Error),
+                       context(process_paper/5, 'Unexpected raster failure'))) )).
+
+try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
+                            Raster, Result) :-
+   table_file_name(StageDir, Index, TableFile),
+   format(string(TableUid), '~s/t~d', [PaperName, Index]),
+   put_dict(table_uid, Context, HtmlContext),
+   catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
+           machine_table_record(PaperName, Index, Table, Context, Raster,
+                                Boundaries, Machine, Meta)
+         -> Result = ok(Boundaries, Machine, Meta)
+         ; throw(error(table_output_failed, context(process_paper/5, 'Writer failed'))) ),
+         Error,
+         ( recoverable_table_error(Error, Code, Message)
+         -> ( exists_file(TableFile) -> delete_file(TableFile) ; true ),
+            Result = rejected(Code, Message)
+         ; throw(error(table_output_failure(Index, Error),
+                       context(process_paper/5, 'Unexpected output failure'))) )).
+
+% Only enumerated structural failures qualify for quarantine. In particular
+% permission errors, out-of-space, JSON encoding errors, paper budgets and
+% bugs must abort publication rather than be mislabeled as bad source tables.
+recoverable_table_error(error(table_layout_error(Cause), _),
+                        "invalid_layout", Message) :- !,
+   format(string(Message), '~w', [Cause]).
+recoverable_table_error(error(table_raster_limit_exceeded(Name, Max, Actual), _),
+                        "table_raster_limit", Message) :- !,
+   format(string(Message), '~w exceeded (~w > ~w)', [Name, Actual, Max]).
+recoverable_table_error(error(table_output_limit_exceeded(Name, Max, Actual), _),
+                        "candidate_output_limit", Message) :- !,
+   format(string(Message), '~w exceeded (~w > ~w)', [Name, Actual, Max]).
+recoverable_table_error(error(unmapped_source_cell(Id), _),
+                        "unmapped_source_cell", Message) :- !,
+   format(string(Message), 'Source cell ~d has no raster slot', [Id]).
+
+quarantined_machine_record(PaperName, Index, Context, Code, Message,
+                           Record, Metadata) :-
+   format(string(TableUid), '~s/t~d', [PaperName, Index]),
+   Diagnostic = json{code:Code, detail:Message},
+   Record = json{schema_version:"1.1", pmc_id:PaperName, table_index:Index,
+                 table_uid:TableUid, source_table_id:Context.table_id,
+                 source_path:Context.source_path,
+                 source_table_html:Context.source_table_html,
+                 context:Context, raster:null, rows:null, columns:null,
+                 cells:[], candidates:[], status:"quarantined",
+                 abstention_reason:"table_processing_error", error:Diagnostic,
+                 algorithm:"seven_structural_constraints_v1"},
+   put_dict(_{table_uid:TableUid, jsonl_file:"tables.jsonl",
+              candidate_count:0, annotation_status:"quarantined",
+              error:Diagnostic}, Context, Metadata).
+
+% Independent staged-snapshot validation for the partial format. Check exact
+% file membership and every JSONL record before publishing; a quarantined
+% record MUST be accompanied by a diagnostic and MUST NOT have an HTML file.
+validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
+                            ExpectedRejected) :-
+   directory_file_path(StageDir, 'tables.jsonl', JsonlFile),
+   read_table_jsonl(JsonlFile, Records),
+   directory_file_path(StageDir, 'metadata.json', MetadataFile),
+   read_json_file(MetadataFile, Meta),
+   ( ExpectedRejected =:= 0 -> Status = "complete", Version = "1.0"
+   ; Status = "partial", Version = "1.1" ),
+   ( Meta.status == Status, Meta.schema_version == Version,
+     Meta.table_count =:= ExpectedTables,
+     Meta.parsed_table_count =:= ExpectedParsed,
+     Meta.quarantined_table_count =:= ExpectedRejected,
+     Meta.jsonl_file == "tables.jsonl",
+     length(Records, ExpectedTables),
+     is_list(Meta.tables), length(Meta.tables, ExpectedTables),
+     recovery_records_consistent(Records, Meta.tables, Meta.pmc_id,
+                                 0, 0, 0, ExpectedParsed, ExpectedRejected,
+                                 HtmlNames)
+   -> true
+   ; throw(error(incomplete_paper_stage(recovery_metadata_mismatch),
+                 context(process_paper/5, 'Recovery snapshot inconsistent'))) ),
+   sort(['metadata.json', 'tables.jsonl'|HtmlNames], ExpectedFiles),
+   directory_files(StageDir, RawFiles),
+   exclude(is_dot_entry, RawFiles, ActualFiles0),
+   sort(ActualFiles0, ActualFiles),
+   ( ActualFiles == ExpectedFiles
+   -> true
+   ; throw(error(incomplete_paper_stage(file_set_mismatch(ExpectedFiles,ActualFiles)),
+                 context(process_paper/5, 'Unexpected or missing staged files'))) ),
+   forall(member(Name, HtmlNames),
+          ( directory_file_path(StageDir, Name, Path),
+            size_file(Path, Size),
+            ( Size > 0 -> true
+            ; throw(error(incomplete_paper_stage(empty_table(Name)),
+                          context(process_paper/5, 'Empty staged table'))) ) )),
+   size_file(MetadataFile, MetaSize), MetaSize > 0,
+   ( ExpectedTables =:= 0 -> true
+   ; size_file(JsonlFile, JsonlSize), JsonlSize > 0 ).
+
+recovery_records_consistent([], [], _, _, Parsed, Rejected,
+                            Parsed, Rejected, []).
+recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
+                            Index, Parsed0, Rejected0, Parsed, Rejected, Files) :-
+   is_dict(Record), is_dict(Context),
+   format(string(ExpectedUid), '~s/t~d', [Pmc, Index]),
+   Record.pmc_id == Pmc, Record.table_index =:= Index,
+   Record.table_uid == ExpectedUid,
+   Record.table_uid == Context.table_uid,
+   Record.source_path == Context.source_path,
+   Record.source_table_id == Context.table_id,
+   Record.source_table_html == Context.source_table_html,
+   Context.jsonl_file == "tables.jsonl",
+   format(atom(HtmlName), 'annotated_table~d.html', [Index]),
+   ( Record.status == "quarantined"
+   -> Record.schema_version == "1.1",
+      Record.raster == null,
+      Record.cells == [], Record.candidates == [],
+      Record.abstention_reason == "table_processing_error",
+      Record.error == Context.error,
+      string(Record.error.detail),
+      memberchk(Record.error.code,
+                ["invalid_layout", "table_raster_limit",
+                 "candidate_output_limit", "unmapped_source_cell",
+                 "rasterization_failed"]),
+      Context.annotation_status == "quarantined",
+      Context.candidate_count =:= 0,
+      Parsed1 = Parsed0, Rejected1 is Rejected0 + 1,
+      Files = RestFiles
+   ; Record.schema_version == "1.0",
+     machine_record_consistent(Record),
+     ( Record.status == "abstained"
+     -> Record.candidates == [], Record.abstention_reason \== null,
+        Parsed1 = Parsed0
+     ; ( Record.status == "unique" -> Record.candidates = [_]
+       ; Record.status == "ambiguous", Record.candidates = [_,_|_] ),
+       Record.abstention_reason == null,
+       Parsed1 is Parsed0 + 1 ),
+     Context.annotation_status == Record.status,
+     length(Record.candidates, Context.candidate_count),
+     Rejected1 = Rejected0,
+     Files = [HtmlName|RestFiles] ),
+   Next is Index + 1,
+   recovery_records_consistent(Records, Contexts, Pmc, Next,
+                               Parsed1, Rejected1, Parsed, Rejected, RestFiles).
 
 % Each JSON line must be a complete object; embedded HTML/newlines are JSON
 % escaped by atom_json_dict/3. Do not parse candidate membership from CSS.
@@ -1035,6 +1281,11 @@ format_paper_failure(PmcId, DatasetDir, Error, Line) :-
    format(string(Line), "~s: failed (~s); ~s", [PaperName, Reason, Previous]),
    ignore(catch(record_paper_attempt(DatasetDir, PaperName, failed, Reason), _, fail)).
 
+paper_failure_reason(error(all_tables_quarantined(Count), _), Reason) :- !,
+   format(string(Reason), "all ~d source tables quarantined; no replacement published", [Count]).
+paper_failure_reason(error(table_processing_failure(Index, Cause), _), Reason) :- !,
+   exception_class(Cause, Class),
+   format(string(Reason), "table ~d processing: ~s", [Index, Class]).
 paper_failure_reason(error(table_rasterization_failed(N), _), Reason) :- !,
    format(string(Reason), "table ~d rasterization returned failure", [N]).
 paper_failure_reason(error(table_layout_error(Cause),
