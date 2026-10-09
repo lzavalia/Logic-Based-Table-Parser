@@ -117,10 +117,11 @@ test(dense_raster_area_budget_applies_to_sparse_tables,
    table_with_rows([WideRow|NarrowRows], Table),
    dataset_pipeline:rasterize_table(Table, _).
 
-test(invalid_span_falls_back_to_one) :-
+test(invalid_explicit_span_is_rejected,
+     [throws(error(table_layout_error(invalid_span(colspan, 'garbage')), _))]) :-
    simple_row([colspan='garbage'], Row),
    table_with_rows([Row], Table),
-   dataset_pipeline:rasterize_table(Table, [[0]]).
+   dataset_pipeline:rasterize_table(Table, _).
 
 test(huge_rowspan_is_clipped_to_section_size) :-
    simple_row([rowspan='1000000000'], Row),

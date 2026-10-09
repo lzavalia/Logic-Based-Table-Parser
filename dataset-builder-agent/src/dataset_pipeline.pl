@@ -914,6 +914,11 @@ format_paper_failure(PmcId, DatasetDir, Error, Line) :-
 
 paper_failure_reason(error(table_rasterization_failed(N), _), Reason) :- !,
    format(string(Reason), "table ~d rasterization returned failure", [N]).
+paper_failure_reason(error(table_layout_error(Cause),
+                           context(table_index(Index), _)), Reason) :- !,
+   format(string(Reason), "table ~d invalid layout: ~w", [Index, Cause]).
+paper_failure_reason(error(table_layout_error(Cause), _), Reason) :- !,
+   format(string(Reason), "invalid table layout: ~w", [Cause]).
 paper_failure_reason(error(table_output_failure(N, Cause), _), Reason) :- !,
    exception_class(Cause, Class),
    format(string(Reason), "table ~d output: ~s", [N, Class]).

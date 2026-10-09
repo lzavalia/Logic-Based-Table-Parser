@@ -170,12 +170,14 @@ annotate_row_child(Colors, Child, NewChild, Id0, Id) :-
       Id = Id0
    ).
 
-% A cell that owns no slot of the raster (it lies entirely under earlier
-% cells of a malformed table) has no position and is left as it is.
+% Every visible DOM cell needs a source raster slot. Do not leave cells
+% uncolored if an inconsistent raster is passed to this public entry point.
 color_cell(element(Name, Attrs, Children), Colors, Id, element(Name, NewAttrs, Children)) :-
    (  get_assoc(Id, Colors, Color)
    -> set_background(Color, Attrs, NewAttrs)
-   ;  NewAttrs = Attrs
+   ;  throw(error(table_layout_error(unmapped_annotation_cell(Id)),
+                  context(annotate_table_element_raster/5,
+                          'DOM cell has no raster slot for annotation')))
    ).
 
 % The color is appended to any existing style, so it wins over an earlier

@@ -89,3 +89,14 @@ The paper-staging mechanism preserves any previously published version.
 `src/boundary_scaling_regression_tests.pl` contains native differential and
 rendering tests; `tools/verify_fast_boundary_logic.py` provides an independent
 formula replay. Native Prolog tests and benchmarks require SWI-Prolog.
+
+### Raster integrity and malformed-span handling (F12)
+
+The rasterizer now raises typed errors on overlapping source-cell rectangles,
+invalid explicit span values and empty tables, and verifies that each DOM cell
+owns at least one grid slot. The HTML annotator rejects unmapped source cell
+IDs rather than silently leaving cells unchanged. A paper with a malformed
+table is not published, and the previous complete output is retained. Ragged
+rows and valid `rowspan="0"` remain supported; synthetic gaps are distinct
+from actual source cells. The offline regression suite is
+`src/raster_integrity_regression_tests.pl`.

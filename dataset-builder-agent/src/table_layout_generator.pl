@@ -145,6 +145,9 @@ rasterize_table(Table, Raster) :-
    place_sections(Sections, 0, 0, Grid0, NumCells, Height, Grid),
    grid_width(Grid, Width),
    ensure_table_limit(max_columns, Width),
+   % A source table without any cells cannot yield a meaningful raster.
+   % Verify every numbered DOM cell owns a slot before padding short rows.
+   verify_source_cell_coverage(Grid, NumCells),
    Slots is Height * Width,
    ensure_table_limit(max_slots, Slots),
    build_raster(Grid, Height, Width, NumCells, Raster).
@@ -247,31 +250,61 @@ claim_rectangle_row(Id, R, C, LastCol, Grid0, Grid) :-
    NextCol is C + 1,
    claim_rectangle_row(Id, R, NextCol, LastCol, Grid1, Grid).
 
-% If spans overlap (malformed table), the earlier cell keeps the slot.
-claim_slot(Id, Slot, Grid0, Grid) :-
-   (  get_assoc(Slot, Grid0, _)
-   -> Grid = Grid0
-   ;  put_assoc(Slot, Grid0, Id, Grid)
+% An overlapping claim is malformed input, not a reason to drop part of a
+% cell silently. The caller's staging transaction quarantines the entire
+% paper on this typed error and preserves any previously published version.
+claim_slot(Id, Row-Col, Grid0, Grid) :-
+   (  get_assoc(Row-Col, Grid0, PreviousId)
+   -> throw(error(table_layout_error(
+                     overlapping_cell_spans(Id, Row, Col, PreviousId)),
+                  context(rasterize_table/2,
+                          'Two source cells claim the same raster slot')))
+   ;  put_assoc(Row-Col, Grid0, Id, Grid)
    ).
 
-% Missing/invalid spans count as 1. rowspan="0" spans to the end of the
-% section, and rowspans are clipped at the end of the section, as in HTML.
+% Every source cell must cover at least one grid slot. Synthetic padding
+% slots (for ragged but otherwise valid tables) are added only AFTER this
+% check and remain explicitly tagged in the JSONL output.
+verify_source_cell_coverage(_, 0) :- !,
+   throw(error(table_layout_error(empty_table),
+               context(rasterize_table/2, 'Table contains no source cells'))).
+verify_source_cell_coverage(Grid, NumCells) :-
+   assoc_to_values(Grid, Values),
+   sort(Values, ObservedIds),
+   LastId is NumCells - 1,
+   numlist(0, LastId, ExpectedIds),
+   (  ExpectedIds == ObservedIds
+   -> true
+   ;  subtract(ExpectedIds, ObservedIds, MissingIds),
+      throw(error(table_layout_error(unmapped_source_cells(MissingIds)),
+                  context(rasterize_table/2,
+                          'A DOM source cell has no raster slot')))
+   ).
+
+% Missing span attributes default to one; malformed explicit attributes
+% are errors. rowspan="0" is valid and extends to the end of its section.
+% Oversized numeric values retain F04's preallocation limit behavior.
 cell_spans(element(_, Attrs, _), I, NumRows, ColSpan, RowSpan) :-
-   span_attr(colspan, Attrs, C),
-   ( C >= 1 -> ColSpan = C ; ColSpan = 1 ),
+   span_attr(colspan, Attrs, ColSpan),
    span_attr(rowspan, Attrs, R),
    Remaining is NumRows - I,
    (  R =:= 0 -> RowSpan = Remaining
-   ;  R < 0   -> RowSpan = 1
    ;  RowSpan is min(R, Remaining)
    ).
 
 span_attr(Name, Attrs, N) :-
-   (  memberchk(Name = Value, Attrs),
-      to_integer(Value, N0)
-   -> N = N0
+   (  memberchk(Name = Value, Attrs)
+   -> (  to_integer(Value, Number), valid_span_number(Name, Number)
+      -> N = Number
+      ;  throw(error(table_layout_error(invalid_span(Name, Value)),
+                     context(rasterize_table/2,
+                             'Explicit span must be a valid nonnegative integer')))
+      )
    ;  N = 1
    ).
+
+valid_span_number(colspan, Number) :- Number >= 1.
+valid_span_number(rowspan, Number) :- Number >= 0.
 
 to_integer(Value, N) :-
    (  integer(Value)

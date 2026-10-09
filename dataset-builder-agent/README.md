@@ -495,3 +495,34 @@ malformed/degenerate inputs, and byte-for-byte comparison with the legacy
 HTML renderer. The Python formula check is a separate verification aid; it
 must **not** be represented as native SWI-Prolog test coverage or a Prolog
 runtime benchmark.
+
+
+### Strict raster integrity (F12)
+
+Rasterization now **fails closed** on malformed source-cell geometry instead
+of silently discarding part of a cell. If two merged cell rectangles attempt
+to claim the same `(row, column)` slot, it raises
+`error(table_layout_error(overlapping_cell_spans(NewId, Row, Col, OldId)), Context)`.
+The per-paper pipeline attaches the failing table index and keeps any prior
+published snapshot unchanged. Source cells are required to occur in the
+finished grid, and annotators reject source cells lacking a raster position.
+
+Missing `rowspan`/`colspan` attributes still mean `1`; `rowspan="0"` is valid
+and rowspans are clipped to their section as before. **Explicit malformed
+span values** (nonnumeric, negative, or `colspan="0"`) now cause a typed
+`table_layout_error(invalid_span(Attribute, Value))` rather than being
+silently normalized. This stricter behavior intentionally rejects some
+malformed HTML that a browser might repair. Oversized spans continue to
+use F04's resource-limit errors. An empty source table fails with
+`table_layout_error(empty_table)`.
+
+Legitimate sparse rows are still supported: uncovered slots receive distinct
+synthetic IDs, identifiable by `kind: "synthetic_gap"` and `source_xpath: null`
+in `tables.jsonl`. No silent overlap correction or permissive rasterization
+mode is offered; a malformed table is quarantined with a diagnostic. Run:
+
+```bash
+cd dataset-builder-agent/src
+swipl -q -s raster_integrity_regression_tests.pl -g run_tests -t halt
+./run_regression_tests.sh
+```
