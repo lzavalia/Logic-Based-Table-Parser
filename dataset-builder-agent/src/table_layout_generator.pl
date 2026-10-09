@@ -1,0 +1,200 @@
+% Table rasterizer.
+%
+% Turns every <table> in an HTML string into a "raster": a list of rows,
+% all of the same length, where each element is the integer id of the cell
+% covering that grid slot. Cells are numbered from 0 in document order, and
+% colspan/rowspan make a cell's id cover a rectangular region of the raster.
+%
+% Example:
+%   ?- html_rasters("<table><tr><td colspan=2>a</td></tr>
+%                           <tr><td>b</td><td>c</td></tr></table>", Rs).
+%   Rs = [[[0,0],[1,2]]].
+
+:- use_module(library(sgml)).
+:- use_module(library(assoc)).
+:- use_module(library(apply)).
+:- use_module(library(lists)).
+
+% html_rasters(+Html, -Rasters): one raster per <table> in Html, in document
+% order (an outer table comes before any table nested inside it).
+html_rasters(Html, Rasters) :-
+   parse_html(Html, Dom),
+   extract_tables(Dom, Tables),
+   maplist(rasterize_table, Tables, Rasters).
+
+html_rasters(Html, Tables, Rasters) :-
+   parse_html(Html, Dom),
+   extract_tables(Dom, Tables),
+   maplist(rasterize_table, Tables, Rasters).
+
+% --- 1) parsing ------------------------------------------------------------
+
+% max_errors(-1): real web pages have far more than the parser's default
+% limit of 50 syntax errors, which would otherwise abort the parse.
+parse_html(Html, Dom) :-
+   text_to_string(Html, String),
+   load_structure(
+      string(String),
+      Dom,
+      [dialect(html), space(remove), syntax_errors(quiet), max_errors(-1)]
+   ).
+
+% --- 2) table extraction ---------------------------------------------------
+
+extract_tables(Dom, Tables) :-
+   findall(Table, (member(Node, Dom), sub_table(Node, Table)), Tables).
+
+sub_table(Table, Table) :-
+   Table = element(table, _, _).
+sub_table(element(_, _, Children), Table) :-
+   member(Child, Children),
+   sub_table(Child, Table).
+
+% --- 3) rasterization ------------------------------------------------------
+
+% rasterize_table(+TableElement, -Raster)
+rasterize_table(Table, Raster) :-
+   table_sections(Table, Sections),
+   empty_assoc(Grid0),
+   place_sections(Sections, 0, 0, Grid0, NumCells, Height, Grid),
+   grid_width(Grid, Width),
+   build_raster(Grid, Height, Width, NumCells, Raster).
+
+% table_sections(+Table, -Sections): each section is a list of <tr>
+% elements. Header rows come first, then body rows, then footer rows
+% (the order a browser renders them in). Rowspans never cross a section.
+% Only direct children are inspected, so nested tables are not mixed in.
+table_sections(element(table, _, Children), Sections) :-
+   include(is_element(thead), Children, Heads),
+   include(is_element(tfoot), Children, Foots),
+   body_sections(Children, Bodies),
+   maplist(section_rows, Heads, HeadSections),
+   maplist(section_rows, Foots, FootSections),
+   append([HeadSections, Bodies, FootSections], Sections).
+
+% <tbody> elements, plus runs of <tr> written directly under <table>
+% (each run acts as an implicit tbody).
+body_sections([], []).
+body_sections([Child|Children], [Rows|Sections]) :-
+   is_element(tbody, Child), !,
+   section_rows(Child, Rows),
+   body_sections(Children, Sections).
+body_sections([Child|Children], [[Child|Trs]|Sections]) :-
+   is_element(tr, Child), !,
+   take_trs(Children, Trs, Rest),
+   body_sections(Rest, Sections).
+body_sections([_|Children], Sections) :-
+   body_sections(Children, Sections).
+
+take_trs([Child|Children], [Child|Trs], Rest) :-
+   is_element(tr, Child), !,
+   take_trs(Children, Trs, Rest).
+take_trs(Rest, [], Rest).
+
+section_rows(element(_, _, Children), Rows) :-
+   include(is_element(tr), Children, Rows).
+
+row_cells(element(tr, _, Children), Cells) :-
+   include(is_cell, Children, Cells).
+
+is_element(Name, element(Name, _, _)).
+
+is_cell(element(td, _, _)).
+is_cell(element(th, _, _)).
+
+% place_sections(+Sections, +RowOffset, +Id0, +Grid0, -Id, -Height, -Grid)
+% Grid is an assoc from Row-Col to the id of the cell occupying that slot.
+place_sections([], Height, Id, Grid, Id, Height, Grid).
+place_sections([Rows|Sections], Offset, Id0, Grid0, Id, Height, Grid) :-
+   length(Rows, NumRows),
+   place_rows(Rows, 0, NumRows, Offset, Id0, Grid0, Id1, Grid1),
+   Offset1 is Offset + NumRows,
+   place_sections(Sections, Offset1, Id1, Grid1, Id, Height, Grid).
+
+% I is the row index within its section, NumRows the section's row count.
+place_rows([], _, _, _, Id, Grid, Id, Grid).
+place_rows([Tr|Trs], I, NumRows, Offset, Id0, Grid0, Id, Grid) :-
+   row_cells(Tr, Cells),
+   Row is Offset + I,
+   place_cells(Cells, Row, 0, I, NumRows, Id0, Grid0, Id1, Grid1),
+   I1 is I + 1,
+   place_rows(Trs, I1, NumRows, Offset, Id1, Grid1, Id, Grid).
+
+place_cells([], _, _, _, _, Id, Grid, Id, Grid).
+place_cells([Cell|Cells], Row, Col0, I, NumRows, Id0, Grid0, Id, Grid) :-
+   cell_spans(Cell, I, NumRows, ColSpan, RowSpan),
+   first_free_col(Grid0, Row, Col0, Col),
+   LastRow is Row + RowSpan - 1,
+   LastCol is Col + ColSpan - 1,
+   findall(R-C, (between(Row, LastRow, R), between(Col, LastCol, C)), Slots),
+   foldl(claim_slot(Id0), Slots, Grid0, Grid1),
+   Id1 is Id0 + 1,
+   Col1 is Col + ColSpan,
+   place_cells(Cells, Row, Col1, I, NumRows, Id1, Grid1, Id, Grid).
+
+% Skip slots already covered by a rowspan from an earlier row.
+first_free_col(Grid, Row, Col0, Col) :-
+   (  get_assoc(Row-Col0, Grid, _)
+   -> Col1 is Col0 + 1,
+      first_free_col(Grid, Row, Col1, Col)
+   ;  Col = Col0
+   ).
+
+% If spans overlap (malformed table), the earlier cell keeps the slot.
+claim_slot(Id, Slot, Grid0, Grid) :-
+   (  get_assoc(Slot, Grid0, _)
+   -> Grid = Grid0
+   ;  put_assoc(Slot, Grid0, Id, Grid)
+   ).
+
+% Missing/invalid spans count as 1. rowspan="0" spans to the end of the
+% section, and rowspans are clipped at the end of the section, as in HTML.
+cell_spans(element(_, Attrs, _), I, NumRows, ColSpan, RowSpan) :-
+   span_attr(colspan, Attrs, C),
+   ( C >= 1 -> ColSpan = C ; ColSpan = 1 ),
+   span_attr(rowspan, Attrs, R),
+   Remaining is NumRows - I,
+   (  R =:= 0 -> RowSpan = Remaining
+   ;  R < 0   -> RowSpan = 1
+   ;  RowSpan is min(R, Remaining)
+   ).
+
+span_attr(Name, Attrs, N) :-
+   (  memberchk(Name = Value, Attrs),
+      to_integer(Value, N0)
+   -> N = N0
+   ;  N = 1
+   ).
+
+to_integer(Value, N) :-
+   (  integer(Value)
+   -> N = Value
+   ;  catch(atom_number(Value, N), _, fail),
+      integer(N)
+   ).
+
+grid_width(Grid, Width) :-
+   assoc_to_keys(Grid, Slots),
+   foldl([_-C, W0, W]>>(W is max(W0, C + 1)), Slots, 0, Width).
+
+% build_raster(+Grid, +Height, +Width, +NextId, -Raster)
+% Slots no cell covers (short rows) each get a fresh id, numbered after the
+% real cells in row-major order, so every row has length Width.
+build_raster(_, 0, _, _, []) :- !.
+build_raster(Grid, Height, Width, NextId, Raster) :-
+   LastRow is Height - 1,
+   numlist(0, LastRow, Rows),
+   foldl(build_row(Grid, Width), Rows, Raster, NextId, _).
+
+build_row(_, 0, _, [], Id, Id) :- !.
+build_row(Grid, Width, R, Row, Id0, Id) :-
+   LastCol is Width - 1,
+   numlist(0, LastCol, Cols),
+   foldl(slot_id(Grid, R), Cols, Row, Id0, Id).
+
+slot_id(Grid, R, C, Value, Id0, Id) :-
+   (  get_assoc(R-C, Grid, Value)
+   -> Id = Id0
+   ;  Value = Id0,
+      Id is Id0 + 1
+   ).

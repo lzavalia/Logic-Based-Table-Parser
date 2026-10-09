@@ -1,0 +1,228 @@
+# Dataset Builder Agent
+
+Turns a search phrase into a set of scientific tables whose cells are labelled as
+horizontal metadata (HMD), vertical metadata (VMD) or data.
+
+A language model picks open-access papers from PubMed Central; everything after
+that (download, table extraction, rasterization, constraint checking, coloring)
+is deterministic Prolog. The agent is written in DML and runs on
+[DeepClause](https://github.com/deepclause/deepclause-sdk).
+
+## Dependencies
+
+| Dependency | Version | Needed for | Notes |
+|---|---|---|---|
+| [Node.js](https://nodejs.org) | 18 or newer | running the agent | Tested with 26.10.0. `npm` comes with it. |
+| [`deepclause-sdk`](https://www.npmjs.com/package/deepclause-sdk) | 0.0.86 | running the agent | npm package that provides the `deepclause` command. |
+| An API key for a model provider | | running the agent | Any provider DeepClause supports. See [step 4](#4-choose-a-model-provider). |
+| Internet access | | running the agent | The model provider's API and `eutils.ncbi.nlm.nih.gov`. |
+| [SWI-Prolog](https://www.swi-prolog.org) | 9 or newer | **optional**: running the table logic without the agent | Tested with 10.0.2. |
+
+There is nothing else to install. In particular:
+
+- **SWI-Prolog is not required to run the agent.** DeepClause ships its own
+  Prolog engine (SWI-Prolog compiled to WebAssembly) and the `.pl` files are
+  loaded into it. A local `swipl` is only needed for the offline commands in
+  [Running the table logic without the agent](#running-the-table-logic-without-the-agent).
+- The Prolog code uses only libraries bundled with SWI-Prolog (`sgml`,
+  `sgml_write`, `json`, `assoc`, `apply`, `lists`, `readutil`, `filesex`). No
+  packs are needed.
+- No NCBI API key is needed. The agent stays under NCBI's keyless limit of 3
+  requests per second.
+
+Developed and tested on macOS (Apple Silicon).
+
+## Installation
+
+These steps start from a machine that has never had DeepClause on it.
+
+### 1. Install Node.js
+
+macOS, with [Homebrew](https://brew.sh):
+
+```bash
+brew install node
+```
+
+Other systems: use the installer from <https://nodejs.org>, or your package
+manager. Then check the version:
+
+```bash
+node --version    # v18.0.0 or newer
+```
+
+### 2. Install DeepClause
+
+DeepClause is an npm package. Installing it globally adds the `deepclause`
+command:
+
+```bash
+npm install -g deepclause-sdk@0.0.86
+deepclause --version    # 0.0.86
+```
+
+The version is pinned because DeepClause is pre-1.0 and this is the release the
+agent was developed against.
+
+### 3. Get the code
+
+```bash
+git clone https://github.com/lzavalia/Logic-Based-Table-Parser.git
+cd Logic-Based-Table-Parser/dataset-builder-agent/src
+```
+
+All commands below are run from `src/`, the directory that holds
+`dataset_builder.dml` and the `.pl` files.
+
+### 4. Choose a model provider
+
+The agent uses the model for one step only: choosing papers with a search tool.
+Any provider DeepClause supports will do, as long as the model supports tool
+calling.
+
+| Provider | Model id format | API key variable |
+|---|---|---|
+| OpenAI | `openai:<model>` | `OPENAI_API_KEY` |
+| Anthropic | `anthropic:<model>` | `ANTHROPIC_API_KEY` |
+| Google | `google:<model>` | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| OpenRouter | `openrouter:<vendor>/<model>` | `OPENROUTER_API_KEY` |
+| Any OpenAI-compatible endpoint | `custom:<name>:<model>` | `LLM_PROVIDER_<NAME>_API_KEY` and `LLM_PROVIDER_<NAME>_BASE_URL` |
+
+Export the key for the provider you picked in the shell that will run the
+agent. For example:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
+A local model server such as Ollama goes through the last row:
+
+```bash
+export LLM_PROVIDER_LOCAL_BASE_URL="http://localhost:11434/v1"
+export LLM_PROVIDER_LOCAL_API_KEY="dummy"
+```
+
+### 5. Initialize DeepClause in `src/`
+
+DeepClause keeps its configuration in a `.deepclause/` directory next to the
+agent. It is not part of the repository, so create it once, naming the model
+from step 4:
+
+```bash
+deepclause init --model openai:gpt-4o
+deepclause show-model
+```
+
+`deepclause list-models` lists the model ids DeepClause knows about. To switch
+later, run `deepclause set-model <provider>:<model>`.
+
+`.deepclause/` is local to your machine. Do not commit it, especially if you
+store an API key in its `config.json` instead of using an environment variable.
+
+### 6. Optional: install SWI-Prolog
+
+Only needed to run the table logic directly, without DeepClause.
+
+```bash
+brew install swi-prolog          # macOS
+sudo apt install swi-prolog      # Debian / Ubuntu
+swipl --version
+```
+
+### 7. Check the installation
+
+```bash
+deepclause run dataset_builder.dml "dementia with lewy bodies" --headless
+```
+
+A working installation prints `Phase 1: Selecting papers...`, then one line per
+paper, and ends with `Dataset build complete`. As a guide to cost, this prompt
+with `anthropic:claude-sonnet-4-6` took 5 model calls and about $0.06 for the
+full 20 papers.
+
+## Running the agent
+
+From `src/`:
+
+```bash
+deepclause run dataset_builder.dml "<search prompt>" --headless
+```
+
+Useful options:
+
+| Option | Effect |
+|---|---|
+| `--model <provider>:<model>` | Use a different model for this run only. |
+| `--usage <file>` | Save the tokens used, per model, to a JSON file. |
+| `--verbose` | Also print each tool call. |
+
+Each run writes a `dataset/` directory inside `src/`:
+
+| Path | Contents |
+|---|---|
+| `dataset/<paper title>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
+| `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
+| `dataset/cache/` | The last PubMed Central search responses. |
+
+`dataset/` is added to by each run, not cleared.
+
+### Settings
+
+| Setting | Where | Default |
+|---|---|---|
+| Papers per run | `max_papers/1` in `dataset_builder.dml` | 20 |
+| Delay between NCBI requests (s) | `ncbi_request_gap/1` in `dataset_builder.dml` | 0.4 |
+| Waits before retrying a rate-limited request (s) | `ncbi_retry_waits/1` in `dataset_builder.dml` | 2, 5, 10, 20, 30 |
+| Model | `deepclause set-model`, or `--model` for one run | chosen in step 5 |
+
+## Running the table logic without the agent
+
+These need SWI-Prolog (step 6) but no API key, no DeepClause and no network.
+Run them from `src/`.
+
+Annotate the tables of any HTML or XML file. This writes `table0.pl`,
+`table1.pl`, ... next to the input file:
+
+```bash
+swipl -g 'consult(test_driver),
+          test_table_parser("path/to/file.html", Files),
+          writeln(Files)' -t halt
+```
+
+Process a paper the agent has already downloaded, exactly as the agent does.
+Replace `7285984` with the id of a file in `dataset/raw/`:
+
+```bash
+swipl -g 'use_module(dataset_pipeline),
+          process_paper("7285984", "dataset/raw/PMC7285984.xml", "dataset", Summary),
+          writeln(Summary)' -t halt
+```
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `src/dataset_builder.dml` | The agent: paper selection (model), NCBI search and download, and the per-paper loop. |
+| `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects the three files below and writes the output. |
+| `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
+| `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
+| `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
+| `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
+
+## Troubleshooting
+
+- **`deepclause: command not found`**: npm's global `bin` directory is not on
+  `PATH`. `npm prefix -g` prints the prefix; add its `bin` subdirectory to
+  `PATH`.
+- **`No .deepclause directory found in this workspace`**: step 5 was skipped,
+  or the command was not run from `src/`.
+- **`... API key is missing`**, followed by `Could not build a dataset`: the API
+  key variable for the configured provider is not set in the shell running the
+  command. `deepclause show-model` prints which provider that is.
+- **`Could not build a dataset ... no usable PMC ids were selected`** with no
+  error before it: the model did not return any PMC ids. Try a more specific
+  prompt, or a model with reliable tool calling.
+- **`NCBI rate limit reached; pausing ...`**: expected now and then. The request
+  is retried up to five times before that paper is reported as failed.
+- **A paper reports `0 table(s)`**: its tables are published as images, or NCBI
+  does not provide its full text as XML.

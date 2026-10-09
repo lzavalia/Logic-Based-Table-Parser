@@ -1,0 +1,244 @@
+% ============================================================================
+% Table Dataset Builder
+% ============================================================================
+%
+% Builds a dataset of rasterized, constraint-checked tables from the full
+% text of open-access PubMed Central (PMC) papers on a given topic.
+%
+%   Phase 1 (LLM)    The model searches PMC with search_pmc and picks papers.
+%   Phase 2 (no LLM) For each chosen paper: download the full text, pull out
+%                    every <table> element, rasterize it with
+%                    table_layout_generator.pl, check the raster against
+%                    parse_constraints.pl, and color it with
+%                    table_annotator.pl. One file is written per table.
+%
+% The Prolog work runs inside DeepClause's own Prolog engine, through the
+% dataset_pipeline module loaded below, so the full text never enters the
+% model's context and no external swipl is needed. The only LLM cost is
+% Phase 1.
+%
+% Output (relative to the workspace):
+%   dataset/<paper title>/annotated_tableN.html  one annotated table per file
+%   dataset/raw/PMC<id>.xml                    full text as downloaded
+%   dataset/cache/                             last search responses
+%
+% Usage (run from the directory that holds the .pl files):
+%   agent_main("CRISPR base editing")
+%
+% ============================================================================
+
+% --- Table logic ---
+
+% The workspace is mounted at /workspace inside DeepClause's Prolog engine.
+% Loading dataset_pipeline.pl through a search-path alias makes it a real
+% Prolog module whose predicates (esearch_ids/2, esummary_lines/2,
+% download_status/2, pause/1, process_paper/4) run as ordinary compiled Prolog. A plain consult/1, or a
+% use_module/1 with a file path, would instead hand the code to DML's
+% meta-interpreter, which keeps only the first solution of a clause body.
+user:file_search_path(workspace, '/workspace').
+:- use_module(workspace(dataset_pipeline)).
+
+% --- Settings ---
+
+% Maximum number of papers processed per run.
+max_papers(20).
+
+% NCBI allows 3 requests per second without an API key. Every request is
+% preceded by this many seconds of waiting, which keeps the run under that.
+ncbi_request_gap(0.4).
+
+% If NCBI still answers "API rate limit exceeded", the run pauses and tries
+% the same request again, waiting this many seconds before each retry. The
+% request fails once the list is used up.
+ncbi_retry_waits([2, 5, 10, 20, 30]).
+
+% --- Tool Definitions ---
+
+% The only tool the model can call. Results are short text, never page HTML.
+tool(search_pmc(Query, Results),
+     "Search PubMed Central for open-access full-text papers. Query uses PubMed search syntax (plain keywords work). Returns up to 15 lines, one per paper: 'PMC<id> | date | journal | title'.") :-
+    (   catch(pmc_search(Query, Found), _, fail)
+    ->  Results = Found
+    ;   Results = "No results (the search failed or matched nothing). Try a simpler query."
+    ).
+
+% --- Search (NCBI E-utilities, no LLM) ---
+
+pmc_search(Query, Results) :-
+    format(string(Term), "(~w) AND open access[filter]", [Query]),
+    url_encode(Term, EncodedTerm),
+    format(string(SearchUrl),
+           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&retmode=json&sort=relevance&retmax=15&term=~w",
+           [EncodedTerm]),
+    ncbi_fetch(SearchUrl, "dataset/cache/esearch.json"),
+    esearch_ids("/workspace/dataset/cache/esearch.json", Ids),
+    Ids \== "",
+    format(string(SummaryUrl),
+           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pmc&retmode=json&id=~w",
+           [Ids]),
+    ncbi_fetch(SummaryUrl, "dataset/cache/esummary.json"),
+    esummary_lines("/workspace/dataset/cache/esummary.json", Results),
+    Results \== "".
+
+% --- Downloads (rate-limited) ---
+
+% ncbi_fetch(+Url, +File): download Url to the workspace-relative File,
+% staying under NCBI's rate limit. Fails if the limit is still being hit
+% after every retry in ncbi_retry_waits/1. url_fetch takes workspace-relative
+% paths; the module predicates need the same file under /workspace.
+ncbi_fetch(Url, File) :-
+    ncbi_retry_waits(Waits),
+    ncbi_fetch(Url, File, Waits).
+
+ncbi_fetch(Url, File, Waits) :-
+    ncbi_request_gap(Gap),
+    pause(Gap),
+    exec(url_fetch(url: Url, save_to: File), _),
+    format(string(MountedFile), "/workspace/~w", [File]),
+    download_status(MountedFile, Status),
+    (   Status == ok
+    ->  true
+    ;   Waits = [Wait|MoreWaits]
+    ->  format(string(Msg), "NCBI rate limit reached; pausing ~w s before retrying...", [Wait]),
+        output(Msg),
+        pause(Wait),
+        ncbi_fetch(Url, File, MoreWaits)
+    ;   delete_file(File),
+        fail
+    ).
+
+% url_encode(+Text, -Encoded): percent-encode everything except ASCII letters
+% and digits, so the model's query can never alter the URL. Non-ASCII
+% characters are dropped.
+url_encode(Text, Encoded) :-
+    string_codes(Text, Codes),
+    encode_codes(Codes, EncodedCodes),
+    string_codes(Encoded, EncodedCodes).
+
+encode_codes([], []).
+encode_codes([C|Cs], Out) :-
+    (   C >= 128
+    ->  Out = Rest
+    ;   code_type(C, alnum)
+    ->  Out = [C|Rest]
+    ;   Hi is C >> 4,
+        Lo is C /\ 15,
+        hex_code(Hi, H),
+        hex_code(Lo, L),
+        Out = [37, H, L|Rest]          % 37 is the code of '%'
+    ),
+    encode_codes(Cs, Rest).
+
+hex_code(N, Code) :-
+    string_codes("0123456789ABCDEF", Hex),
+    nth0(N, Hex, Code).
+
+% --- Paper ids ---
+
+% parse_pmc_ids(+Text, +Max, -Ids): the digit part of each PMC id the model
+% returned, without duplicates, at most Max of them. Anything that is not
+% "PMC" followed by digits is discarded, so model output can only ever name
+% a file of the form dataset/raw/PMC<digits>.xml.
+parse_pmc_ids(Text, Max, Ids) :-
+    split_string(Text, ",;\n ", " \t\r", Parts),
+    pmc_numbers(Parts, All),
+    list_to_set(All, Unique),
+    take(Max, Unique, Ids).
+
+pmc_numbers([], []).
+pmc_numbers([Part|Parts], Ids) :-
+    (   pmc_number(Part, Id)
+    ->  Ids = [Id|Rest]
+    ;   Ids = Rest
+    ),
+    pmc_numbers(Parts, Rest).
+
+pmc_number(Part, Digits) :-
+    string_upper(Part, Upper),
+    (   string_concat("PMC", Digits, Upper)
+    ->  true
+    ;   Digits = Upper
+    ),
+    string_length(Digits, Length),
+    Length > 0,
+    Length =< 12,
+    string_codes(Digits, Codes),
+    all_digits(Codes).
+
+all_digits([]).
+all_digits([C|Cs]) :-
+    C >= 48,                            % '0'
+    C =< 57,                            % '9'
+    all_digits(Cs).
+
+take(_, [], []) :- !.
+take(N, _, []) :- N =< 0, !.
+take(N, [X|Xs], [X|Ys]) :-
+    N1 is N - 1,
+    take(N1, Xs, Ys).
+
+% --- Table pipeline (no LLM) ---
+
+% process_papers(+Ids, -Lines): one status line per paper. Never fails, so a
+% bad paper cannot abort the run or trigger the fallback clause.
+process_papers([], []).
+process_papers([Id|Ids], [Line|Lines]) :-
+    (   catch(download_and_process(Id, Result), _, fail)
+    ->  Line = Result
+    ;   format(string(Line), "PMC~w: failed (could not download or process the full text; no files written)", [Id])
+    ),
+    output(Line),
+    process_papers(Ids, Lines).
+
+% download_and_process(+Id, -Line)
+% Id is digits only (see parse_pmc_ids/3). url_fetch saves the full text as
+% JATS XML, whose tables use the HTML table model (<table>, <tr>, <td>, <th>,
+% colspan, rowspan). process_paper/4 (dataset_pipeline.pl) then does, for
+% every table:
+%   table_layout_generator.pl  ->  raster
+%   parse_constraints.pl       ->  header boundaries that satisfy omni_validate/3
+%   table_annotator.pl         ->  the table colored as HMD / VMD / data
+% and saves it under dataset/<paper title>/, creating the directories if
+% needed.
+download_and_process(Id, Line) :-
+    format(string(Url),
+           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=~w",
+           [Id]),
+    format(string(RawFile), "dataset/raw/PMC~w.xml", [Id]),
+    ncbi_fetch(Url, RawFile),
+    format(string(MountedRawFile), "/workspace/~w", [RawFile]),
+    process_paper(Id, MountedRawFile, "/workspace/dataset", Line).
+
+% --- Main ---
+
+agent_main(Topic) :-
+    max_papers(Max),
+
+    system("You select research papers for a dataset of tables.
+- Use search_pmc to find open-access PubMed Central papers on the topic.
+- Prefer original research and systematic reviews, which usually contain data tables.
+- Run search_pmc at most 3 times, refining the query only if the results are off-topic.
+- Only choose PMC ids that appear in the search results. Never invent an id."),
+
+    format(string(Msg), "Building table dataset for: ~w", [Topic]),
+    output(Msg),
+
+    output("Phase 1: Selecting papers..."),
+    format(string(SelectTask), "Find papers on '~w' and choose the ~w most relevant ones.
+Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567) in PaperIds.", [Topic, Max]),
+    task(SelectTask, string(PaperIds)),
+
+    parse_pmc_ids(PaperIds, Max, Ids),
+    Ids \== [],
+
+    output("Phase 2: Extracting, rasterizing and validating tables..."),
+    process_papers(Ids, Lines),
+
+    atomic_list_concat(Lines, "\n", Report),
+    format(string(Summary), "Dataset build complete for '~w'. Each paper's tables are in dataset/<paper title>/.\n~w", [Topic, Report]),
+    answer(Summary).
+
+% Fallback
+agent_main(Topic) :-
+    format(string(Msg), "Could not build a dataset for '~w': no usable PMC ids were selected. Please try a more specific topic or check your connection.", [Topic]),
+    answer(Msg).
