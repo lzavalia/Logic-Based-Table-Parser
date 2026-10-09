@@ -51,3 +51,24 @@ Yellow is the only step that uses the language model; blue steps are determinist
 ## Limits observed
 
 Tables published as images cannot be extracted, and the agent only reaches papers whose full text NCBI makes available as XML.
+
+### PMC download and XML integrity (F07/F08)
+
+PMC eFetch payloads are parsed as **JATS XML**, using SWI's XML dialect with
+parser diagnostics treated as errors. Standalone HTML helpers remain tolerant
+of loose HTML. The parser normalizes qualified JATS element names before
+extracting and rasterizing `<table>` elements; it does not change the
+semantics of the seven boundary constraints. Before publishing a paper,
+`process_paper/4` requires exactly one JATS article and a matching `pmc`
+`article-id` inside `<front><article-meta>`. A genuine, well-formed paper
+with no tables may still produce a complete zero-table result.
+
+`download_status/3` distinguishes accepted ESearch/ESummary JSON, accepted
+JATS XML, rate-limited/transient error bodies, and invalid/empty/nonarticle
+responses. `ncbi_fetch` retries only known transient bodies, with bounded
+retries. Invalid responses cannot publish a paper. The DeepClause
+`url_fetch` API in use does **not** expose HTTP headers/status to this DML
+code; status/content-type checks at the transport layer remain a follow-up
+for the fetch adapter. The local, network-free regression suite is
+`src/download_xml_regression_tests.pl` (also included in
+`src/run_regression_tests.sh`).

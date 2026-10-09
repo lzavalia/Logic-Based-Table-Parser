@@ -25,11 +25,11 @@ cleanup_test_workspace(Root) :-
     ( exists_directory(Root) -> delete_directory_and_contents(Root) ; true ).
 
 % The input deliberately includes a title that is identical across paper IDs.
-write_article(Root, Name, Title, TableCount, File) :-
+write_article(Root, Id, Name, Title, TableCount, File) :-
     directory_file_path(Root, Name, File),
     setup_call_cleanup(
         open(File, write, Out, [encoding(utf8)]),
-        ( format(Out, '<article><article-title>~s</article-title><body>', [Title]),
+        ( format(Out, '<article><front><article-meta><article-id pub-id-type="pmc">~w</article-id></article-meta></front><article-title>~s</article-title><body>', [Id, Title]),
           forall(between(1, TableCount, _),
                  write(Out,
                        '<table><tr><td>Country</td><td>Year</td></tr><tr><td>USA</td><td>42</td></tr></table>')),
@@ -45,8 +45,8 @@ published_file(Root, Pmc, Name, File) :-
 
 test(same_title_different_ids_do_not_collide,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'a.xml', "A Shared Title", 1, A),
-    write_article(Root, 'b.xml', "A Shared Title", 2, B),
+    write_article(Root, 101, 'a.xml', "A Shared Title", 1, A),
+    write_article(Root, 102, 'b.xml', "A Shared Title", 2, B),
     process_paper("101", A, Root, SummaryA),
     process_paper("102", B, Root, SummaryB),
     published_file(Root, 'PMC101', 'annotated_table0.html', A0),
@@ -57,8 +57,8 @@ test(same_title_different_ids_do_not_collide,
 
 test(shorter_rerun_drops_stale_tables_and_updates_title,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'three.xml', "Old title", 3, Old),
-    write_article(Root, 'one.xml', "New title", 1, New),
+    write_article(Root, 103, 'three.xml', "Old title", 3, Old),
+    write_article(Root, 103, 'one.xml', "New title", 1, New),
     process_paper("103", Old, Root, _),
     published_file(Root, 'PMC103', 'annotated_table2.html', PreviousLast),
     exists_file(PreviousLast),
@@ -74,8 +74,8 @@ test(shorter_rerun_drops_stale_tables_and_updates_title,
 
 test(zero_table_rerun_drops_all_old_tables,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'previous.xml', "First", 1, Previous),
-    write_article(Root, 'zero.xml', "Empty", 0, Empty),
+    write_article(Root, 104, 'previous.xml', "First", 1, Previous),
+    write_article(Root, 104, 'zero.xml', "Empty", 0, Empty),
     process_paper("104", Previous, Root, _),
     process_paper("104", Empty, Root, _),
     published_file(Root, 'PMC104', 'annotated_table0.html', Obsolete),
@@ -86,7 +86,7 @@ test(zero_table_rerun_drops_all_old_tables,
 
 test(failed_stage_preserves_previous_paper,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'complete.xml', "Complete", 1, Input),
+    write_article(Root, 105, 'complete.xml', "Complete", 1, Input),
     process_paper("105", Input, Root, _),
     directory_file_path(Root, papers, Papers),
     catch(dataset_pipeline:with_paper_output_staging(
@@ -100,7 +100,7 @@ test(failed_stage_preserves_previous_paper,
 
 test(failed_publication_restores_previous_paper,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'complete.xml', "Complete", 1, Input),
+    write_article(Root, 106, 'complete.xml', "Complete", 1, Input),
     process_paper("106", Input, Root, _),
     directory_file_path(Root, papers, Papers),
     directory_file_path(Papers, '.not-a-real-stage', Missing),
@@ -113,7 +113,7 @@ test(failed_publication_restores_previous_paper,
 
 test(failed_later_table_does_not_publish_partial_paper,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'complete.xml', "Complete", 1, Input),
+    write_article(Root, 109, 'complete.xml', "Complete", 1, Input),
     process_paper("109", Input, Root, _),
     directory_file_path(Root, papers, Papers),
     dataset_pipeline:parse_html(
@@ -134,7 +134,7 @@ test(failed_later_table_does_not_publish_partial_paper,
 
 test(existing_per_paper_lock_blocks_concurrent_publication,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
-    write_article(Root, 'complete.xml', "Complete", 1, Input),
+    write_article(Root, 108, 'complete.xml', "Complete", 1, Input),
     process_paper("108", Input, Root, _),
     directory_file_path(Root, papers, Papers),
     dataset_pipeline:paper_lock_directory(Papers, "PMC108", Lock),

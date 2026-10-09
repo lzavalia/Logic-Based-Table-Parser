@@ -14,13 +14,13 @@ make_failure_workspace(Root) :-
 remove_failure_workspace(Root) :-
     ( exists_directory(Root) -> delete_directory_and_contents(Root) ; true ).
 
-write_failure_article(Root, Name, Colspan, Path) :-
+write_failure_article(Root, Id, Name, Colspan, Path) :-
     directory_file_path(Root, Name, Path),
     setup_call_cleanup(
         open(Path, write, Out, [encoding(utf8)]),
         format(Out,
-            '<article><article-title>Sample</article-title><body><table><tr><td colspan="~w">Header</td><td>Year</td></tr><tr><td>Label</td><td>5</td></tr></table></body></article>',
-            [Colspan]),
+            '<article><front><article-meta><article-id pub-id-type="pmc">~w</article-id></article-meta></front><article-title>Sample</article-title><body><table><tr><td colspan="~w">Header</td><td>Year</td></tr><tr><td>Label</td><td>5</td></tr></table></body></article>',
+            [Id, Colspan]),
         close(Out)).
 
 file_in_snapshot(Root, Name, Filename, Path) :-
@@ -43,7 +43,7 @@ attempt_statuses(Root, Statuses) :-
 
 test(complete_snapshot_is_marked_and_logged,
      [setup(make_failure_workspace(Root)), cleanup(remove_failure_workspace(Root))]) :-
-    write_failure_article(Root, 'good.xml', 1, Input),
+    write_failure_article(Root, 321, 'good.xml', 1, Input),
     process_paper("321", Input, Root, _),
     file_in_snapshot(Root, "PMC321", 'metadata.json', MetadataFile),
     dataset_pipeline:read_json_file(MetadataFile, Metadata),
@@ -54,8 +54,8 @@ test(complete_snapshot_is_marked_and_logged,
 
 test(raster_limit_reports_table_index_without_discarding_old_snapshot,
      [setup(make_failure_workspace(Root)), cleanup(remove_failure_workspace(Root))]) :-
-    write_failure_article(Root, 'good.xml', 1, Good),
-    write_failure_article(Root, 'bad.xml', 1000000000, Bad),
+    write_failure_article(Root, 322, 'good.xml', 1, Good),
+    write_failure_article(Root, 322, 'bad.xml', 1000000000, Bad),
     process_paper("322", Good, Root, _),
     catch(process_paper("322", Bad, Root, _), Error, true),
     nonvar(Error),
@@ -136,7 +136,7 @@ test(missing_later_table_is_a_located_failure,
 
 test(unwritable_attempt_path_does_not_mask_published_success,
      [setup(make_failure_workspace(Root)), cleanup(remove_failure_workspace(Root))]) :-
-    write_failure_article(Root, 'good.xml', 1, Input),
+    write_failure_article(Root, 326, 'good.xml', 1, Input),
     directory_file_path(Root, 'attempts', Blocker),
     setup_call_cleanup(open(Blocker, write, Stream), write(Stream, 'blocked'), close(Stream)),
     process_paper("326", Input, Root, _),

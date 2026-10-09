@@ -39,6 +39,7 @@
       verified_search_lines/3,
       filter_search_selected_ids/3,
       download_status/2,
+      download_status/3,
       pause/1,
       process_paper/4,
       format_paper_failure/4
@@ -163,19 +164,109 @@ field(Doc, Key, Value) :-
 
 % --- downloads -------------------------------------------------------------
 
-% NCBI answers a request over its rate limit with a short JSON object, e.g.
-%   {"error":"API rate limit exceeded","api-key":"...","count":"4","limit":"3"}
-% which url_fetch saves as if it were the requested file.
+% Validate the *body* saved by url_fetch.  That primitive does not expose
+% an HTTP status/content-type here: an HTTP error page or JSON error body
+% must never count as a successfully downloaded PMC article.  Unlike the
+% historical first-400-character check, this validates the document shape
+% and a complete XML parse.  process_paper/4 subsequently checks PMC identity.
+%
+% Status is one of ok, rate_limited, retryable(server_unavailable), or
+% invalid(Reason).  JSON and XML are validated separately.
 download_status(File, Status) :-
-   setup_call_cleanup(
-      open(File, read, In, [encoding(utf8)]),
-      read_string(In, 400, Start),
-      close(In)
-   ),
-   (  sub_string(Start, _, _, _, "API rate limit exceeded")
+   file_base_name(File, Base),
+   text_to_string(Base, BaseText),
+   ( sub_string(BaseText, _, _, 0, ".xml") -> Kind = jats_xml
+   ; sub_string(BaseText, _, _, _, "esummary") -> Kind = esummary_json
+   ; Kind = esearch_json ),
+   download_status(File, Kind, Status).
+
+download_status(File, Kind, Status) :-
+   read_file_to_string(File, Body, [encoding(utf8)]),
+   string_length(Body, Length),
+   Sniff is min(Length, 2048),
+   sub_string(Body, 0, Sniff, _, Prefix),
+   string_lower(Prefix, Lower),
+   ( Length =:= 0
+   -> Status = invalid(empty_body)
+   ; ( sub_string(Lower, _, _, _, "rate limit exceeded")
+     ; sub_string(Lower, _, _, _, "too many requests")
+     ; sub_string(Lower, _, _, _, "429 too many requests") )
    -> Status = rate_limited
-   ;  Status = ok
+   ; ( sub_string(Lower, _, _, _, "503 service unavailable")
+     ; sub_string(Lower, _, _, _, "502 bad gateway")
+     ; sub_string(Lower, _, _, _, "500 internal server error") )
+   -> Status = retryable(server_unavailable)
+   ; classify_download_body(Kind, Body, Lower, Status)
    ).
+
+classify_download_body(_, _, Lower, invalid(http_error_page)) :-
+   ( sub_string(Lower, _, _, _, "<html")
+   ; sub_string(Lower, _, _, _, "<!doctype html") ), !.
+classify_download_body(jats_xml, Body, _, Status) :- !,
+   ( catch((parse_jats_xml(Body, Dom), jats_single_article(Dom, _)), _, fail)
+   -> Status = ok
+   ;  Status = invalid(malformed_or_nonarticle_xml) ).
+classify_download_body(Kind, Body, _, Status) :-
+   memberchk(Kind, [esearch_json, esummary_json]), !,
+   ( catch(setup_call_cleanup(open_string(Body, In),
+                             json_read_dict(In, Json, [default_tag(json)]),
+                             close(In)), _, fail)
+   -> json_response_status(Kind, Json, Status)
+   ;  Status = invalid(malformed_json) ).
+classify_download_body(_, _, _, invalid(unknown_document_kind)).
+
+json_response_status(_, Json, invalid(api_error)) :-
+   is_dict(Json), get_dict(error, Json, _), !.
+json_response_status(esearch_json, Json, ok) :-
+   is_dict(Json), get_dict(esearchresult, Json, Result),
+   is_dict(Result), get_dict(idlist, Result, Ids), is_list(Ids), !.
+json_response_status(esummary_json, Json, ok) :-
+   is_dict(Json), get_dict(result, Json, Result),
+   is_dict(Result), get_dict(uids, Result, Uids), is_list(Uids), !.
+json_response_status(_, _, invalid(unexpected_json_shape)).
+
+% Only the canonical JATS forms are accepted.  An HTML response, a random
+% XML document and a batch containing multiple articles are not one paper.
+jats_single_article(Dom, Article) :-
+   include(jats_top_level_element, Dom, [Root]),
+   ( Root = element(article, _, _)
+   -> Article = Root
+   ;  Root = element('pmc-articleset', _, Children),
+      include(is_element(article), Children, [Article])
+   ).
+
+jats_top_level_element(element(_, _, _)).
+
+% An eFetch response for PMC123 must contain a JATS article with exactly
+% that ID in <front><article-meta><article-id pub-id-type="pmc">.
+% Reference-list article ids do not count as identity evidence.
+verify_jats_pmc_id(Dom, Expected) :-
+   ( jats_single_article(Dom, Article)
+   -> true
+   ;  throw(error(invalid_jats_xml(nonarticle_root),
+                  context(process_paper/4, 'No single JATS article in PMC response'))) ),
+   findall(Id, article_front_pmc_id(Article, Id), Ids0),
+   sort(Ids0, Ids),
+   ( Ids == [Expected]
+   -> true
+   ;  throw(error(pmc_article_identity_mismatch(Expected, Ids),
+                  context(process_paper/4, 'Missing or conflicting JATS PMC ID'))) ).
+
+article_front_pmc_id(element(article, _, Children), PmcName) :-
+   member(element(front, _, Front), Children),
+   member(element('article-meta', _, Meta), Front),
+   member(element('article-id', Attrs, Content), Meta),
+   memberchk('pub-id-type'=Type, Attrs),
+   text_to_string(Type, TypeText),
+   string_lower(TypeText, "pmc"),
+   findall(Piece, text_piece(Content, Piece), Pieces),
+   atomic_list_concat(Pieces, '', Atom),
+   normalize_space(string(Raw), Atom),
+   string_upper(Raw, Upper),
+   ( sub_string(Upper, 0, 3, _, "PMC")
+   -> sub_string(Upper, 3, _, 0, Digits)
+   ; Digits = Upper ),
+   canonical_pmc_name(Digits, PmcName).
 
 % sleep/1 is not available in DeepClause's WebAssembly engine (it raises a
 % JavaScript error there), so pause/1 falls back to watching the clock.
@@ -200,7 +291,8 @@ wait_until(End) :-
 process_paper(PmcId, File, DatasetDir, Summary) :-
    canonical_pmc_name(PmcId, PaperName),
    read_file_to_string(File, Text, [encoding(utf8)]),
-   parse_html(Text, Dom),
+   parse_jats_xml(Text, Dom),
+   verify_jats_pmc_id(Dom, PaperName),
    extract_tables(Dom, Tables),
    rasterize_tables_bounded(Tables, Rasters),
    ( paper_title(Dom, Title) -> true ; Title = "" ),
@@ -514,6 +606,14 @@ paper_failure_reason(error(paper_raster_limit_exceeded(Name, Maximum, Actual),
           [Index, Name, Actual, Maximum]).
 paper_failure_reason(error(paper_raster_limit_exceeded(Name, Maximum, Actual), _), Reason) :- !,
    format(string(Reason), "paper raster limit ~w exceeded (~w > ~w)", [Name, Actual, Maximum]).
+paper_failure_reason(error(ncbi_download_invalid(Kind, Cause), _), Reason) :- !,
+   format(string(Reason), "NCBI ~w response invalid: ~w", [Kind, Cause]).
+paper_failure_reason(error(pmc_article_identity_mismatch(Expected, Seen), _), Reason) :- !,
+   format(string(Reason), "PMC article identity mismatch (expected ~s, found ~w)", [Expected, Seen]).
+paper_failure_reason(error(invalid_jats_xml(Cause), _), Reason) :- !,
+   format(string(Reason), "invalid JATS XML: ~w", [Cause]).
+paper_failure_reason(error(invalid_jats_xml(Severity, Line, Message), _), Reason) :- !,
+   format(string(Reason), "invalid JATS XML (~w line ~w): ~w", [Severity, Line, Message]).
 paper_failure_reason(pipeline_goal_failed, "download or processing returned failure").
 paper_failure_reason(Error, Reason) :-
    exception_class(Error, Class),

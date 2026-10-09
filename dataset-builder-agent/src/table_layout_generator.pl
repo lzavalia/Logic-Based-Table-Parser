@@ -39,6 +39,41 @@ parse_html(Html, Dom) :-
       [dialect(html), space(remove), syntax_errors(quiet), max_errors(-1)]
    ).
 
+% PMC eFetch returns JATS XML, *not HTML*.  The XML entry point is
+% intentionally separate from parse_html/2: callers accepting loose HTML
+% may use HTML recovery, but a PMC article must not silently be repaired.
+% syntax_errors(error) is not an option of SWI's SGML library; use its
+% error callback instead, which can interrupt parsing even for warnings.
+parse_jats_xml(Xml, Dom) :-
+   text_to_string(Xml, String),
+   load_structure(
+      string(String), Raw,
+      [dialect(xml), space(remove), syntax_errors(quiet),
+       call(error, jats_parse_diagnostic)]
+   ),
+   normalize_jats_dom(Raw, Dom).
+
+jats_parse_diagnostic(Severity, Message, Parser) :-
+   ( get_sgml_parser(Parser, line(Line)) -> true ; Line = unknown ),
+   throw(error(invalid_jats_xml(Severity, Line, Message),
+               context(parse_jats_xml/2, 'JATS XML parsing reported a diagnostic'))).
+
+% In a JATS document, qualified names such as jats:table mean the same
+% table layout element as the unqualified name.  Keep all attributes and
+% text intact, but normalize element names for the existing table IR.
+normalize_jats_dom([], []).
+normalize_jats_dom([Node|Nodes], [Normalized|More]) :-
+   normalize_jats_node(Node, Normalized),
+   normalize_jats_dom(Nodes, More).
+
+normalize_jats_node(element(Name, Attrs, Children),
+                    element(Local, Attrs, NewChildren)) :- !,
+   ( atom(Name), sub_atom(Name, _, 1, After, ':')
+   -> sub_atom(Name, _, After, 0, Local)
+   ;  Local = Name ),
+   normalize_jats_dom(Children, NewChildren).
+normalize_jats_node(Node, Node).
+
 % --- 2) table extraction ---------------------------------------------------
 
 extract_tables(Dom, Tables) :-

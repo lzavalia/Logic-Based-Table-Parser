@@ -20,7 +20,7 @@
 % Output (relative to the workspace):
 %   dataset/papers/PMC<id>/annotated_tableN.html  one annotated table per file
 %   dataset/papers/PMC<id>/metadata.json      article title and table counts
-%   dataset/raw/PMC<id>.xml                    full text as downloaded
+%   dataset/raw/PMC<id>.xml                    validated JATS full text as downloaded
 %   dataset/cache/                             last search responses
 %
 % Usage (run from the directory that holds the .pl files):
@@ -85,29 +85,38 @@ pmc_search(Query, Results) :-
 
 % --- Downloads (rate-limited) ---
 
-% ncbi_fetch(+Url, +File): download Url to the workspace-relative File,
-% staying under NCBI's rate limit. Fails if the limit is still being hit
-% after every retry in ncbi_retry_waits/1. url_fetch takes workspace-relative
-% paths; the module predicates need the same file under /workspace.
+% ncbi_fetch(+Url, +File): validate the downloaded body before trusting it.
+% url_fetch does not return an HTTP status to this DML caller; malformed
+% JSON, HTML error pages, malformed XML and other invalid responses fail.
+% Only known transient rate-limit/server error bodies are retried.
 ncbi_fetch(Url, File) :-
+    ( sub_string(File, _, _, 0, ".xml") -> Kind = jats_xml
+    ; sub_string(File, _, _, _, "esummary") -> Kind = esummary_json
+    ; Kind = esearch_json ),
     ncbi_retry_waits(Waits),
-    ncbi_fetch(Url, File, Waits).
+    ncbi_fetch(Url, File, Kind, Waits).
 
-ncbi_fetch(Url, File, Waits) :-
+ncbi_fetch(Url, File, Kind, Waits) :-
     ncbi_request_gap(Gap),
     pause(Gap),
+    ( exists_file(File) -> delete_file(File) ; true ),
     exec(url_fetch(url: Url, save_to: File), _),
     format(string(MountedFile), "/workspace/~w", [File]),
-    download_status(MountedFile, Status),
-    (   Status == ok
-    ->  true
-    ;   Waits = [Wait|MoreWaits]
-    ->  format(string(Msg), "NCBI rate limit reached; pausing ~w s before retrying...", [Wait]),
-        output(Msg),
-        pause(Wait),
-        ncbi_fetch(Url, File, MoreWaits)
-    ;   delete_file(File),
-        fail
+    download_status(MountedFile, Kind, Status),
+    ( Status == ok
+    -> true
+    ; ( Status == rate_limited ; Status = retryable(_) )
+    -> ( Waits = [Wait|MoreWaits]
+       -> format(string(Msg), "NCBI transient response (~w); retrying after ~w s", [Status, Wait]),
+          output(Msg),
+          pause(Wait),
+          ncbi_fetch(Url, File, Kind, MoreWaits)
+       ;  ( exists_file(File) -> delete_file(File) ; true ),
+          throw(error(ncbi_download_invalid(Kind, retries_exhausted(Status)),
+                      context(ncbi_fetch/2, Url))) )
+    ;  ( exists_file(File) -> delete_file(File) ; true ),
+       throw(error(ncbi_download_invalid(Kind, Status),
+                   context(ncbi_fetch/2, Url)))
     ).
 
 % url_encode(+Text, -Encoded): percent-encode everything except ASCII letters

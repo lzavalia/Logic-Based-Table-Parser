@@ -28,7 +28,7 @@ write_raster_fixture(Root, Name, Span, File) :-
    setup_call_cleanup(
       open(File, write, Out, [encoding(utf8)]),
       format(Out,
-             '<article><article-title>Title</article-title><body><table><tr><td colspan="~w">A</td></tr><tr><td>B</td></tr></table></body></article>',
+             '<article><front><article-meta><article-id pub-id-type="pmc">2026</article-id></article-meta></front><article-title>Title</article-title><body><table><tr><td colspan="~w">A</td></tr><tr><td>B</td></tr></table></body></article>',
              [Span]),
       close(Out)).
 
