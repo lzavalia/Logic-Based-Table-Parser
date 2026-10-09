@@ -41,12 +41,17 @@ annotate_table(Hmd, Vmd, HtmlTable, AnnotatedTable) :-
 % annotate_table_element(+Hmd, +Vmd, +Table, -Annotated)
 % Same as annotate_table/4, on a parsed element(table, Attrs, Children) term.
 annotate_table_element(Hmd, Vmd, Table, Annotated) :-
-   Table = element(table, Attrs, Children),
    rasterize_table(Table, Raster),
+   annotate_table_element_raster(Hmd, Vmd, Table, Raster, Annotated).
+
+% Reuse the already-validated raster when producing several HTML views of
+% the same table. The source raster is identical to the one checked by the
+% structural solver; no per-candidate rasterization or span allocation.
+annotate_table_element_raster(Hmd, Vmd, element(table, Attrs, Children),
+                              Raster, element(table, Attrs, NewChildren)) :-
    cell_colors(Raster, Hmd, Vmd, Colors),
    first_cell_ids(Children, Ids0),
-   annotate_children(Children, Colors, Ids0, _, NewChildren),
-   Annotated = element(table, Attrs, NewChildren).
+   annotate_children(Children, Colors, Ids0, _, NewChildren).
 
 % table_html(+Element, -Html): Element serialized as an HTML string.
 table_html(Element, Html) :-

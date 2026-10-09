@@ -163,18 +163,13 @@ omni_validate(Raster, HmdBoundary, VmdBoundary) :-
 
 % --- boundary search -------------------------------------------------------
 
-% valid_boundaries(+Raster, -Boundaries): every (HmdBoundary, VmdBoundary)
-% pair with nonempty HMD, VMD and data regions for which all seven
-% constraints hold.  An undersized or malformed raster produces [].
-% Each pair is a dict json{hmd: Hmd, vmd: Vmd}.
+% valid_boundaries(+Raster, -Boundaries): exact same candidates and ordering
+% as the exhaustive reference, but precompute adjacency witnesses once and
+% query the condensed predicates for each (H,V) pair. Public constraints
+% and omni_validate/3-4 remain unchanged for diagnostics and compatibility.
+:- consult(fast_boundaries).
+
 valid_boundaries(Raster, Boundaries) :-
-   findall(
-      json{hmd: Hmd, vmd: Vmd},
-      ( valid_raster_shape(Raster, NumRows, NumCols),
-        MaxHmd is NumRows - 2,
-        MaxVmd is NumCols - 2,
-        between(0, MaxHmd, Hmd),
-        between(0, MaxVmd, Vmd),
-        omni_validate(Raster, Hmd, Vmd) ),
-      Boundaries
-   ).
+   ( valid_raster_shape(Raster, Rows, Cols)
+   -> fast_valid_boundaries(Raster, Rows, Cols, Boundaries)
+   ;  Boundaries = [] ).

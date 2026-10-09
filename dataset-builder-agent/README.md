@@ -301,9 +301,11 @@ label for a scientific table.
 | `src/table_machine_records.pl` | Canonical JSONL schema, deterministic cell provenance and candidate labels. |
 | `src/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
-| `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
+| `src/parse_constraints.pl` | The seven reference constraints and public boundary validator. |
+| `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
 | `src/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
+| `src/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
 | `src/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 
@@ -445,3 +447,51 @@ assigning that source cell a label; detailed collision diagnostics remain F12.
 
 Run the offline regression suite with `src/run_regression_tests.sh`; the new
 F10-specific suite is `src/machine_annotations_regression_tests.pl`.
+
+### Indexed boundary search and streamed rendering (F11)
+
+`src/parse_constraints.pl` retains the original seven public structural
+predicates and `omni_validate/3-4` for precise explanations and compatibility.
+`valid_boundaries/2` now calls `src/fast_boundaries.pl` after validating the
+raster's shape **once**. The new evaluator makes a single pass through cell
+adjacencies and builds ordered-association summaries for merged-cell
+crossings, hierarchy witnesses, and inversions. Per-header-row bounds reduce
+the candidate-column search range before further checks. It returns exactly
+the same candidate list, in the same `(hmd,vmd)` order, as the seven original
+predicates under the F01 nonempty-region boundary contract.
+
+In contrast to the old repeated `nth0/3` scans, the indexed construction uses
+`O(R*C*log(R+C))` time and `O(R+C)` auxiliary summary space for an `R x C`
+raster. Testing candidate positions costs up to `O(R*C*log(R+C))`; candidate
+materialization still takes `O(K)` positions for `K` accepted pairs. The
+writer now **streams one HTML candidate at a time** and reuses the input
+raster without rerasterizing merged cells for each candidate. Canonical
+JSONL records still intentionally contain all candidate label lists, so their
+size can grow as `O(K*R*C)` in the worst case. To avoid huge allocations,
+the output layer rejects a table before opening its HTML file if the number
+of candidate × distinct-cell labels exceeds **500,000**. This raises
+`table_output_limit_exceeded(candidate_labels, Limit, Actual)` and preserves
+previously published results via the existing staging/rollback path. It does
+not silently truncate candidates or pretend the table was successfully parsed.
+This is a resource limit on F10's explicit-label schema, not a restriction
+of the logical boundary solver itself.
+
+Run the new offline differential tests as part of the full suite:
+
+```sh
+cd dataset-builder-agent/src
+./run_regression_tests.sh
+# Or just F11:
+swipl -q -s boundary_scaling_regression_tests.pl -g run_tests -t halt
+# Repeatable standalone (no external services) benchmark:
+swipl -q -s benchmark_boundaries.pl -g run_benchmark -t halt
+# Independent Python formula replay (does not execute Prolog):
+python3 ../tools/verify_fast_boundary_logic.py
+```
+
+The differential suite includes exhaustive binary-valued small rasters,
+400 seeded randomized rectangular rasters, real merged-cell arrangements,
+malformed/degenerate inputs, and byte-for-byte comparison with the legacy
+HTML renderer. The Python formula check is a separate verification aid; it
+must **not** be represented as native SWI-Prolog test coverage or a Prolog
+runtime benchmark.

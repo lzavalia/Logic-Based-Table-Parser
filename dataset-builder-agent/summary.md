@@ -45,7 +45,7 @@ Yellow is the only step that uses the language model; blue steps are determinist
 - **Every decision is explainable.** A rejected boundary can be traced to the first constraint it violates (`omni_validate/4`), so a wrong or missing annotation can be diagnosed rather than merely observed.
 - **Content-independent.** The constraints look only at the table's structure (which slots belong to the same merged cell), not at its text. They apply unchanged across subjects, languages and vocabularies.
 - **Merged cells are evidence, not noise.** Row and column spans, which make tables hard for text-based methods, are exactly what the constraints reason about.
-- **Exhaustive search is cheap.** Because a check is a few list lookups, every candidate boundary of every table is tested; a whole paper takes a fraction of a second.
+- **Boundary checking is indexed.** Adjacent-cell relationships and hierarchy witnesses are summarized once per raster, then boundary candidates use those summaries rather than rescanning rows and columns. A separate resource budget prevents excessive candidate-label output; performance should be measured on representative tables rather than assumed.
 - **Ambiguity is preserved.** When more than one boundary pair is valid, all are reported, leaving the choice to a later stage instead of hiding it.
 
 ## Limits observed
@@ -76,3 +76,16 @@ for the fetch adapter. The local, network-free regression suite is
 ### Machine-readable output (F10)
 
 The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `annotated_tableN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot.
+
+### Boundary scalability (F11)
+
+`valid_boundaries/2` now precomputes adjacency summaries and maintains the same
+ordered set of accepted boundaries as the original seven predicates. The
+inspection renderer reuses the input raster and writes HTML candidates one at a
+time. Full per-candidate labels in `tables.jsonl` remain potentially quadratic
+in table size and candidate count, so attempts requiring more than 500,000
+cell-label records raise a typed output-limit error before writing HTML.
+The paper-staging mechanism preserves any previously published version.
+`src/boundary_scaling_regression_tests.pl` contains native differential and
+rendering tests; `tools/verify_fast_boundary_logic.py` provides an independent
+formula replay. Native Prolog tests and benchmarks require SWI-Prolog.

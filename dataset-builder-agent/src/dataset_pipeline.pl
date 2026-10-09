@@ -702,9 +702,11 @@ machine_record_consistent(Record) :-
    length(FirstSlots, NumCells),
    length(Record.cells, NumCells),
    maplist(machine_record_cell_consistent, FirstSlots, Record.cells),
-   maplist(machine_record_candidate_consistent(Record.table_uid,
-                                              Record.raster, FirstSlots),
-           Record.candidates).
+   % Recompute the complete candidate set once using the indexed checker.
+   % This verifies membership, order and completeness as well as labels.
+   valid_boundaries(Record.raster, ExpectedBoundaries),
+   maplist(machine_record_candidate_consistent(Record.table_uid, FirstSlots),
+           ExpectedBoundaries, Record.candidates).
 
 machine_record_cell_consistent(Id-(Row-Col), Cell) :-
    Cell.cell_id =:= Id,
@@ -714,11 +716,8 @@ machine_record_cell_consistent(Id-(Row-Col), Cell) :-
    -> string(Cell.source_xpath), Cell.source_xpath \== ""
    ; Cell.kind == "synthetic_gap", Cell.source_xpath == null ).
 
-machine_record_candidate_consistent(TableUid, Raster, FirstSlots, Candidate) :-
-   integer(Candidate.hmd), integer(Candidate.vmd),
-   omni_validate(Raster, Candidate.hmd, Candidate.vmd),
-   machine_candidate(TableUid, FirstSlots,
-                     json{hmd:Candidate.hmd, vmd:Candidate.vmd}, Expected),
+machine_record_candidate_consistent(TableUid, FirstSlots, Boundary, Candidate) :-
+   machine_candidate(TableUid, FirstSlots, Boundary, Expected),
    Candidate == Expected.
 
 is_dot_entry('.').
@@ -772,11 +771,48 @@ save_table(TableFile, Table, Raster, Boundaries) :-
 save_table(TableFile, Table, Raster, Context, Boundaries) :-
    Table = element(table, _, _),
    valid_boundaries(Raster, Boundaries),
-   table_annotations(Table, Boundaries, Annotations),
+   ensure_candidate_output_budget(Raster, Boundaries),
+   % Stream candidate views one by one. Do not materialize the full table
+   % once for every surviving boundary, and do not rasterize it again.
    setup_call_cleanup(
       open(TableFile, write, Stream, [encoding(utf8)]),
-      save_annotated_candidates(Stream, Context, Boundaries, Annotations),
+      save_candidates_stream(Stream, Context, Table, Raster, Boundaries),
       close(Stream)).
+
+% The explicit F10 JSONL label arrays, and the optional per-candidate HTML,
+% still require work proportional to candidates * distinct source cells.
+% Do not attempt to materialize an unbounded cartesian product on large,
+% highly ambiguous tables. This is checked before opening the output file;
+% failure aborts the staged paper and leaves the previous publication intact.
+% It never truncates a candidate set or misreports a rejected table as parsed.
+max_candidate_label_records(500000).
+
+ensure_candidate_output_budget(_, []) :- !.
+ensure_candidate_output_budget(Raster, Boundaries) :-
+   length(Boundaries, NumCandidates),
+   machine_first_slots(Raster, FirstSlots),
+   length(FirstSlots, NumCells),
+   TotalLabels is NumCandidates * NumCells,
+   max_candidate_label_records(MaxLabels),
+   (  TotalLabels =< MaxLabels
+   -> true
+   ;  throw(error(table_output_limit_exceeded(candidate_labels,
+                                               MaxLabels, TotalLabels),
+                  context(save_table/5,
+                          'Full candidate labels would exceed output budget')))
+   ).
+
+save_candidates_stream(Stream, Context, Table, _, []) :- !,
+   table_html(Table, Html),
+   save_annotated_candidates(Stream, Context, [], [Html]).
+save_candidates_stream(Stream, Context, Table, Raster, Boundaries) :-
+   maplist(save_candidate_stream(Stream, Context, Table, Raster), Boundaries).
+
+save_candidate_stream(Stream, Context, Table, Raster, Boundary) :-
+   Boundary = json{hmd:Hmd,vmd:Vmd},
+   annotate_table_element_raster(Hmd, Vmd, Table, Raster, Annotated),
+   table_html(Annotated, Html),
+   save_annotated_candidate(Stream, Context, Boundary, Html).
 
 save_annotated_candidates(Stream, Context, [], [Annotation]) :- !,
    contextual_table_annotation(Context, Annotation, WithContext),
