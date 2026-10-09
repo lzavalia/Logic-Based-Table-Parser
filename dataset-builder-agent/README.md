@@ -161,7 +161,8 @@ Each run writes a `dataset/` directory inside `src/`:
 | Path | Contents |
 |---|---|
 | `dataset/papers/PMC<id>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
-| `dataset/papers/PMC<id>/metadata.json` | Paper identity, original title, and counts of tables and validly partitioned tables. |
+| `dataset/papers/PMC<id>/metadata.json` | Published paper identity, `status: "complete"`, original title, and table counts. |
+| `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
 | `dataset/cache/` | The last PubMed Central search responses. |
 
@@ -318,4 +319,31 @@ Run the standalone offline regression suite from `dataset-builder-agent/src`:
 
 ```bash
 swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
+```
+
+### Failure reporting and complete-output validation (F05)
+
+A successful paper publication is now tagged `"status":"complete"` in its
+`metadata.json` and is preceded by a check that **exactly** the numbered
+`annotated_tableN.html` files and matching metadata exist in the staging
+directory; empty table files, missing or unexpected files, and inconsistent
+counts abort publication. Annotation rendering now requires an output for
+**each** valid boundary (instead of silently dropping failed candidates).
+
+Failed builds appear as `PMC<id>: failed (<reason>); <previous snapshot status>`
+with an indexed table error or raster-limit description where applicable.
+Failures do **not** publish partial table sets; previously published completed
+snapshots remain untouched. Download failures may still leave a raw response
+under `dataset/raw/`; these are not published table annotations. Status files
+under `dataset/attempts/` record successful and failed build attempts
+separately; they are **best-effort**, not a transactional database. A hard
+crash can still leave an incomplete staging directory or prevent a status
+record from being written; there is no automatic crash recovery yet.
+
+Run the new offline tests alongside the prior three suites (from `src/`):
+
+```bash
+./run_regression_tests.sh
+# or run just F05:
+swipl -q -s paper_failure_regression_tests.pl -g run_tests -t halt
 ```

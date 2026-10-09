@@ -184,9 +184,10 @@ take(N, [X|Xs], [X|Ys]) :-
 % bad paper cannot abort the run or trigger the fallback clause.
 process_papers([], []).
 process_papers([Id|Ids], [Line|Lines]) :-
-    (   catch(download_and_process(Id, Result), _, fail)
+    (   catch(download_and_process(Id, Result), Error,
+              format_paper_failure(Id, "/workspace/dataset", Error, Result))
     ->  Line = Result
-    ;   format(string(Line), "PMC~w: failed (download or processing error; previous completed annotations, if any, retained)", [Id])
+    ;   format_paper_failure(Id, "/workspace/dataset", pipeline_goal_failed, Line)
     ),
     output(Line),
     process_papers(Ids, Lines).

@@ -37,7 +37,8 @@
       esummary_lines/2,
       download_status/2,
       pause/1,
-      process_paper/4
+      process_paper/4,
+      format_paper_failure/4
    ]).
 
 % library(json) only exists in recent SWI-Prolog; DeepClause's bundled engine
@@ -138,6 +139,8 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    make_directory_path(PapersDir),
    with_paper_output_staging(PapersDir, PaperName,
                              write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed)),
+   ignore(catch(record_paper_attempt(DatasetDir, PaperName, complete, "published"),
+                _, fail)),
    length(Tables, NumTables),
    format(string(Summary),
           "~s: ~d table(s), ~d with a valid header boundary -> papers/~s/",
@@ -159,16 +162,25 @@ ensure_paper_limit(Name, Actual) :-
 rasterize_tables_bounded(Tables, Rasters) :-
    length(Tables, NumTables),
    ensure_paper_limit(max_tables, NumTables),
-   rasterize_tables_bounded(Tables, 0, Rasters).
+   rasterize_tables_bounded(Tables, 0, 0, Rasters).
 
-rasterize_tables_bounded([], _, []).
-rasterize_tables_bounded([Table|Tables], Used0, [Raster|Rasters]) :-
-   rasterize_table(Table, Raster),
+rasterize_tables_bounded([], _, _, []).
+rasterize_tables_bounded([Table|Tables], Used0, Index, [Raster|Rasters]) :-
+   % Preserve the original error term (for API compatibility) while adding
+   % the table index to its context for actionable build reports.
+   (  catch(rasterize_table(Table, Raster), error(Formal, _),
+            throw(error(Formal, context(table_index(Index), 'Rasterizing table'))))
+   -> true
+   ;  throw(error(table_rasterization_failed(Index),
+                  context(process_paper/4, 'Rasterizer returned failure')))
+   ),
    length(Raster, Rows),
    ( Raster = [FirstRow|_] -> length(FirstRow, Cols) ; Cols = 0 ),
    Used is Used0 + Rows * Cols,
-   ensure_paper_limit(max_total_slots, Used),
-   rasterize_tables_bounded(Tables, Used, Rasters).
+   catch(ensure_paper_limit(max_total_slots, Used), error(Formal2, _),
+         throw(error(Formal2, context(table_index(Index), 'Paper slot budget')))),
+   Next is Index + 1,
+   rasterize_tables_bounded(Tables, Used, Next, Rasters).
 
 % The agent supplies digit strings. Also accept atoms and positive integers in
 % local Prolog calls, but never allow unchecked path fragments or alternate
@@ -240,17 +252,67 @@ write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
    setup_call_cleanup(
       open(MetadataFile, write, Stream, [encoding(utf8)]),
       json_write_dict(Stream,
-                      json{pmc_id:PaperName, title:Title,
+                      json{pmc_id:PaperName, title:Title, status:"complete",
                            table_count:NumTables, parsed_table_count:NumParsed}),
-      close(Stream)).
+      close(Stream)),
+   validate_paper_stage(StageDir, NumTables, NumParsed).
 
 save_numbered_tables(_, [], [], _, []).
 save_numbered_tables(StageDir, [Table|Tables], [Raster|Rasters], N,
                      [Boundaries|MoreBoundaries]) :-
    table_file_name(StageDir, N, TableFile),
-   save_table(TableFile, Table, Raster, Boundaries),
+   % Never let either an exception or plain predicate failure silently skip
+   % one table. Include its 0-based index in the diagnostic.
+   (  catch(save_table(TableFile, Table, Raster, Boundaries), Error,
+            throw(error(table_output_failure(N, Error),
+                        context(process_paper/4, 'Writing table failed'))))
+   -> true
+   ;  throw(error(table_output_failure(N, goal_failed),
+                  context(process_paper/4, 'Writing table failed')))
+   ),
    Next is N + 1,
    save_numbered_tables(StageDir, Tables, Rasters, Next, MoreBoundaries).
+
+% Ensure the entire expected paper snapshot was staged, not merely that
+% its writer returned true. A missing, empty or unexpected file is an error;
+% in particular we must never publish an empty annotation as a successful
+% table or a directory whose metadata disagrees with its contents.
+validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
+   directory_files(StageDir, Entries),
+   exclude(is_dot_entry, Entries, ActualFiles),
+   findall(Name,
+           ( ExpectedTables > 0,
+             Last is ExpectedTables - 1,
+             between(0, Last, N),
+             format(atom(Name), 'annotated_table~d.html', [N]) ),
+           TableFiles),
+   sort(['metadata.json'|TableFiles], Expected),
+   sort(ActualFiles, Actual),
+   (  Actual == Expected
+   -> true
+   ;  throw(error(incomplete_paper_stage(file_set_mismatch(Expected, Actual)),
+                  context(process_paper/4, 'Staged paper files mismatch')))
+   ),
+   forall(member(FileName, TableFiles),
+          ( directory_file_path(StageDir, FileName, File),
+            size_file(File, Size),
+            ( Size > 0
+            -> true
+            ;  throw(error(incomplete_paper_stage(empty_table(FileName)),
+                           context(process_paper/4, 'Staged table is empty')))
+            ) )),
+   directory_file_path(StageDir, 'metadata.json', MetadataFile),
+   read_json_file(MetadataFile, Metadata),
+   (  Metadata.status == "complete",
+      Metadata.table_count =:= ExpectedTables,
+      Metadata.parsed_table_count =:= ExpectedParsed
+   -> true
+   ;  throw(error(incomplete_paper_stage(metadata_mismatch),
+                  context(process_paper/4, 'Staged metadata is inconsistent')))
+   ).
+
+is_dot_entry('.').
+is_dot_entry('..').
 
 % Replacement of a nonempty directory requires two renames. We retain the
 % previous complete version under a hidden backup until the staged directory
@@ -299,19 +361,21 @@ save_table(TableFile, Table, Raster, Boundaries) :-
    setup_call_cleanup(
       open(TableFile, write, Stream, [encoding(utf8)]),
       forall(member(Annotation, Annotations),
-             ( write(Stream, Annotation), nl(Stream) )),
+             ( string_length(Annotation, HtmlLength), HtmlLength > 0,
+               write(Stream, Annotation), nl(Stream) )),
       close(Stream)).
 
 table_annotations(Table, [], [Html]) :- !,
    table_html(Table, Html).
 table_annotations(Table, Boundaries, Annotations) :-
-   findall(
-      Annotation,
-      ( member(json{hmd: Hmd, vmd: Vmd}, Boundaries),
-        annotate_table_element(Hmd, Vmd, Table, Annotated),
-        table_html(Annotated, Annotation) ),
-      Annotations
-   ).
+   % findall/3 silently drops candidates whose annotation fails. A table
+   % with valid candidate boundaries must render exactly one result per
+   % candidate; maplist/3 propagates ordinary failure to the table writer.
+   maplist(render_boundary(Table), Boundaries, Annotations).
+
+render_boundary(Table, json{hmd:Hmd, vmd:Vmd}, Annotation) :-
+   annotate_table_element(Hmd, Vmd, Table, Annotated),
+   table_html(Annotated, Annotation).
 
 % --- paper metadata --------------------------------------------------------
 
@@ -338,3 +402,75 @@ text_piece(Children, Piece) :-
    ;  Piece = Child
    ).
 
+
+% --- build diagnostics -----------------------------------------------------
+%
+% In the DML agent a failure is reported instead of being swallowed by an
+% anonymous catch/3. The *previous published paper* is not modified on
+% failed reruns; this is distinct from an unsuccessful raw XML download.
+% Failure records are outside papers/ and never mark an incomplete snapshot
+% as complete. Logging is best effort and must not hide the original error.
+format_paper_failure(PmcId, DatasetDir, Error, Line) :-
+   (  canonical_pmc_name(PmcId, PaperName)
+   -> true
+   ;  PaperName = "PMC-invalid-id"
+   ),
+   paper_failure_reason(Error, Reason),
+   directory_file_path(DatasetDir, 'papers', PapersDir),
+   directory_file_path(PapersDir, PaperName, FinalDir),
+   (  exists_directory(FinalDir)
+   -> Previous = "previous published snapshot retained"
+   ;  Previous = "no published snapshot present"
+   ),
+   format(string(Line), "~s: failed (~s); ~s", [PaperName, Reason, Previous]),
+   ignore(catch(record_paper_attempt(DatasetDir, PaperName, failed, Reason), _, fail)).
+
+paper_failure_reason(error(table_rasterization_failed(N), _), Reason) :- !,
+   format(string(Reason), "table ~d rasterization returned failure", [N]).
+paper_failure_reason(error(table_output_failure(N, Cause), _), Reason) :- !,
+   exception_class(Cause, Class),
+   format(string(Reason), "table ~d output: ~s", [N, Class]).
+paper_failure_reason(error(incomplete_paper_stage(Cause), _), Reason) :- !,
+   exception_class(Cause, Class),
+   format(string(Reason), "stage validation: ~s", [Class]).
+paper_failure_reason(error(table_raster_limit_exceeded(Name, Maximum, Actual),
+                           context(table_index(Index), _)), Reason) :- !,
+   format(string(Reason), "table ~d raster limit ~w exceeded (~w > ~w)",
+          [Index, Name, Actual, Maximum]).
+paper_failure_reason(error(table_raster_limit_exceeded(Name, Maximum, Actual), _), Reason) :- !,
+   format(string(Reason), "raster limit ~w exceeded (~w > ~w)", [Name, Actual, Maximum]).
+paper_failure_reason(error(paper_raster_limit_exceeded(Name, Maximum, Actual),
+                           context(table_index(Index), _)), Reason) :- !,
+   format(string(Reason), "table ~d paper raster limit ~w exceeded (~w > ~w)",
+          [Index, Name, Actual, Maximum]).
+paper_failure_reason(error(paper_raster_limit_exceeded(Name, Maximum, Actual), _), Reason) :- !,
+   format(string(Reason), "paper raster limit ~w exceeded (~w > ~w)", [Name, Actual, Maximum]).
+paper_failure_reason(pipeline_goal_failed, "download or processing returned failure").
+paper_failure_reason(Error, Reason) :-
+   exception_class(Error, Class),
+   format(string(Reason), "~s", [Class]).
+
+exception_class(error(Formal, _), Class) :- !,
+   exception_class(Formal, Class).
+exception_class(Formal, Class) :-
+   (  compound(Formal) -> functor(Formal, Name, _) ; Name = Formal ),
+   format(string(Class), "~w", [Name]).
+
+% Each attempt gets a unique status file, so a failed rerun does not alter
+% earlier successful attempt records or the published paper metadata.
+% Cleanup/reporting errors are deliberately non-fatal once publication occurs.
+record_paper_attempt(DatasetDir, PaperName, Status, Detail) :-
+   directory_file_path(DatasetDir, 'attempts', AttemptsDir),
+   make_directory_path(AttemptsDir),
+   get_time(Now),
+   Stamp is floor(Now * 1000000),
+   between(0, 9999, Sequence),
+   format(string(FileName), "~s.~d.~d.json", [PaperName, Stamp, Sequence]),
+   directory_file_path(AttemptsDir, FileName, File),
+   \+ exists_file(File),
+   setup_call_cleanup(
+      open(File, write, Out, [encoding(utf8)]),
+      json_write_dict(Out, json{pmc_id:PaperName, status:Status, detail:Detail,
+                               timestamp_unix:Now}),
+      close(Out)),
+   !.
