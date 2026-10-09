@@ -188,8 +188,10 @@ color_cell(element(Name, Attrs, Children), Colors, Id, element(Name, NewAttrs, C
                           'DOM cell has no raster slot for annotation')))
    ).
 
-% The color is appended to any existing style, so it wins over an earlier
-% background declaration and over a bgcolor attribute.
+% Source `style` and `bgcolor` attributes are removed by table_html_sanitizer
+% before coloring, so on sanitized input this declaration is the only
+% background the cell has. Appending does NOT beat an earlier `!important`
+% declaration, so never call this on unsanitized DOM.
 set_background(Color, Attrs, NewAttrs) :-
    (  selectchk(style = Style, Attrs, Rest)
    -> format(atom(NewStyle), '~w; background-color: ~w', [Style, Color]),

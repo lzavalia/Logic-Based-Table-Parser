@@ -1,6 +1,6 @@
 # Dataset Builder Agent
 
-The dataset builder turns a search phrase into a set of scientific tables whose cells are labelled as **horizontal metadata (HMD)**, **vertical metadata (VMD)** or **data**. It is a DeepClause (DML) agent: a Prolog program in which a language model performs one narrow step and logic performs the rest.
+The dataset builder turns a search phrase into a set of scientific tables whose cells are given *candidate* structural regions: **horizontal metadata (HMD)**, **vertical metadata (VMD)** or **data**. These are hypotheses derived from merged-cell geometry, not verified semantic labels. It is a DeepClause (DML) agent: a Prolog program in which a language model performs one narrow step and logic performs the rest.
 
 ## What it does
 
@@ -40,8 +40,8 @@ Yellow is the only step that uses the language model; blue steps are determinist
 ## Advantages of the parse constraints in this workflow
 
 - **No model cost for the hard part.** Deciding where a table's headers end is done by logic, so the model never reads a table. A 20-paper run that produced 38 tables used about 16,600 tokens (roughly $0.06), all of it spent choosing papers.
-- **Deterministic and repeatable.** The same table always yields the same boundaries. Labels do not drift between runs, which matters when the output is training or evaluation data.
-- **It declines rather than guesses.** A table with no boundary satisfying all seven constraints is saved uncolored instead of being given a plausible-looking but unsupported labelling. In the 20-paper run this happened for 1 of 38 tables.
+- **Deterministic and repeatable.** The same table always yields the same candidate boundaries, so results do not drift between runs. Repeatable is not the same as correct: candidates need comparison against human-labeled tables before they are used as training or evaluation labels.
+- **It abstains only when no boundary exists, and says so.** A table with no boundary satisfying all seven constraints is saved uncolored with an explicit abstention reason instead of being given a forced labelling. In the 20-paper run this happened for 1 of 38 tables. A table that does admit a boundary is *not* thereby labelled correctly: for example, an entirely unmerged grid always admits `(0,0)` whether or not it has real headers. Treat every candidate as unverified (`semantic_validation: "unverified"`).
 - **Every decision is explainable.** A rejected boundary can be traced to the first constraint it violates (`omni_validate/4`), so a wrong or missing annotation can be diagnosed rather than merely observed.
 - **Content-independent.** The constraints look only at the table's structure (which slots belong to the same merged cell), not at its text. They apply unchanged across subjects, languages and vocabularies.
 - **Merged cells are evidence, not noise.** Row and column spans, which make tables hard for text-based methods, are exactly what the constraints reason about.

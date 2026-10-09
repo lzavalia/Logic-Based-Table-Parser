@@ -403,14 +403,30 @@ validation. The independent Python geometry and boundary-model scripts under
 These need SWI-Prolog (step 6) but no API key, no DeepClause and no network.
 Run them from `src/`.
 
-Annotate the tables of any HTML or XML file. This writes `table0.pl`,
-`table1.pl`, ... next to the input file:
+Annotate the tables of any HTML or XML file with `test_driver.pl`. Files with
+the extension `.xml` or `.nxml` are parsed as strict JATS XML; anything else is
+parsed as loose HTML:
 
 ```bash
 swipl -g 'consult(test_driver),
           test_table_parser("path/to/file.html", Files),
           writeln(Files)' -t halt
 ```
+
+For every `<table>` (numbered from 0 in document order) the driver writes one
+sanitized, colored view per structural candidate boundary to
+`path/to/file.html.tables/`:
+
+- `table<N>_hmd<H>_vmd<V>.html`: table `N` colored for boundary `(H, V)`.
+- `table<N>_unannotated.html`: table `N` has no admissible boundary, so it is
+  written uncolored instead of being omitted.
+
+Choose another directory with `test_table_parser(File, OutDir, Files)`. Earlier
+`table*.html` files in that directory are replaced; other files are untouched.
+The driver is strict like `process_paper/4`: oversized or malformed spans raise
+the same typed errors, and a file with no `<table>` raises
+`no_tables_found(File)`. Candidates are structural hypotheses, not verified
+semantic labels. `src/test_driver_regression_tests.pl` covers this driver.
 
 Process a paper the agent has already downloaded, exactly as the agent does.
 Replace `7285984` with the id of a file in `dataset/raw/`:
@@ -475,6 +491,7 @@ label for a scientific table.
 | `src/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
 | `src/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
+| `src/test_driver_regression_tests.pl` | Offline tests for the local driver: output naming, sanitization, stale-file replacement, strict errors. |
 
 ## Troubleshooting
 
@@ -493,10 +510,22 @@ label for a scientific table.
   run its Python host timer/limiter or the timer rejected shared state. Verify
   `python3 --version`, the built-in `bash` tool, and ownership of
   `dataset/cache/`. Do not bypass the limiter to make the run proceed.
-- **`concurrent_lock_busy(...)` / `pmc_ingest_busy(...)`**: another run
-  owns a workspace-level request lock or the same paper's raw XML. Retry
-  after the other run finishes; after a crash, verify no worker owns the
-  lock before removing a stale `.lock` directory.
+- **`concurrent_lock_busy(...)` / `pmc_ingest_busy(...)`, or an error naming a
+  `.PMC<n>.lock` path under `dataset/papers/`**: another run owns a lock, or a
+  crashed run left one behind. Locks are plain directories and are never removed
+  automatically, because a slow live run must not lose its lock. To recover:
+  1. Confirm nothing is using this workspace:
+     `pgrep -fa 'deepclause|swipl'` should show no run for it.
+  2. List the lock directories:
+     `find dataset -maxdepth 3 -type d -name '.*lock'`.
+     The three kinds are `dataset/cache/.ncbi-request.lock` (request limiter),
+     `dataset/raw/.PMC<n>.ingest.lock` (download and processing of one paper)
+     and `dataset/papers/.PMC<n>.lock` (publication of one paper).
+  3. Remove only the stale one with `rmdir <path>` (it is empty).
+  Leftover `dataset/papers/.PMC<n>.stage.*` or `*.backup` directories are
+  harmless debris from a crash and may be deleted once no run is active; a
+  `*.backup` directory beside a missing `PMC<n>` directory holds the previous
+  published copy, so rename it back to `PMC<n>` instead of deleting it.
 - **`NCBI rate limit reached; pausing ...`**: expected now and then. The request
   is retried up to five times before that paper is reported as failed.
 - **A paper reports `0 table(s)`**: its tables are published as images, or NCBI
@@ -574,8 +603,13 @@ with no tables may still produce a complete zero-table result.
 
 `download_status/3` distinguishes accepted ESearch/ESummary JSON, accepted
 JATS XML, rate-limited/transient error bodies, and invalid/empty/nonarticle
-responses. `ncbi_fetch` retries only known transient bodies, with bounded
-retries. Invalid responses cannot publish a paper. The DeepClause
+responses. A body that parses as exactly one JATS article is accepted as such
+*before* any error-text matching, so an article whose title mentions "rate limit
+exceeded" or "too many requests" is not mistaken for a throttling reply; bodies
+that fail that check (JSON errors, XML `<ERROR>` documents, HTML pages) are
+still matched against the transient-error phrases. `ncbi_fetch` retries only
+known transient bodies, with bounded retries. Invalid responses cannot publish
+a paper. The DeepClause
 `url_fetch` API in use does **not** expose HTTP headers/status to this DML
 code; status/content-type checks at the transport layer remain a follow-up
 for the fetch adapter. The local, network-free regression suite is
@@ -716,8 +750,12 @@ Offline tests: `src/pmc_id_parser_regression_tests.pl`.
 **Per-paper evidence (F20).** Every normally published `metadata.json` now
 contains `source_provenance` with the **raw-input-file SHA-256**, file byte count,
 input filename, canonical PMC identity, processing timestamp, article reference
-URL, and any JATS license evidence. The `retrieval_timestamp` is deliberately
-`null`: it cannot be inferred from processing a local file. The license state
+URL, and any JATS license evidence. `retrieval_timestamp` (ISO 8601 UTC, with
+`retrieval_timestamp_unix`) is the raw file's modification time, and
+`retrieval_timestamp_basis` is always `"raw_file_mtime"`. In an agent run the
+file is re-downloaded each time, so this is when NCBI's response was written; for
+a pre-existing local file passed to `process_paper/4` it is only when that file
+was last written, not an observed NCBI request time. The license state
 `requires_manual_review` is *not* an authorization to redistribute source
 material. The raw input file is not automatically embedded in the paper
 snapshot; retain `dataset/raw/` with a controlled storage policy for later

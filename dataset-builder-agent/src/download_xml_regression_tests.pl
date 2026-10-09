@@ -74,6 +74,21 @@ test(rate_limit_error_is_retryable,
     write_xml_fixture(Root, 'retry.xml', '{"error":"API rate limit exceeded"}', File),
     download_status(File, jats_xml, rate_limited).
 
+% A real article whose title contains a rate-limit phrase is still an article.
+test(article_mentioning_rate_limit_phrase_is_ok,
+     [setup(make_xml_fixture_dir(Root)), cleanup(cleanup_xml_fixture_dir(Root))]) :-
+    write_xml_fixture(Root, 'phrase.xml',
+        '<article><front><article-meta><article-id pub-id-type=\"pmc\">7</article-id><title-group><article-title>Too many requests: API rate limit exceeded in practice</article-title></title-group></article-meta></front><body/></article>',
+        File),
+    download_status(File, jats_xml, ok).
+
+% An XML-looking error body is not mistaken for an article.
+test(xml_error_body_with_rate_limit_is_retryable,
+     [setup(make_xml_fixture_dir(Root)), cleanup(cleanup_xml_fixture_dir(Root))]) :-
+    write_xml_fixture(Root, 'xmlerr.xml',
+        '<?xml version=\"1.0\"?><ERROR>API rate limit exceeded</ERROR>', File),
+    download_status(File, jats_xml, rate_limited).
+
 test(server_error_page_is_retryable,
      [setup(make_xml_fixture_dir(Root)), cleanup(cleanup_xml_fixture_dir(Root))]) :-
     write_xml_fixture(Root, 'server.xml', '<html><h1>503 Service Unavailable</h1></html>', File),

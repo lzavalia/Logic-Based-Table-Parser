@@ -321,6 +321,11 @@ download_status(File, Kind, Status) :-
    string_lower(Prefix, Lower),
    ( Length =:= 0
    -> Status = invalid(empty_body)
+   % A complete, single JATS article is never an error response, even when
+   % its first 2 KB (e.g. a title) happens to contain a rate-limit phrase.
+   % Error bodies that merely look like XML still fall through to the sniffs.
+   ; Kind == jats_xml, valid_jats_body(Body)
+   -> Status = ok
    ; ( sub_string(Lower, _, _, _, "rate limit exceeded")
      ; sub_string(Lower, _, _, _, "too many requests")
      ; sub_string(Lower, _, _, _, "429 too many requests") )
@@ -331,6 +336,9 @@ download_status(File, Kind, Status) :-
    -> Status = retryable(server_unavailable)
    ; classify_download_body(Kind, Body, Lower, Status)
    ).
+
+valid_jats_body(Body) :-
+   catch(( parse_jats_xml(Body, Dom), jats_single_article(Dom, _) ), _, fail).
 
 classify_download_body(_, _, Lower, invalid(http_error_page)) :-
    ( sub_string(Lower, _, _, _, "<html")

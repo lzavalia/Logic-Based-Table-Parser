@@ -36,6 +36,14 @@ paper_source_provenance(File, Pmc, Dom, Manifest) :-
     size_file(File, Bytes),
     file_base_name(File, FileName),
     get_time(Now),
+    % The agent deletes and re-downloads dataset/raw/PMC<id>.xml for every run,
+    % so the file's modification time is when NCBI's response was written.
+    % For a pre-existing local file passed to process_paper/4 it is only when
+    % that file was last written; retrieval_timestamp_basis says which source
+    % this is so no reader mistakes it for an observed NCBI request time.
+    time_file(File, Mtime),
+    stamp_date_time(Mtime, MtimeUtc, 'UTC'),
+    format_time(string(MtimeIso), '%FT%TZ', MtimeUtc),
     format(string(ArticleUrl), 'https://pmc.ncbi.nlm.nih.gov/articles/~s/', [Pmc]),
     license_evidence(Dom, License),
     Manifest = json{schema_version:"1.0", pmc_id:Pmc,
@@ -44,7 +52,9 @@ paper_source_provenance(File, Pmc, Dom, Manifest) :-
                     hash_scope:"raw_file_bytes",
                     input_file_size_bytes:Bytes,
                     article_reference_url:ArticleUrl,
-                    retrieval_timestamp:null,
+                    retrieval_timestamp:MtimeIso,
+                    retrieval_timestamp_unix:Mtime,
+                    retrieval_timestamp_basis:"raw_file_mtime",
                     processing_timestamp_unix:Now,
                     software:"logic_based_table_parser",
                     segmentation_semantics:"structural_hypotheses_not_verified_semantic_labels",
