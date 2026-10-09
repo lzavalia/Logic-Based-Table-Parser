@@ -379,7 +379,9 @@ jats_single_article(Dom, Article) :-
 jats_top_level_element(element(_, _, _)).
 
 % An eFetch response for PMC123 must contain a JATS article with exactly
-% that ID in <front><article-meta><article-id pub-id-type="pmc">.
+% that ID in <front><article-meta><article-id pub-id-type="pmc">, or
+% pub-id-type="pmcid", which is what current eFetch responses carry.
+% Versioned and internal ids (pmcid-ver, pmcaid, pmcaiid) are not identity.
 % Reference-list article ids do not count as identity evidence.
 verify_jats_pmc_id(Dom, Expected) :-
    ( jats_single_article(Dom, Article)
@@ -399,7 +401,8 @@ article_front_pmc_id(element(article, _, Children), PmcName) :-
    member(element('article-id', Attrs, Content), Meta),
    memberchk('pub-id-type'=Type, Attrs),
    text_to_string(Type, TypeText),
-   string_lower(TypeText, "pmc"),
+   string_lower(TypeText, LowerType),
+   memberchk(LowerType, ["pmc", "pmcid"]),
    findall(Piece, text_piece(Content, Piece), Pieces),
    atomic_list_concat(Pieces, '', Atom),
    normalize_space(string(Raw), Atom),
@@ -598,8 +601,9 @@ table_source_context(Table, Path, Wrap, Context) :-
       wrap_notes(WrapChildren, Notes)
    ;  WrapPathText = "", WrapId = "", Label = "", Notes = [],
       LabelMarkup = "", CaptionMarkup = "", FootMarkup = "",
-      Table = element(table, _, TableChildren),
-      direct_context_text(TableChildren, caption, Caption) ),
+      % No wrapper means no external caption; the table's own caption is
+      % picked up below and marked as internal.
+      Caption = "" ),
    % A standalone HTML table can also carry its own caption, even when a
    % wrapping JATS table-wrap is present but has no external caption.
    ( Caption == "", Table = element(table, _, InnerChildren)
@@ -773,7 +777,7 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
                       [Boundaries|MoreBoundaries], [Meta|MoreMeta]) :-
    table_file_name(StageDir, N, TableFile),
    format(string(TableUid), '~s/t~d', [PaperName, N]),
-   put_dict(table_uid, Context, HtmlContext),
+   put_dict(table_uid, Context, TableUid, HtmlContext),
    % Fail closed if any annotation or JSONL record cannot be generated.
    ( catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
              machine_table_record(PaperName, N, Table, Context, Raster,
@@ -865,7 +869,7 @@ try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
                             Raster, Result) :-
    table_file_name(StageDir, Index, TableFile),
    format(string(TableUid), '~s/t~d', [PaperName, Index]),
-   put_dict(table_uid, Context, HtmlContext),
+   put_dict(table_uid, Context, TableUid, HtmlContext),
    catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
            machine_table_record(PaperName, Index, Table, Context, Raster,
                                 Boundaries, Machine, Meta)
@@ -1012,7 +1016,7 @@ read_table_jsonl_stream(Stream, Records) :-
    read_line_to_string(Stream, Line),
    ( Line == end_of_file -> Records = []
    ; atom_string(Text, Line),
-     atom_json_dict(Text, Record, []),
+     atom_json_dict(Text, Record, [default_tag(json)]),
      Records = [Record|Rest],
      read_table_jsonl_stream(Stream, Rest) ).
 

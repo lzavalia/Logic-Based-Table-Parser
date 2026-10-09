@@ -1,6 +1,6 @@
 % Source and license evidence for paper snapshots. No assertion of redistribution
 % permission follows from a PMC open-access search filter or a license tag.
-:- module(provenance_manifest, [paper_source_provenance/3,
+:- module(provenance_manifest, [paper_source_provenance/4,
                                 store_source_provenance/2]).
 % crypto is not included in every WASM SWI build. The bundled lightweight
 % SHA package provides a fallback, without weakening the SHA-256 requirement.
