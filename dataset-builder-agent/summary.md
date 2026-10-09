@@ -11,7 +11,7 @@ Given a phrase such as `"dementia with lewy bodies"`, the agent:
 3. **Extracts every `<table>` element** and lays it out as a *raster*: a grid in which each slot holds the id of the cell covering it, so merged cells span several slots (`table_layout_generator.pl`).
 4. **Finds the header boundaries.** Every candidate pair (HMD boundary row, VMD boundary column) is tested against the seven parse constraints; the pairs that satisfy all of them are kept (`parse_constraints.pl`).
 5. **Annotates the table.** For each valid pair the original table is colored: HMD cells green, VMD cells blue, data cells gray (`table_annotator.pl`).
-6. **Saves the result** as `dataset/<paper title>/annotated_tableN.html`.
+6. **Saves the result** as `dataset/papers/PMC<id>/annotated_tableN.html`, with `metadata.json` for the article title and table counts. Outputs are staged and replaced per PMC ID to avoid title collisions and stale tables.
 
 Steps 2–6 run inside DeepClause's own Prolog engine and never involve the model.
 
@@ -26,7 +26,7 @@ flowchart TD
     E --> F{"Parse constraints<br/>parse_constraints.pl<br/>any valid HMD/VMD boundary?"}
     F -->|yes| G["Color cells HMD / VMD / data<br/>table_annotator.pl"]
     F -->|no| H["Save table uncolored"]
-    G --> I[("dataset/&lt;paper title&gt;/<br/>annotated_tableN.html")]
+    G --> I[("dataset/papers/PMC&lt;id&gt;/<br/>annotated_tableN.html")]
     H --> I
 
     classDef llm fill:#ffe9a8,stroke:#b8860b,color:#000

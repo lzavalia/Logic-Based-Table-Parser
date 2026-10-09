@@ -160,11 +160,35 @@ Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
-| `dataset/<paper title>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
+| `dataset/papers/PMC<id>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
+| `dataset/papers/PMC<id>/metadata.json` | Paper identity, original title, and counts of tables and validly partitioned tables. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
 | `dataset/cache/` | The last PubMed Central search responses. |
 
-`dataset/` is added to by each run, not cleared.
+`dataset/` is retained between runs. Paper outputs are keyed by **canonical PMC ID**
+(rather than article title), so papers with equal or truncated titles cannot
+overwrite one another. Reprocessing an ID replaces its entire published paper
+directory: old `annotated_tableN.html` files from larger previous runs do not
+survive. The article title is available in `metadata.json` instead of the path.
+
+Paper output is first written in a hidden staging directory under
+`dataset/papers/`. The old complete version remains untouched on normal
+processing failures; a successful rerun moves it to a temporary backup and
+publishes the new directory, then removes the backup. **Directory replacement
+is not crash-atomic**: if the process or host stops in the short interval
+between the two renames, a hidden `.PMC<id>.stage.*.backup` directory may hold
+the previous complete version while `papers/PMC<id>/` is absent. Recover it
+manually only after confirming no other run is active, and inspect any stale
+`.PMC<id>.stage.*` directories before removing them. An exclusive
+`.PMC<id>.lock` directory protects against two processes publishing the same
+paper concurrently. A hard crash can leave that lock behind: manually remove
+it only after verifying the earlier process is no longer running.
+
+**Migration:** directories produced by older versions at
+`dataset/<sanitized article title>/` are left untouched to avoid accidental
+delete/misattribution of files already affected by title collisions. Review
+and archive or remove those legacy directories manually; new output is under
+`dataset/papers/`.
 
 ### Settings
 
@@ -222,7 +246,14 @@ Run the offline boundary regressions from `dataset-builder-agent/src`:
 swipl -q -s boundary_regression_tests.pl -g run_tests -t halt
 ```
 
-This check needs SWI-Prolog but no network access or LLM. A valid structural
+This check needs SWI-Prolog but no network access or LLM.
+
+Paper-output regressions (duplicate titles, stale files, rollback, and PMC
+identity validation) are run separately:
+
+```bash
+swipl -q -s paper_output_regression_tests.pl -g run_tests -t halt
+``` A valid structural
 partition is still only a *candidate interpretation*, not a verified semantic
 label for a scientific table.
 
@@ -236,6 +267,7 @@ label for a scientific table.
 | `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
 | `src/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
+| `src/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 
 ## Troubleshooting

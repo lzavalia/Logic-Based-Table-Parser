@@ -18,7 +18,8 @@
 % Phase 1.
 %
 % Output (relative to the workspace):
-%   dataset/<paper title>/annotated_tableN.html  one annotated table per file
+%   dataset/papers/PMC<id>/annotated_tableN.html  one annotated table per file
+%   dataset/papers/PMC<id>/metadata.json      article title and table counts
 %   dataset/raw/PMC<id>.xml                    full text as downloaded
 %   dataset/cache/                             last search responses
 %
@@ -185,7 +186,7 @@ process_papers([], []).
 process_papers([Id|Ids], [Line|Lines]) :-
     (   catch(download_and_process(Id, Result), _, fail)
     ->  Line = Result
-    ;   format(string(Line), "PMC~w: failed (could not download or process the full text; no files written)", [Id])
+    ;   format(string(Line), "PMC~w: failed (download or processing error; previous completed annotations, if any, retained)", [Id])
     ),
     output(Line),
     process_papers(Ids, Lines).
@@ -198,8 +199,7 @@ process_papers([Id|Ids], [Line|Lines]) :-
 %   table_layout_generator.pl  ->  raster
 %   parse_constraints.pl       ->  header boundaries that satisfy omni_validate/3
 %   table_annotator.pl         ->  the table colored as HMD / VMD / data
-% and saves it under dataset/<paper title>/, creating the directories if
-% needed.
+% and saves it under dataset/papers/PMC<id>/ after full-paper staging.
 download_and_process(Id, Line) :-
     format(string(Url),
            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=~w",
@@ -235,7 +235,7 @@ Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567)
     process_papers(Ids, Lines),
 
     atomic_list_concat(Lines, "\n", Report),
-    format(string(Summary), "Dataset build complete for '~w'. Each paper's tables are in dataset/<paper title>/.\n~w", [Topic, Report]),
+    format(string(Summary), "Dataset build complete for '~w'. Each paper's tables are in dataset/papers/PMC<id>/.\n~w", [Topic, Report]),
     answer(Summary).
 
 % Fallback

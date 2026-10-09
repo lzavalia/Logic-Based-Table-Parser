@@ -27,7 +27,9 @@
 %       table_layout_generator.pl, check every header boundary against
 %       parse_constraints.pl, and color the table for each valid boundary
 %       with table_annotator.pl. The tables are saved as
-%       <DatasetDir>/<paper title>/annotated_tableN.html, N counting from 0.
+%       <DatasetDir>/papers/PMC<id>/annotated_tableN.html, N from 0.
+%       The directory is replaced as a whole after a successful run; the
+%       title and counts are recorded in metadata.json.
 %       Summary is a one-line report.
 
 :- module(dataset_pipeline, [
@@ -122,31 +124,140 @@ wait_until(End) :-
 % --- table pipeline --------------------------------------------------------
 
 % process_paper(+PmcId, +File, +DatasetDir, -Summary)
-% Creates DatasetDir and the paper's directory inside it if they do not
-% exist, then writes one file per table of the full text, numbered from 0 in
-% document order (the same layout as test_driver.pl).
+% A canonical PMC id is the ONLY output identity. Titles never control paths.
+% Build a complete replacement under a hidden staging directory, then publish
+% it; a smaller rerun cannot leave the previous paper's extra table files.
 process_paper(PmcId, File, DatasetDir, Summary) :-
+   canonical_pmc_name(PmcId, PaperName),
    read_file_to_string(File, Text, [encoding(utf8)]),
    parse_html(Text, Dom),
    extract_tables(Dom, Tables),
    maplist(rasterize_table, Tables, Rasters),
-   paper_directory_name(PmcId, Dom, PaperName),
-   directory_file_path(DatasetDir, PaperName, PaperDir),
-   make_directory_path(PaperDir),
-   findall(
-      Boundaries,
-      ( nth0(N, Tables, Table),
-        nth0(N, Rasters, Raster),
-        table_file_name(PaperDir, N, TableFile),
-        save_table(TableFile, Table, Raster, Boundaries) ),
-      BoundaryLists
+   ( paper_title(Dom, Title) -> true ; Title = "" ),
+   directory_file_path(DatasetDir, 'papers', PapersDir),
+   make_directory_path(PapersDir),
+   with_paper_output_staging(PapersDir, PaperName,
+                             write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed)),
+   length(Tables, NumTables),
+   format(string(Summary),
+          "~s: ~d table(s), ~d with a valid header boundary -> papers/~s/",
+          [PaperName, NumTables, NumParsed, PaperName]).
+
+% The agent supplies digit strings. Also accept atoms and positive integers in
+% local Prolog calls, but never allow unchecked path fragments or alternate
+% spellings (e.g. PMC00042 and PMC42) to create different paper identities.
+canonical_pmc_name(PmcId, PaperName) :-
+   ( integer(PmcId) -> format(string(Text), "~d", [PmcId])
+   ; string(PmcId) -> Text = PmcId
+   ; atom(PmcId) -> atom_string(PmcId, Text)
    ),
+   string_length(Text, Length),
+   between(1, 12, Length),
+   string_codes(Text, Codes),
+   forall(member(Code, Codes), between(0'0, 0'9, Code)),
+   number_string(Number, Text),
+   Number > 0,
+   format(string(PaperName), "PMC~d", [Number]).
+
+% Meta-argument: a goal that receives the fresh staging directory.
+% If parsing, coloring, writing or publishing fails, the incomplete staging
+% directory is removed and any previously published version is retained.
+:- meta_predicate with_paper_output_staging(+, +, 1).
+with_paper_output_staging(PapersDir, PaperName, Writer) :-
+   paper_lock_directory(PapersDir, PaperName, LockDir),
+   % make_directory/1 provides exclusive creation; a second process trying
+   % the same PMC id fails instead of racing the two directory renames.
+   make_directory(LockDir),
+   setup_call_cleanup(
+      true,
+      staged_paper_write(PapersDir, PaperName, Writer),
+      delete_directory(LockDir)).
+
+staged_paper_write(PapersDir, PaperName, Writer) :-
+   fresh_staging_directory(PapersDir, PaperName, StageDir),
+   setup_call_cleanup(
+      true,
+      ( call(Writer, StageDir),
+        publish_paper_directory(PapersDir, PaperName, StageDir) ),
+      ( exists_directory(StageDir)
+      -> delete_directory_and_contents(StageDir)
+      ;  true )).
+
+paper_lock_directory(PapersDir, PaperName, LockDir) :-
+   format(string(LockName), ".~s.lock", [PaperName]),
+   directory_file_path(PapersDir, LockName, LockDir).
+
+% Hidden staging/backup names are reserved under the SAME parent as the final
+% directory so renames do not cross filesystem boundaries. A fresh directory
+% is allocated for each run, even if a crashed earlier run left staging files.
+fresh_staging_directory(PapersDir, PaperName, StageDir) :-
+   get_time(Now),
+   Stamp is floor(Now * 1000000),
+   between(0, 9999, Attempt),
+   format(string(StageName), ".~s.stage.~d.~d", [PaperName, Stamp, Attempt]),
+   directory_file_path(PapersDir, StageName, Candidate),
+   \+ exists_directory(Candidate),
+   \+ exists_file(Candidate),
+   make_directory(Candidate),
+   StageDir = Candidate,
+   !.
+
+write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
+   % Do not use findall/3 around save_table/4: a failed table write would be
+   % silently skipped, letting an incomplete paper look like a success.
+   save_numbered_tables(StageDir, Tables, Rasters, 0, BoundaryLists),
    length(Tables, NumTables),
    exclude(==([]), BoundaryLists, Parsed),
    length(Parsed, NumParsed),
-   format(string(Summary),
-          "PMC~w: ~w table(s), ~w with a valid header boundary -> ~w/",
-          [PmcId, NumTables, NumParsed, PaperName]).
+   directory_file_path(StageDir, 'metadata.json', MetadataFile),
+   setup_call_cleanup(
+      open(MetadataFile, write, Stream, [encoding(utf8)]),
+      json_write_dict(Stream,
+                      json{pmc_id:PaperName, title:Title,
+                           table_count:NumTables, parsed_table_count:NumParsed}),
+      close(Stream)).
+
+save_numbered_tables(_, [], [], _, []).
+save_numbered_tables(StageDir, [Table|Tables], [Raster|Rasters], N,
+                     [Boundaries|MoreBoundaries]) :-
+   table_file_name(StageDir, N, TableFile),
+   save_table(TableFile, Table, Raster, Boundaries),
+   Next is N + 1,
+   save_numbered_tables(StageDir, Tables, Rasters, Next, MoreBoundaries).
+
+% Replacement of a nonempty directory requires two renames. We retain the
+% previous complete version under a hidden backup until the staged directory
+% is in place; on ordinary errors we restore that previous version. Unlike
+% a single file rename, this is NOT crash-atomic: power loss between renames
+% may leave a .backup directory requiring recovery.
+publish_paper_directory(PapersDir, PaperName, StageDir) :-
+   directory_file_path(PapersDir, PaperName, FinalDir),
+   ( exists_directory(FinalDir)
+   -> backup_directory_path(PapersDir, StageDir, BackupDir),
+      rename_file(FinalDir, BackupDir),
+      ( catch(rename_file(StageDir, FinalDir), Error,
+              ( rename_file(BackupDir, FinalDir), throw(Error) ))
+      -> discard_old_backup(BackupDir)
+      ;  rename_file(BackupDir, FinalDir),
+         fail )
+   ;  rename_file(StageDir, FinalDir)
+   ).
+
+% Once the new directory has been published, failure to clean an obsolete
+% backup must not turn a complete build into a reported failure. Keep it for
+% manual review and emit a warning instead.
+discard_old_backup(BackupDir) :-
+   ( catch(delete_directory_and_contents(BackupDir), _, fail)
+   -> true
+   ;  format(user_error, "Warning: obsolete paper backup remains at ~s~n", [BackupDir])
+   ).
+
+backup_directory_path(PapersDir, StageDir, BackupDir) :-
+   file_base_name(StageDir, StageName),
+   format(string(BackupName), "~s.backup", [StageName]),
+   directory_file_path(PapersDir, BackupName, BackupDir),
+   \+ exists_directory(BackupDir),
+   \+ exists_file(BackupDir).
 
 table_file_name(PaperDir, N, TableFile) :-
    format(string(Name), "annotated_table~w.html", [N]),
@@ -175,17 +286,7 @@ table_annotations(Table, Boundaries, Annotations) :-
       Annotations
    ).
 
-% --- paper directory -------------------------------------------------------
-
-% paper_directory_name(+PmcId, +Dom, -Name): the paper's title as a directory
-% name, or its PMC id if the full text has no title.
-paper_directory_name(PmcId, Dom, Name) :-
-   (  paper_title(Dom, Title),
-      directory_name(Title, Name),
-      Name \== ""
-   -> true
-   ;  format(string(Name), "PMC~w", [PmcId])
-   ).
+% --- paper metadata --------------------------------------------------------
 
 % The first <article-title> in document order is the paper's own; the ones
 % in the reference list come later.
@@ -210,23 +311,3 @@ text_piece(Children, Piece) :-
    ;  Piece = Child
    ).
 
-% directory_name(+Title, -Name): Title made safe as a single path component.
-% Letters, digits and  - _ . , ( )  are kept, anything else (slashes, colons,
-% quotes, ...) becomes a space; the result is at most 80 characters long and
-% does not start or end with a dot or a space.
-directory_name(Title, Name) :-
-   string_chars(Title, Chars),
-   maplist(safe_char, Chars, SafeChars),
-   string_chars(Safe, SafeChars),
-   normalize_space(string(Collapsed), Safe),
-   (  string_length(Collapsed, Length), Length > 80
-   -> sub_string(Collapsed, 0, 80, _, Cut)
-   ;  Cut = Collapsed
-   ),
-   split_string(Cut, "", " .", [Name]).
-
-safe_char(Char, Safe) :-
-   (  ( char_type(Char, alnum) ; memberchk(Char, ['-', '_', '.', ',', '(', ')']) )
-   -> Safe = Char
-   ;  Safe = ' '
-   ).
