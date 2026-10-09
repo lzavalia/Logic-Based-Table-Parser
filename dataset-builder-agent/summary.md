@@ -133,3 +133,18 @@ Prolog and Python regression suites on pushes and pull requests.
 runtimes, missing suites, or test failures. It supports `--list`,
 `--prolog-only`, and `--python-only`. The workflow does not validate a live
 DeepClause/NCBI round trip.
+
+
+### Final audit follow-ups (F19–F20, F02)
+
+- Strict model-selected PMC token parsing is separated into
+  `pmc_id_parser.pl` and still requires search-result allowlist membership.
+- Every published paper metadata snapshot records the SHA-256 of its input
+  XML, byte size, observed JATS license evidence, article reference URL,
+  processing time, and a clearly **unverified** redistribution status.
+- Agent runs store source-query and selection provenance in a separate
+  per-run JSON manifest, with explicit persistence warnings.
+- Candidate region labels remain **structural hypotheses, not established
+  semantic labels**. JSONL records make this distinction machine-readable;
+  an offline evaluation script can compare against independently labeled gold.
+  Semantic accuracy remains unknown until such a corpus is provided.

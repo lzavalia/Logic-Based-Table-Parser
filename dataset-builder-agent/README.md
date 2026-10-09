@@ -1,7 +1,8 @@
 # Dataset Builder Agent
 
-Turns a search phrase into a set of scientific tables whose cells are labelled as
-horizontal metadata (HMD), vertical metadata (VMD) or data.
+Turns a search phrase into a set of scientific tables with **candidate
+structural** horizontal metadata (HMD), vertical metadata (VMD) and data
+regions. The segmentation is **not** verified semantic ground truth.
 
 A language model picks open-access papers from PubMed Central; everything after
 that (download, table extraction, rasterization, constraint checking, coloring)
@@ -24,9 +25,11 @@ There is nothing else to install. In particular:
   Prolog engine (SWI-Prolog compiled to WebAssembly) and the `.pl` files are
   loaded into it. A local `swipl` is only needed for the offline commands in
   [Running the table logic without the agent](#running-the-table-logic-without-the-agent).
-- The Prolog code uses only libraries bundled with SWI-Prolog (`sgml`,
-  `sgml_write`, `json`, `assoc`, `apply`, `lists`, `readutil`, `filesex`). No
-  packs are needed.
+- The Prolog code uses SWI-Prolog libraries (`sgml`, `sgml_write`, `json`,
+  `assoc`, `apply`, `lists`, `readutil`, `filesex`). SHA-256 provenance
+  additionally needs `library(crypto)` or `library(sha)` from the SWI runtime;
+  if neither is available, paper publication fails with an explicit error.
+  DeepClause's WebAssembly distribution must provide one of them.
 - No NCBI API key is needed. Workers sharing a filesystem workspace coordinate
   their request reservations with a 0.4-second minimum gap. This does not
   coordinate requests from other workspaces or machines sharing an IP.
@@ -698,3 +701,70 @@ cd dataset-builder-agent/src
 swipl -q -s raster_integrity_regression_tests.pl -g run_tests -t halt
 ./run_regression_tests.sh
 ```
+
+
+## Final audit closure: F19, F20 and semantic limitations
+
+**PMC ID selection (F19).** `src/pmc_id_parser.pl` accepts case-insensitive
+`PMC` + 1–12 ASCII digits as a *complete token*, with optional enclosing
+brackets/quotes and trailing sentence punctuation. It splits tabs, newlines,
+commas, semicolons and spaces; collapses leading-zero aliases and preserves
+first-seen order. Standalone numbers, embedded punctuation and non-ASCII digits
+are rejected. Grounding against this run's observed NCBI IDs remains mandatory.
+Offline tests: `src/pmc_id_parser_regression_tests.pl`.
+
+**Per-paper evidence (F20).** Every normally published `metadata.json` now
+contains `source_provenance` with the **raw-input-file SHA-256**, file byte count,
+input filename, canonical PMC identity, processing timestamp, article reference
+URL, and any JATS license evidence. The `retrieval_timestamp` is deliberately
+`null`: it cannot be inferred from processing a local file. The license state
+`requires_manual_review` is *not* an authorization to redistribute source
+material. The raw input file is not automatically embedded in the paper
+snapshot; retain `dataset/raw/` with a controlled storage policy for later
+hash verification. Both strict and opt-in quarantine modes attach provenance
+inside the staged paper snapshot before publication. Missing SHA-256 support is
+fatal, not silently replaced with a weaker checksum.
+
+**Run manifest (F20).** DML runs additionally write
+`dataset/runs/run-<unique-id>/manifest.json`, containing the topic,
+successful search query strings, authorized IDs, raw model selection, parsed
+IDs, chosen IDs, rejected IDs and per-paper status lines. Individual local
+`process_paper/4` calls have no upstream search query and create no run-level
+manifest; only the source manifest embedded in `metadata.json` is available.
+Run-manifest persistence failures are explicitly reported by the DML agent and
+do not roll back papers that have already been published. If you require
+end-to-end complete run manifests, treat the warning as an unsuccessful run.
+
+**Semantic correctness (F02).** All candidates are **structural boundary
+hypotheses**. Even a single valid boundary does not imply the data cells are
+semantically correct. JSONL table records and paper metadata explicitly mark
+`semantic_validation: "unverified"`; gold labels must come from independent
+human annotation. Tables with HMD-only, VMD-only, or no headers cannot be
+faithfully represented by the current required HMD+VMD boundary scheme.
+
+To measure semantic usefulness, prepare a **human-labeled** JSONL file, one
+record per source table, of the shape:
+
+```json
+{"pmc_id":"PMC123456", "table_index":0, "gold_boundary":{"hmd":0,"vmd":0}}
+```
+
+For a table that genuinely has no HMD+VMD segmentation, use
+`"gold_boundary":null`. Then run:
+
+```sh
+python3 tools/evaluate_structural_candidates.py \
+  --predictions dataset/papers/PMC123456/tables.jsonl \
+  --gold path/to/independently_annotated_gold.jsonl \
+  --output evaluation.json
+```
+
+Metrics include candidate-set recall, unique-hypothesis precision/coverage,
+no-header false-positive rate and abstention/ambiguity rates, with explicit
+denominators. **No human-labeled reference corpus was supplied, so no semantic
+accuracy claim can yet be made.** The included evaluator tests use synthetic
+examples, not gold data.
+
+Security: `.gitignore` excludes `.deepclause/`, local datasets and `.env`
+files. This guards accidental `git add .` but does not revoke previously
+committed secrets or establish article redistribution rights.

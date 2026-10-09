@@ -41,6 +41,7 @@
 user:file_search_path(workspace, '/workspace').
 :- use_module(workspace(dataset_pipeline)).
 :- use_module(workspace(pmc_query_encoding)).
+:- use_module(workspace(pmc_id_parser)).
 
 % --- Settings ---
 
@@ -96,7 +97,8 @@ pmc_search_files(Query, SearchSave, SearchMounted,
            [Ids]),
     ncbi_fetch(SummaryUrl, SummarySave, esummary_json),
     verified_search_lines(SearchMounted, SummaryMounted, Results),
-    Results \== "".
+    Results \== "",
+    remember_search_query(Query).
 
 % --- Non-spinning host waits and shared request reservations (F14) ---
 %
@@ -176,42 +178,10 @@ ncbi_fetch(Url, File, Kind, Waits) :-
 % regression tests). Unicode must be encoded as UTF-8 bytes, not dropped.
 
 % --- Paper ids ---
-
-% parse_pmc_ids(+Text, +Max, -Ids): the digit part of each PMC id the model
-% returned, without duplicates, at most Max of them. Anything that is not
-% "PMC" followed by digits is discarded, so model output can only ever name
-% a file of the form dataset/raw/PMC<digits>.xml.
-parse_pmc_ids(Text, Max, Ids) :-
-    split_string(Text, ",;\n ", " \t\r", Parts),
-    pmc_numbers(Parts, All),
-    list_to_set(All, Unique),
-    take(Max, Unique, Ids).
-
-pmc_numbers([], []).
-pmc_numbers([Part|Parts], Ids) :-
-    (   pmc_number(Part, Id)
-    ->  Ids = [Id|Rest]
-    ;   Ids = Rest
-    ),
-    pmc_numbers(Parts, Rest).
-
-pmc_number(Part, Digits) :-
-    string_upper(Part, Upper),
-    (   string_concat("PMC", Digits, Upper)
-    ->  true
-    ;   Digits = Upper
-    ),
-    string_length(Digits, Length),
-    Length > 0,
-    Length =< 12,
-    string_codes(Digits, Codes),
-    all_digits(Codes).
-
-all_digits([]).
-all_digits([C|Cs]) :-
-    C >= 48,                            % '0'
-    C =< 57,                            % '9'
-    all_digits(Cs).
+% parse_pmc_ids/3 is provided by pmc_id_parser.pl, tested separately.
+% It recognizes complete PMC tokens only, normalizes zero padding, and
+% ignores malformed selections. filter_search_selected_ids/3 subsequently
+% rejects all IDs not observed in this run's actual search responses.
 
 take(_, [], []) :- !.
 take(N, _, []) :- N =< 0, !.
@@ -297,6 +267,14 @@ Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567)
 
     output("Phase 2: Extracting, rasterizing and validating tables..."),
     process_papers(Ids, Lines),
+    % The archive of this run includes the search queries and grounded IDs.
+    % If persistence fails, disclose that fact instead of claiming provenance.
+    ( catch(record_dataset_run("/workspace/dataset", Topic, PaperIds, ProposedIds, Ids,
+                               RejectedIds, Lines, RunFile), Error,
+            (format(string(Warn), 'WARNING: could not save run manifest: ~w', [Error]),
+             output(Warn), fail))
+    -> format(string(RunMsg), 'Run manifest: ~w', [RunFile]), output(RunMsg)
+    ;  output('WARNING: run manifest unavailable; inspect per-paper provenance') ),
 
     atomic_list_concat(Lines, "\n", Report),
     format(string(Summary), "Dataset build complete for '~w'. Each paper's tables are in dataset/papers/PMC<id>/.\n~w", [Topic, Report]),

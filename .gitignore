@@ -1,2 +1,10 @@
 __pycache__/
 *.py[cod]
+# Local agent configuration, secrets, downloads and generated datasets
+.deepclause/
+**/.deepclause/
+**/dataset/
+dataset/
+*.env
+.env*
+!.env.example

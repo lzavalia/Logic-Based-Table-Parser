@@ -36,6 +36,8 @@
       esearch_ids/2,
       esummary_lines/2,
       reset_search_provenance/0,
+      remember_search_query/1,
+      record_dataset_run/8,
       verified_search_lines/3,
       filter_search_selected_ids/3,
       download_status/2,
@@ -69,11 +71,13 @@
 :- consult(parse_constraints).
 :- consult(table_annotator).
 :- consult(table_machine_records).
+:- use_module(provenance_manifest).
 
 % Only IDs actually displayed by this run's successful search_pmc calls
 % may be downloaded. Kept in the compiled module so tool calls and the main
 % DML predicate share one source of truth. Cleared at the start of each run.
 :- dynamic observed_search_pmc/1.
+:- dynamic observed_search_query/1.
 
 % --- search results --------------------------------------------------------
 
@@ -92,7 +96,12 @@ esummary_lines(File, Lines) :-
 % Clear the candidate allowlist *before* invoking the model. Search results
 % from previous agent_main invocations must not authorize new selections.
 reset_search_provenance :-
-   retractall(observed_search_pmc(_)).
+   retractall(observed_search_pmc(_)),
+   retractall(observed_search_query(_)).
+
+remember_search_query(Query) :-
+   ( string(Query) -> Text = Query ; atom(Query), atom_string(Query, Text) ),
+   ( observed_search_query(Text) -> true ; assertz(observed_search_query(Text)) ).
 
 % Build a trusted list of selectable PMC IDs from one paired ESearch /
 % ESummary response. ESummary UIDs MUST also be in this ESearch ID list.
@@ -428,8 +437,10 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    ( paper_title(Dom, Title) -> true ; Title = "" ),
    directory_file_path(DatasetDir, 'papers', PapersDir),
    make_directory_path(PapersDir),
+   paper_source_provenance(File, PaperName, Dom, SourceEvidence),
    with_paper_output_staging(PapersDir, PaperName,
-                             write_paper_records(PaperName, Title, Records, Rasters, NumParsed)),
+       write_paper_records_with_evidence(PaperName, Title, Records,
+                                         Rasters, NumParsed, SourceEvidence)),
    ignore(catch(record_paper_attempt(DatasetDir, PaperName, complete, "published"),
                 _, fail)),
    length(Tables, NumTables),
@@ -464,9 +475,10 @@ process_paper_quarantine(PmcId, File, DatasetDir, Summary) :-
    ( paper_title(Dom, Title) -> true ; Title = "" ),
    directory_file_path(DatasetDir, 'papers', PapersDir),
    make_directory_path(PapersDir),
+   paper_source_provenance(File, PaperName, Dom, SourceEvidence),
    with_paper_output_staging(PapersDir, PaperName,
-                             write_recoverable_paper(PaperName, Title, Records,
-                                                     NumParsed, NumRejected)),
+       write_recoverable_paper_with_evidence(PaperName, Title, Records,
+                                             NumParsed, NumRejected, SourceEvidence)),
    ( NumRejected =:= 0 -> Status = "complete" ; Status = "partial" ),
    format(string(Detail), '~d table(s), ~d parsed, ~d quarantined',
           [NumTables, NumParsed, NumRejected]),
@@ -707,6 +719,18 @@ fresh_staging_directory(PapersDir, PaperName, StageDir) :-
    StageDir = Candidate,
    !.
 
+% The original writer/validator is unchanged. Provenance is appended to
+% metadata inside the unpublished stage; a failure retains the old snapshot.
+write_paper_records_with_evidence(Pmc, Title, Records, Rasters,
+                                   NumParsed, Evidence, StageDir) :-
+   write_paper_records(Pmc, Title, Records, Rasters, NumParsed, StageDir),
+   store_source_provenance(StageDir, Evidence).
+
+write_recoverable_paper_with_evidence(Pmc, Title, Records,
+                                      NumParsed, NumRejected, Evidence, StageDir) :-
+   write_recoverable_paper(Pmc, Title, Records, NumParsed, NumRejected, StageDir),
+   store_source_provenance(StageDir, Evidence).
+
 % Retain the pre-F09 writer interface for existing local Prolog callers.
 write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
    maplist(plain_table_record, Tables, Records),
@@ -873,7 +897,9 @@ quarantined_machine_record(PaperName, Index, Context, Code, Message,
                  context:Context, raster:null, rows:null, columns:null,
                  cells:[], candidates:[], status:"quarantined",
                  abstention_reason:"table_processing_error", error:Diagnostic,
-                 algorithm:"seven_structural_constraints_v1"},
+                 algorithm:"seven_structural_constraints_v1",
+                 semantic_validation:"unverified",
+                 interpretation_kind:"structural_boundary_hypotheses"},
    put_dict(_{table_uid:TableUid, jsonl_file:"tables.jsonl",
               candidate_count:0, annotation_status:"quarantined",
               error:Diagnostic}, Context, Metadata).
@@ -1353,3 +1379,37 @@ record_paper_attempt(DatasetDir, PaperName, Status, Detail) :-
                                timestamp_unix:Now}),
       close(Out)),
    !.
+
+% One run record stores the source topic, actual successful search queries,
+% model-proposed tokens, grounded selections and each paper's outcome.
+% It is deliberately separate from immutable per-PMC snapshots. A unique
+% directory avoids cross-process collisions and incomplete file replacement.
+record_dataset_run(DatasetDir, Topic, RawModelIds, ProposedIds, SelectedIds, RejectedIds,
+                   Results, RunFile) :-
+   findall(Query, observed_search_query(Query), Queries),
+   findall(Pmc, observed_search_pmc(Pmc), Allowed),
+   directory_file_path(DatasetDir, 'runs', RunsDir),
+   make_directory_path(RunsDir),
+   fresh_staging_directory(RunsDir, 'run', StageDir),
+   file_base_name(StageDir, StageName),
+   format(string(FinalName), 'run-~w', [StageName]),
+   directory_file_path(RunsDir, FinalName, FinalDir),
+   directory_file_path(StageDir, 'manifest.json', StageFile),
+   get_time(Now),
+   setup_call_cleanup(
+      true,
+      ( setup_call_cleanup(open(StageFile, write, Out, [encoding(utf8)]),
+            json_write_dict(Out,
+               json{schema_version:"1.0", topic:Topic,
+                    timestamp_unix:Now, search_queries:Queries,
+                    authorized_pmc_ids:Allowed, model_selection_raw:RawModelIds,
+                    parsed_pmc_ids:ProposedIds, selected_pmc_ids:SelectedIds,
+                    rejected_pmc_ids:RejectedIds, paper_status_lines:Results,
+                    policy:"Only IDs observed in paired ESearch and ESummary can be selected; license review required before redistribution"}),
+            close(Out)),
+        % Only a completed manifest is made visible as a run directory.
+        rename_file(StageDir, FinalDir) ),
+      ( exists_directory(StageDir)
+      -> delete_directory_and_contents(StageDir)
+      ;  true )),
+   directory_file_path(FinalDir, 'manifest.json', RunFile).
