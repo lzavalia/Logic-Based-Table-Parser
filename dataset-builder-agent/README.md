@@ -160,8 +160,9 @@ Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
-| `dataset/papers/PMC<id>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
-| `dataset/papers/PMC<id>/metadata.json` | Published paper identity, `status: "complete"`, original title, and table counts. |
+| `dataset/papers/PMC<id>/annotated_tableN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
+| `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
+| `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
 | `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
 | `dataset/cache/` | The last PubMed Central search responses. |
@@ -171,6 +172,28 @@ Each run writes a `dataset/` directory inside `src/`:
 overwrite one another. Reprocessing an ID replaces its entire published paper
 directory: old `annotated_tableN.html` files from larger previous runs do not
 survive. The article title is available in `metadata.json` instead of the path.
+
+### JATS table context and provenance
+
+In JATS, `<table-wrap>` generally contains the `<label>`, `<caption>`, and
+`<table-wrap-foot>` as **siblings** of `<table>`. They are not cells and must
+not affect row/column inference. The exported HTML renders them around each
+annotated table, while `metadata.json` stores an entry for every table in the
+same document order as `annotated_table0.html`, `annotated_table1.html`, etc.
+Each `tables` entry has `source_path` (1-based element-child indexes through
+the normalized JATS DOM), `table_id`, `wrap_path`, `wrap_id`, `label`,
+`caption`, `caption_external` (whether the caption is outside the table),
+`notes` (individual plain-text footnotes), and
+`source_table_html` (uncolored serialized table), plus `label_markup`,
+`caption_markup`, and `foot_markup` (serialized source elements, retaining
+inline scientific notation). Empty strings and `[]`
+represent unavailable context for tables without a wrapping element.
+
+The displayed HTML uses normalized context text, while the structured
+metadata retains the original context-element markup. This does not claim
+that table headers are semantically
+correct or that the exported HTML is safe to open when its source XML is
+untrusted; the latter remains a separate audit finding (F17).
 
 **Search provenance (F06).** Paper selection is fail-closed. At the start of each
 `agent_main` run, the in-memory PMC-ID allowlist is cleared. Each successful
@@ -274,7 +297,9 @@ label for a scientific table.
 | File | Purpose |
 |---|---|
 | `src/dataset_builder.dml` | The agent: paper selection (model), NCBI search and download, and the per-paper loop. |
-| `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects the three files below and writes the output. |
+| `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects parsers, constraints, annotations, and staged JSONL/HTML output. |
+| `src/table_machine_records.pl` | Canonical JSONL schema, deterministic cell provenance and candidate labels. |
+| `src/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
@@ -379,3 +404,44 @@ code; status/content-type checks at the transport layer remain a follow-up
 for the fetch adapter. The local, network-free regression suite is
 `src/download_xml_regression_tests.pl` (also included in
 `src/run_regression_tests.sh`).
+
+
+### Canonical machine-readable annotations (F10)
+
+Each complete paper snapshot includes `papers/PMC<id>/tables.jsonl`, with
+**exactly one compact JSON object per extracted table** (newline-delimited JSON).
+Do not derive labels from the inspection HTML/CSS. The JSONL records include:
+
+- `schema_version: "1.0"`, `pmc_id` (e.g. `PMC123`), zero-based `table_index`, and
+  stable `table_uid` (`PMC123/t0`); JATS `source_table_id` is descriptive and
+  **not** used for identity because source IDs may be missing or duplicate.
+- `source_path` and `context`, including unannotated `source_table_html`, JATS
+  label/caption/footnotes and their original markup (preserved since F09).
+- `rows`, `columns`, `raster` (rectangular array of zero-based cell IDs), and
+  `cells`: each distinct cell ID with its top-left `row`/`column`, text, tag,
+  and `source_xpath` using 1-based element-sibling XPath steps. Cells added
+  to pad short rows have `kind: "synthetic_gap"` and `source_xpath: null`.
+- `candidates`: **all** structurally valid boundaries, in deterministic search
+  order. Each candidate has `candidate_id` such as `PMC123/t0/h0_v1`, zero-based
+  `hmd`, `vmd`, and one `{cell_id, region}` label per distinct raster cell,
+  with region `"hmd"`, `"vmd"`, or `"data"`. `failed_constraints: []` signifies
+  that all seven constraints passed. **Rejected candidates are not exported**;
+  `omni_validate/4` can diagnose an individual rejected boundary.
+- `status`: `"unique"` (one candidate), `"ambiguous"` (multiple), or
+  `"abstained"` (none), plus nullable `abstention_reason`. Structural validity
+  does **not** establish that a human would assign the same header semantics.
+
+`metadata.json` retains its existing per-table scientific context and now also
+supplies `table_uid`, `candidate_count`, `annotation_status`, and `jsonl_file`.
+Publication validates the JSONL record count, identities, statuses, and
+candidate counts against this metadata and the HTML file count before replacing
+an existing paper snapshot. A zero-table paper publishes an empty `tables.jsonl`.
+
+All coordinates, table indices, and cell IDs start at **zero**. XPath element
+sibling indices start at **one** (as required by XPath). Cell labels follow
+**the top-left occupied raster slot** for merged cells. If a malformed source
+cell is absent from the raster, JSONL generation fails instead of silently
+assigning that source cell a label; detailed collision diagnostics remain F12.
+
+Run the offline regression suite with `src/run_regression_tests.sh`; the new
+F10-specific suite is `src/machine_annotations_regression_tests.pl`.

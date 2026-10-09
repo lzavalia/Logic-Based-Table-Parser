@@ -29,7 +29,7 @@
 %       with table_annotator.pl. The tables are saved as
 %       <DatasetDir>/papers/PMC<id>/annotated_tableN.html, N from 0.
 %       The directory is replaced as a whole after a successful run; the
-%       title and counts are recorded in metadata.json.
+%       title, counts and per-table JATS context are recorded in metadata.json.
 %       Summary is a one-line report.
 
 :- module(dataset_pipeline, [
@@ -60,6 +60,7 @@
 :- consult(table_layout_generator).
 :- consult(parse_constraints).
 :- consult(table_annotator).
+:- consult(table_machine_records).
 
 % Only IDs actually displayed by this run's successful search_pmc calls
 % may be downloaded. Kept in the compiled module so tool calls and the main
@@ -293,19 +294,162 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    read_file_to_string(File, Text, [encoding(utf8)]),
    parse_jats_xml(Text, Dom),
    verify_jats_pmc_id(Dom, PaperName),
-   extract_tables(Dom, Tables),
+   % Keep each table paired with its JATS table-wrap and its element path.
+   % Rasterization still sees only the <table>, never captions/footnotes.
+   jats_table_records(Dom, Records),
+   maplist(record_table, Records, Tables),
    rasterize_tables_bounded(Tables, Rasters),
    ( paper_title(Dom, Title) -> true ; Title = "" ),
    directory_file_path(DatasetDir, 'papers', PapersDir),
    make_directory_path(PapersDir),
    with_paper_output_staging(PapersDir, PaperName,
-                             write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed)),
+                             write_paper_records(PaperName, Title, Records, Rasters, NumParsed)),
    ignore(catch(record_paper_attempt(DatasetDir, PaperName, complete, "published"),
                 _, fail)),
    length(Tables, NumTables),
    format(string(Summary),
           "~s: ~d table(s), ~d with a valid header boundary -> papers/~s/",
           [PaperName, NumTables, NumParsed, PaperName]).
+
+
+% --- JATS table provenance and context (F09) ------------------------------
+%
+% A table-wrap is a sibling container: its <label>, <caption> and
+% <table-wrap-foot> are NOT descendants of <table>. Merely calling
+% extract_tables/2 loses these scientific qualifications. Keep the nearest
+% enclosing wrap while walking the normalized JATS DOM in document order.
+% Paths are 1-based element-child positions, ignoring text nodes. They are
+% relative to the root DOM list and can distinguish equal table-wrap ids.
+%
+% jats_table_records(+Dom, -Records)
+% Record = table_record(TableElement, ContextDict).
+jats_table_records(Dom, Records) :-
+   findall(table_record(Table, Context),
+           ( element_child_at(Dom, Root, RootIndex),
+             table_in_jats(Root, [RootIndex], none, Table, Context) ),
+           Records).
+
+record_table(table_record(Table, _), Table).
+record_context(table_record(_, Context), Context).
+
+% Count only elements, not inter-element whitespace or character data.
+element_child_at(Children, Child, Index) :-
+   element_child_at_(Children, 1, Child, Index).
+element_child_at_([element(Name, Attrs, Content)|Rest], N, Child, Index) :- !,
+   ( Child = element(Name, Attrs, Content), Index = N
+   ; N1 is N + 1, element_child_at_(Rest, N1, Child, Index) ).
+element_child_at_([_|Rest], N, Child, Index) :-
+   element_child_at_(Rest, N, Child, Index).
+
+table_in_jats(Table, Path, Wrap, Table, Context) :-
+   Table = element(table, _, _),
+   table_source_context(Table, Path, Wrap, Context).
+table_in_jats(element(Name, Attrs, Children), Path, ParentWrap, Table, Context) :-
+   ( Name == 'table-wrap'
+   -> CurrentWrap = wrap(element(Name, Attrs, Children), Path)
+   ;  CurrentWrap = ParentWrap ),
+   element_child_at(Children, Child, ChildIndex),
+   append(Path, [ChildIndex], ChildPath),
+   table_in_jats(Child, ChildPath, CurrentWrap, Table, Context).
+
+source_path_text(Path, Text) :-
+   maplist(number_string, Path, Parts),
+   atomics_to_string(Parts, '/', Text).
+
+source_id(element(_, Attrs, _), Id) :-
+   ( memberchk(id=Value, Attrs)
+   -> text_to_string(Value, Id)
+   ;  Id = "" ).
+
+% Text is deliberately normalized for a searchable JSON field and for an
+% HTML caption. The source table itself is separately serialized in JSON.
+jats_element_text(element(_, _, Children), Text) :-
+   findall(Piece, text_piece(Children, Piece), Pieces),
+   atomic_list_concat(Pieces, ' ', Joined),
+   normalize_space(string(Text), Joined).
+
+direct_context_text(Children, Name, Text) :-
+   findall(Piece,
+           ( member(Node, Children), Node = element(Name, _, _),
+             jats_element_text(Node, Piece), Piece \== "" ),
+           Pieces),
+   atomics_to_string(Pieces, ' ', Text).
+
+% Also retain the annotated DOM markup in metadata. Superscripts, xrefs,
+% emphasis and note identifiers are important scientific context which a
+% plain text field by itself cannot faithfully preserve.
+direct_context_markup(Children, Name, Markup) :-
+   findall(Fragment,
+           ( member(Node, Children), Node = element(Name, _, _),
+             table_html(Node, Fragment) ),
+           Fragments),
+   atomics_to_string(Fragments, '\n', Markup).
+
+% One note per direct foot child, or per fn under a fn-group. This preserves
+% separate JATS footnote entries rather than flattening the full table-wrap.
+wrap_notes(Children, Notes) :-
+   findall(Note,
+           ( member(element('table-wrap-foot', _, FootChildren), Children),
+             member(Node, FootChildren),
+             footnote_node(Node, Note), Note \== "" ),
+           Notes).
+
+footnote_node(element('fn-group', _, Children), Text) :- !,
+   member(Child, Children), footnote_node(Child, Text).
+footnote_node(Node, Text) :-
+   Node = element(_, _, _),
+   jats_element_text(Node, Text).
+
+table_source_context(Table, Path, Wrap, Context) :-
+   source_path_text(Path, TablePath),
+   source_id(Table, TableId),
+   ( Wrap = wrap(WrapElement, WrapPath)
+   -> WrapElement = element('table-wrap', _, WrapChildren),
+      source_path_text(WrapPath, WrapPathText),
+      source_id(WrapElement, WrapId),
+      direct_context_text(WrapChildren, label, Label),
+      direct_context_text(WrapChildren, caption, Caption),
+      direct_context_markup(WrapChildren, label, LabelMarkup),
+      direct_context_markup(WrapChildren, caption, CaptionMarkup),
+      direct_context_markup(WrapChildren, 'table-wrap-foot', FootMarkup),
+      wrap_notes(WrapChildren, Notes)
+   ;  WrapPathText = "", WrapId = "", Label = "", Notes = [],
+      LabelMarkup = "", CaptionMarkup = "", FootMarkup = "",
+      Table = element(table, _, TableChildren),
+      direct_context_text(TableChildren, caption, Caption) ),
+   % A standalone HTML table can also carry its own caption, even when a
+   % wrapping JATS table-wrap is present but has no external caption.
+   ( Caption == "", Table = element(table, _, InnerChildren)
+   -> direct_context_text(InnerChildren, caption, EffectiveCaption),
+      direct_context_markup(InnerChildren, caption, EffectiveCaptionMarkup),
+      CaptionExternal = false
+   ;  EffectiveCaption = Caption,
+      EffectiveCaptionMarkup = CaptionMarkup,
+      CaptionExternal = true ),
+   table_html(Table, RawTableHtml),
+   Context = json{source_path:TablePath, table_id:TableId,
+                  wrap_path:WrapPathText, wrap_id:WrapId,
+                  label:Label, caption:EffectiveCaption,
+                  caption_external:CaptionExternal,
+                  notes:Notes, source_table_html:RawTableHtml,
+                  label_markup:LabelMarkup,
+                  caption_markup:EffectiveCaptionMarkup,
+                  foot_markup:FootMarkup}.
+
+% Compatibility entry point for tests and callers supplying parsed <table>
+% elements instead of full JATS documents.
+plain_table_record(Table, table_record(Table, Context)) :-
+   ( Table = element(table, _, _)
+   -> table_source_context(Table, [], none, Context)
+   ;  % Preserve the F05 table-indexed error for malformed caller input:
+      % only the numbered writer should fail, not the upfront conversion.
+      empty_table_context(Context) ).
+
+empty_table_context(json{source_path:"", table_id:"", wrap_path:"",
+                         wrap_id:"", label:"", caption:"",
+                         caption_external:false, notes:[],
+                         source_table_html:"", label_markup:"",
+                         caption_markup:"", foot_markup:""}).
 
 % Per-paper budgets bound the number and combined raster area of tables
 % retained in memory before paper publication. A violation is an exception,
@@ -402,11 +546,21 @@ fresh_staging_directory(PapersDir, PaperName, StageDir) :-
    StageDir = Candidate,
    !.
 
+% Retain the pre-F09 writer interface for existing local Prolog callers.
 write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
-   % Do not use findall/3 around save_table/4: a failed table write would be
-   % silently skipped, letting an incomplete paper look like a success.
-   save_numbered_tables(StageDir, Tables, Rasters, 0, BoundaryLists),
-   length(Tables, NumTables),
+   maplist(plain_table_record, Tables, Records),
+   write_paper_records(PaperName, Title, Records, Rasters, NumParsed, StageDir).
+
+write_paper_records(PaperName, Title, Records, Rasters, NumParsed, StageDir) :-
+   % Publish one JSONL record per table alongside the optional HTML view.
+   % Both live in the same staged snapshot and are validated before commit.
+   directory_file_path(StageDir, 'tables.jsonl', RecordsFile),
+   setup_call_cleanup(
+      open(RecordsFile, write, JsonlStream, [encoding(utf8)]),
+      save_numbered_records(StageDir, PaperName, Records, Rasters, 0,
+                            JsonlStream, BoundaryLists, TableMetadata),
+      close(JsonlStream)),
+   length(Records, NumTables),
    exclude(==([]), BoundaryLists, Parsed),
    length(Parsed, NumParsed),
    directory_file_path(StageDir, 'metadata.json', MetadataFile),
@@ -414,25 +568,50 @@ write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
       open(MetadataFile, write, Stream, [encoding(utf8)]),
       json_write_dict(Stream,
                       json{pmc_id:PaperName, title:Title, status:"complete",
-                           table_count:NumTables, parsed_table_count:NumParsed}),
+                           schema_version:"1.0", jsonl_file:"tables.jsonl",
+                           table_count:NumTables, parsed_table_count:NumParsed,
+                           tables:TableMetadata}),
       close(Stream)),
    validate_paper_stage(StageDir, NumTables, NumParsed).
 
-save_numbered_tables(_, [], [], _, []).
-save_numbered_tables(StageDir, [Table|Tables], [Raster|Rasters], N,
-                     [Boundaries|MoreBoundaries]) :-
+save_numbered_records(_, _, [], [], _, _, [], []).
+save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
+                      [Raster|Rasters], N, JsonlStream,
+                      [Boundaries|MoreBoundaries], [Meta|MoreMeta]) :-
    table_file_name(StageDir, N, TableFile),
-   % Never let either an exception or plain predicate failure silently skip
-   % one table. Include its 0-based index in the diagnostic.
-   (  catch(save_table(TableFile, Table, Raster, Boundaries), Error,
-            throw(error(table_output_failure(N, Error),
-                        context(process_paper/4, 'Writing table failed'))))
+   format(string(TableUid), '~s/t~d', [PaperName, N]),
+   put_dict(table_uid, Context, HtmlContext),
+   % Fail closed if any annotation or JSONL record cannot be generated.
+   ( catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
+             machine_table_record(PaperName, N, Table, Context, Raster,
+                                  Boundaries, MachineRecord, Meta),
+             atom_json_dict(JsonLine, MachineRecord, [width(0)]),
+             format(JsonlStream, '~w~n', [JsonLine]) ),
+           Error, throw(error(table_output_failure(N, Error),
+                              context(process_paper/4, 'Writing table failed'))))
    -> true
    ;  throw(error(table_output_failure(N, goal_failed),
                   context(process_paper/4, 'Writing table failed')))
    ),
    Next is N + 1,
-   save_numbered_tables(StageDir, Tables, Rasters, Next, MoreBoundaries).
+   save_numbered_records(StageDir, PaperName, Rest, Rasters, Next,
+                         JsonlStream, MoreBoundaries, MoreMeta).
+
+% Each JSON line must be a complete object; embedded HTML/newlines are JSON
+% escaped by atom_json_dict/3. Do not parse candidate membership from CSS.
+read_table_jsonl(File, Records) :-
+   setup_call_cleanup(
+      open(File, read, Stream, [encoding(utf8)]),
+      read_table_jsonl_stream(Stream, Records),
+      close(Stream)).
+
+read_table_jsonl_stream(Stream, Records) :-
+   read_line_to_string(Stream, Line),
+   ( Line == end_of_file -> Records = []
+   ; atom_string(Text, Line),
+     atom_json_dict(Text, Record, []),
+     Records = [Record|Rest],
+     read_table_jsonl_stream(Stream, Rest) ).
 
 % Ensure the entire expected paper snapshot was staged, not merely that
 % its writer returned true. A missing, empty or unexpected file is an error;
@@ -447,7 +626,7 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
              between(0, Last, N),
              format(atom(Name), 'annotated_table~d.html', [N]) ),
            TableFiles),
-   sort(['metadata.json'|TableFiles], Expected),
+   sort(['metadata.json', 'tables.jsonl'|TableFiles], Expected),
    sort(ActualFiles, Actual),
    (  Actual == Expected
    -> true
@@ -462,15 +641,85 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
             ;  throw(error(incomplete_paper_stage(empty_table(FileName)),
                            context(process_paper/4, 'Staged table is empty')))
             ) )),
+   directory_file_path(StageDir, 'tables.jsonl', JsonlFile),
+   size_file(JsonlFile, JsonlSize),
+   ( ( ( ExpectedTables =:= 0, JsonlSize =:= 0 )
+       ; ( ExpectedTables > 0, JsonlSize > 0 ) )
+   -> true
+   ; throw(error(incomplete_paper_stage(invalid_jsonl_size),
+                 context(process_paper/4, 'JSONL size does not match table count'))) ),
+   read_table_jsonl(JsonlFile, MachineRecords),
    directory_file_path(StageDir, 'metadata.json', MetadataFile),
    read_json_file(MetadataFile, Metadata),
    (  Metadata.status == "complete",
       Metadata.table_count =:= ExpectedTables,
-      Metadata.parsed_table_count =:= ExpectedParsed
+      Metadata.parsed_table_count =:= ExpectedParsed,
+      Metadata.jsonl_file == "tables.jsonl",
+      get_dict(tables, Metadata, Contexts),
+      is_list(Contexts), length(Contexts, ExpectedTables),
+      length(MachineRecords, ExpectedTables),
+      machine_records_match_metadata(MachineRecords, Contexts,
+                                     Metadata.pmc_id, ExpectedParsed)
    -> true
    ;  throw(error(incomplete_paper_stage(metadata_mismatch),
                   context(process_paper/4, 'Staged metadata is inconsistent')))
    ).
+
+machine_records_match_metadata(Records, Contexts, Pmc, ParsedCount) :-
+   machine_records_match_metadata(Records, Contexts, Pmc, 0, 0, ParsedCount).
+
+machine_records_match_metadata([], [], _, _, Parsed, Parsed).
+machine_records_match_metadata([Record|Records], [Context|Contexts],
+                               Pmc, Index, Parsed0, ExpectedParsed) :-
+   is_dict(Record), is_dict(Context),
+   Record.pmc_id == Pmc, Record.table_index =:= Index,
+   Record.table_uid == Context.table_uid,
+   Context.jsonl_file == "tables.jsonl",
+   get_dict(source_path, Context, SourcePath),
+   get_dict(source_table_html, Context, _),
+   Record.source_path == SourcePath,
+   is_list(Record.raster), is_list(Record.cells),
+   is_list(Record.candidates),
+   machine_record_consistent(Record),
+   length(Record.candidates, Context.candidate_count),
+   ( Record.candidates == []
+   -> Record.status == "abstained", Record.abstention_reason \== null,
+      Context.annotation_status == "abstained", Parsed1 = Parsed0
+   ;  Record.abstention_reason == null,
+      Context.annotation_status == Record.status,
+      ( Record.candidates = [_] -> Record.status == "unique"
+      ; Record.status == "ambiguous" ),
+      Parsed1 is Parsed0 + 1 ),
+   Next is Index + 1,
+   machine_records_match_metadata(Records, Contexts, Pmc, Next,
+                                  Parsed1, ExpectedParsed).
+
+% The JSONL label map is a scientific data artifact: before publishing,
+% check every reported candidate against the structural solver and the
+% raster's first-slot cell IDs. A swapped/missing/duplicated label is fatal.
+machine_record_consistent(Record) :-
+   machine_first_slots(Record.raster, FirstSlots),
+   length(FirstSlots, NumCells),
+   length(Record.cells, NumCells),
+   maplist(machine_record_cell_consistent, FirstSlots, Record.cells),
+   maplist(machine_record_candidate_consistent(Record.table_uid,
+                                              Record.raster, FirstSlots),
+           Record.candidates).
+
+machine_record_cell_consistent(Id-(Row-Col), Cell) :-
+   Cell.cell_id =:= Id,
+   Cell.row =:= Row,
+   Cell.column =:= Col,
+   ( Cell.kind == "source"
+   -> string(Cell.source_xpath), Cell.source_xpath \== ""
+   ; Cell.kind == "synthetic_gap", Cell.source_xpath == null ).
+
+machine_record_candidate_consistent(TableUid, Raster, FirstSlots, Candidate) :-
+   integer(Candidate.hmd), integer(Candidate.vmd),
+   omni_validate(Raster, Candidate.hmd, Candidate.vmd),
+   machine_candidate(TableUid, FirstSlots,
+                     json{hmd:Candidate.hmd, vmd:Candidate.vmd}, Expected),
+   Candidate == Expected.
 
 is_dot_entry('.').
 is_dot_entry('..').
@@ -517,14 +766,55 @@ table_file_name(PaperDir, N, TableFile) :-
 % The file holds the table colored once for every valid (Hmd, Vmd) boundary,
 % one copy after another; a table with no valid boundary is saved uncolored.
 save_table(TableFile, Table, Raster, Boundaries) :-
+   table_source_context(Table, [], none, Context),
+   save_table(TableFile, Table, Raster, Context, Boundaries).
+
+save_table(TableFile, Table, Raster, Context, Boundaries) :-
+   Table = element(table, _, _),
    valid_boundaries(Raster, Boundaries),
    table_annotations(Table, Boundaries, Annotations),
    setup_call_cleanup(
       open(TableFile, write, Stream, [encoding(utf8)]),
-      forall(member(Annotation, Annotations),
-             ( string_length(Annotation, HtmlLength), HtmlLength > 0,
-               write(Stream, Annotation), nl(Stream) )),
+      save_annotated_candidates(Stream, Context, Boundaries, Annotations),
       close(Stream)).
+
+save_annotated_candidates(Stream, Context, [], [Annotation]) :- !,
+   contextual_table_annotation(Context, Annotation, WithContext),
+   format(Stream, '<h3 class="boundary-status">Abstained: no valid boundary</h3>~n~s~n',
+          [WithContext]).
+save_annotated_candidates(Stream, Context, Boundaries, Annotations) :-
+   % Each rendered candidate has its own explicit coordinates and heading.
+   % The JSONL candidate IDs are fully qualified by PMC/table index.
+   maplist(save_annotated_candidate(Stream, Context), Boundaries, Annotations).
+
+save_annotated_candidate(Stream, Context, json{hmd:Hmd,vmd:Vmd}, Annotation) :-
+   contextual_table_annotation(Context, Annotation, WithContext),
+   ( get_dict(table_uid, Context, TableUid)
+   -> format(string(CandidateId), '~s/h~d_v~d', [TableUid, Hmd, Vmd])
+   ;  format(string(CandidateId), 'h~d_v~d', [Hmd, Vmd]) ),
+   format(Stream,
+          '<h3 class="boundary-candidate" data-candidate-id="~s" data-hmd="~d" data-vmd="~d">Candidate h~d_v~d (HMD=~d, VMD=~d)</h3>~n~s~n',
+          [CandidateId, Hmd, Vmd, Hmd, Vmd, Hmd, Vmd, WithContext]).
+
+% Render external JATS metadata as separate HTML, NEVER as extra table cells:
+% otherwise the constraint checker would be given a different raster.
+% html_write escapes label/caption/footnote text, including angle brackets.
+contextual_table_annotation(Context, TableHtml, Html) :-
+   findall(Node,
+           ( ( Context.label \== "", Node = element(p, [class='jats-label'], [Context.label]) )
+           ; ( Context.caption_external == true, Context.caption \== "",
+               Node = element(p, [class='jats-caption'], [Context.caption]) ) ),
+           HeadingNodes),
+   ( HeadingNodes == [] -> Header = ""
+   ; table_html(element(header, [class='jats-table-context'], HeadingNodes), Header) ),
+   ( Context.notes == [] -> Footer = ""
+   ; maplist(note_list_item, Context.notes, NoteItems),
+     table_html(element(footer, [class='jats-table-notes'],
+                        [element(ul, [], NoteItems)]), Footer) ),
+   format(string(Html), '<section class="jats-table-result">~s~s~s</section>',
+          [Header, TableHtml, Footer]).
+
+note_list_item(Note, element(li, [], [Note])).
 
 table_annotations(Table, [], [Html]) :- !,
    table_html(Table, Html).

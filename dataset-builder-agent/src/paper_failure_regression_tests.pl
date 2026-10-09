@@ -107,6 +107,8 @@ test(stage_rejects_empty_table_file,
     setup_call_cleanup(open(Empty, write, Stream), true, close(Stream)),
     directory_file_path(Root, 'metadata.json', MetadataFile),
     setup_call_cleanup(open(MetadataFile, write, Out), write(Out, '{}'), close(Out)),
+    directory_file_path(Root, 'tables.jsonl', JsonlFile),
+    setup_call_cleanup(open(JsonlFile, write, Js), write(Js, '{}'), close(Js)),
     dataset_pipeline:validate_paper_stage(Root, 1, 0).
 
 test(stage_rejects_inconsistent_metadata,
@@ -118,6 +120,8 @@ test(stage_rejects_inconsistent_metadata,
     setup_call_cleanup(open(MetadataFile, write, Meta),
         write(Meta, '{"status":"complete", "table_count":4, "parsed_table_count":0}'),
         close(Meta)),
+    directory_file_path(Root, 'tables.jsonl', JsonlFile),
+    setup_call_cleanup(open(JsonlFile, write, Js), write(Js, '{}'), close(Js)),
     dataset_pipeline:validate_paper_stage(Root, 1, 0).
 
 test(missing_later_table_is_a_located_failure,
