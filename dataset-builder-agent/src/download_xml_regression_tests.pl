@@ -140,6 +140,36 @@ test(missing_pmc_identity,
     dataset_pipeline:parse_jats_xml('<article><front><article-meta/></front><body/></article>', Dom),
     dataset_pipeline:verify_jats_pmc_id(Dom, "PMC123").
 
+% Current eFetch responses carry the PMC identity as pub-id-type="pmcid"
+% (found by the first real 20-paper run), with or without the PMC prefix.
+test(pmcid_pub_id_type_is_identity) :-
+    Xml = '<article><front><article-meta><article-id pub-id-type="pmcid">PMC321</article-id></article-meta></front><body/></article>',
+    dataset_pipeline:parse_jats_xml(Xml, Dom),
+    dataset_pipeline:verify_jats_pmc_id(Dom, "PMC321").
+
+test(pmc_and_pmcid_agreeing_is_one_identity) :-
+    Xml = '<article><front><article-meta><article-id pub-id-type="pmc">321</article-id><article-id pub-id-type="pmcid">PMC321</article-id></article-meta></front><body/></article>',
+    dataset_pipeline:parse_jats_xml(Xml, Dom),
+    dataset_pipeline:verify_jats_pmc_id(Dom, "PMC321").
+
+% Internal and versioned ids are not article identity, even beside a real one.
+test(internal_and_versioned_ids_are_ignored) :-
+    Xml = '<article><front><article-meta><article-id pub-id-type="pmcid">PMC321</article-id><article-id pub-id-type="pmcid-ver">PMC321.1</article-id><article-id pub-id-type="pmcaid">999</article-id><article-id pub-id-type="pmcaiid">888</article-id></article-meta></front><body/></article>',
+    dataset_pipeline:parse_jats_xml(Xml, Dom),
+    dataset_pipeline:verify_jats_pmc_id(Dom, "PMC321").
+
+test(only_internal_ids_is_missing_identity,
+     [throws(error(pmc_article_identity_mismatch("PMC321", []), _))]) :-
+    Xml = '<article><front><article-meta><article-id pub-id-type="pmcid-ver">PMC321.1</article-id><article-id pub-id-type="pmcaid">321</article-id></article-meta></front><body/></article>',
+    dataset_pipeline:parse_jats_xml(Xml, Dom),
+    dataset_pipeline:verify_jats_pmc_id(Dom, "PMC321").
+
+test(pmc_and_pmcid_disagreeing_is_conflict,
+     [throws(error(pmc_article_identity_mismatch("PMC321", ["PMC321", "PMC322"]), _))]) :-
+    Xml = '<article><front><article-meta><article-id pub-id-type="pmc">321</article-id><article-id pub-id-type="pmcid">PMC322</article-id></article-meta></front><body/></article>',
+    dataset_pipeline:parse_jats_xml(Xml, Dom),
+    dataset_pipeline:verify_jats_pmc_id(Dom, "PMC321").
+
 test(reference_pmc_identity_is_not_authoritative,
      [throws(error(pmc_article_identity_mismatch("PMC123", []), _))]) :-
     Xml = '<article><front><article-meta/></front><body><ref><article-id pub-id-type="pmc">123</article-id></ref></body></article>',

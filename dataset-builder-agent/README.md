@@ -597,8 +597,9 @@ parser diagnostics treated as errors. Standalone HTML helpers remain tolerant
 of loose HTML. The parser normalizes qualified JATS element names before
 extracting and rasterizing `<table>` elements; it does not change the
 semantics of the seven boundary constraints. Before publishing a paper,
-`process_paper/4` requires exactly one JATS article and a matching `pmc`
-`article-id` inside `<front><article-meta>`. A genuine, well-formed paper
+`process_paper/4` requires exactly one JATS article and a matching `pmc` or
+`pmcid` `article-id` inside `<front><article-meta>` (current eFetch responses use
+`pmcid`; versioned and internal ids such as `pmcid-ver` and `pmcaid` are ignored). A genuine, well-formed paper
 with no tables may still produce a complete zero-table result.
 
 `download_status/3` distinguishes accepted ESearch/ESummary JSON, accepted
