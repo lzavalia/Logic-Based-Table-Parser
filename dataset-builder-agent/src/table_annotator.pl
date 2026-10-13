@@ -2,18 +2,18 @@
 %
 % Colors the cells of a table according to a partition of its raster into
 % horizontal metadata (HMD), vertical metadata (VMD) and data, as given by the
-% boundaries that parse_constraints.pl validates:
+% layer counts that valid_boundaries/2 of parse_constraints.pl reports:
 %
-%   rows =< Hmd                       horizontal metadata   springgreen
-%   rows >  Hmd and columns =< Vmd    vertical metadata     skyblue
-%   everything else                   data                  lightgray
+%   the first Hmd rows                        horizontal metadata   springgreen
+%   the first Vmd columns of the other rows   vertical metadata     skyblue
+%   everything else                           data                  lightgray
 %
 % A cell's row and column are those of its top-left slot in the raster built
 % by table_layout_generator.pl, so merged cells and <thead>/<tfoot> ordering
 % are handled exactly as they are during rasterization.
 %
 % Example:
-%   ?- annotate_table(0, 0, "<table><tr><th>k</th><th>v</th></tr>
+%   ?- annotate_table(1, 1, "<table><tr><th>k</th><th>v</th></tr>
 %                                   <tr><td>a</td><td>1</td></tr></table>", A).
 %   A = "<table><tr><th style=\"background-color: springgreen\">k</th>...".
 %
@@ -78,8 +78,8 @@ slot_color(Hmd, Vmd, R, Id, C-Colors0, C1-Colors) :-
    C1 is C + 1.
 
 slot_region(Hmd, Vmd, R, C, Region) :-
-   (  R =< Hmd -> Region = hmd
-   ;  C =< Vmd -> Region = vmd
+   (  R < Hmd -> Region = hmd
+   ;  C < Vmd -> Region = vmd
    ;  Region = data
    ).
 

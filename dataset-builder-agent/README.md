@@ -205,7 +205,8 @@ swipl -g 'use_module(dataset_pipeline),
 | `src/dataset_builder.dml` | The agent: paper selection (model), NCBI search and download, and the per-paper loop. |
 | `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects the three files below and writes the output. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
-| `src/parse_constraints.pl` | The seven parse constraints and the search for valid HMD/VMD boundaries. |
+| `src/parse_constraints.pl` | The seven parse constraints, the search for valid HMD/VMD boundaries (`valid_boundaries/2`), and the search for candidate layouts with metadata in the middle of the table (`table_layouts/2`). |
+| `tests/parse_constraints_tests.pl` | Tests for `valid_boundaries/2` and `table_layouts/2` on hand-built rasters: `swipl -g run_tests -t halt tests/parse_constraints_tests.pl`. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 

@@ -153,7 +153,8 @@ table_file_name(PaperDir, N, TableFile) :-
    directory_file_path(PaperDir, Name, TableFile).
 
 % save_table(+TableFile, +Table, +Raster, -Boundaries)
-% The file holds the table colored once for every valid (Hmd, Vmd) boundary,
+% The file holds the table colored once for every valid pair of HMD and VMD
+% layer counts (a count of 0 meaning no metadata of that kind),
 % one copy after another; a table with no valid boundary is saved uncolored.
 save_table(TableFile, Table, Raster, Boundaries) :-
    valid_boundaries(Raster, Boundaries),
