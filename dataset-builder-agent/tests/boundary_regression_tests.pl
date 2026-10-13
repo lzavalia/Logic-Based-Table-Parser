@@ -1,12 +1,12 @@
 % Regression tests for the public table-boundary API.
 %
-% From dataset-builder-agent/src/:
+% From dataset-builder-agent/tests/:
 %   swipl -q -s boundary_regression_tests.pl -g run_tests -t halt
 %
 % No network, LLM, article downloads, or DeepClause installation required.
 
 :- begin_tests(table_boundary_regressions).
-:- consult(parse_constraints).
+:- consult('../src/parse_constraints').
 
 % Positive baselines: rejecting degenerate partitions must not suppress
 % legitimate boundary candidates or change the seven original constraints.

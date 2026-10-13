@@ -1,9 +1,9 @@
 % Offline regressions for F04 (untrusted raster dimensions and spans).
-% From dataset-builder-agent/src/:
+% From dataset-builder-agent/tests/:
 %   swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
 % SWI-Prolog required; no network, DeepClause or API token needed.
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 
 simple_cell(Attrs, element(td, Attrs, [value])).

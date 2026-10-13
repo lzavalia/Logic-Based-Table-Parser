@@ -13,8 +13,8 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "src" / "run_regression_tests.sh"
-SRC = ROOT / "src"
+SCRIPT = ROOT / "tests" / "run_regression_tests.sh"
+SUITES = ROOT / "tests"
 
 
 class RegressionRunnerTests(unittest.TestCase):
@@ -54,8 +54,8 @@ class RegressionRunnerTests(unittest.TestCase):
     def test_list_discovers_all_suites(self) -> None:
         result = self.invoke("--list")
         self.assertEqual(result.returncode, 0, result.stderr)
-        prolog = sorted(p.name for p in SRC.glob("*_regression_tests.pl"))
-        python = sorted(p.name for p in SRC.glob("*_regression_tests.py"))
+        prolog = sorted(p.name for p in SUITES.glob("*_regression_tests.pl"))
+        python = sorted(p.name for p in SUITES.glob("*_regression_tests.py"))
         self.assertGreater(len(prolog), 10)
         self.assertTrue(python)
         for suite in prolog + python:
@@ -89,7 +89,7 @@ class RegressionRunnerTests(unittest.TestCase):
             })
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(log.read_text().splitlines(), sorted(
-                p.name for p in SRC.glob("*_regression_tests.pl")
+                p.name for p in SUITES.glob("*_regression_tests.pl")
             ))
 
     def test_prolog_suite_failure_stops_runner(self) -> None:
@@ -97,7 +97,7 @@ class RegressionRunnerTests(unittest.TestCase):
             directory = Path(tmp)
             log = directory / "log"
             # The first test suite exits nonzero; no subsequent suites run.
-            first = sorted(p.name for p in SRC.glob("*_regression_tests.pl"))[0]
+            first = sorted(p.name for p in SUITES.glob("*_regression_tests.pl"))[0]
             result = self.invoke("--all", env={
                 "SWIPL": str(self.fake_swipl(directory, exit_on=first)),
                 "MOCK_LOG": str(log),

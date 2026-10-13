@@ -2,8 +2,8 @@
 % swipl -q -s boundary_scaling_regression_tests.pl -g run_tests -t halt
 :- use_module(library(random)).
 :- use_module(library(lists)).
-:- consult(parse_constraints).
-:- use_module(dataset_pipeline).
+:- consult('../src/parse_constraints').
+:- use_module('../src/dataset_pipeline').
 
 :- begin_tests(boundary_scaling).
 

@@ -3,7 +3,7 @@
 
 Replays the seven predicate conditions directly and compares their results
 against the indexed-summary formulas in fast_boundaries.pl, including exact
-ordering. Native SWI-Prolog differential tests are in src/*scaling*tests.pl.
+ordering. Native SWI-Prolog differential tests are in tests/*scaling*tests.pl.
 """
 from itertools import product
 from random import Random

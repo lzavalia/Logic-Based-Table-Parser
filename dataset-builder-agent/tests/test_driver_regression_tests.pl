@@ -1,6 +1,6 @@
 % Regression tests for the local table-logic driver (test_driver.pl).
 %
-% From dataset-builder-agent/src/:
+% From dataset-builder-agent/tests/:
 %   swipl -q -s test_driver_regression_tests.pl -g run_tests -t halt
 %
 % No network, LLM, article downloads, or DeepClause installation required.
@@ -9,7 +9,7 @@
 :- use_module(library(readutil)).
 
 :- begin_tests(test_driver).
-:- consult(test_driver).
+:- consult('../src/test_driver').
 
 % Each test gets a private workspace through plunit's setup/cleanup options;
 % Root is shared between those options and the test body.

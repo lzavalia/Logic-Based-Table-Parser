@@ -66,12 +66,9 @@ deepclause --version    # 0.0.86
 ```
 
 The version is pinned because DeepClause is pre-1.0 and this is the release the
-agent was developed against. **Python 3** must also be available as `python3`
-in the DeepClause **host shell** (not only inside a Prolog environment): the
-F14 host helper uses Python's `time.sleep` to wait without spinning when the
-WebAssembly Prolog engine lacks `sleep/1`. The built-in `bash` runtime tool
-must be enabled; this project does not execute arbitrary model-provided shell
-commands. Check with `python3 --version`.
+agent was developed against. The agent itself is Prolog only: it needs no
+Python and does not use DeepClause's `bash` tool. Python 3.10+ is needed only
+for some of the offline tests and the scripts under `tools/`.
 
 ### 3. Get the code
 
@@ -224,7 +221,7 @@ serialized table and context fields for research; keep these JSON files under
 web page without sanitizing again. If deploying a viewer, use an appropriate
 Content Security Policy and test it independently.
 
-The offline security suite is `src/html_sanitization_regression_tests.pl`.
+The offline security suite is `tests/html_sanitization_regression_tests.pl`.
 
 **PMC query encoding (F15).** Search terms are encoded in
 `src/pmc_query_encoding.pl`, which converts each Unicode scalar value to
@@ -234,7 +231,7 @@ instead of being removed. PubMed operators such as `[`/`]` are percent-encoded
 in transit and interpreted as part of the `term` query parameter rather than
 as URL delimiters. Unsupported scalar values fail explicitly. Run
 `swipl -q -s pmc_query_encoding_regression_tests.pl -g run_tests -t halt`
-from `src/` for the targeted offline regression suite.
+from `tests/` for the targeted offline regression suite.
 
 **Search provenance (F06).** Paper selection is fail-closed. At the start of each
 `agent_main` run, the in-memory PMC-ID allowlist is cleared. Each successful
@@ -273,22 +270,18 @@ request *reservations* immediately preceding `url_fetch`, not guaranteed
 HTTP arrival times. It cannot enforce an IP-wide limit across unrelated
 workspaces or servers; use one shared workspace/host limiter for those runs.
 
-**Non-spinning waits (F14).** In the DeepClause agent, `ncbi_fetch` invokes
-`exec(bash(...))` to run `python3 ncbi_wait.py reserve dataset/cache 0.4`
-before a request, and `python3 ncbi_wait.py wait <seconds>` for transient
-response backoff. The helper uses `time.sleep` (not wall-clock polling), and
-uses the **same** `.ncbi-request.lock` directory and `.ncbi-last-request`
-file as native SWI-Prolog, so mixed host/native workers remain coordinated.
-Any missing host tool, missing Python, invalid timestamp, or failed sleep
-**aborts the request** rather than silently bypassing throttling. Internal
-arguments are numeric and range-checked; the shell never sees LLM-provided
-queries, URLs or article IDs. Host-side `bash` must run in the same workspace
-as the mounted `/workspace` Prolog filesystem. `pause/1` in standalone
-SWI-Prolog uses native `sleep/1` and raises an explicit error if the timed
-wait is unavailable; it never busy-spins. The host helper intentionally
-adds an external process for each request, trading a little overhead for
-safety and low CPU use. Run `python3 -m unittest -v
-ncbi_wait_regression_tests` from `src/` to verify its CPU use and locking.
+**Waits (F14).** Request spacing and retry backoff are done in Prolog, by
+`reserve_ncbi_request/1` and `pause/1` in `src/dataset_pipeline.pl`; there is no
+host helper. In standalone SWI-Prolog `pause/1` blocks in `sleep/1` and uses no
+CPU. DeepClause's WebAssembly engine has no blocking wait (`sleep/1` raises a
+JavaScript error, and `shell/1` and threads are absent), so there `pause/1`
+falls back to polling the clock. That keeps one CPU core busy while waiting:
+0.4 seconds per NCBI request, and 2 to 30 seconds per retry when NCBI
+rate-limits. The lock directory and timestamp file are the same in both
+engines, so native and DeepClause workers sharing a workspace stay coordinated.
+An invalid timestamp or a busy lock **aborts the request** rather than
+bypassing throttling. `tests/pause_regression_tests.pl` and
+`tests/concurrency_regression_tests.pl` cover the waits and the limiter.
 
 An exclusive `dataset/raw/.PMC<id>.ingest.lock` covers an individual paper's
 raw XML download **and subsequent processing**; a competing ingest for the
@@ -370,16 +363,16 @@ fixture-predicate name collisions.
 From **any directory**, run the portable harness:
 
 ```sh
-/path/to/Logic-Based-Table-Parser-main/dataset-builder-agent/src/run_regression_tests.sh --all
+/path/to/Logic-Based-Table-Parser-main/dataset-builder-agent/tests/run_regression_tests.sh --all
 # Alternatives:
-./dataset-builder-agent/src/run_regression_tests.sh --list
-./dataset-builder-agent/src/run_regression_tests.sh --prolog-only
-./dataset-builder-agent/src/run_regression_tests.sh --python-only
+./dataset-builder-agent/tests/run_regression_tests.sh --list
+./dataset-builder-agent/tests/run_regression_tests.sh --prolog-only
+./dataset-builder-agent/tests/run_regression_tests.sh --python-only
 ```
 
 `--all` is also the default. Prolog suite files matching
-`src/*_regression_tests.pl` and Python suite files matching
-`src/*_regression_tests.py` are discovered automatically. The selected
+`tests/*_regression_tests.pl` and Python suite files matching
+`tests/*_regression_tests.py` are discovered automatically. The selected
 interpreter must be installed: `swipl` (SWI-Prolog 9+) or `python3` (Python
 3.10+). Set `SWIPL=/path/to/swipl` or `PYTHON=/path/to/python3` to select
 alternatives. **No suites are silently skipped.** The `--python-only` option
@@ -389,7 +382,7 @@ CI run.
 To test the harness itself without SWI-Prolog, run:
 
 ```sh
-python3 -m unittest discover -v -s dataset-builder-agent/tools -p 'test_*.py'
+python3 -m unittest discover -v -s dataset-builder-agent/tests -p 'test_*.py'
 ```
 
 These harness tests use mock executables to verify discovery, working-directory
@@ -426,7 +419,7 @@ Choose another directory with `test_table_parser(File, OutDir, Files)`. Earlier
 The driver is strict like `process_paper/4`: oversized or malformed spans raise
 the same typed errors, and a file with no `<table>` raises
 `no_tables_found(File)`. Candidates are structural hypotheses, not verified
-semantic labels. `src/test_driver_regression_tests.pl` covers this driver.
+semantic labels. `tests/test_driver_regression_tests.pl` covers this driver.
 
 Process a paper the agent has already downloaded, exactly as the agent does.
 Replace `7285984` with the id of a file in `dataset/raw/`:
@@ -455,7 +448,7 @@ four-argument form reports `some(invalid_boundary)` for out-of-domain
 coordinates or malformed/undersized rasters; structural failures continue
 to report `some(0)` through `some(6)`.
 
-Run the offline boundary regressions from `dataset-builder-agent/src`:
+Run the offline boundary regressions from `dataset-builder-agent/tests`:
 
 ```bash
 swipl -q -s boundary_regression_tests.pl -g run_tests -t halt
@@ -477,21 +470,21 @@ label for a scientific table.
 | File | Purpose |
 |---|---|
 | `src/pmc_query_encoding.pl` | Unicode-safe UTF-8 query-component encoder used by the agent. |
-| `src/pmc_query_encoding_regression_tests.pl` | Offline tests for Unicode, reserved URL characters, and edge cases. |
+| `tests/pmc_query_encoding_regression_tests.pl` | Offline tests for Unicode, reserved URL characters, and edge cases. |
 | `src/dataset_builder.dml` | The agent: paper selection (model), NCBI search and download, and the per-paper loop. |
 | `src/dataset_pipeline.pl` | Prolog module the agent loads. Connects parsers, constraints, annotations, and staged JSONL/HTML output. |
 | `src/table_machine_records.pl` | Canonical JSONL schema, deterministic cell provenance and candidate labels. |
-| `src/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
+| `tests/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/table_html_sanitizer.pl` | Removes executable markup from browser-facing table views while keeping source records unchanged. |
 | `src/parse_constraints.pl` | The seven reference constraints and public boundary validator. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
-| `src/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
-| `src/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
-| `src/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
+| `tests/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
+| `tests/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
+| `tests/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
-| `src/test_driver_regression_tests.pl` | Offline tests for the local driver: output naming, sanitization, stale-file replacement, strict errors. |
+| `tests/test_driver_regression_tests.pl` | Offline tests for the local driver: output naming, sanitization, stale-file replacement, strict errors. |
 
 ## Troubleshooting
 
@@ -506,10 +499,10 @@ label for a scientific table.
 - **`Could not build a dataset ... no usable PMC ids were selected`** with no
   error before it: the model did not return any PMC ids. Try a more specific
   prompt, or a model with reliable tool calling.
-- **`host_wait_failed(...)` / `NCBI host wait failed`**: DeepClause could not
-  run its Python host timer/limiter or the timer rejected shared state. Verify
-  `python3 --version`, the built-in `bash` tool, and ownership of
-  `dataset/cache/`. Do not bypass the limiter to make the run proceed.
+- **`ncbi_invalid_rate_state(...)` / `ncbi_rate_clock_skew(...)`**: the shared
+  limiter file `dataset/cache/.ncbi-last-request` is unreadable or holds a time
+  in the future. Check ownership of `dataset/cache/`; once no run is active,
+  delete that file. Do not bypass the limiter to make the run proceed.
 - **`concurrent_lock_busy(...)` / `pmc_ingest_busy(...)`, or an error naming a
   `.PMC<n>.lock` path under `dataset/papers/`**: another run owns a lock, or a
   crashed run left one behind. Locks are plain directories and are never removed
@@ -557,7 +550,7 @@ Change budgets only for **trusted** oversized tables with adequate memory.
 These checks protect the rasterization stage; they do not cap XML download
 sizes, DOM parsing allocations or the later number of annotations generated.
 
-Run the standalone offline regression suite from `dataset-builder-agent/src`:
+Run the standalone offline regression suite from `dataset-builder-agent/tests`:
 
 ```bash
 swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
@@ -582,7 +575,7 @@ separately; they are **best-effort**, not a transactional database. A hard
 crash can still leave an incomplete staging directory or prevent a status
 record from being written; there is no automatic crash recovery yet.
 
-Run the new offline tests alongside the prior three suites (from `src/`):
+Run the new offline tests alongside the prior three suites (from `tests/`):
 
 ```bash
 ./run_regression_tests.sh
@@ -614,8 +607,8 @@ a paper. The DeepClause
 `url_fetch` API in use does **not** expose HTTP headers/status to this DML
 code; status/content-type checks at the transport layer remain a follow-up
 for the fetch adapter. The local, network-free regression suite is
-`src/download_xml_regression_tests.pl` (also included in
-`src/run_regression_tests.sh`).
+`tests/download_xml_regression_tests.pl` (also included in
+`tests/run_regression_tests.sh`).
 
 
 ### Canonical machine-readable annotations (F10)
@@ -655,8 +648,8 @@ sibling indices start at **one** (as required by XPath). Cell labels follow
 cell is absent from the raster, JSONL generation fails instead of silently
 assigning that source cell a label; detailed collision diagnostics remain F12.
 
-Run the offline regression suite with `src/run_regression_tests.sh`; the new
-F10-specific suite is `src/machine_annotations_regression_tests.pl`.
+Run the offline regression suite with `tests/run_regression_tests.sh`; the new
+F10-specific suite is `tests/machine_annotations_regression_tests.pl`.
 
 ### Indexed boundary search and streamed rendering (F11)
 
@@ -689,12 +682,12 @@ of the logical boundary solver itself.
 Run the new offline differential tests as part of the full suite:
 
 ```sh
-cd dataset-builder-agent/src
+cd dataset-builder-agent/tests
 ./run_regression_tests.sh
 # Or just F11:
 swipl -q -s boundary_scaling_regression_tests.pl -g run_tests -t halt
 # Repeatable standalone (no external services) benchmark:
-swipl -q -s benchmark_boundaries.pl -g run_benchmark -t halt
+swipl -q -s ../tools/benchmark_boundaries.pl -g run_benchmark -t halt
 # Independent Python formula replay (does not execute Prolog):
 python3 ../tools/verify_fast_boundary_logic.py
 ```
@@ -732,7 +725,7 @@ in `tables.jsonl`. No silent overlap correction or permissive rasterization
 mode is offered; a malformed table is quarantined with a diagnostic. Run:
 
 ```bash
-cd dataset-builder-agent/src
+cd dataset-builder-agent/tests
 swipl -q -s raster_integrity_regression_tests.pl -g run_tests -t halt
 ./run_regression_tests.sh
 ```
@@ -746,7 +739,7 @@ brackets/quotes and trailing sentence punctuation. It splits tabs, newlines,
 commas, semicolons and spaces; collapses leading-zero aliases and preserves
 first-seen order. Standalone numbers, embedded punctuation and non-ASCII digits
 are rejected. Grounding against this run's observed NCBI IDs remains mandatory.
-Offline tests: `src/pmc_id_parser_regression_tests.pl`.
+Offline tests: `tests/pmc_id_parser_regression_tests.pl`.
 
 **Per-paper evidence (F20).** Every normally published `metadata.json` now
 contains `source_provenance` with the **raw-input-file SHA-256**, file byte count,

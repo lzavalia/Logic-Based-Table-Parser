@@ -1,6 +1,6 @@
 % F15: test the actual encoding module used by dataset_builder.dml.
 % Run: swipl -q -s pmc_query_encoding_regression_tests.pl -g run_tests -t halt
-:- use_module(pmc_query_encoding).
+:- use_module('../src/pmc_query_encoding').
 :- use_module(library(plunit)).
 
 :- begin_tests(pmc_query_encoding).

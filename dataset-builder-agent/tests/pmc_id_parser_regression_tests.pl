@@ -1,4 +1,4 @@
-:- use_module(pmc_id_parser).
+:- use_module('../src/pmc_id_parser').
 :- begin_tests(pmc_id_parser).
 
 test(common_punctuation_and_tabs) :-

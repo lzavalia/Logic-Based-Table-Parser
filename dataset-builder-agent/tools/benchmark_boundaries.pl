@@ -1,7 +1,7 @@
 % Offline boundary-search microbenchmark. No external services.
-% Run: swipl -q -s benchmark_boundaries.pl -g run_benchmark -t halt
+% Run from dataset-builder-agent/: swipl -q -s tools/benchmark_boundaries.pl -g run_benchmark -t halt
 % Produces CSV of size, candidate count, time and Prolog global-stack bytes.
-:- consult(parse_constraints).
+:- consult('../src/parse_constraints').
 
 benchmark_raster(Rows, Cols, Raster) :-
    RowsMinus is Rows - 1,

@@ -1,7 +1,7 @@
 % F07/F08: network-independent NCBI download and JATS XML regressions.
 % Run: swipl -q -s download_xml_regression_tests.pl -g run_tests -t halt
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 
 jats_article(Id, Xml) :-

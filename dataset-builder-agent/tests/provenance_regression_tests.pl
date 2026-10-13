@@ -1,5 +1,5 @@
-:- use_module(dataset_pipeline).
-:- use_module(provenance_manifest).
+:- use_module('../src/dataset_pipeline').
+:- use_module('../src/provenance_manifest').
 :- use_module(library(filesex)).
 
 make_prov_workspace(Root) :-

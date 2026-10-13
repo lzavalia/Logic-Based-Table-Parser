@@ -1,6 +1,7 @@
-% Native SWI-Prolog timing checks.  DeepClause's WASM path uses the host
-% ncbi_wait.py helper instead, avoiding the unsupported sleep/1 builtin.
-:- use_module(dataset_pipeline).
+% Timing checks for pause/1. Native SWI-Prolog blocks in sleep/1; the
+% clock-polling fallback used in DeepClause's WASM engine, where sleep/1
+% raises, is exercised through wait_until/1.
+:- use_module('../src/dataset_pipeline').
 
 :- begin_tests(f14_native_timed_wait).
 
@@ -26,5 +27,20 @@ test(native_sleep_does_not_spin) :-
     CpuUsed is CpuAfter - CpuBefore,
     Elapsed >= 0.23,
     CpuUsed < 0.1.
+
+test(clock_fallback_waits_full_duration) :-
+    get_time(Before),
+    End is Before + 0.2,
+    dataset_pipeline:wait_until(End),
+    get_time(After),
+    After >= End,
+    After - Before < 1.0.
+
+test(clock_fallback_returns_at_once_for_past_deadline) :-
+    get_time(Now),
+    Past is Now - 5,
+    dataset_pipeline:wait_until(Past),
+    get_time(After),
+    After - Now < 0.1.
 
 :- end_tests(f14_native_timed_wait).

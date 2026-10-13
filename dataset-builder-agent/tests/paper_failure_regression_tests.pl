@@ -1,9 +1,9 @@
 % F05: paper snapshots are committed only if complete; failures are
 % diagnosed with their phase or table index and recorded independently.
-% Run offline from src/:
+% From dataset-builder-agent/tests/:
 %   swipl -q -s paper_failure_regression_tests.pl -g run_tests -t halt
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(lists)).
 

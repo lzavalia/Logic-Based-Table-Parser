@@ -35,7 +35,7 @@
 % Loading dataset_pipeline.pl through a search-path alias makes it a real
 % Prolog module whose predicates (esearch_ids/2, verified_search_lines/3,
 % reset_search_provenance/0, filter_search_selected_ids/3,
-% download_status/2, pause/1, process_paper/4) run as ordinary compiled Prolog. A plain consult/1, or a
+% download_status/2, reserve_ncbi_request/1, pause/1, process_paper/4) run as ordinary compiled Prolog. A plain consult/1, or a
 % use_module/1 with a file path, would instead hand the code to DML's
 % meta-interpreter, which keeps only the first solution of a clause body.
 user:file_search_path(workspace, '/workspace').
@@ -50,7 +50,8 @@ max_papers(20).
 
 % NCBI's no-key request budget is shared by all local workers using the
 % same workspace. Each request reserves a slot under an OS-atomic directory
-% lock; 0.4 seconds is deliberately slower than 3 requests per second.
+% lock (reserve_ncbi_request/1 in dataset_pipeline.pl); 0.4 seconds is
+% deliberately slower than 3 requests per second.
 ncbi_request_gap(0.4).
 
 % If NCBI still answers "API rate limit exceeded", the run pauses and tries
@@ -73,14 +74,20 @@ tool(search_pmc(Query, Results),
 % ESearch and ESummary live in one unique temporary directory per tool
 % invocation. The last successful search IDs are retained in the verified
 % provenance allowlist, not in shared JSON filenames.
+% The cleanup is written with catch/3 because setup_call_cleanup/3 cannot
+% call predicates defined in this file: DML's interpreter does not make them
+% visible to it (existence_error on pmc_search_files/6).
 pmc_search(Query, Results) :-
     allocate_search_cache("/workspace", SearchSave, SearchMounted,
                           SummarySave, SummaryMounted),
-    setup_call_cleanup(
-       true,
-       pmc_search_files(Query, SearchSave, SearchMounted,
-                        SummarySave, SummaryMounted, Results),
-       cleanup_search_cache(SearchMounted)).
+    (   catch(pmc_search_files(Query, SearchSave, SearchMounted,
+                               SummarySave, SummaryMounted, Results),
+              Error, true)
+    ->  cleanup_search_cache(SearchMounted),
+        ( var(Error) -> true ; throw(Error) )
+    ;   cleanup_search_cache(SearchMounted),
+        fail
+    ).
 
 pmc_search_files(Query, SearchSave, SearchMounted,
                  SummarySave, SummaryMounted, Results) :-
@@ -100,41 +107,6 @@ pmc_search_files(Query, SearchSave, SearchMounted,
     Results \== "",
     remember_search_query(Query).
 
-% --- Non-spinning host waits and shared request reservations (F14) ---
-%
-% The Prolog module runs inside DeepClause's WebAssembly runtime, where
-% sleep/1 can throw. exec(bash/1) crosses to the host and suspends the WASM
-% engine while an ordinary OS timer waits, rather than burning CPU.
-% Python3 is required in the DeepClause host workspace. Commands contain
-% *only* fixed literals and validated, formatted numeric values; never
-% interpolate a model-provided URL, query, ID or file path into the shell.
-% ncbi_wait.py uses the SAME .ncbi-request.lock and .ncbi-last-request files
-% as native Prolog's ncbi_rate_limit_at/3, preserving cross-worker spacing.
-host_ncbi_reserve(Gap) :-
-    ( number(Gap), Gap >= 0.34, Gap =< 60
-    -> true
-    ;  throw(error(domain_error(ncbi_request_gap_0_34_to_60, Gap),
-                   context(host_ncbi_reserve/1, 'Invalid host request spacing'))) ),
-    format(string(Command), "python3 ncbi_wait.py reserve dataset/cache ~6f", [Gap]),
-    exec(bash(command: Command), Result),
-    host_wait_success(Result, "RESERVED").
-
-host_pause(Seconds) :-
-    ( number(Seconds), Seconds >= 0, Seconds =< 300
-    -> true
-    ;  throw(error(domain_error(pause_seconds_0_to_300, Seconds),
-                   context(host_pause/1, 'Invalid host wait duration'))) ),
-    format(string(Command), "python3 ncbi_wait.py wait ~6f", [Seconds]),
-    exec(bash(command: Command), Result),
-    host_wait_success(Result, "SLEPT").
-
-host_wait_success(Result, Expected) :-
-    ( get_dict(stdout, Result, Stdout),
-      normalize_space(string(Marker), Stdout), Marker == Expected
-    -> true
-    ;  throw(error(host_wait_failed(Expected, Result),
-                   context(host_wait_success/2, 'Host wait helper did not report success'))) ).
-
 % --- Downloads (rate-limited) ---
 
 % ncbi_fetch(+Url, +File): validate the downloaded body before trusting it.
@@ -153,7 +125,7 @@ ncbi_fetch(Url, File, Kind) :-
 
 ncbi_fetch(Url, File, Kind, Waits) :-
     ncbi_request_gap(Gap),
-    host_ncbi_reserve(Gap),
+    reserve_ncbi_request(Gap),
     ( exists_file(File) -> delete_file(File) ; true ),
     exec(url_fetch(url: Url, save_to: File), _),
     format(string(MountedFile), "/workspace/~w", [File]),
@@ -164,7 +136,7 @@ ncbi_fetch(Url, File, Kind, Waits) :-
     -> ( Waits = [Wait|MoreWaits]
        -> format(string(Msg), "NCBI transient response (~w); retrying after ~w s", [Status, Wait]),
           output(Msg),
-          host_pause(Wait),
+          pause(Wait),
           ncbi_fetch(Url, File, Kind, MoreWaits)
        ;  ( exists_file(File) -> delete_file(File) ; true ),
           throw(error(ncbi_download_invalid(Kind, retries_exhausted(Status)),
@@ -214,12 +186,16 @@ process_papers([Id|Ids], [Line|Lines]) :-
 % and saves it under dataset/papers/PMC<id>/ after full-paper staging.
 % Serializes each PMC ID's raw download and subsequent parsing. The raw
 % filename is stable, so holding only the publication lock would be too late.
-% setup_call_cleanup ensures that exceptions do not strand the ingest lock.
+% The lock is released on success, failure and exceptions alike; see
+% pmc_search/2 for why this is catch/3 rather than setup_call_cleanup/3.
 download_and_process(Id, Line) :-
     acquire_paper_ingest_lock(Id, LockDir),
-    setup_call_cleanup(true,
-                       download_and_process_locked(Id, Line),
-                       release_paper_ingest_lock(LockDir)).
+    (   catch(download_and_process_locked(Id, Line), Error, true)
+    ->  release_paper_ingest_lock(LockDir),
+        ( var(Error) -> true ; throw(Error) )
+    ;   release_paper_ingest_lock(LockDir),
+        fail
+    ).
 
 download_and_process_locked(Id, Line) :-
     format(string(Url),

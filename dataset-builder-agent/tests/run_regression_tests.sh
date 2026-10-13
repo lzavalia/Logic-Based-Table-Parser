@@ -4,7 +4,7 @@
 # Run from any working directory; no API key, DeepClause, or network required.
 set -eu
 
-SRC_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+TEST_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SWIPL=${SWIPL:-swipl}
 PYTHON=${PYTHON:-python3}
 
@@ -26,17 +26,17 @@ case "${1:---all}" in
     *) usage >&2; exit 2 ;;
 esac
 
-# Expand in the source directory, not the invoking working directory.
+# Expand in the tests directory, not the invoking working directory.
 # Without an explicit existence check, POSIX shells leave an unmatched glob
 # literal and a suite-free CI run would be incorrectly reported as success.
-set -- "$SRC_DIR"/*_regression_tests.pl
+set -- "$TEST_DIR"/*_regression_tests.pl
 if [ ! -f "$1" ]; then
     echo 'ERROR: no Prolog regression suites found' >&2
     exit 1
 fi
 prolog_count=$#
 
-set -- "$SRC_DIR"/*_regression_tests.py
+set -- "$TEST_DIR"/*_regression_tests.py
 if [ ! -f "$1" ]; then
     echo 'ERROR: no Python regression suites found' >&2
     exit 1
@@ -45,9 +45,9 @@ python_count=$#
 
 if [ "${list_only:-0}" -eq 1 ]; then
     printf 'Prolog suites (%s):\n' "$prolog_count"
-    for suite in "$SRC_DIR"/*_regression_tests.pl; do printf '  %s\n' "${suite##*/}"; done
+    for suite in "$TEST_DIR"/*_regression_tests.pl; do printf '  %s\n' "${suite##*/}"; done
     printf 'Python suites (%s):\n' "$python_count"
-    for suite in "$SRC_DIR"/*_regression_tests.py; do printf '  %s\n' "${suite##*/}"; done
+    for suite in "$TEST_DIR"/*_regression_tests.py; do printf '  %s\n' "${suite##*/}"; done
     exit 0
 fi
 
@@ -58,9 +58,9 @@ if [ "$run_prolog" -eq 1 ]; then
         exit 127
     fi
     printf 'Running %s offline Prolog regression suites\n' "$prolog_count"
-    for suite in "$SRC_DIR"/*_regression_tests.pl; do
+    for suite in "$TEST_DIR"/*_regression_tests.pl; do
         printf '\n==> %s\n' "${suite##*/}"
-        (cd "$SRC_DIR" && "$SWIPL" -q -f none -s "${suite##*/}" \
+        (cd "$TEST_DIR" && "$SWIPL" -q -f none -s "${suite##*/}" \
             -g '(run_tests -> halt(0) ; halt(1))' -t 'halt(2)')
     done
 fi
@@ -71,7 +71,7 @@ if [ "$run_python" -eq 1 ]; then
         exit 127
     fi
     printf '\nRunning %s offline Python regression suites\n' "$python_count"
-    (cd "$SRC_DIR" && "$PYTHON" -m unittest discover -v -s . -p '*_regression_tests.py')
+    (cd "$TEST_DIR" && "$PYTHON" -m unittest discover -v -s . -p '*_regression_tests.py')
 fi
 
 printf '\nAll selected regression suites passed.\n'

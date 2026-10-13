@@ -1,7 +1,7 @@
 % F13: Offline concurrency and shared-request-budget regression tests.
 % Run: swipl -q -s concurrency_regression_tests.pl -g run_tests -t halt
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
 :- if(exists_source(library(json))).

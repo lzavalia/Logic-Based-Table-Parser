@@ -21,7 +21,8 @@
 %       Status is rate_limited if File holds NCBI's "API rate limit exceeded"
 %       reply instead of the requested data, and ok otherwise.
 %   pause(+Seconds)
-%       Native SWI-Prolog OS-backed sleep (WASM callers use the host helper).
+%       Wait for Seconds: sleep/1 where the engine has it, otherwise a
+%       clock-polling fallback (DeepClause's WebAssembly engine).
 %   process_paper(+PmcId, +File, +DatasetDir, -Summary)
 %       Extract every <table> of the full text File, rasterize it with
 %       table_layout_generator.pl, check every header boundary against
@@ -210,7 +211,7 @@ cleanup_search_cache(SearchMounted) :-
    -> delete_directory_and_contents(SearchDir)
    ;  true ).
 
-% Shared host/workspace limiter, not a per-agent sleep. All DeepClause
+% Shared workspace limiter, not a per-agent sleep. All DeepClause
 % processes working in the same /workspace/dataset/cache reserve request
 % start times under one OS-atomic mkdir lock. A lock holder sleeps *inside*
 % the critical section; other workers cannot reserve conflicting times.
@@ -412,11 +413,12 @@ article_front_pmc_id(element(article, _, Children), PmcName) :-
    ; Digits = Upper ),
    canonical_pmc_name(Digits, PmcName).
 
-% This predicate is for standalone/native Prolog (including plunit tests).
-% DeepClause's WebAssembly Prolog may lack sleep/1. Never spin on get_time/1
-% as a fallback: that burns CPU and can prevent the host from servicing work.
-% The DML agent instead delegates both request reservations and retries to
-% the host through ncbi_wait.py, which uses an OS-backed timed wait.
+% pause(+Seconds): wait for Seconds, in Prolog only.
+% Native SWI-Prolog blocks in sleep/1 and uses no CPU. DeepClause's
+% WebAssembly engine has no blocking wait at all: sleep/1 raises a JavaScript
+% error there, and shell/1 and threads do not exist. In that engine the wait
+% falls back to polling the clock, which keeps one core busy for the duration
+% (0.4 s per NCBI request, longer only for rate-limit retries).
 pause(Seconds) :-
    ( number(Seconds), Seconds >= 0, Seconds =< 300
    -> true
@@ -424,10 +426,19 @@ pause(Seconds) :-
                   context(pause/1, 'Expected a nonnegative number of seconds <= 300'))) ),
    ( Seconds =:= 0
    -> true
-   ;  catch(sleep(Seconds), Error,
-             throw(error(timed_wait_unavailable(Seconds, Error),
-                         context(pause/1, 'Use host sleep from DML when running in WebAssembly'))))
+   ;  get_time(Start),
+      End is Start + Seconds,
+      catch(sleep(Seconds), _, true),
+      wait_until(End)
    ).
+
+% wait_until(+End): succeed once the wall clock reaches End. A no-op after a
+% sleep/1 that worked; the whole wait when sleep/1 is unavailable.
+wait_until(End) :-
+   repeat,
+   get_time(Now),
+   Now >= End,
+   !.
 
 % --- table pipeline --------------------------------------------------------
 

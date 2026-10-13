@@ -1,6 +1,6 @@
 % F09: Context and source provenance belong to the table they describe.
 % Run: swipl -q -s jats_context_regression_tests.pl -g run_tests -t halt
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
 

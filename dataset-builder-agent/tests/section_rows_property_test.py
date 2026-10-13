@@ -1,5 +1,7 @@
 """Property test for the section-row reduction: 20,000 random merged-cell tables with full-width rows inserted."""
-import random, json, glob
+import random, json, glob, sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 from section_rows_model import *
 
 def random_table(rng):

@@ -1,6 +1,6 @@
 % F17 (original audit): untrusted table input cannot become active HTML.
 % Run: swipl -q -s html_sanitization_regression_tests.pl -g run_tests -t halt
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
 

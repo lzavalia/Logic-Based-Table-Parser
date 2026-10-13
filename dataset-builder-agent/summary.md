@@ -70,8 +70,8 @@ retries. Invalid responses cannot publish a paper. The DeepClause
 `url_fetch` API in use does **not** expose HTTP headers/status to this DML
 code; status/content-type checks at the transport layer remain a follow-up
 for the fetch adapter. The local, network-free regression suite is
-`src/download_xml_regression_tests.pl` (also included in
-`src/run_regression_tests.sh`).
+`tests/download_xml_regression_tests.pl` (also included in
+`tests/run_regression_tests.sh`).
 
 ### Machine-readable output (F10)
 
@@ -86,7 +86,7 @@ time. Full per-candidate labels in `tables.jsonl` remain potentially quadratic
 in table size and candidate count, so attempts requiring more than 500,000
 cell-label records raise a typed output-limit error before writing HTML.
 The paper-staging mechanism preserves any previously published version.
-`src/boundary_scaling_regression_tests.pl` contains native differential and
+`tests/boundary_scaling_regression_tests.pl` contains native differential and
 rendering tests; `tools/verify_fast_boundary_logic.py` provides an independent
 formula replay. Native Prolog tests and benchmarks require SWI-Prolog.
 
@@ -99,7 +99,7 @@ IDs rather than silently leaving cells unchanged. A paper with a malformed
 table is not published, and the previous complete output is retained. Ragged
 rows and valid `rowspan="0"` remain supported; synthetic gaps are distinct
 from actual source cells. The offline regression suite is
-`src/raster_integrity_regression_tests.pl`.
+`tests/raster_integrity_regression_tests.pl`.
 
 ### Concurrent search and request isolation (F13)
 
@@ -110,26 +110,24 @@ per-PMC ingest lock protects the shared raw XML while downloading and parsing.
 Normal exceptions release locks; stale locks after crashes require operator
 inspection. The limiter coordinates a single shared workspace, not distinct
 IP-sharing hosts, and request start times may vary after reservation due to
-DML scheduling. See `src/concurrency_regression_tests.pl` for offline tests.
+DML scheduling. See `tests/concurrency_regression_tests.pl` for offline tests.
 
-### F14 — Non-spinning waits
+### F14 — Waits
 
-DeepClause's WASM Prolog engine can reject native `sleep/1`. The agent now
-calls the host `bash` tool to execute `ncbi_wait.py`, a Python 3 helper using
-`time.sleep` for rate reservations, contention, and retry delays. It shares
-the existing F13 on-disk lock and timestamp with native Prolog. The native
-`pause/1` uses `sleep/1` and fails explicitly if it is unavailable instead of
-busy-polling with `get_time`. The 11 offline Python regressions cover elapsed
-time, CPU utilization, concurrency, invalid inputs, and lock cleanup; the new
-native Prolog tests require SWI-Prolog. **Python3 and DeepClause's `bash`
-tool are required for the production DML runtime.**
+Request spacing and retry backoff run in Prolog (`reserve_ncbi_request/1` and
+`pause/1` in `dataset_pipeline.pl`), with no Python or shell helper. Native
+SWI-Prolog blocks in `sleep/1`. DeepClause's WASM Prolog engine has no
+blocking wait, so `pause/1` falls back to polling the clock there, which keeps
+one CPU core busy for the wait (0.4 seconds per request, longer on retries).
+Both engines share the F13 on-disk lock and timestamp. The offline tests are
+`tests/pause_regression_tests.pl` and `tests/concurrency_regression_tests.pl`.
 
 ## Offline regression CI (F16)
 
 `.github/workflows/regression.yml` installs SWI-Prolog and Python on
 GitHub Actions, tests the regression harness, and runs all standalone offline
 Prolog and Python regression suites on pushes and pull requests.
-`src/run_regression_tests.sh` discovers suites and fails closed on missing
+`tests/run_regression_tests.sh` discovers suites and fails closed on missing
 runtimes, missing suites, or test failures. It supports `--list`,
 `--prolog-only`, and `--python-only`. The workflow does not validate a live
 DeepClause/NCBI round trip.

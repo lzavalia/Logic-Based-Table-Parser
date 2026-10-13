@@ -1,6 +1,6 @@
 % F17 optional, explicit per-table recovery. /4 remains fail-closed.
 % swipl -q -s paper_recovery_regression_tests.pl -g run_tests -t halt
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 
 make_recovery_workspace(Root) :-

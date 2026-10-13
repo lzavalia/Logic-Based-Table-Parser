@@ -5,7 +5,7 @@
 %
 % No network, LLM or DeepClause dependency.
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 
 % Deliberately fail AFTER creating a staging artifact. The publication code

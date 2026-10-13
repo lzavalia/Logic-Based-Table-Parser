@@ -2,7 +2,7 @@
 % may be selected for download. Fixtures are offline E-utilities responses.
 % Run: swipl -q -s search_provenance_regression_tests.pl -g run_tests -t halt
 
-:- use_module(dataset_pipeline).
+:- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(apply)).
 :- if(exists_source(library(json))).

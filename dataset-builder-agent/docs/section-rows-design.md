@@ -2,7 +2,7 @@
 
 **Status:** proposal. Nothing in the repo has been changed for this.
 **Evidence base:** the 20-paper run in `first_test.zip` (49 tables), plus a Python reference model written for this design.
-**Reference model and property test (both run, both pass):** `tools/section_rows_model.py`, `tools/section_rows_property_test.py`.
+**Reference model and property test (both run, both pass):** `tools/section_rows_model.py`, `tests/section_rows_property_test.py`.
 **Not yet done:** any Prolog implementation. The Prolog sketches below are untested.
 
 ---
@@ -140,7 +140,7 @@ All paths under `dataset-builder-agent/src/`. Today every caller uses `valid_bou
 | `table_machine_records.pl` `machine_candidate/4`, `machine_cell_label/4` | same `Sections` argument; emit `section_rows` and `section_rows_detected` |
 | `test_driver.pl` | call `candidate_boundaries/2` |
 | `tools/evaluate_structural_candidates.py` | optional `gold_section_rows`; keep scoring `(hmd, vmd)` as it does today |
-| README, `summary.md`, status file | describe the new region and the direct-first guarantee; no overclaiming (`tools/test_doc_claims.py` guards the wording) |
+| README, `summary.md`, status file | describe the new region and the direct-first guarantee; no overclaiming (`tests/test_doc_claims.py` guards the wording) |
 
 ---
 
@@ -154,7 +154,7 @@ All paths under `dataset-builder-agent/src/`. Today every caller uses `valid_bou
 
 **To do in the repo:**
 
-1. `src/section_rows_regression_tests.pl` with these cases:
+1. `tests/section_rows_regression_tests.pl` with these cases:
    - Rasters from the 3 recovered tables (copy the real rasters: PMC12386235 t2, PMC7293797 t2 and t3).
    - A synthetic 4×3 with one interior section row gives `{hmd:0, vmd:0, section_rows:[2]}`.
    - A raster that already has direct candidates returns them unchanged with `section_rows:[]`.
