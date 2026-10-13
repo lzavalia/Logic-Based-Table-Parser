@@ -1,0 +1,8 @@
+# Local DeepClause configuration can hold API keys; never send it to the build.
+**/.deepclause/
+**/.env*
+# Generated output and large files the image does not need.
+**/dataset/
+first_test.zip
+docs/
+**/__pycache__/

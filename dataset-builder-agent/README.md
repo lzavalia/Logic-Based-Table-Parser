@@ -146,6 +146,43 @@ paper, and ends with `Dataset build complete`. As a guide to cost, this prompt
 with `anthropic:claude-sonnet-4-6` took 5 model calls and about $0.06 for the
 full 20 papers.
 
+## Docker
+
+The `Dockerfile` in this directory builds an image with Node.js, DeepClause
+0.0.86, SWI-Prolog and Python 3, with DeepClause already initialized for
+`openai:gpt-4o`. It replaces installation steps 1 to 6. Build it from
+`dataset-builder-agent/`:
+
+```bash
+docker build -t table-dataset-builder .
+```
+
+Run the agent. The API key is passed in at run time and is not stored in the
+image; the mounted directory receives the `dataset/` output described below:
+
+```bash
+docker run --rm -e OPENAI_API_KEY \
+  -v "$PWD/dataset:/app/src/dataset" \
+  table-dataset-builder "dementia with lewy bodies"
+```
+
+Options from [Running the agent](#running-the-agent) go after the search
+phrase. For another provider, pass its key variable and a model, for example
+`-e ANTHROPIC_API_KEY` with `--model anthropic:claude-sonnet-4-6`.
+
+Run the offline tests, or open a shell to use `swipl` directly:
+
+```bash
+docker run --rm --entrypoint /app/tests/run_regression_tests.sh table-dataset-builder
+docker run --rm -it --entrypoint bash table-dataset-builder
+```
+
+`.github/workflows/docker.yml` rebuilds the image on every push to `main` that
+touches this directory and publishes it to the GitHub Container Registry as
+`ghcr.io/lzavalia/logic-based-table-parser:latest`, so the published image
+tracks the repository. Other branches and pull requests only build and
+smoke-test it.
+
 ## Running the agent
 
 From `src/`:
