@@ -1,8 +1,8 @@
 name: Docker image
 
 # Keeps ghcr.io/<owner>/<repo> in step with main: every push to main rebuilds
-# the image and publishes it as :latest and :sha-<commit>. Pull requests and
-# other branches only build and smoke-test it.
+# the image and publishes it as :latest and :sha-<commit>, for both x86-64 and
+# ARM64 hosts. Pull requests and other branches only build and smoke-test it.
 on:
   push:
     paths:
@@ -27,6 +27,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - name: Image names and tags
         id: meta
@@ -50,6 +51,9 @@ jobs:
           docker run --rm --entrypoint swipl table-dataset-builder:ci --version
           docker run --rm --entrypoint python3 table-dataset-builder:ci --version
           docker run --rm --entrypoint test table-dataset-builder:ci -f /app/src/.deepclause/config.json
+          docker run --rm --entrypoint sh table-dataset-builder:ci -c \
+            'grep -q "compactedMessages !== normalizedForCompaction" "$(npm root -g)/deepclause-sdk/dist/agent.js"'
+          docker run --rm --entrypoint bash table-dataset-builder:ci -n /app/run_agent.sh
           docker run --rm --entrypoint swipl -w /app/tests table-dataset-builder:ci \
             -q -f none -s boundary_regression_tests.pl \
             -g '(run_tests -> halt(0) ; halt(1))' -t 'halt(2)'
@@ -65,6 +69,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: dataset-builder-agent
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

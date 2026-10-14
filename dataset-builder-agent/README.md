@@ -70,6 +70,17 @@ agent was developed against. The agent itself is Prolog only: it needs no
 Python and does not use DeepClause's `bash` tool. Python 3.10+ is needed only
 for some of the offline tests and the scripts under `tools/`.
 
+Then apply the project's fix to DeepClause, from `dataset-builder-agent/`:
+
+```bash
+patch -p1 -b -d "$(npm root -g)/deepclause-sdk" < docker/deepclause-0.0.86-compaction.patch
+```
+
+Without it, DeepClause 0.0.86 can drop the `search_pmc` results from the
+model's conversation before it chooses papers; the patch file explains the
+change. `-b` keeps the original as `dist/agent.js.orig`. The Docker image
+applies the same patch. It is needed until the fix is released upstream.
+
 ### 3. Get the code
 
 ```bash
@@ -149,19 +160,20 @@ full 20 papers.
 ## Docker
 
 The `Dockerfile` in this directory builds an image with Node.js, DeepClause
-0.0.86, SWI-Prolog and Python 3, with DeepClause already initialized for
-`openai:gpt-4o`. It replaces installation steps 1 to 6. Build it from
-`dataset-builder-agent/`:
+0.0.86 with the project's patch applied, SWI-Prolog and Python 3, with
+DeepClause already initialized for `openai:gpt-4o`. It replaces installation
+steps 1 to 6. Build it from `dataset-builder-agent/`:
 
 ```bash
 docker build -t table-dataset-builder .
 ```
 
 Run the agent. The API key is passed in at run time and is not stored in the
-image; the mounted directory receives the `dataset/` output described below:
+image. The container runs `run_agent.sh`, which keeps a log of each run
+(see [Running the agent](#running-the-agent)):
 
 ```bash
-docker run --rm -e OPENAI_API_KEY \
+docker run --rm --user "$(id -u):$(id -g)" -e OPENAI_API_KEY \
   -v "$PWD/dataset:/app/src/dataset" \
   table-dataset-builder "dementia with lewy bodies"
 ```
@@ -169,6 +181,22 @@ docker run --rm -e OPENAI_API_KEY \
 Options from [Running the agent](#running-the-agent) go after the search
 phrase. For another provider, pass its key variable and a model, for example
 `-e ANTHROPIC_API_KEY` with `--model anthropic:claude-sonnet-4-6`.
+
+**Getting the dataset out.** The container writes straight into the mounted
+host directory, so there is nothing to extract: after the run, `./dataset/`
+holds the `papers/`, `raw/`, `runs/` and `attempts/` output described below,
+plus `logs/<UTC timestamp>/` with that run's `runtime_log.txt` and
+`token_usage.json`. Mount the same directory on every
+run: results accumulate per PMC ID, and `dataset/cache/` holds the NCBI rate
+limiter's state. `--user` makes the files yours; without it they are owned by
+root on a Linux host. Where mounting is not possible, run without `--rm` and
+copy the output out afterwards:
+
+```bash
+docker run --name tdb-run -e OPENAI_API_KEY table-dataset-builder "dementia with lewy bodies"
+docker cp tdb-run:/app/src/dataset ./dataset
+docker rm tdb-run
+```
 
 Run the offline tests, or open a shell to use `swipl` directly:
 
@@ -179,9 +207,21 @@ docker run --rm -it --entrypoint bash table-dataset-builder
 
 `.github/workflows/docker.yml` rebuilds the image on every push to `main` that
 touches this directory and publishes it to the GitHub Container Registry as
-`ghcr.io/lzavalia/logic-based-table-parser:latest`, so the published image
-tracks the repository. Other branches and pull requests only build and
-smoke-test it.
+`ghcr.io/lzavalia/logic-based-table-parser:latest`, for x86-64 and ARM64
+machines, so the published image tracks the repository. Other branches and
+pull requests only build and smoke-test it. On another computer, pull it
+instead of building:
+
+```bash
+docker pull ghcr.io/lzavalia/logic-based-table-parser:latest
+docker run --rm --user "$(id -u):$(id -g)" -e OPENAI_API_KEY \
+  -v "$PWD/dataset:/app/src/dataset" \
+  ghcr.io/lzavalia/logic-based-table-parser:latest "dementia with lewy bodies"
+```
+
+The package is private until it is made public in its GitHub package
+settings; until then, run `docker login ghcr.io` first, with a GitHub token
+that has the `read:packages` scope.
 
 ## Running the agent
 
@@ -199,21 +239,20 @@ Useful options:
 | `--usage <file>` | Save the tokens used, per model, to a JSON file. |
 | `--verbose` | Also print each tool call. |
 
-`src/run_agent.sh` wraps that command with a spending limit and keeps a record
-of the run:
+`run_agent.sh`, in `dataset-builder-agent/`, wraps that command and keeps a
+record of the run. Run it from any directory; it changes into `src/` itself:
 
 ```bash
 ./run_agent.sh "<search prompt>"
-BUDGET_USD=1 ./run_agent.sh "<search prompt>"    # default limit is 5
+./run_agent.sh "<search prompt>" --model anthropic:claude-sonnet-4-6
 ```
 
-It writes `runtime_log.txt` (everything the agent printed), `token_usage.json`
-(tokens per model) and `budget_guard.log` (one line per model call with the
-running cost) next to the script, replacing those of the previous run. The
-limit is enforced by `budget_guard.mjs`, which is preloaded into the
-`deepclause` process and stops it with exit status 3 once the estimated cost
-reaches `BUDGET_USD`. It only meters calls to the Anthropic API, so it does not
-limit runs with another provider.
+Arguments after the search prompt are passed on to `deepclause run`. It
+writes `runtime_log.txt` (everything the agent printed) and `token_usage.json`
+(tokens per model) to `src/`, beside `dataset/`, replacing those of the
+previous run. With `LOG_DIR` set, they go instead to a new
+`LOG_DIR/<UTC timestamp>/` directory for each run; the Docker image uses
+`dataset/logs`.
 
 Each run writes a `dataset/` directory inside `src/`:
 

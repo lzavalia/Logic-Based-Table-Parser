@@ -6,7 +6,9 @@
 first_test.zip
 docs/
 **/__pycache__/
-# Per-run output of src/run_agent.sh.
+# Local debugging aid and per-run output of run_agent.sh.
+src/budget_guard.mjs
 src/runtime_log.txt
 src/token_usage.json
 src/budget_guard.log
+src/dataset.zip

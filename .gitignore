@@ -8,7 +8,8 @@ dataset/
 *.env
 .env*
 !.env.example
-# Per-run output of dataset-builder-agent/src/run_agent.sh
+# Local debugging aid and per-run output of dataset-builder-agent/run_agent.sh
+dataset-builder-agent/src/budget_guard.mjs
 dataset-builder-agent/src/runtime_log.txt
 dataset-builder-agent/src/token_usage.json
 dataset-builder-agent/src/budget_guard.log

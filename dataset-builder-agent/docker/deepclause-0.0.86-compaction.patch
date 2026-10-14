@@ -1,0 +1,29 @@
+DeepClause 0.0.86: keep the original message history when no compactor ran.
+
+Before each model call the agent passes a flattened copy of the history to the
+onBeforeModelCall compaction hook and, in 0.0.86, always adopts what the hook
+returns. When no compactor rewrites anything the hook returns the flattened
+copy unchanged, and the tool results in it are lost, so the model no longer
+sees the search_pmc results it is meant to choose papers from. This keeps the
+original history unless the hook actually returned a different one.
+
+Apply from the installed package directory:
+  patch -p1 -d "$(npm root -g)/deepclause-sdk" < deepclause-0.0.86-compaction.patch
+
+--- a/dist/agent.js
++++ b/dist/agent.js
+@@ -604,7 +604,13 @@
+         try {
+             await tick();
+             if (options.onBeforeModelCall) {
+-                messages = await options.onBeforeModelCall(normalizeMessagesForCompaction(messages), lastActualInputTokens);
++                const normalizedForCompaction = normalizeMessagesForCompaction(messages);
++                const compactedMessages = await options.onBeforeModelCall(normalizedForCompaction, lastActualInputTokens);
++                // Only adopt the flattened history when a compactor actually rewrote it;
++                // otherwise keep the original messages so tool results are preserved.
++                if (compactedMessages !== normalizedForCompaction) {
++                    messages = compactedMessages;
++                }
+             }
+             // Ensure proper role alternation — some APIs reject consecutive same-role messages
+             messages = sanitizeMessages(messages);
