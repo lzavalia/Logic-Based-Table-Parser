@@ -3,6 +3,11 @@
 :- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
+:- if(exists_source(library(json))).
+:- use_module(library(json)).
+:- else.
+:- use_module(library(http/json)).
+:- endif.
 
 machine_workspace(Root) :-
     tmp_file(table_machine, Root), make_directory(Root).

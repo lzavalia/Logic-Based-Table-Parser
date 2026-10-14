@@ -28,7 +28,7 @@ test(source_hash_and_semantics,[setup(make_prov_workspace(Root)), cleanup(cleanu
     write_prov_article(Root, 613, no, File),
     process_paper('613', File, Root, _),
     prov_metadata(Root, 613, Meta),
-    file_sha256(File, Hash), atom_string(Hash, HashText),
+    provenance_manifest:file_sha256(File, Hash), atom_string(Hash, HashText),
     Meta.source_provenance.input_file_sha256 == HashText,
     Meta.source_provenance.hash_scope == "raw_file_bytes",
     Meta.source_provenance.pmc_id == "PMC613",

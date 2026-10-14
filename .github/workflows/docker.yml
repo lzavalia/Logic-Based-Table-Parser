@@ -1,0 +1,71 @@
+name: Docker image
+
+# Keeps ghcr.io/<owner>/<repo> in step with main: every push to main rebuilds
+# the image and publishes it as :latest and :sha-<commit>. Pull requests and
+# other branches only build and smoke-test it.
+on:
+  push:
+    paths:
+      - 'dataset-builder-agent/**'
+      - '.github/workflows/docker.yml'
+  pull_request:
+    paths:
+      - 'dataset-builder-agent/**'
+      - '.github/workflows/docker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    name: Build and publish image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Image names and tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: dataset-builder-agent
+          load: true
+          tags: table-dataset-builder:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke-test the image
+        run: |
+          docker run --rm --entrypoint deepclause table-dataset-builder:ci --version
+          docker run --rm --entrypoint swipl table-dataset-builder:ci --version
+          docker run --rm --entrypoint python3 table-dataset-builder:ci --version
+          docker run --rm --entrypoint test table-dataset-builder:ci -f /app/src/.deepclause/config.json
+          docker run --rm --entrypoint swipl -w /app/tests table-dataset-builder:ci \
+            -q -f none -s boundary_regression_tests.pl \
+            -g '(run_tests -> halt(0) ; halt(1))' -t 'halt(2)'
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: dataset-builder-agent
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha

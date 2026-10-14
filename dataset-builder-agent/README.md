@@ -199,11 +199,28 @@ Useful options:
 | `--usage <file>` | Save the tokens used, per model, to a JSON file. |
 | `--verbose` | Also print each tool call. |
 
+`src/run_agent.sh` wraps that command with a spending limit and keeps a record
+of the run:
+
+```bash
+./run_agent.sh "<search prompt>"
+BUDGET_USD=1 ./run_agent.sh "<search prompt>"    # default limit is 5
+```
+
+It writes `runtime_log.txt` (everything the agent printed), `token_usage.json`
+(tokens per model) and `budget_guard.log` (one line per model call with the
+running cost) next to the script, replacing those of the previous run. The
+limit is enforced by `budget_guard.mjs`, which is preloaded into the
+`deepclause` process and stops it with exit status 3 once the estimated cost
+reaches `BUDGET_USD`. It only meters calls to the Anthropic API, so it does not
+limit runs with another provider.
+
 Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
 | `dataset/papers/PMC<id>/annotated_tableN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
+| `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `annotated_tableN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
 | `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |

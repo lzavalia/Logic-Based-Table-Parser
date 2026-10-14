@@ -19,6 +19,7 @@
 %
 % Output (relative to the workspace):
 %   dataset/papers/PMC<id>/annotated_tableN.html  one annotated table per file
+%   dataset/papers/PMC<id>/input_tableN.html      the same table, uncolored
 %   dataset/papers/PMC<id>/metadata.json      article title and table counts
 %   dataset/raw/PMC<id>.xml                    validated JATS full text as downloaded
 %   dataset/cache/requests/                    temporary per-search responses

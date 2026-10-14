@@ -53,7 +53,11 @@ test(quarantine_preserves_indices_and_diagnostics,
    R2.table_uid == "PMC401/t2",
    snapshot_file(Root, 401, 'annotated_table0.html', First), exists_file(First),
    snapshot_file(Root, 401, 'annotated_table1.html', Missing), \+ exists_file(Missing),
-   snapshot_file(Root, 401, 'annotated_table2.html', Third), exists_file(Third).
+   snapshot_file(Root, 401, 'annotated_table2.html', Third), exists_file(Third),
+   % Input views follow the annotated ones: none for a quarantined table.
+   snapshot_file(Root, 401, 'input_table0.html', In0), exists_file(In0),
+   snapshot_file(Root, 401, 'input_table1.html', In1), \+ exists_file(In1),
+   snapshot_file(Root, 401, 'input_table2.html', In2), exists_file(In2).
 
 test(quarantine_only_individual_table_raster_limits,
      [setup(make_recovery_workspace(Root)), cleanup(remove_recovery_workspace(Root))]) :-

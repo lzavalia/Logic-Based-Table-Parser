@@ -6,3 +6,7 @@
 first_test.zip
 docs/
 **/__pycache__/
+# Per-run output of src/run_agent.sh.
+src/runtime_log.txt
+src/token_usage.json
+src/budget_guard.log

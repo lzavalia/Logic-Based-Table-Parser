@@ -49,6 +49,14 @@ test(complete_snapshot_is_marked_and_logged,
     dataset_pipeline:read_json_file(MetadataFile, Metadata),
     Metadata.status == "complete",
     Metadata.table_count =:= 1,
+    % Every annotated view has an uncolored input counterpart.
+    file_in_snapshot(Root, "PMC321", 'annotated_table0.html', AnnotatedFile),
+    file_in_snapshot(Root, "PMC321", 'input_table0.html', InputFile),
+    read_file_to_string(AnnotatedFile, Annotated, [encoding(utf8)]),
+    read_file_to_string(InputFile, InputHtml, [encoding(utf8)]),
+    sub_string(Annotated, _, _, _, "background-color"),
+    \+ sub_string(InputHtml, _, _, _, "background-color"),
+    sub_string(InputHtml, _, _, _, "Header"),
     attempt_statuses(Root, Statuses),
     Statuses == ["complete"].
 
@@ -105,8 +113,21 @@ test(stage_rejects_empty_table_file,
       throws(error(incomplete_paper_stage(empty_table('annotated_table0.html')), _))]) :-
     directory_file_path(Root, 'annotated_table0.html', Empty),
     setup_call_cleanup(open(Empty, write, Stream), true, close(Stream)),
+    directory_file_path(Root, 'input_table0.html', Input),
+    setup_call_cleanup(open(Input, write, In), write(In, '<table></table>'), close(In)),
     directory_file_path(Root, 'metadata.json', MetadataFile),
     setup_call_cleanup(open(MetadataFile, write, Out), write(Out, '{}'), close(Out)),
+    directory_file_path(Root, 'tables.jsonl', JsonlFile),
+    setup_call_cleanup(open(JsonlFile, write, Js), write(Js, '{}'), close(Js)),
+    dataset_pipeline:validate_paper_stage(Root, 1, 0).
+
+test(stage_rejects_missing_input_table,
+     [setup(make_failure_workspace(Root)), cleanup(remove_failure_workspace(Root)),
+      throws(error(incomplete_paper_stage(file_set_mismatch(_, _)), _))]) :-
+    directory_file_path(Root, 'annotated_table0.html', File),
+    setup_call_cleanup(open(File, write, Out), write(Out, '<table></table>'), close(Out)),
+    directory_file_path(Root, 'metadata.json', MetadataFile),
+    setup_call_cleanup(open(MetadataFile, write, Meta), write(Meta, '{}'), close(Meta)),
     directory_file_path(Root, 'tables.jsonl', JsonlFile),
     setup_call_cleanup(open(JsonlFile, write, Js), write(Js, '{}'), close(Js)),
     dataset_pipeline:validate_paper_stage(Root, 1, 0).
@@ -116,6 +137,8 @@ test(stage_rejects_inconsistent_metadata,
       throws(error(incomplete_paper_stage(metadata_mismatch), _))]) :-
     directory_file_path(Root, 'annotated_table0.html', File),
     setup_call_cleanup(open(File, write, Out), write(Out, '<table></table>'), close(Out)),
+    directory_file_path(Root, 'input_table0.html', Input),
+    setup_call_cleanup(open(Input, write, In), write(In, '<table></table>'), close(In)),
     directory_file_path(Root, 'metadata.json', MetadataFile),
     setup_call_cleanup(open(MetadataFile, write, Meta),
         write(Meta, '{"status":"complete", "table_count":4, "parsed_table_count":0}'),

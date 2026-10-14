@@ -14,6 +14,10 @@
 
 FROM node:24-bookworm-slim
 
+# Without a UTF-8 locale SWI-Prolog reads source and data files as ASCII,
+# which breaks the non-ASCII test fixtures and article text.
+ENV LANG=C.UTF-8
+
 # SWI-Prolog runs the table logic and the Prolog suites outside DeepClause;
 # Python runs the remaining tests and the scripts under tools/. The agent
 # itself needs neither: DeepClause ships its own Prolog engine.

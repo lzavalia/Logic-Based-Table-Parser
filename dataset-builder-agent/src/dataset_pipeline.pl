@@ -28,7 +28,8 @@
 %       table_layout_generator.pl, check every header boundary against
 %       parse_constraints.pl, and color the table for each valid boundary
 %       with table_annotator.pl. The tables are saved as
-%       <DatasetDir>/papers/PMC<id>/annotated_tableN.html, N from 0.
+%       <DatasetDir>/papers/PMC<id>/annotated_tableN.html, N from 0, each
+%       beside an uncolored input_tableN.html for comparison.
 %       The directory is replaced as a whole after a successful run; the
 %       title, counts and per-table JATS context are recorded in metadata.json.
 %       Summary is a one-line report.
@@ -762,11 +763,14 @@ write_paper_outputs(PaperName, Title, Tables, Rasters, NumParsed, StageDir) :-
 write_paper_records(PaperName, Title, Records, Rasters, NumParsed, StageDir) :-
    % Publish one JSONL record per table alongside the optional HTML view.
    % Both live in the same staged snapshot and are validated before commit.
+   % once/1: setup_call_cleanup/3 closes the stream only when its goal is
+   % deterministic. SWI-Prolog 9 leaves a choicepoint in the recursive writer,
+   % which kept tables.jsonl open and unflushed during stage validation.
    directory_file_path(StageDir, 'tables.jsonl', RecordsFile),
    setup_call_cleanup(
       open(RecordsFile, write, JsonlStream, [encoding(utf8)]),
-      save_numbered_records(StageDir, PaperName, Records, Rasters, 0,
-                            JsonlStream, BoundaryLists, TableMetadata),
+      once(save_numbered_records(StageDir, PaperName, Records, Rasters, 0,
+                                 JsonlStream, BoundaryLists, TableMetadata)),
       close(JsonlStream)),
    length(Records, NumTables),
    exclude(==([]), BoundaryLists, Parsed),
@@ -791,6 +795,7 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
    put_dict(table_uid, Context, TableUid, HtmlContext),
    % Fail closed if any annotation or JSONL record cannot be generated.
    ( catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
+             save_input_table(StageDir, N, Table, HtmlContext),
              machine_table_record(PaperName, N, Table, Context, Raster,
                                   Boundaries, MachineRecord, Meta),
              atom_json_dict(JsonLine, MachineRecord, [width(0)]),
@@ -811,11 +816,13 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
 % A paper with no successfully processed tables is NOT published as partial.
 write_recoverable_paper(PaperName, Title, Records, NumParsed, NumRejected,
                         StageDir) :-
+   % once/1 for the same reason as in write_paper_records/6.
    directory_file_path(StageDir, 'tables.jsonl', RecordsFile),
    setup_call_cleanup(
       open(RecordsFile, write, Out, [encoding(utf8)]),
-      save_recoverable_records(Records, PaperName, StageDir, Out,
-                               0, 0, 0, 0, NumParsed, NumRejected, TableMetadata),
+      once(save_recoverable_records(Records, PaperName, StageDir, Out,
+                                    0, 0, 0, 0, NumParsed, NumRejected,
+                                    TableMetadata)),
       close(Out)),
    length(Records, NumTables),
    NumKept is NumTables - NumRejected,
@@ -881,14 +888,17 @@ try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
    table_file_name(StageDir, Index, TableFile),
    format(string(TableUid), '~s/t~d', [PaperName, Index]),
    put_dict(table_uid, Context, TableUid, HtmlContext),
+   input_table_file_name(StageDir, Index, InputFile),
    catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
+           save_input_table(StageDir, Index, Table, HtmlContext),
            machine_table_record(PaperName, Index, Table, Context, Raster,
                                 Boundaries, Machine, Meta)
          -> Result = ok(Boundaries, Machine, Meta)
          ; throw(error(table_output_failed, context(process_paper/5, 'Writer failed'))) ),
          Error,
          ( recoverable_table_error(Error, Code, Message)
-         -> ( exists_file(TableFile) -> delete_file(TableFile) ; true ),
+         -> forall(( member(Stale, [TableFile, InputFile]), exists_file(Stale) ),
+                   delete_file(Stale)),
             Result = rejected(Code, Message)
          ; throw(error(table_output_failure(Index, Error),
                        context(process_paper/5, 'Unexpected output failure'))) )).
@@ -929,7 +939,7 @@ quarantined_machine_record(PaperName, Index, Context, Code, Message,
 
 % Independent staged-snapshot validation for the partial format. Check exact
 % file membership and every JSONL record before publishing; a quarantined
-% record MUST be accompanied by a diagnostic and MUST NOT have an HTML file.
+% record MUST be accompanied by a diagnostic and MUST NOT have HTML files.
 validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
                             ExpectedRejected) :-
    directory_file_path(StageDir, 'tables.jsonl', JsonlFile),
@@ -983,6 +993,7 @@ recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
    Record.source_table_html == Context.source_table_html,
    Context.jsonl_file == "tables.jsonl",
    format(atom(HtmlName), 'annotated_table~d.html', [Index]),
+   format(atom(InputName), 'input_table~d.html', [Index]),
    ( Record.status == "quarantined"
    -> Record.schema_version == "1.1",
       Record.raster == null,
@@ -1010,7 +1021,7 @@ recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
      Context.annotation_status == Record.status,
      length(Record.candidates, Context.candidate_count),
      Rejected1 = Rejected0,
-     Files = [HtmlName|RestFiles] ),
+     Files = [HtmlName, InputName|RestFiles] ),
    Next is Index + 1,
    recovery_records_consistent(Records, Contexts, Pmc, Next,
                                Parsed1, Rejected1, Parsed, Rejected, RestFiles).
@@ -1042,7 +1053,8 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
            ( ExpectedTables > 0,
              Last is ExpectedTables - 1,
              between(0, Last, N),
-             format(atom(Name), 'annotated_table~d.html', [N]) ),
+             member(Format, ['annotated_table~d.html', 'input_table~d.html']),
+             format(atom(Name), Format, [N]) ),
            TableFiles),
    sort(['metadata.json', 'tables.jsonl'|TableFiles], Expected),
    sort(ActualFiles, Actual),
@@ -1178,6 +1190,25 @@ backup_directory_path(PapersDir, StageDir, BackupDir) :-
 table_file_name(PaperDir, N, TableFile) :-
    format(string(Name), "annotated_table~w.html", [N]),
    directory_file_path(PaperDir, Name, TableFile).
+
+input_table_file_name(PaperDir, N, InputFile) :-
+   format(string(Name), "input_table~w.html", [N]),
+   directory_file_path(PaperDir, Name, InputFile).
+
+% save_input_table(+PaperDir, +N, +Table, +Context)
+% input_tableN.html is the counterpart of annotated_tableN.html: the same
+% sanitized table and JATS context, once and uncolored, so the two files
+% differ only in the candidate headings and the label colors.
+save_input_table(PaperDir, N, Table, Context) :-
+   input_table_file_name(PaperDir, N, InputFile),
+   safe_table_dom(Table, SafeTable),
+   table_html(SafeTable, Html),
+   contextual_table_annotation(Context, Html, WithContext),
+   setup_call_cleanup(
+      open(InputFile, write, Stream, [encoding(utf8)]),
+      format(Stream, '<h3 class="input-table">Input table (unannotated)</h3>~n~s~n',
+             [WithContext]),
+      close(Stream)).
 
 % save_table(+TableFile, +Table, +Raster, -Boundaries)
 % The file holds the table colored once for every valid (Hmd, Vmd) boundary,

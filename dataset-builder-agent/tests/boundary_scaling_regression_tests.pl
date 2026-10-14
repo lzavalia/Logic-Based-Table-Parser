@@ -2,8 +2,18 @@
 % swipl -q -s boundary_scaling_regression_tests.pl -g run_tests -t halt
 :- use_module(library(random)).
 :- use_module(library(lists)).
-:- consult('../src/parse_constraints').
 :- use_module('../src/dataset_pipeline').
+
+% dataset_pipeline consults parse_constraints.pl into its own module, and a
+% plain file cannot also be consulted into user. Reach the solver there.
+valid_boundaries(Raster, Boundaries) :-
+   dataset_pipeline:valid_boundaries(Raster, Boundaries).
+valid_raster_shape(Raster, Rows, Cols) :-
+   dataset_pipeline:valid_raster_shape(Raster, Rows, Cols).
+omni_validate(Raster, H, V) :-
+   dataset_pipeline:omni_validate(Raster, H, V).
+omni_validate(Raster, H, V, Offending) :-
+   dataset_pipeline:omni_validate(Raster, H, V, Offending).
 
 :- begin_tests(boundary_scaling).
 
@@ -112,25 +122,37 @@ test(streaming_preserves_abstained_html) :-
 test(streaming_preserves_unmerged_html) :-
    legacy_vs_streamed('<table><tr><th>H</th><th>V</th></tr><tr><th>K</th><td>D</td></tr></table>').
 
-% A dense all-distinct 50x50 raster has 2401 valid (H,V) pairs and 2500
-% distinct cells. Materializing all 6,002,500 per-candidate labels would
-% overwhelm the F10 JSONL schema. Reject that before opening output files.
+% The output budget limits candidates x distinct cells, whatever the solver
+% found. An all-distinct grid admits only (0,0): constraints 2 and 3 need a
+% merged cell above every extra header row and beside every extra stub
+% column. So the budget tests pass explicit candidate lists, sized like a
+% 50x50 table with 2401 candidates (6,002,500 labels, over the 500,000 limit).
 unique_raster(Rows, Cols, Raster) :-
    LastRow is Rows - 1, LastCol is Cols - 1,
    findall(Row, (between(0, LastRow, R),
                  findall(Id, (between(0, LastCol, C),
                               Id is R*Cols+C), Row)), Raster).
 
-test(output_budget_allows_small_tables) :-
+all_pairs(Rows, Cols, Boundaries) :-
+   MaxH is Rows - 2, MaxV is Cols - 2,
+   findall(json{hmd:H, vmd:V}, (between(0, MaxH, H), between(0, MaxV, V)),
+           Boundaries).
+
+test(all_distinct_grid_admits_only_origin) :-
    unique_raster(8, 8, Raster),
    valid_boundaries(Raster, Candidates),
+   Candidates == [json{hmd:0, vmd:0}].
+
+test(output_budget_allows_small_tables) :-
+   unique_raster(8, 8, Raster),
+   all_pairs(8, 8, Candidates),
    length(Candidates, 49),
    dataset_pipeline:ensure_candidate_output_budget(Raster, Candidates).
 
 test(output_budget_rejects_combinatorial_label_volume,
      [throws(error(table_output_limit_exceeded(candidate_labels, 500000, 6002500), _))]) :-
    unique_raster(50, 50, Raster),
-   valid_boundaries(Raster, Candidates),
+   all_pairs(50, 50, Candidates),
    length(Candidates, 2401),
    dataset_pipeline:ensure_candidate_output_budget(Raster, Candidates).
 
