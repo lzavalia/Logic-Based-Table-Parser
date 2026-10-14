@@ -173,10 +173,15 @@ image. The container runs `run_agent.sh`, which keeps a log of each run
 (see [Running the agent](#running-the-agent)):
 
 ```bash
+mkdir -p dataset
 docker run --rm --user "$(id -u):$(id -g)" -e OPENAI_API_KEY \
   -v "$PWD/dataset:/app/src/dataset" \
   table-dataset-builder "dementia with lewy bodies"
 ```
+
+Create the host directory first, as above. If it does not exist, Docker creates
+it owned by root and, on Linux, the run stops with `.../dataset is not
+writable`; fix an existing one with `sudo chown "$(id -u):$(id -g)" dataset`.
 
 Options from [Running the agent](#running-the-agent) go after the search
 phrase. For another provider, pass its key variable and a model, for example
@@ -214,6 +219,7 @@ instead of building:
 
 ```bash
 docker pull ghcr.io/lzavalia/logic-based-table-parser:latest
+mkdir -p dataset
 docker run --rm --user "$(id -u):$(id -g)" -e OPENAI_API_KEY \
   -v "$PWD/dataset:/app/src/dataset" \
   ghcr.io/lzavalia/logic-based-table-parser:latest "dementia with lewy bodies"

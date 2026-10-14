@@ -31,6 +31,17 @@ shift
 # DeepClause reads its config and the workspace from the current directory.
 cd "$(dirname "$0")/src" || exit 1
 
+# Fail early, with the fix, when the output directory is not writable. The
+# usual cause is a Docker bind mount of a host directory that did not exist:
+# Docker then creates it owned by root, and a run with --user cannot write.
+mkdir -p dataset 2>/dev/null
+if [ ! -w dataset ]; then
+    echo "error: $PWD/dataset is not writable by user $(id -u):$(id -g)." >&2
+    echo "With Docker, create the host directory before mounting it, or make" >&2
+    echo "it yours: sudo chown \"\$(id -u):\$(id -g)\" <host directory>" >&2
+    exit 1
+fi
+
 if [ -n "${LOG_DIR:-}" ]; then
     log_dir="$LOG_DIR/$(date -u +%Y%m%dT%H%M%SZ)"
     mkdir -p "$log_dir" || exit 1

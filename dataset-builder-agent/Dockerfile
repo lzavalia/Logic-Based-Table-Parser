@@ -59,6 +59,9 @@ RUN deepclause init --model "${DEFAULT_MODEL}"
 # Papers, tables and run manifests are written here; mount a host directory
 # to keep them after the container exits. run_agent.sh puts each run's logs
 # in dataset/logs/<UTC timestamp>/ so the same mount captures them.
+# The directory is world-writable (with the sticky bit, like /tmp) so that a
+# run as a non-root --user can write to it when no host directory is mounted.
+RUN mkdir -p /app/src/dataset && chmod 1777 /app/src/dataset
 VOLUME /app/src/dataset
 ENV LOG_DIR=/app/src/dataset/logs
 
