@@ -78,7 +78,7 @@ test(annotations_retain_context_without_inserting_raster_cells,
      [setup(context_workspace(Root)), cleanup(remove_context_workspace(Root))]) :-
     context_xml_file(Root, 704, Input),
     process_paper("704", Input, Root, _),
-    context_published_file(Root, 704, 'annotated_table0.html', HtmlFile),
+    context_published_file(Root, 704, 'candidates0.html', HtmlFile),
     read_file_to_string(HtmlFile, Html, [encoding(utf8)]),
     sub_string(Html, _, _, _, "Table 1"),
     sub_string(Html, _, _, _, "Outcomes"),
@@ -113,7 +113,7 @@ test(rerun_replaces_old_context,
     process_paper("705", Empty, Root, _),
     dataset_pipeline:read_json_file(MetaFile, New),
     New.tables == [], New.table_count =:= 0,
-    context_published_file(Root, 705, 'annotated_table0.html', OldHtml),
+    context_published_file(Root, 705, 'candidates0.html', OldHtml),
     \+ exists_file(OldHtml).
 
 test(no_wrap_with_namespaced_markup) :-

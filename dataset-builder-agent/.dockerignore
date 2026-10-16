@@ -11,4 +11,6 @@ src/budget_guard.mjs
 src/runtime_log.txt
 src/token_usage.json
 src/budget_guard.log
+src/review_log.txt
+src/review_token_usage.json
 src/dataset.zip

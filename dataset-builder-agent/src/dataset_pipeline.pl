@@ -28,7 +28,7 @@
 %       table_layout_generator.pl, check every header boundary against
 %       parse_constraints.pl, and color the table for each valid boundary
 %       with table_annotator.pl. The tables are saved as
-%       <DatasetDir>/papers/PMC<id>/annotated_tableN.html, N from 0, each
+%       <DatasetDir>/papers/PMC<id>/candidatesN.html, N from 0, each
 %       beside an uncolored input_tableN.html for comparison.
 %       The directory is replaced as a whole after a successful run; the
 %       title, counts and per-table JATS context are recorded in metadata.json.
@@ -54,7 +54,8 @@
       ncbi_rate_limit_at/3,
       acquire_paper_ingest_lock/2,
       acquire_paper_ingest_lock_at/3,
-      release_paper_ingest_lock/1
+      release_paper_ingest_lock/1,
+      final_table_html/3
    ]).
 
 % library(json) only exists in recent SWI-Prolog; DeepClause's bundled engine
@@ -992,7 +993,7 @@ recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
    Record.source_table_id == Context.table_id,
    Record.source_table_html == Context.source_table_html,
    Context.jsonl_file == "tables.jsonl",
-   format(atom(HtmlName), 'annotated_table~d.html', [Index]),
+   format(atom(HtmlName), 'candidates~d.html', [Index]),
    format(atom(InputName), 'input_table~d.html', [Index]),
    ( Record.status == "quarantined"
    -> Record.schema_version == "1.1",
@@ -1053,7 +1054,7 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
            ( ExpectedTables > 0,
              Last is ExpectedTables - 1,
              between(0, Last, N),
-             member(Format, ['annotated_table~d.html', 'input_table~d.html']),
+             member(Format, ['candidates~d.html', 'input_table~d.html']),
              format(atom(Name), Format, [N]) ),
            TableFiles),
    sort(['metadata.json', 'tables.jsonl'|TableFiles], Expected),
@@ -1188,7 +1189,7 @@ backup_directory_path(PapersDir, StageDir, BackupDir) :-
    \+ exists_file(BackupDir).
 
 table_file_name(PaperDir, N, TableFile) :-
-   format(string(Name), "annotated_table~w.html", [N]),
+   format(string(Name), "candidates~w.html", [N]),
    directory_file_path(PaperDir, Name, TableFile).
 
 input_table_file_name(PaperDir, N, InputFile) :-
@@ -1196,7 +1197,7 @@ input_table_file_name(PaperDir, N, InputFile) :-
    directory_file_path(PaperDir, Name, InputFile).
 
 % save_input_table(+PaperDir, +N, +Table, +Context)
-% input_tableN.html is the counterpart of annotated_tableN.html: the same
+% input_tableN.html is the counterpart of candidatesN.html: the same
 % sanitized table and JATS context, once and uncolored, so the two files
 % differ only in the candidate headings and the label colors.
 save_input_table(PaperDir, N, Table, Context) :-
@@ -1304,6 +1305,109 @@ contextual_table_annotation(Context, TableHtml, Html) :-
           [Header, TableHtml, Footer]).
 
 note_list_item(Note, element(li, [], [Note])).
+
+% --- final table (after the LLM review) ------------------------------------
+
+% final_table_html(+Record, +Review, -Html)
+% The content of final_tableN.html: what the parser and the LLM review
+% concluded together about one table. Record is the table's tables.jsonl
+% record, Review its review.jsonl record (table_review.pl).
+%   valid                   "Parse Succeeded", the LLM's reason, then the table
+%                           colored for the candidate both agree on
+%   unparseable, by the LLM "Error: Misalignment Between LLM And Formal Table
+%                           Parser" and the LLM's reason
+%   no candidates           "Nothing To Do." (parser abstained, or the table
+%                           was quarantined)
+%   unreviewed              "Not Reviewed" and why (too large, or no usable
+%                           answer from the LLM)
+% Headings and reasons go through html_write, so their text is escaped; the
+% table is the sanitized, colored table that candidatesN.html also uses.
+final_table_html(Record, Review, Html) :-
+   (  Review.table_uid == Record.table_uid
+   -> true
+   ;  throw(error(final_table_error(review_mismatch(Record.table_uid, Review.table_uid)),
+                  context(final_table_html/3, 'Review belongs to another table'))) ),
+   (  Record.candidates == []
+   -> final_nothing_to_do(Record, Nodes), Table = ""
+   ;  Review.final_status == "valid"
+   -> final_succeeded(Record, Review, Nodes, Table)
+   ;  Review.final_status == "unparseable"
+   -> final_misaligned(Record, Review, Nodes), Table = ""
+   ;  final_not_reviewed(Review, Nodes), Table = "" ),
+   maplist(table_html, Nodes, Parts),
+   atomics_to_string(Parts, "\n", Text),
+   format(string(Uid), "~w", [Record.table_uid]),
+   table_html(element(div, [class='final-table', 'data-table-uid'=Uid], ['@@BODY@@']),
+              Shell),
+   format(string(Body), "~n~s~n~s~n", [Text, Table]),
+   atomic_list_concat(Pieces, '@@BODY@@', Shell),
+   atomic_list_concat(Pieces, Body, Joined),
+   format(string(Html), "~w~n", [Joined]).
+
+final_succeeded(Record, Review, [Heading, Reason], Table) :-
+   Heading = element(h2, [class='final-status'], ['Parse Succeeded']),
+   llm_reason_paragraph(Review, Reason),
+   Id = Review.selected_candidate_id,
+   (  member(C, Record.candidates), C.candidate_id == Id
+   -> Hmd = C.hmd, Vmd = C.vmd
+   ;  throw(error(final_table_error(unknown_candidate(Id)),
+                  context(final_table_html/3, 'Selected candidate is not in tables.jsonl'))) ),
+   final_colored_table(Record, Hmd, Vmd, Table).
+
+final_misaligned(Record, Review, [Heading, Reason, Details]) :-
+   Heading = element(h2, [class='final-status'],
+                     ['Error: Misalignment Between LLM And Formal Table Parser']),
+   llm_reason_paragraph(Review, Reason),
+   findall(Id, ( member(C, Record.candidates), get_dict(candidate_id, C, Id0),
+                 format(string(Id), "~w", [Id0]) ), Ids),
+   atomics_to_string(Ids, ", ", IdText),
+   (  is_dict(Review.llm_boundary)
+   -> format(string(LlmText),
+             "LLM: last column-header row ~w, last row-header column ~w.",
+             [Review.llm_boundary.hmd, Review.llm_boundary.vmd])
+   ;  LlmText = "LLM: the table has no column-header rows and row-header columns." ),
+   format(string(DetailText), "~s Formal table parser candidates: ~s.", [LlmText, IdText]),
+   Details = element(p, [class='final-details'], [DetailText]).
+
+final_nothing_to_do(Record, [Heading, Why]) :-
+   Heading = element(h2, [class='final-status'], ['Nothing To Do.']),
+   (  Record.status == "quarantined"
+   -> format(string(Text), "The table could not be processed: ~w", [Record.error.detail])
+   ;  Text = "The formal table parser found no candidate boundary for this table, so the LLM was not asked."
+   ),
+   Why = element(p, [class='final-details'], [Text]).
+
+final_not_reviewed(Review, [Heading, Why]) :-
+   Heading = element(h2, [class='final-status'], ['Not Reviewed']),
+   (  get_dict(not_reviewed_reason, Review, "too_large_for_review")
+   -> Text = "The table is too large to send to the LLM."
+   ;  Review.error \== null
+   -> format(string(Text), "No usable answer from the LLM: ~w", [Review.error])
+   ;  Text = "The table was not reviewed." ),
+   Why = element(p, [class='final-details'], [Text]).
+
+llm_reason_paragraph(Review, element(p, [class='llm-reason'], [Text])) :-
+   (  string(Review.llm_reason), Review.llm_reason \== ""
+   -> Text = Review.llm_reason
+   ;  Text = "The LLM gave no reason." ).
+
+% The source table is re-parsed from tables.jsonl and must rasterize to the
+% recorded raster, so the colors are those of the reviewed boundary.
+final_colored_table(Record, Hmd, Vmd, WithContext) :-
+   parse_html(Record.source_table_html, Dom),
+   (  extract_tables(Dom, [Table|_])
+   -> true
+   ;  throw(error(final_table_error(no_source_table(Record.table_uid)),
+                  context(final_table_html/3, 'tables.jsonl has no source table'))) ),
+   rasterize_table(Table, Raster),
+   (  Raster == Record.raster
+   -> true
+   ;  throw(error(final_table_error(raster_mismatch(Record.table_uid)),
+                  context(final_table_html/3, 'Source table no longer matches its raster'))) ),
+   safe_table_dom(Table, Clean),
+   annotate_precleaned_table_raster(Hmd, Vmd, Clean, Raster, Annotated),
+   table_html(Annotated, TableHtml),
+   contextual_table_annotation(Record.context, TableHtml, WithContext).
 
 table_annotations(Table, [], [Html]) :- !,
    safe_table_dom(Table, SafeTable),

@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
-# Run the dataset builder agent on one search prompt.
+# Build a dataset for one search prompt, then have the LLM review it.
 #
 #   ./run_agent.sh "dementia with lewy bodies"
 #   ./run_agent.sh "dementia with lewy bodies" --model anthropic:claude-sonnet-4-6
+#   ./run_agent.sh "dementia with lewy bodies" --no-review
 #
-# Anything after the search prompt is passed on to `deepclause run`. The
-# agent runs in src/, where DeepClause finds its configuration and the .pl
+# One run does two steps:
+#   1. the dataset builder (src/dataset_builder.dml) selects, downloads and
+#      parses the papers;
+#   2. the review (review_agent.sh, src/review_dataset.dml) checks the
+#      candidate parses of exactly the papers this run selected, and writes
+#      src/dataset/papers/PMC<id>/review.jsonl.
+# --no-review stops after step 1. Step 2 is skipped as well when the build
+# fails or selects no papers. Anything else after the search prompt is passed
+# on to `deepclause run` in both steps, so --model applies to both.
+#
+# The agents run in src/, where DeepClause finds its configuration and the .pl
 # files, so all output goes there too:
 #   src/runtime_log.txt    everything the agent printed (also shown on screen)
 #   src/token_usage.json   tokens used, per model
 #   src/dataset/           the annotated tables
+#   src/review_log.txt, src/review_token_usage.json   the same for step 2
 # runtime_log.txt and token_usage.json are overwritten by each run. With
 # LOG_DIR set, they go instead to a new directory LOG_DIR/<UTC timestamp>/ for
 # every run, so earlier runs' logs are kept; a relative LOG_DIR is taken from
@@ -27,6 +38,17 @@ if [ "$#" -lt 1 ] || [ -z "$1" ]; then
 fi
 prompt="$1"
 shift
+
+review=1
+build_args=()
+for arg in "$@"; do
+    if [ "$arg" = "--no-review" ]; then
+        review=0
+    else
+        build_args+=("$arg")
+    fi
+done
+script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # DeepClause reads its config and the workspace from the current directory.
 cd "$(dirname "$0")/src" || exit 1
@@ -58,7 +80,7 @@ fi
 
 # The AI SDK's repeated warning about system messages is dropped from stderr.
 deepclause run dataset_builder.dml "$prompt" --headless \
-    --usage "$log_dir/token_usage.json" "$@" \
+    --usage "$log_dir/token_usage.json" ${build_args[@]+"${build_args[@]}"} \
     2> >(grep -v "AI SDK Warning" >&2) \
     | tee "$log_dir/runtime_log.txt"
 status="${PIPESTATUS[0]}"
@@ -77,4 +99,19 @@ fi
 if [ "$log_dir" != . ]; then
     echo "Logs: $log_dir" >&2
 fi
-exit "$status"
+if [ "$status" -ne 0 ] || [ "$review" -eq 0 ]; then
+    exit "$status"
+fi
+
+# Step 2. The build prints "Run manifest: /workspace/dataset/runs/<name>/
+# manifest.json"; the review reads that run's selected papers from it.
+run_name="$(sed -n 's|^Run manifest: .*/runs/\([^/]*\)/manifest\.json$|\1|p' \
+    "$log_dir/runtime_log.txt" | tail -n 1)"
+if [ -z "$run_name" ]; then
+    echo "No run manifest was written (no papers selected?); skipping the review." >&2
+    exit 0
+fi
+echo
+echo "Reviewing the candidate parses of this run's papers..."
+"$script_dir/review_agent.sh" --run "$run_name" ${build_args[@]+"${build_args[@]}"}
+exit $?

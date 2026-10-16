@@ -24,6 +24,21 @@ prov_metadata(Root, Id, Meta) :-
 
 :- begin_tests(provenance_manifests).
 
+% Known SHA-256 values, as printed by `shasum -a 256`, so the hash is checked
+% against the standard rather than against itself. The second file holds the
+% two UTF-8 bytes of "é"; hashing decoded text instead of bytes changes it.
+test(file_hash_is_sha256_of_the_raw_bytes,
+     [setup(make_prov_workspace(Root)), cleanup(cleanup_prov_workspace(Root))]) :-
+    directory_file_path(Root, 'ascii.txt', Ascii),
+    setup_call_cleanup(open(Ascii, write, A, [type(binary)]), format(A, "abc", []), close(A)),
+    provenance_manifest:file_sha256(Ascii, H1),
+    H1 == 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+    directory_file_path(Root, 'utf8.txt', Utf8),
+    setup_call_cleanup(open(Utf8, write, U, [type(binary)]),
+                       ( put_byte(U, 0xC3), put_byte(U, 0xA9) ), close(U)),
+    provenance_manifest:file_sha256(Utf8, H2),
+    H2 == '4a99557e4033c3539de2eb65472017cad5f9557f7a0625a09f1c3f6e2ba69c4c'.
+
 test(source_hash_and_semantics,[setup(make_prov_workspace(Root)), cleanup(cleanup_prov_workspace(Root))]) :-
     write_prov_article(Root, 613, no, File),
     process_paper('613', File, Root, _),

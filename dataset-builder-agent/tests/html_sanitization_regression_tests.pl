@@ -84,7 +84,7 @@ test(published_html_safe_and_original_source_retained,
      [setup(sanitizer_workspace(Root)), cleanup(sanitizer_cleanup(Root))]) :-
    security_input(Root, File),
    dataset_pipeline:process_paper('919', File, Root, _),
-   directory_file_path(Root, 'papers/PMC919/annotated_table0.html', HtmlFile),
+   directory_file_path(Root, 'papers/PMC919/candidates0.html', HtmlFile),
    read_file_to_string(HtmlFile, Html, [encoding(utf8)]),
    \+ sub_string(Html, _, _, _, 'onclick'),
    \+ sub_string(Html, _, _, _, '<script'),

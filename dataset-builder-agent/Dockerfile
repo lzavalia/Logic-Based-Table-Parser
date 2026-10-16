@@ -43,7 +43,7 @@ RUN patch -p1 -d "$(npm root -g)/deepclause-sdk" < /tmp/deepclause-0.0.86-compac
  && rm /tmp/deepclause-0.0.86-compaction.patch
 
 WORKDIR /app
-COPY README.md summary.md run_agent.sh ./
+COPY README.md summary.md run_agent.sh review_agent.sh ./
 COPY src/ src/
 COPY tests/ tests/
 COPY tools/ tools/
@@ -65,6 +65,9 @@ RUN mkdir -p /app/src/dataset && chmod 1777 /app/src/dataset
 VOLUME /app/src/dataset
 ENV LOG_DIR=/app/src/dataset/logs
 
-# run_agent.sh adds the per-run logs. Arguments after the search phrase are
-# passed on to `deepclause run`.
+# run_agent.sh builds the dataset, then has the LLM review the papers it
+# selected (add --no-review after the search phrase to skip that), and keeps
+# per-run logs. Other arguments after the search phrase are passed on to
+# `deepclause run`. To review an existing mounted dataset only, use
+# --entrypoint /app/review_agent.sh.
 ENTRYPOINT ["/app/run_agent.sh"]

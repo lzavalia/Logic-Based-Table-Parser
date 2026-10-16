@@ -1,7 +1,8 @@
 % Source and license evidence for paper snapshots. No assertion of redistribution
 % permission follows from a PMC open-access search filter or a license tag.
 :- module(provenance_manifest, [paper_source_provenance/4,
-                                store_source_provenance/2]).
+                                store_source_provenance/2,
+                                file_sha256/2]).
 % crypto is not included in every WASM SWI build. The bundled lightweight
 % SHA package provides a fallback, without weakening the SHA-256 requirement.
 :- if(exists_source(library(crypto))).
@@ -18,9 +19,14 @@
 :- use_module(library(http/json)).
 :- endif.
 
+% The hash is over the file's raw bytes, so it equals `shasum -a 256`. Both
+% branches read the file in binary: crypto_file_hash/3 decodes the file as
+% UTF-8 text first, which gives a different hash for any non-ASCII byte.
 file_sha256(File, Hash) :-
-    ( current_predicate(crypto_file_hash/3)
-    -> crypto_file_hash(File, Hash, [algorithm(sha256)])
+    ( current_predicate(crypto_data_hash/3)
+    -> setup_call_cleanup(open(File, read, In, [type(binary)]),
+                          read_stream_to_codes(In, Bytes), close(In)),
+       crypto_data_hash(Bytes, Hash, [algorithm(sha256), encoding(octet)])
     ; current_predicate(sha_hash/3)
     -> setup_call_cleanup(open(File, read, In, [type(binary)]),
                           read_stream_to_codes(In, Bytes), close(In)),

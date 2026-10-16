@@ -169,8 +169,10 @@ docker build -t table-dataset-builder .
 ```
 
 Run the agent. The API key is passed in at run time and is not stored in the
-image. The container runs `run_agent.sh`, which keeps a log of each run
-(see [Running the agent](#running-the-agent)):
+image. The container runs `run_agent.sh`, which builds the dataset and then
+has the LLM review it, and keeps a log of each run (see
+[Running the agent](#running-the-agent); add `--no-review` after the search
+phrase to skip the review):
 
 ```bash
 mkdir -p dataset
@@ -229,6 +231,17 @@ The package is private until it is made public in its GitHub package
 settings; until then, run `docker login ghcr.io` first, with a GitHub token
 that has the `read:packages` scope.
 
+To run only the [LLM review](#reviewing-candidates-with-the-llm), on a mounted
+dataset that already exists, use the review script as the entrypoint; its
+options go after the image name:
+
+```bash
+docker run --rm --user "$(id -u):$(id -g)" -e OPENAI_API_KEY \
+  -v "$PWD/dataset:/app/src/dataset" \
+  --entrypoint /app/review_agent.sh \
+  ghcr.io/lzavalia/logic-based-table-parser:latest --papers PMC7293797
+```
+
 ## Running the agent
 
 From `src/`:
@@ -245,29 +258,39 @@ Useful options:
 | `--usage <file>` | Save the tokens used, per model, to a JSON file. |
 | `--verbose` | Also print each tool call. |
 
-`run_agent.sh`, in `dataset-builder-agent/`, wraps that command and keeps a
-record of the run. Run it from any directory; it changes into `src/` itself:
+`run_agent.sh`, in `dataset-builder-agent/`, is the normal way to run it. One
+run does two steps: it builds the dataset with that command, then runs the
+[LLM review](#reviewing-candidates-with-the-llm) on exactly the papers this
+run selected, so every new table gets a verdict in its paper's
+`review.jsonl`. The review is skipped when the build fails or selects no
+papers, or with `--no-review`. Run it from any directory; it changes into
+`src/` itself:
 
 ```bash
 ./run_agent.sh "<search prompt>"
 ./run_agent.sh "<search prompt>" --model anthropic:claude-sonnet-4-6
+./run_agent.sh "<search prompt>" --no-review      # build only
 ```
 
-Arguments after the search prompt are passed on to `deepclause run`. It
-writes `runtime_log.txt` (everything the agent printed) and `token_usage.json`
+Other arguments after the search prompt are passed on to `deepclause run` in
+both steps, so `--model` selects the model for both. The build step writes `runtime_log.txt` (everything the agent printed) and `token_usage.json`
 (tokens per model) to `src/`, beside `dataset/`, replacing those of the
 previous run. With `LOG_DIR` set, they go instead to a new
 `LOG_DIR/<UTC timestamp>/` directory for each run; the Docker image uses
-`dataset/logs`.
+`dataset/logs`. The review step's logs are described in
+[Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm).
 
 Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
-| `dataset/papers/PMC<id>/annotated_tableN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
-| `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `annotated_tableN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
+| `dataset/papers/PMC<id>/candidatesN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
+| `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `candidatesN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
+| `dataset/papers/PMC<id>/review.jsonl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one verdict per line of `tables.jsonl`. Absent until the paper has been reviewed; a rebuilt paper loses it. |
+| `dataset/papers/PMC<id>/final_tableN.html` | Also written by the review: the outcome for table `N`. "Parse Succeeded", the LLM's reason and the table colored for the boundary the parser and the LLM agree on; "Error: Misalignment Between LLM And Formal Table Parser" with the LLM's reason; or "Nothing To Do." when the parser found no candidate. |
+| `dataset/reviews/review-<timestamp>-<n>/manifest.json` | One per review run: model, prompt version, papers requested and one status line per paper. |
 | `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
 | `dataset/cache/requests/` | Private, temporary ESearch/ESummary pairs; removed after each search. |
@@ -276,7 +299,7 @@ Each run writes a `dataset/` directory inside `src/`:
 `dataset/` is retained between runs. Paper outputs are keyed by **canonical PMC ID**
 (rather than article title), so papers with equal or truncated titles cannot
 overwrite one another. Reprocessing an ID replaces its entire published paper
-directory: old `annotated_tableN.html` files from larger previous runs do not
+directory: old `candidatesN.html` files from larger previous runs do not
 survive. The article title is available in `metadata.json` instead of the path.
 
 ### JATS table context and provenance
@@ -285,7 +308,7 @@ In JATS, `<table-wrap>` generally contains the `<label>`, `<caption>`, and
 `<table-wrap-foot>` as **siblings** of `<table>`. They are not cells and must
 not affect row/column inference. The exported HTML renders them around each
 annotated table, while `metadata.json` stores an entry for every table in the
-same document order as `annotated_table0.html`, `annotated_table1.html`, etc.
+same document order as `candidates0.html`, `candidates1.html`, etc.
 Each `tables` entry has `source_path` (1-based element-child indexes through
 the normalized JATS DOM), `table_id`, `wrap_path`, `wrap_id`, `label`,
 `caption`, `caption_external` (whether the caption is outside the table),
@@ -313,7 +336,7 @@ label colors are applied **after** sanitization, so source CSS cannot override
 them. This also addresses the original audit F18 CSS-precedence issue for the
 inspection views.
 
-`annotated_tableN.html` is for review, not a byte-for-byte reproduction of
+`candidatesN.html` is for review, not a byte-for-byte reproduction of
 the source. `metadata.json` and `tables.jsonl` intentionally retain the raw
 serialized table and context fields for research; keep these JSON files under
 `application/json` if serving them and NEVER insert their raw markup into a
@@ -414,7 +437,7 @@ existing published snapshot is retained. Native SWI-Prolog callers may
 For each source table, `tables.jsonl` still has an entry with the **original
 zero-based table index**. A quarantined table has `status: "quarantined"`,
 `raster: null`, no cell/candidate labels, and an `error` object with a stable
-code and reason. Its `annotated_tableN.html` **does not exist**, rather than
+code and reason. Its `candidatesN.html` **does not exist**, rather than
 containing a misleading annotation. All successful tables keep their original
 numbered HTML files. The `metadata.json` file includes `status: "partial"`,
 `table_count` (total), `parsed_table_count` (usable tables with a valid
@@ -489,6 +512,89 @@ independence, and failure propagation. CI does **not** run the live DeepClause
 agent or NCBI network integration; those still require separate integration
 validation. The independent Python geometry and boundary-model scripts under
 `tools/` are supplementary checks, not native Prolog coverage.
+
+## Reviewing candidates with the LLM
+
+The parser only finds *structurally* admissible header boundaries. A second
+agent, `src/review_dataset.dml`, asks the LLM whether it agrees. `run_agent.sh`
+runs it automatically after each build, on that run's papers (see
+[Running the agent](#running-the-agent)). To review an existing dataset
+without building, run it on its own with `review_agent.sh`:
+
+```bash
+./review_agent.sh                                  # every paper not yet reviewed
+./review_agent.sh --papers PMC7293797,PMC5831205   # only these papers
+./review_agent.sh --run <name>                     # the papers of build run dataset/runs/<name>
+./review_agent.sh --force --model anthropic:claude-sonnet-4-6
+```
+
+**How a table is judged.** The review is blind: for each table the model is
+shown the cell texts row by row (with merged cells, `<th>` header cells,
+label, caption and notes) but *not* the parser's candidates, so it cannot
+simply agree with them. It answers with its own boundary (the last
+column-header row and the last row-header column) or says the table has no
+such structure. `src/table_review.pl` then compares that answer with the
+candidates:
+
+| Parser | Model's answer | `final_status` | `decided_by` |
+|---|---|---|---|
+| one candidate (`unique`) | the same boundary | `valid` | `llm` |
+| several candidates (`ambiguous`) | one of them | `valid`, with `selected_candidate_id` | `llm` |
+| `unique` or `ambiguous` | another boundary, or none | `unparseable` | `llm` |
+| no candidate (`abstained`) | not asked | `unparseable` | `parser` |
+| `quarantined`, or more than 2,500 slots | not asked | `unreviewed` | none |
+| any | no usable answer after one retry | `unreviewed` (`review_status: "review_failed"`) | none |
+
+An API failure or an answer that cannot be read is never counted as
+`unparseable`. Each table gets a fresh call with no earlier conversation and
+no tools, so verdicts cannot influence one another, and the temperature is 0
+unless `--temperature` is passed. Text inside the table is presented as data;
+only the typed answer is used.
+
+**Output.** `dataset/papers/PMC<id>/review.jsonl` has one record per line of
+the paper's `tables.jsonl`, which itself is left unchanged. Each record has the
+statuses above, the candidate ids, the model's boundary and one-sentence
+reason, its raw answer, the number of attempts, the model and prompt version,
+and the SHA-256 of the `tables.jsonl` it reviewed. A paper whose review is
+current (same `tables.jsonl`, prompt version and model, and no failed
+reviews) is skipped on the next run; `--force` reviews it again. Each run also
+writes `dataset/reviews/review-*/manifest.json`. The script's own log goes to
+`src/review_log.txt` and `src/review_token_usage.json` (or under `LOG_DIR`).
+
+Next to `review.jsonl` the review writes `final_tableN.html` for every table,
+rendered by `final_table_html/3` in `src/dataset_pipeline.pl` from the table's
+`tables.jsonl` record and its verdict. It starts with one of these headings:
+
+| Verdict | Heading | Then |
+|---|---|---|
+| `valid` | Parse Succeeded | the LLM's reason, then the table with its label, caption and notes, colored for the agreed candidate (green HMD, blue VMD, gray data) |
+| `unparseable`, decided by the LLM | Error: Misalignment Between LLM And Formal Table Parser | the LLM's reason, then the LLM's boundary and the parser's candidate ids |
+| no candidates (parser abstained, or the table was quarantined) | Nothing To Do. | one line saying why |
+| `unreviewed` (too large, or no usable answer) | Not Reviewed | one line saying why |
+
+The table in a "Parse Succeeded" page is re-parsed from `tables.jsonl` and
+must rasterize to the recorded raster, so its colors are exactly those of the
+reviewed boundary. The pages are written before `review.jsonl` under the
+paper's lock, each through a temporary file, so a failure leaves the previous
+review and pages in place. A paper whose review is current but has no pages
+(reviewed before they existed) gets them on the next run, from `review.jsonl`
+and without new model calls.
+
+`valid` means that the parser and the model agree, nothing more:
+`semantic_validation` is `"llm_reviewed_not_human_verified"`. The model can
+be wrong, and its agreement rate should be checked against human labels
+before it is relied on.
+
+**Cost.** One model call per table with candidates, which DeepClause turns
+into two API requests (the answer and a short follow-up), each carrying the
+whole table. In a trial with `anthropic:claude-sonnet-4-6` that was 6,000 to
+61,000 input tokens per table, depending on its size: roughly $0.02 to $0.20
+per table, about $0.06 on average.
+
+The model recorded in each review is the `--model` passed to `review_agent.sh`,
+or else the `run` model in `src/.deepclause/config.json`. When running
+`deepclause run review_dataset.dml` directly with `--model`, also pass
+`-P model=<the same id>` so the record names the right model.
 
 ## Running the table logic without the agent
 
@@ -579,6 +685,9 @@ label for a scientific table.
 | `src/parse_constraints.pl` | The seven reference constraints and public boundary validator. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
+| `src/review_dataset.dml` | The review agent: asks the LLM to check every table's candidates (see [Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm)). |
+| `src/table_review.pl` | Builds the review prompts, checks the answers against the candidates, and writes `review.jsonl`. |
+| `tests/table_review_regression_tests.pl` | Offline tests for the review: blind prompts, answer checking, statuses, skipping current reviews, file safety. |
 | `tests/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
 | `tests/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
 | `tests/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
@@ -659,7 +768,7 @@ swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
 
 A successful paper publication is now tagged `"status":"complete"` in its
 `metadata.json` and is preceded by a check that **exactly** the numbered
-`annotated_tableN.html` files and matching metadata exist in the staging
+`candidatesN.html` files and matching metadata exist in the staging
 directory; empty table files, missing or unexpected files, and inconsistent
 counts abort publication. Annotation rendering now requires an output for
 **each** valid boundary (instead of silently dropping failed candidates).

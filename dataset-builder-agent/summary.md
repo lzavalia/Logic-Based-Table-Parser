@@ -11,7 +11,7 @@ Given a phrase such as `"dementia with lewy bodies"`, the agent:
 3. **Extracts every `<table>` element** and lays it out as a *raster*: a grid in which each slot holds the id of the cell covering it, so merged cells span several slots (`table_layout_generator.pl`). Untrusted spans and raster dimensions are checked against explicit per-table and per-paper resource budgets before full grid materialization; oversized papers fail with a structured error rather than consuming unbounded memory.
 4. **Finds the header boundaries.** Every candidate pair (HMD boundary row, VMD boundary column) is tested against the seven parse constraints; the pairs that satisfy all of them are kept (`parse_constraints.pl`).
 5. **Annotates the table.** For each valid pair the original table is colored: HMD cells green, VMD cells blue, data cells gray (`table_annotator.pl`).
-6. **Saves the result** as `dataset/papers/PMC<id>/annotated_tableN.html`, with `metadata.json` for the article title, table counts, and JATS label/caption/footnote context with source paths and original unannotated table markup. Outputs are staged and replaced per PMC ID to avoid title collisions and stale tables.
+6. **Saves the result** as `dataset/papers/PMC<id>/candidatesN.html`, with `metadata.json` for the article title, table counts, and JATS label/caption/footnote context with source paths and original unannotated table markup. Outputs are staged and replaced per PMC ID to avoid title collisions and stale tables.
 
 Steps 2–6 run inside DeepClause's own Prolog engine and never involve the model.
 
@@ -26,7 +26,7 @@ flowchart TD
     E --> F{"Parse constraints<br/>parse_constraints.pl<br/>any valid HMD/VMD boundary?"}
     F -->|yes| G["Color cells HMD / VMD / data<br/>table_annotator.pl"]
     F -->|no| H["Save table uncolored"]
-    G --> I[("dataset/papers/PMC&lt;id&gt;/<br/>annotated_tableN.html")]
+    G --> I[("dataset/papers/PMC&lt;id&gt;/<br/>candidatesN.html")]
     H --> I
 
     classDef llm fill:#ffe9a8,stroke:#b8860b,color:#000
@@ -75,7 +75,7 @@ for the fetch adapter. The local, network-free regression suite is
 
 ### Machine-readable output (F10)
 
-The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `annotated_tableN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot.
+The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `candidatesN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot.
 
 ### Boundary scalability (F11)
 
@@ -121,6 +121,19 @@ blocking wait, so `pause/1` falls back to polling the clock there, which keeps
 one CPU core busy for the wait (0.4 seconds per request, longer on retries).
 Both engines share the F13 on-disk lock and timestamp. The offline tests are
 `tests/pause_regression_tests.pl` and `tests/concurrency_regression_tests.pl`.
+
+### LLM review of candidates
+
+After each build, `run_agent.sh` runs a second agent, `review_dataset.dml`, on
+the papers that build selected (`review_agent.sh` runs it on its own). It shows
+the LLM each table without the parser's candidates and asks for its own header
+boundary. A table whose candidate matches that answer is `valid`; one whose
+candidates do not is `unparseable`; a table the parser abstained on stays
+`unparseable` without a call. Verdicts go to `papers/PMC<id>/review.jsonl`,
+and `final_tableN.html` shows each table's outcome: "Parse Succeeded" with the
+agreed table, the misalignment error with the LLM's reason, or "Nothing To
+Do.".
+Agreement between parser and model is still not a verified label.
 
 ## Offline regression CI (F16)
 
