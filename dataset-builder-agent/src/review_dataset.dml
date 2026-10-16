@@ -1,0 +1,119 @@
+% ============================================================================
+% Table Review
+% ============================================================================
+%
+% Asks the LLM to check the parser's candidate boundaries for every table in
+% dataset/papers/, and writes the verdicts to papers/PMC<id>/review.jsonl and
+% one page per table, papers/PMC<id>/final_tableN.html, with the outcome.
+%
+% The review is blind: for each table the model sees the cells, merged
+% cells, label, caption and notes, but not the candidates, and gives its own
+% header boundary or says the table has none. table_review.pl then compares
+% that answer with the candidates:
+%   - it equals a candidate          -> valid, with that candidate
+%   - another boundary, or none      -> unparseable
+%   - the parser found no candidate  -> unparseable, without asking
+%   - no usable answer after a retry -> unreviewed (never counted as unparseable)
+%
+% Each table gets a fresh LLM call (prompt/2: no earlier conversation and no
+% tools), so verdicts cannot influence one another.
+%
+% Parameters (deepclause run ... -P key=value), all optional:
+%   papers=PMC123,PMC456   review only these papers
+%   run=<name>             review only the papers selected by the build run
+%                          dataset/runs/<name> (run_agent.sh passes this)
+%   force=true             review again even when review.jsonl is current
+%   model=<provider:model> the model in use, recorded in each review; pass the
+%                          same value as --model (review_agent.sh does this)
+%
+% Run from the directory that holds the .pl files:
+%   deepclause run review_dataset.dml --headless
+%
+% ============================================================================
+
+% Loaded through a search-path alias so the module runs as compiled Prolog;
+% see dataset_builder.dml.
+user:file_search_path(workspace, '/workspace').
+:- use_module(workspace(table_review)).
+
+agent_main :-
+    (   param(run, Run)
+    ->  review_run_papers("/workspace/dataset", Run, Papers)
+    ;   param(papers, Papers)
+    ->  true
+    ;   Papers = none
+    ),
+    ( param(force, Force) -> true ; Force = none ),
+    ( param(model, Model) -> true ; Model = none ),
+    review_settings("/workspace", Papers, Force, Model, Settings),
+    output("Reviewing candidate parses..."),
+    review_queue("/workspace/dataset", Settings, Queue, Skipped),
+    report_skipped(Skipped),
+    review_papers(Queue, Settings, Lines),
+    (   catch(record_review_run("/workspace/dataset", Settings, Lines, Skipped, RunFile),
+              Error,
+              ( format(string(Warning), "WARNING: could not save the review manifest: ~w", [Error]),
+                output(Warning),
+                fail ))
+    ->  format(string(RunMsg), "Review manifest: ~w", [RunFile]),
+        output(RunMsg)
+    ;   true
+    ),
+    length(Queue, Reviewed),
+    length(Skipped, NumSkipped),
+    format(string(Summary),
+           "Review complete: ~d paper(s) reviewed, ~d skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl.",
+           [Reviewed, NumSkipped]),
+    answer(Summary).
+
+report_skipped([]).
+report_skipped([Name-Reason|Rest]) :-
+    format(string(Line), "~w: skipped (~w)", [Name, Reason]),
+    output(Line),
+    report_skipped(Rest).
+
+% review_papers(+Queue, +Settings, -Lines): one status line per paper. A
+% failure to write one paper's review is reported and does not stop the run.
+review_papers([], _, []).
+review_papers([Paper|Papers], Settings, [Line|Lines]) :-
+    review_paper_name(Paper, Name),
+    review_paper_items(Paper, Items),
+    review_items(Items, Results),
+    (   catch(publish_paper_review("/workspace/dataset", Paper, Settings, Results, Line0),
+              Error,
+              format(string(Line0), "~w: review not saved (~w)", [Name, Error]))
+    ->  Line = Line0
+    ;   format(string(Line), "~w: review not saved", [Name])
+    ),
+    output(Line),
+    review_papers(Papers, Settings, Lines).
+
+review_items([], []).
+review_items([Item|Items], [Result|Results]) :-
+    review_item(Item, Result),
+    review_items(Items, Results).
+
+review_item(Item, Result) :-
+    review_item_action(Item, Action),
+    (   Action == ask
+    ->  ask_model(Item, 1, Result)
+    ;   review_skip_result(Item, Result)
+    ).
+
+% ask_model(+Item, +Attempt, -Result): one retry when the answer is missing
+% or does not follow the requested format, then review_failed.
+ask_model(Item, Attempt, Result) :-
+    review_item_prompt(Item, Prompt),
+    (   catch(prompt(Prompt, object(Answer)), Error, true)
+    ->  ( var(Error) -> Reply = Answer ; Reply = error(Error) )
+    ;   Reply = no_answer
+    ),
+    review_answer(Item, Reply, Attempt, Outcome),
+    (   Outcome = done(Result)
+    ->  true
+    ;   Outcome = retry(_), Attempt < 2
+    ->  Next is Attempt + 1,
+        ask_model(Item, Next, Result)
+    ;   Outcome = retry(Why),
+        review_failed_result(Item, Why, Attempt, Result)
+    ).
