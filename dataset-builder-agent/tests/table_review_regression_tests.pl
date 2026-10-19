@@ -13,8 +13,10 @@
 :- endif.
 
 % A workspace with one published paper, PMC901, built by the real pipeline:
-%   t0  unique     2x2 grid, one candidate h0_v0
-%   t1  ambiguous  row header spanning two rows: candidates h0_v0 and h0_v1
+%   t0  ambiguous  2x2 grid: h0_v1, h1_v0, h1_v1 (a header row, a header
+%                  column, or both; candidate ids give the counts)
+%   t1  ambiguous  row header spanning two rows: h1_v0, h1_v1, h1_v2 (no
+%                  candidate without header rows: it has a merged cell)
 %   t2  abstained  a single cell
 review_workspace(Root) :-
     tmp_file(table_review, Root), make_directory(Root),
@@ -48,8 +50,8 @@ queued_items(Root, Settings, Items) :-
 
 item(Items, Index, Item) :- nth0(Index, Items, Item).
 
-boundary_answer(H, V, json{structure:"boundary", last_header_row:H,
-                            last_row_header_column:V, reason:"test"}).
+boundary_answer(H, V, json{column_header_rows:H, row_header_columns:V,
+                            reason:"test"}).
 
 % Reviews every paper in the queue: Answer(Index) gives the model's answer.
 review_all(Root, Settings, Answers, Results) :-
@@ -107,7 +109,7 @@ test(prompt_is_blind_and_describes_the_table,
     sub_string(P0, _, _, _, "Caption: Doses \"high\" and low"),
     sub_string(P0, _, _, _, "row 0: c0* \"Drug\" | c1* \"Dose\""),
     sub_string(P0, _, _, _, "row 1: c0 \"A\" | c1 \"1\""),
-    sub_string(P0, _, _, _, "from 0 to 0"),
+    sub_string(P0, _, _, _, "the integer H, from 0 to 1"),
     \+ sub_string(P0, _, _, _, "h0_v0"),
     \+ sub_string(P0, _, _, _, "candidate"),
     item(Items, 1, I1), review_item_prompt(I1, P1),
@@ -134,13 +136,13 @@ test(matching_answer_validates_and_selects_the_candidate,
     settings(Root, S),
     queued_items(Root, S, Items),
     item(Items, 1, I1),
-    boundary_answer(0, 1, A),
+    boundary_answer(1, 2, A),
     review_answer(I1, A, 1, done(R)),
     R.review_status == "reviewed",
     R.final_status == "valid", R.decided_by == "llm",
-    R.selected_candidate_id == "PMC901/t1/h0_v1",
-    R.candidate_ids == ["PMC901/t1/h0_v0", "PMC901/t1/h0_v1"],
-    R.llm_boundary == json{hmd:0, vmd:1},
+    R.selected_candidate_id == "PMC901/t1/h1_v2",
+    R.candidate_ids == ["PMC901/t1/h1_v0", "PMC901/t1/h1_v1", "PMC901/t1/h1_v2"],
+    R.llm_boundary == json{hmd:1, vmd:2},
     R.parser_status == "ambiguous",
     R.semantic_validation == "llm_reviewed_not_human_verified".
 
@@ -149,13 +151,14 @@ test(other_boundary_or_none_makes_the_table_unparseable,
     settings(Root, S),
     queued_items(Root, S, Items),
     item(Items, 1, I1),
-    boundary_answer(1, 0, Other),
+    boundary_answer(2, 1, Other),
     review_answer(I1, Other, 1, done(R1)),
     R1.final_status == "unparseable", R1.selected_candidate_id == null,
-    R1.llm_boundary == json{hmd:1, vmd:0},
-    review_answer(I1, json{structure:"None", last_header_row: -1,
-                           last_row_header_column: -1, reason:"list"}, 1, done(R2)),
-    R2.final_status == "unparseable", R2.llm_boundary == null,
+    R1.llm_boundary == json{hmd:2, vmd:1},
+    % "No headers at all" is (0, 0): never a candidate (constraint 7).
+    review_answer(I1, json{column_header_rows:0, row_header_columns:0,
+                           reason:"list"}, 1, done(R2)),
+    R2.final_status == "unparseable", R2.llm_boundary == json{hmd:0, vmd:0},
     R2.llm_reason == "list".
 
 test(answers_as_json_text_or_numeric_strings_are_read,
@@ -163,7 +166,7 @@ test(answers_as_json_text_or_numeric_strings_are_read,
     settings(Root, S),
     queued_items(Root, S, Items),
     item(Items, 0, I0),
-    review_answer(I0, "{\"structure\":\"boundary\",\"last_header_row\":\"0\",\"last_row_header_column\":0.0}",
+    review_answer(I0, "{\"column_header_rows\":\"1\",\"row_header_columns\":1.0}",
                   2, done(R)),
     R.final_status == "valid", R.attempts =:= 2, R.llm_reason == "".
 
@@ -175,10 +178,10 @@ test(unusable_answers_ask_for_a_retry,
     forall(member(Bad, [ no_answer,
                          error(timeout),
                          "not json",
-                         json{structure:"maybe"},
-                         json{structure:"boundary", last_header_row:1, last_row_header_column:0},
-                         json{structure:"boundary", last_header_row:0, last_row_header_column: -1},
-                         json{structure:"boundary", last_header_row:"x", last_row_header_column:0} ]),
+                         json{structure:"boundary"},
+                         json{column_header_rows:3, row_header_columns:1},
+                         json{column_header_rows:1, row_header_columns: -1},
+                         json{column_header_rows:"x", row_header_columns:1} ]),
            review_answer(I0, Bad, 1, retry(_))).
 
 test(skipped_and_failed_tables_are_recorded_honestly,
@@ -198,7 +201,7 @@ test(skipped_and_failed_tables_are_recorded_honestly,
 test(review_file_has_one_record_per_table_and_is_not_redone,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    boundary_answer(0, 0, A0), boundary_answer(0, 1, A1),
+    boundary_answer(1, 1, A0), boundary_answer(1, 2, A1),
     review_all(Root, S, [0-A0, 1-A1], _),
     review_file(Root, Records),
     findall(U-F, (member(R, Records), U = R.table_uid, F = R.final_status), Pairs),
@@ -215,7 +218,7 @@ test(review_file_has_one_record_per_table_and_is_not_redone,
 test(failed_reviews_are_queued_again,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    boundary_answer(0, 0, A0),
+    boundary_answer(1, 1, A0),
     review_all(Root, S, [0-A0, 1-no_answer], _),
     review_file(Root, [_, R1, _]),
     R1.review_status == "review_failed",
@@ -273,7 +276,7 @@ test(oversized_table_is_not_sent) :-
     Record = json{table_uid:"PMC1/t0", pmc_id:"PMC1", table_index:0,
                   status:"unique", rows:Rows, columns:Cols, raster:Raster,
                   cells:[], context:json{label:"", caption:"", notes:[]},
-                  candidates:[json{candidate_id:"PMC1/t0/h0_v0", hmd:0, vmd:0}]},
+                  candidates:[json{candidate_id:"PMC1/t0/h1_v1", hmd:1, vmd:1}]},
     review_settings("/nonexistent", none, none, "m:m", S),
     table_review:review_item_for(S, Record, Item),
     review_item_action(Item, skip),
@@ -288,7 +291,7 @@ test(run_manifest_records_settings_and_lines,
     record_review_run(Dataset, S, ["PMC901: done"], ["PMC5"-"not in dataset/papers"], File),
     dataset_pipeline:read_json_file(File, M),
     M.model == "test:configured-model",
-    M.prompt_version == "table-review-blind-v1",
+    M.prompt_version == "table-review-blind-v2-counts",
     M.paper_status_lines == ["PMC901: done"],
     M.skipped_papers = [Skipped], Skipped.pmc_id == "PMC5".
 
@@ -336,8 +339,8 @@ final_page(Root, Index, Html) :-
 test(final_pages_show_success_misalignment_and_nothing_to_do,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    boundary_answer(0, 0, A0),
-    boundary_answer(1, 0, A1),
+    boundary_answer(1, 1, A0),
+    boundary_answer(2, 1, A1),
     review_all(Root, S, [0-A0, 1-A1], _),
     final_page(Root, 0, P0),
     sub_string(P0, _, _, _, "<h2 class=\"final-status\">Parse Succeeded</h2>"),
@@ -354,8 +357,8 @@ test(final_pages_show_success_misalignment_and_nothing_to_do,
     final_page(Root, 1, P1),
     sub_string(P1, _, _, _, "Error: Misalignment Between LLM And Formal Table Parser"),
     sub_string(P1, _, _, _, "<p class=\"llm-reason\">test</p>"),
-    sub_string(P1, _, _, _, "last column-header row 1, last row-header column 0"),
-    sub_string(P1, _, _, _, "PMC901/t1/h0_v0, PMC901/t1/h0_v1"),
+    sub_string(P1, _, _, _, "LLM: 2 HMD rows, 1 VMD column."),
+    sub_string(P1, _, _, _, "PMC901/t1/h1_v0 (1 HMD row, no VMD columns); PMC901/t1/h1_v1"),
     \+ sub_string(P1, _, _, _, "<table"),
     final_page(Root, 2, P2),
     sub_string(P2, _, _, _, "<h2 class=\"final-status\">Nothing To Do.</h2>"),
@@ -364,19 +367,19 @@ test(final_pages_show_success_misalignment_and_nothing_to_do,
 test(final_page_colors_the_candidate_the_llm_chose,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    boundary_answer(0, 0, A0),
-    boundary_answer(0, 1, A1),
+    boundary_answer(1, 1, A0),
+    boundary_answer(1, 2, A1),
     review_all(Root, S, [0-A0, 1-A1], _),
     final_page(Root, 1, P1),
     sub_string(P1, _, _, _, "Parse Succeeded"),
-    % h0_v1: column 1 below the header is row-header (skyblue), not data.
+    % h1_v2: column 1 below the header is row-header (skyblue), not data.
     sub_string(P1, _, _, _, "background-color: skyblue\">1<"),
     sub_string(P1, _, _, _, "background-color: lightgray\">2<").
 
 test(final_page_escapes_the_llm_reason,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    A0 = json{structure:"boundary", last_header_row:0, last_row_header_column:0,
+    A0 = json{column_header_rows:1, row_header_columns:1,
               reason:"<script>alert(1)</script> & more"},
     review_all(Root, S, [0-A0, 1-no_answer], _),
     final_page(Root, 0, P0),
@@ -389,7 +392,7 @@ test(final_page_escapes_the_llm_reason,
 test(current_review_without_pages_gets_them_without_a_new_review,
      [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
     settings(Root, S),
-    boundary_answer(0, 0, A0), boundary_answer(0, 1, A1),
+    boundary_answer(1, 1, A0), boundary_answer(1, 2, A1),
     review_all(Root, S, [0-A0, 1-A1], _),
     dataset_dir(Root, Dataset),
     directory_file_path(Dataset, 'papers/PMC901', Dir),
@@ -408,5 +411,30 @@ test(final_table_rejects_a_review_of_another_table) :-
     catch(dataset_pipeline:final_table_html(json{table_uid:"PMC1/t0", candidates:[]},
                                             json{table_uid:"PMC1/t1"}, _), E, true),
     E = error(final_table_error(review_mismatch("PMC1/t0", "PMC1/t1")), _).
+
+test(papers_built_with_last_index_boundaries_are_not_reviewed,
+     [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
+    settings(Root, S),
+    dataset_dir(Root, Dataset),
+    directory_file_path(Dataset, 'papers/PMC901/tables.jsonl', Tables),
+    read_file_to_string(Tables, Text, [encoding(utf8)]),
+    atomic_list_concat(Parts, '"schema_version":"3.0"', Text),
+    atomic_list_concat(Parts, '"schema_version":"1.0"', Old),
+    write_text(Tables, Old),
+    review_queue(Dataset, S, [], [Skipped]),
+    Skipped = "PMC901"-Reason,
+    sub_string(Reason, _, _, _, "rebuild the paper").
+
+% Schema 3.x only added geometric certificates, so 2.x papers still count.
+test(papers_built_before_certificates_are_still_reviewed,
+     [setup(review_workspace(Root)), cleanup(review_cleanup(Root))]) :-
+    settings(Root, S),
+    dataset_dir(Root, Dataset),
+    directory_file_path(Dataset, 'papers/PMC901/tables.jsonl', Tables),
+    read_file_to_string(Tables, Text, [encoding(utf8)]),
+    atomic_list_concat(Parts, '"schema_version":"3.0"', Text),
+    atomic_list_concat(Parts, '"schema_version":"2.0"', Old),
+    write_text(Tables, Old),
+    review_queue(Dataset, S, [_], []).
 
 :- end_tests(table_review).

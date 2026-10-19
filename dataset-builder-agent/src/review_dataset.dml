@@ -18,6 +18,10 @@
 % Each table gets a fresh LLM call (prompt/2: no earlier conversation and no
 % tools), so verdicts cannot influence one another.
 %
+% Finally, without the LLM, table_export.pl writes papers/PMC<id>/final_tables.json
+% for every paper with a current review: each valid table as subtables with
+% nested horizontal and vertical metadata, unmerged data and the residual corner.
+%
 % Parameters (deepclause run ... -P key=value), all optional:
 %   papers=PMC123,PMC456   review only these papers
 %   run=<name>             review only the papers selected by the build run
@@ -35,6 +39,7 @@
 % see dataset_builder.dml.
 user:file_search_path(workspace, '/workspace').
 :- use_module(workspace(table_review)).
+:- use_module(workspace(table_export)).
 
 agent_main :-
     (   param(run, Run)
@@ -59,12 +64,29 @@ agent_main :-
         output(RunMsg)
     ;   true
     ),
+    % Last stage: every paper with a current review (including those skipped
+    % above as up to date) gets final_tables.json. A failure is reported and
+    % does not undo the review.
+    output("Exporting reviewed tables..."),
+    (   catch(export_reviewed_papers("/workspace/dataset", Settings, ExportLines),
+              ExportError,
+              ( format(string(ExportWarning), "WARNING: export failed: ~w", [ExportError]),
+                output(ExportWarning),
+                fail ))
+    ->  report_lines(ExportLines)
+    ;   true
+    ),
     length(Queue, Reviewed),
     length(Skipped, NumSkipped),
     format(string(Summary),
-           "Review complete: ~d paper(s) reviewed, ~d skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl.",
+           "Review complete: ~d paper(s) reviewed, ~d skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.",
            [Reviewed, NumSkipped]),
     answer(Summary).
+
+report_lines([]).
+report_lines([Line|Lines]) :-
+    output(Line),
+    report_lines(Lines).
 
 report_skipped([]).
 report_skipped([Name-Reason|Rest]) :-

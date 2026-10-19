@@ -20,6 +20,8 @@
 % Output (relative to the workspace):
 %   dataset/papers/PMC<id>/candidatesN.html  the table colored for each candidate
 %   dataset/papers/PMC<id>/input_tableN.html      the same table, uncolored
+%   dataset/papers/PMC<id>/certificateN_hH_vV.pl  geometric labelability
+%                                             certificate per labelable candidate
 %   dataset/papers/PMC<id>/metadata.json      article title and table counts
 %   dataset/raw/PMC<id>.xml                    validated JATS full text as downloaded
 %   dataset/cache/requests/                    temporary per-search responses

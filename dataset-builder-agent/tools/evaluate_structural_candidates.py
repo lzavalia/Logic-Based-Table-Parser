@@ -2,9 +2,12 @@
 """Offline evaluation of structural candidates against independently labeled gold.
 
 Gold JSONL row: {"pmc_id":"PMC123", "table_index":0,
-                 "gold_boundary":{"hmd":0,"vmd":0}}
-Use null for gold_boundary if human annotation says there is no HMD+VMD
-segmentation; this does NOT train or infer semantic labels.
+                 "gold_boundary":{"hmd":1,"vmd":1}}
+hmd and vmd are counts, as in tables.jsonl: the number of header rows at the
+top and of row-header columns at the left; either may be 0, but not both.
+Use null for gold_boundary if human annotation says the table has no such
+segmentation at all (no headers, or headers that are not at the top/left);
+this does NOT train or infer semantic labels.
 """
 import argparse
 import json

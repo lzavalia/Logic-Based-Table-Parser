@@ -287,7 +287,9 @@ Each run writes a `dataset/` directory inside `src/`:
 | `dataset/papers/PMC<id>/candidatesN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
 | `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `candidatesN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
+| `dataset/papers/PMC<id>/certificateN_hH_vV.pl` | Geometric labelability certificate for candidate `(H, V)` of table `N`, written only when the candidate is labelable. A Prolog program that checks itself; see [Geometric labelability certificates](#geometric-labelability-certificates). |
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
+| `dataset/papers/PMC<id>/final_tables.json` | Written by the last stage of the [LLM review](#reviewing-candidates-with-the-llm): every `valid` table as `subtables` with nested horizontal and vertical metadata, unmerged data, and the residual corner. |
 | `dataset/papers/PMC<id>/review.jsonl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one verdict per line of `tables.jsonl`. Absent until the paper has been reviewed; a rebuilt paper loses it. |
 | `dataset/papers/PMC<id>/final_tableN.html` | Also written by the review: the outcome for table `N`. "Parse Succeeded", the LLM's reason and the table colored for the boundary the parser and the LLM agree on; "Error: Misalignment Between LLM And Formal Table Parser" with the LLM's reason; or "Nothing To Do." when the parser found no candidate. |
 | `dataset/reviews/review-<timestamp>-<n>/manifest.json` | One per review run: model, prompt version, papers requested and one status line per paper. |
@@ -441,8 +443,8 @@ code and reason. Its `candidatesN.html` **does not exist**, rather than
 containing a misleading annotation. All successful tables keep their original
 numbered HTML files. The `metadata.json` file includes `status: "partial"`,
 `table_count` (total), `parsed_table_count` (usable tables with a valid
-boundary), and `quarantined_table_count`. Partial snapshots use schema `1.1`;
-fully successful snapshots retain schema `1.0` (with an extra zero count in
+boundary), and `quarantined_table_count`. Partial snapshots use schema `3.1`;
+fully successful snapshots retain schema `3.0` (with an extra zero count in
 the opt-in path). Summaries and attempt records explicitly say `partial`.
 
 Quarantine applies only to known invalid spans/overlaps, table raster limits,
@@ -531,16 +533,16 @@ without building, run it on its own with `review_agent.sh`:
 **How a table is judged.** The review is blind: for each table the model is
 shown the cell texts row by row (with merged cells, `<th>` header cells,
 label, caption and notes) but *not* the parser's candidates, so it cannot
-simply agree with them. It answers with its own boundary (the last
-column-header row and the last row-header column) or says the table has no
-such structure. `src/table_review.pl` then compares that answer with the
+simply agree with them. It answers with its own boundary: the number of
+column-header rows and the number of row-header columns, either of which may
+be 0 (`0` and `0` when the table has no headers at all). `src/table_review.pl` then compares that answer with the
 candidates:
 
 | Parser | Model's answer | `final_status` | `decided_by` |
 |---|---|---|---|
 | one candidate (`unique`) | the same boundary | `valid` | `llm` |
 | several candidates (`ambiguous`) | one of them | `valid`, with `selected_candidate_id` | `llm` |
-| `unique` or `ambiguous` | another boundary, or none | `unparseable` | `llm` |
+| `unique` or `ambiguous` | any other counts, including `0` and `0` | `unparseable` | `llm` |
 | no candidate (`abstained`) | not asked | `unparseable` | `parser` |
 | `quarantined`, or more than 2,500 slots | not asked | `unreviewed` | none |
 | any | no usable answer after one retry | `unreviewed` (`review_status: "review_failed"`) | none |
@@ -585,6 +587,53 @@ and without new model calls.
 be wrong, and its agreement rate should be checked against human labels
 before it is relied on.
 
+**Structured export.** As its last stage, without the LLM, the review agent
+runs `src/table_export.pl`, which writes `dataset/papers/PMC<id>/final_tables.json`
+for every paper in scope whose `review.jsonl` matches its current
+`tables.jsonl` (including papers skipped because their review is current).
+Papers still in schema 1.x are skipped. The file has one entry per table, in
+`tables.jsonl` order, with `table_uid`, `table_index`, `label`, `caption`,
+`final_status`, and for a `valid` table the agreed `candidate_id`, its
+`boundary` (`{hmd, vmd}` counts), its `geometric_certificate`, and
+`subtables`. For now a table has exactly one subtable:
+
+```json
+{"subtables": [
+  {"horizontal metadata": [{"HMD 0": [{"HMD 1": []}, {"HMD 1": []}, {"HMD 1": []}]}],
+   "vertical metadata":   [{"VMD 0": [{"VMD 1": []}, {"VMD 1": []}]},
+                           {"VMD 0": [{"VMD 1": []}, {"VMD 1": []}]}],
+   "data": [["DATA", "DATA", "DATA"], ["DATA", "DATA", "DATA"],
+            ["DATA", "DATA", "DATA"], ["DATA", "DATA", "DATA"]],
+   "residual_corner": [{"Corner": []}]}]}
+```
+
+That is the export of a table with a two-row header (`HMD 0` over three
+`HMD 1` cells), two two-level row headers, and a `Corner` cell spanning the
+two header rows and two row-header columns.
+
+- Each metadata cell is an object with one key, the cell's text, whose value
+  is the list of its children, in reading order. A padding cell's key is `""`.
+- `horizontal metadata`: the header rows over the data columns. Roots are the
+  cells of the first row; a cell's children are the cells directly below it.
+  The leaves, left to right, head the data columns.
+- `vertical metadata`: the row-header columns over the data rows, read left to
+  right. The leaves, top to bottom, head the data rows.
+- `data`: the data region as a list of rows of cell texts. Merged cells are
+  **unmerged**: a cell's text is repeated in every slot it covers. Slots that
+  pad short rows are `null`.
+- `residual_corner`: the cells above the row headers, as a forest read top to
+  bottom; `[]` without header rows or row-header columns. A cell over both
+  the corner and the data columns (a title row) appears in both
+  `residual_corner` and `horizontal metadata`.
+
+Other tables keep their entry with `"subtables": null`. If a metadata cell
+sits under (or right of) more than one cell, so the metadata is not a forest,
+the table gets an `export_error` instead; the ten constraints rule this out
+for every candidate. Tables with central metadata (several subtables) are not
+supported yet; they have no candidate, so they are never `valid`. The file is
+written under the paper's lock through a temporary file. Tests:
+`tests/table_export_regression_tests.pl`.
+
 **Cost.** One model call per table with candidates, which DeepClause turns
 into two API requests (the answer and a short follow-up), each carrying the
 whole table. In a trial with `anthropic:claude-sonnet-4-6` that was 6,000 to
@@ -615,7 +664,8 @@ For every `<table>` (numbered from 0 in document order) the driver writes one
 sanitized, colored view per structural candidate boundary to
 `path/to/file.html.tables/`:
 
-- `table<N>_hmd<H>_vmd<V>.html`: table `N` colored for boundary `(H, V)`.
+- `table<N>_hmd<H>_vmd<V>.html`: table `N` colored for `H` HMD rows and `V`
+  VMD columns.
 - `table<N>_unannotated.html`: table `N` has no admissible boundary, so it is
   written uncolored instead of being omitted.
 
@@ -637,21 +687,57 @@ swipl -g 'use_module(dataset_pipeline),
 
 ### Boundary contract and regression tests
 
-The table validator now returns boundaries only for rectangular rasters with at
-least two rows and two columns. A boundary `(Hmd, Vmd)` must leave at least
-one horizontal-metadata row, one vertical-metadata column **below** the
-horizontal header, and a nonempty data region:
+A boundary `(Hmd, Vmd)` gives the **number** of horizontal-metadata rows and
+the number of vertical-metadata columns:
 
 ```text
-0 <= Hmd < number_of_rows - 1
-0 <= Vmd < number_of_columns - 1
+rows 0 .. Hmd-1                     horizontal metadata (HMD)
+rows Hmd.., columns 0 .. Vmd-1      vertical metadata (VMD)
+rows Hmd.., columns Vmd..           data
 ```
 
-Tables without such a partition are saved uncolored (the existing abstention
-behavior). Both forms of `omni_validate` enforce the same domain. The
-four-argument form reports `some(invalid_boundary)` for out-of-domain
-coordinates or malformed/undersized rasters; structural failures continue
-to report `some(0)` through `some(6)`.
+`Hmd = 0` means the table has no HMD rows (row headers only), and `Vmd = 0`
+that it has no VMD columns (column headers only). Three constraints on top of
+the seven original ones rule out the degenerate partitions and bias the
+search towards HMD:
+
+| # | Constraint | Rejects |
+|---|---|---|
+| 7 | not entirely data | `(0, 0)` |
+| 8 | not entirely metadata | `Hmd = number_of_rows` or `Vmd = number_of_columns` |
+| 9 | no HMD rows only for a plain grid | `Hmd = 0` in any table with a merged cell |
+
+A *plain grid* is a table without merged cells: no two raster slots belong to
+the same cell (padding slots for short rows are cells of their own). A merged
+cell anywhere is taken as evidence of a header hierarchy, so such a table is
+always read with at least one HMD row. `Vmd = 0` is not limited this way, so
+a table can have column headers without row headers whatever its shape, but
+row headers without column headers only if it is a plain grid.
+
+So every candidate satisfies `0 <= Hmd < number_of_rows`,
+`0 <= Vmd < number_of_columns` and `Hmd + Vmd > 0`. Rasters of any rectangular
+shape are accepted, including one-row and one-column tables; a single cell has
+no admissible boundary. Tables without one are saved uncolored (the existing
+abstention behavior).
+
+Constraints 0 to 6 are those of the original `ConstraintValidators.scala`,
+which named the last HMD row and the last VMD column. For `Hmd >= 1` and
+`Vmd >= 1` each tests exactly the cells the original tested at
+`(Hmd-1, Vmd-1)`; `tests/legacy_index_constraints.pl` keeps the original
+rules so a regression test can check this. A rule that compares a region with
+an empty one has nothing to compare and holds.
+
+Both forms of `omni_validate` enforce the same domain (`0..number_of_rows`,
+`0..number_of_columns`). The four-argument form reports
+`some(invalid_boundary)` for counts outside it or malformed rasters,
+`some(7)` or `some(8)` for a degenerate partition, `some(9)` for no HMD rows in
+a table with merged cells, and otherwise the first failed structural
+constraint, `some(0)` through `some(6)`.
+
+A plain grid of at least 2x2 admits exactly three boundaries, `(0,1)`, `(1,0)`
+and `(1,1)`: the structure alone cannot tell a header row from a header column,
+so such tables are `ambiguous` and the LLM review chooses. Tables with merged
+cells can also be ambiguous between `Vmd = 0` and `Vmd >= 1`.
 
 Run the offline boundary regressions from `dataset-builder-agent/tests`:
 
@@ -682,11 +768,17 @@ label for a scientific table.
 | `tests/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/table_html_sanitizer.pl` | Removes executable markup from browser-facing table views while keeping source records unchanged. |
-| `src/parse_constraints.pl` | The seven reference constraints and public boundary validator. |
+| `src/parse_constraints.pl` | The ten reference constraints (HMD and VMD as counts) and public boundary validator. |
+| `tests/legacy_index_constraints.pl` | The original last-index constraints, kept as a test reference only. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
+| `src/certificate_kernel.pl` | Trusted checker for geometric labelability certificates (see [Geometric labelability certificates](#geometric-labelability-certificates)). |
+| `src/table_certify.pl` | Builds and writes geometric labelability certificates; not trusted, every certificate is checked by the kernel. |
+| `tests/certificate_regression_tests.pl` | Offline tests for the certificate kernel and generator: both claims, the strong reading, boundary lines, tampering, and agreement with the constraints. |
 | `src/review_dataset.dml` | The review agent: asks the LLM to check every table's candidates (see [Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm)). |
 | `src/table_review.pl` | Builds the review prompts, checks the answers against the candidates, and writes `review.jsonl`. |
+| `src/table_export.pl` | Last stage: writes `final_tables.json` from `tables.jsonl` and `review.jsonl`. |
+| `tests/table_export_regression_tests.pl` | Offline tests for the export: the reference example, trees, unmerged data, stale reviews, locking, paper filter. |
 | `tests/table_review_regression_tests.pl` | Offline tests for the review: blind prompts, answer checking, statuses, skipping current reviews, file safety. |
 | `tests/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
 | `tests/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
@@ -768,8 +860,8 @@ swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
 
 A successful paper publication is now tagged `"status":"complete"` in its
 `metadata.json` and is preceded by a check that **exactly** the numbered
-`candidatesN.html` files and matching metadata exist in the staging
-directory; empty table files, missing or unexpected files, and inconsistent
+`candidatesN.html` files, matching metadata and the certificate files the
+records name exist in the staging directory; empty table files, missing or unexpected files, and inconsistent
 counts abort publication. Annotation rendering now requires an output for
 **each** valid boundary (instead of silently dropping failed candidates).
 
@@ -825,7 +917,9 @@ Each complete paper snapshot includes `papers/PMC<id>/tables.jsonl`, with
 **exactly one compact JSON object per extracted table** (newline-delimited JSON).
 Do not derive labels from the inspection HTML/CSS. The JSONL records include:
 
-- `schema_version: "1.0"`, `pmc_id` (e.g. `PMC123`), zero-based `table_index`, and
+- `schema_version: "3.0"` (`"3.1"` for a quarantined table; 3.x adds
+  `geometric_certificate` to each candidate, otherwise it is 2.x), `pmc_id` (e.g.
+  `PMC123`), zero-based `table_index`, and
   stable `table_uid` (`PMC123/t0`); JATS `source_table_id` is descriptive and
   **not** used for identity because source IDs may be missing or duplicate.
 - `source_path` and `context`, including unannotated `source_table_html`, JATS
@@ -835,11 +929,17 @@ Do not derive labels from the inspection HTML/CSS. The JSONL records include:
   and `source_xpath` using 1-based element-sibling XPath steps. Cells added
   to pad short rows have `kind: "synthetic_gap"` and `source_xpath: null`.
 - `candidates`: **all** structurally valid boundaries, in deterministic search
-  order. Each candidate has `candidate_id` such as `PMC123/t0/h0_v1`, zero-based
-  `hmd`, `vmd`, and one `{cell_id, region}` label per distinct raster cell,
-  with region `"hmd"`, `"vmd"`, or `"data"`. `failed_constraints: []` signifies
-  that all seven constraints passed. **Rejected candidates are not exported**;
-  `omni_validate/4` can diagnose an individual rejected boundary.
+  order. Each candidate has `candidate_id` such as `PMC123/t0/h1_v0`, `hmd`
+  and `vmd` as **counts** (the number of HMD rows and VMD columns; schema 1.x
+  files stored the last HMD row and VMD column instead), and one
+  `{cell_id, region}` label per distinct raster cell, with region `"hmd"`,
+  `"vmd"`, or `"data"`. `failed_constraints: []` signifies that all ten
+  constraints passed. **Rejected candidates are not exported**;
+  `omni_validate/4` can diagnose an individual rejected boundary. Each
+  candidate also has `geometric_certificate`: `{status: "certified", claim:
+  "columns"|"rows", file, rejections: null}` naming the certificate file, or
+  `{status: "not_labelable", claim: null, file: null, rejections: {columns,
+  rows}}` with the kernel's reason for rejecting each claim.
 - `status`: `"unique"` (one candidate), `"ambiguous"` (multiple), or
   `"abstained"` (none), plus nullable `abstention_reason`. Structural validity
   does **not** establish that a human would assign the same header semantics.
@@ -849,6 +949,45 @@ supplies `table_uid`, `candidate_count`, `annotation_status`, and `jsonl_file`.
 Publication validates the JSONL record count, identities, statuses, and
 candidate counts against this metadata and the HTML file count before replacing
 an existing paper snapshot. A zero-table paper publishes an empty `tables.jsonl`.
+
+### Geometric labelability certificates
+
+A boundary `(Hmd, Vmd)` makes a table **geometrically labelable** if its data
+columns correspond one to one with the root-to-sink paths of the HMD graph,
+or its data rows with those of the VMD graph. The HMD graph has an edge
+`A -> B` when, in a data column, cell `A` is directly above cell `B` and
+`A` differs from `B`; a column's path is its HMD cell ids, top to bottom,
+without repeats. So no two columns share a path, and no path in the graph
+belongs to no column (which excludes inverted hierarchies). The VMD graph
+is the same, read left to right over the data rows. In addition, no cell may
+cross the HMD line (in any column) or, below the HMD, the VMD line.
+
+- `src/certificate_kernel.pl` is the trusted checker; it depends only on
+  SWI-Prolog's standard libraries and states the definition precisely.
+- `src/table_certify.pl` (not trusted) builds certificates with `certify/4,5`
+  and writes them with `write_certificate/2`. Every certificate it returns
+  has been accepted by the kernel.
+
+For each candidate the build writes `certificateN_hH_vV.pl` if it is
+labelable. Before publishing, the stage validator reads every certificate
+back **as data** (its directives are never run), compares it with a freshly
+generated one, and has the kernel check it. Check a published certificate
+yourself with only the kernel:
+
+```bash
+swipl -p certificate_kernel=src dataset/papers/PMC123/certificate0_h1_v1.pl
+```
+
+It prints `certificate accepted` and exits with status 0, or prints the
+reason and exits with status 1. The certificate locates the kernel through
+the `certificate_kernel` search path, so whoever checks it decides which
+kernel to trust. In the Docker image the kernel is in `/app/src`.
+
+Labelability is checked independently of the ten constraints. On random
+tables the two agree on every candidate except one known case: constraint 1
+checks the HMD line only from column `Vmd-1` rightwards, so a VMD cell further
+left may cross it; such a candidate is kept with status `"not_labelable"`.
+Tests: `tests/certificate_regression_tests.pl`.
 
 All coordinates, table indices, and cell IDs start at **zero**. XPath element
 sibling indices start at **one** (as required by XPath). Cell labels follow
@@ -861,15 +1000,16 @@ F10-specific suite is `tests/machine_annotations_regression_tests.pl`.
 
 ### Indexed boundary search and streamed rendering (F11)
 
-`src/parse_constraints.pl` retains the original seven public structural
-predicates and `omni_validate/3-4` for precise explanations and compatibility.
+`src/parse_constraints.pl` keeps the ten public constraint predicates and
+`omni_validate/3-4` as the reference, for precise explanations.
 `valid_boundaries/2` now calls `src/fast_boundaries.pl` after validating the
 raster's shape **once**. The new evaluator makes a single pass through cell
 adjacencies and builds ordered-association summaries for merged-cell
 crossings, hierarchy witnesses, and inversions. Per-header-row bounds reduce
 the candidate-column search range before further checks. It returns exactly
-the same candidate list, in the same `(hmd,vmd)` order, as the seven original
-predicates under the F01 nonempty-region boundary contract.
+the same candidate list, in the same `(hmd,vmd)` order, as the reference
+predicates. Its summaries are indexed by the last HMD row and VMD column; the
+cases with no HMD or no VMD are checked separately.
 
 In contrast to the old repeated `nth0/3` scans, the indexed construction uses
 `O(R*C*log(R+C))` time and `O(R+C)` auxiliary summary space for an `R x C`
@@ -979,17 +1119,20 @@ end-to-end complete run manifests, treat the warning as an unsuccessful run.
 hypotheses**. Even a single valid boundary does not imply the data cells are
 semantically correct. JSONL table records and paper metadata explicitly mark
 `semantic_validation: "unverified"`; gold labels must come from independent
-human annotation. Tables with HMD-only, VMD-only, or no headers cannot be
-faithfully represented by the current required HMD+VMD boundary scheme.
+human annotation. Tables with HMD only are represented by `Vmd = 0`, and
+plain grids with VMD only by `Hmd = 0`; a table with merged cells is always
+read with HMD rows (constraint 9), and tables without any headers have no
+admissible boundary.
 
 To measure semantic usefulness, prepare a **human-labeled** JSONL file, one
 record per source table, of the shape:
 
 ```json
-{"pmc_id":"PMC123456", "table_index":0, "gold_boundary":{"hmd":0,"vmd":0}}
+{"pmc_id":"PMC123456", "table_index":0, "gold_boundary":{"hmd":1,"vmd":1}}
 ```
 
-For a table that genuinely has no HMD+VMD segmentation, use
+`hmd` and `vmd` are counts, as in `tables.jsonl`. For a table that genuinely
+has no header segmentation at all, use
 `"gold_boundary":null`. Then run:
 
 ```sh

@@ -14,7 +14,7 @@
 %      (table_annotator.pl), or one uncolored view when no boundary exists.
 %
 % Output files go to OutDir (default: "<File>.tables"):
-%   table<N>_hmd<H>_vmd<V>.html   table N colored for boundary (H,V)
+%   table<N>_hmd<H>_vmd<V>.html   table N colored for H HMD rows, V VMD columns
 %   table<N>_unannotated.html     table N has no admissible boundary
 % N counts from 0. Before writing, previous files named table*.html in OutDir
 % are removed so stale candidates from an earlier run cannot be mistaken for

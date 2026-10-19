@@ -73,6 +73,7 @@
 :- consult(table_layout_generator).
 :- consult(parse_constraints).
 :- consult(table_annotator).
+:- consult(table_certify).
 :- consult(table_machine_records).
 :- use_module(provenance_manifest).
 
@@ -781,7 +782,7 @@ write_paper_records(PaperName, Title, Records, Rasters, NumParsed, StageDir) :-
       open(MetadataFile, write, Stream, [encoding(utf8)]),
       json_write_dict(Stream,
                       json{pmc_id:PaperName, title:Title, status:"complete",
-                           schema_version:"1.0", jsonl_file:"tables.jsonl",
+                           schema_version:"3.0", jsonl_file:"tables.jsonl",
                            table_count:NumTables, parsed_table_count:NumParsed,
                            tables:TableMetadata}),
       close(Stream)),
@@ -799,6 +800,7 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
              save_input_table(StageDir, N, Table, HtmlContext),
              machine_table_record(PaperName, N, Table, Context, Raster,
                                   Boundaries, MachineRecord, Meta),
+             save_table_certificates(StageDir, TableUid, N, Raster, Boundaries),
              atom_json_dict(JsonLine, MachineRecord, [width(0)]),
              format(JsonlStream, '~w~n', [JsonLine]) ),
            Error, throw(error(table_output_failure(N, Error),
@@ -831,8 +833,8 @@ write_recoverable_paper(PaperName, Title, Records, NumParsed, NumRejected,
    -> throw(error(all_tables_quarantined(NumTables),
                   context(process_paper/5, 'No usable tables; snapshot retained')))
    ; true ),
-   ( NumRejected =:= 0 -> Status = "complete", Version = "1.0"
-   ; Status = "partial", Version = "1.1" ),
+   ( NumRejected =:= 0 -> Status = "complete", Version = "3.0"
+   ; Status = "partial", Version = "3.1" ),
    directory_file_path(StageDir, 'metadata.json', MetadataFile),
    setup_call_cleanup(
       open(MetadataFile, write, Stream, [encoding(utf8)]),
@@ -893,7 +895,8 @@ try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
    catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
            save_input_table(StageDir, Index, Table, HtmlContext),
            machine_table_record(PaperName, Index, Table, Context, Raster,
-                                Boundaries, Machine, Meta)
+                                Boundaries, Machine, Meta),
+           save_table_certificates(StageDir, TableUid, Index, Raster, Boundaries)
          -> Result = ok(Boundaries, Machine, Meta)
          ; throw(error(table_output_failed, context(process_paper/5, 'Writer failed'))) ),
          Error,
@@ -924,14 +927,14 @@ quarantined_machine_record(PaperName, Index, Context, Code, Message,
                            Record, Metadata) :-
    format(string(TableUid), '~s/t~d', [PaperName, Index]),
    Diagnostic = json{code:Code, detail:Message},
-   Record = json{schema_version:"1.1", pmc_id:PaperName, table_index:Index,
+   Record = json{schema_version:"3.1", pmc_id:PaperName, table_index:Index,
                  table_uid:TableUid, source_table_id:Context.table_id,
                  source_path:Context.source_path,
                  source_table_html:Context.source_table_html,
                  context:Context, raster:null, rows:null, columns:null,
                  cells:[], candidates:[], status:"quarantined",
                  abstention_reason:"table_processing_error", error:Diagnostic,
-                 algorithm:"seven_structural_constraints_v1",
+                 algorithm:"ten_structural_constraints_counts_v2",
                  semantic_validation:"unverified",
                  interpretation_kind:"structural_boundary_hypotheses"},
    put_dict(_{table_uid:TableUid, jsonl_file:"tables.jsonl",
@@ -947,8 +950,8 @@ validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
    read_table_jsonl(JsonlFile, Records),
    directory_file_path(StageDir, 'metadata.json', MetadataFile),
    read_json_file(MetadataFile, Meta),
-   ( ExpectedRejected =:= 0 -> Status = "complete", Version = "1.0"
-   ; Status = "partial", Version = "1.1" ),
+   ( ExpectedRejected =:= 0 -> Status = "complete", Version = "3.0"
+   ; Status = "partial", Version = "3.1" ),
    ( Meta.status == Status, Meta.schema_version == Version,
      Meta.table_count =:= ExpectedTables,
      Meta.parsed_table_count =:= ExpectedParsed,
@@ -962,7 +965,9 @@ validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
    -> true
    ; throw(error(incomplete_paper_stage(recovery_metadata_mismatch),
                  context(process_paper/5, 'Recovery snapshot inconsistent'))) ),
-   sort(['metadata.json', 'tables.jsonl'|HtmlNames], ExpectedFiles),
+   staged_certificate_names(Records, CertificateNames),
+   append(HtmlNames, CertificateNames, TableFiles),
+   sort(['metadata.json', 'tables.jsonl'|TableFiles], ExpectedFiles),
    directory_files(StageDir, RawFiles),
    exclude(is_dot_entry, RawFiles, ActualFiles0),
    sort(ActualFiles0, ActualFiles),
@@ -976,6 +981,7 @@ validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
             ( Size > 0 -> true
             ; throw(error(incomplete_paper_stage(empty_table(Name)),
                           context(process_paper/5, 'Empty staged table'))) ) )),
+   verify_staged_certificates(StageDir, Records),
    size_file(MetadataFile, MetaSize), MetaSize > 0,
    ( ExpectedTables =:= 0 -> true
    ; size_file(JsonlFile, JsonlSize), JsonlSize > 0 ).
@@ -996,7 +1002,7 @@ recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
    format(atom(HtmlName), 'candidates~d.html', [Index]),
    format(atom(InputName), 'input_table~d.html', [Index]),
    ( Record.status == "quarantined"
-   -> Record.schema_version == "1.1",
+   -> Record.schema_version == "3.1",
       Record.raster == null,
       Record.cells == [], Record.candidates == [],
       Record.abstention_reason == "table_processing_error",
@@ -1010,7 +1016,7 @@ recovery_records_consistent([Record|Records], [Context|Contexts], Pmc,
       Context.candidate_count =:= 0,
       Parsed1 = Parsed0, Rejected1 is Rejected0 + 1,
       Files = RestFiles
-   ; Record.schema_version == "1.0",
+   ; Record.schema_version == "3.0",
      machine_record_consistent(Record),
      ( Record.status == "abstained"
      -> Record.candidates == [], Record.abstention_reason \== null,
@@ -1058,7 +1064,10 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
              format(atom(Name), Format, [N]) ),
            TableFiles),
    sort(['metadata.json', 'tables.jsonl'|TableFiles], Expected),
-   sort(ActualFiles, Actual),
+   % Which certificates must exist depends on the records, read below.
+   partition(is_certificate_file_name, ActualFiles,
+             ActualCertificates0, OtherFiles),
+   sort(OtherFiles, Actual),
    (  Actual == Expected
    -> true
    ;  throw(error(incomplete_paper_stage(file_set_mismatch(Expected, Actual)),
@@ -1094,6 +1103,63 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
    -> true
    ;  throw(error(incomplete_paper_stage(metadata_mismatch),
                   context(process_paper/4, 'Staged metadata is inconsistent')))
+   ),
+   staged_certificate_names(MachineRecords, ExpectedCertificates),
+   sort(ActualCertificates0, ActualCertificates),
+   (  ActualCertificates == ExpectedCertificates
+   -> true
+   ;  throw(error(incomplete_paper_stage(
+                     certificate_set_mismatch(ExpectedCertificates,
+                                              ActualCertificates)),
+                  context(process_paper/4, 'Staged certificates mismatch')))
+   ),
+   verify_staged_certificates(StageDir, MachineRecords).
+
+% --- geometric certificates ------------------------------------------------
+
+% save_table_certificates(+StageDir, +TableUid, +Index, +Raster, +Boundaries)
+% Writes one certificate per boundary that is geometrically labelable.
+save_table_certificates(StageDir, TableUid, Index, Raster, Boundaries) :-
+   machine_certificate_files(TableUid, Index, Raster, Boundaries, Files),
+   forall(member(Name-Facts, Files),
+          ( directory_file_path(StageDir, Name, File),
+            write_certificate(File, Facts) )).
+
+is_certificate_file_name(Name) :-
+   sub_atom(Name, 0, _, _, certificate),
+   file_name_extension(_, pl, Name).
+
+% The certificate files the records name, sorted.
+staged_certificate_names(Records, Names) :-
+   findall(Name,
+           ( member(Record, Records),
+             member(Candidate, Record.candidates),
+             Candidate.geometric_certificate.status == "certified",
+             atom_string(Name, Candidate.geometric_certificate.file) ),
+           Names0),
+   sort(Names0, Names).
+
+% Every certificate a record names is read back as data and must be exactly
+% the certificate certify/5 gives for the record's raster and boundary, and
+% the kernel must accept it. The records themselves were already checked
+% against certify/5 by machine_record_consistent/1.
+verify_staged_certificates(StageDir, Records) :-
+   forall(( member(Record, Records),
+            member(Candidate, Record.candidates),
+            Candidate.geometric_certificate.status == "certified" ),
+          verify_staged_certificate(StageDir, Record, Candidate)).
+
+verify_staged_certificate(StageDir, Record, Candidate) :-
+   atom_string(Name, Candidate.geometric_certificate.file),
+   directory_file_path(StageDir, Name, File),
+   (  catch(read_certificate_file(File, Facts), _, fail),
+      certify(Record.raster, Candidate.hmd, Candidate.vmd, Record.table_uid,
+              certificate(Expected)),
+      Facts == Expected,
+      check_certificate(Facts)
+   -> true
+   ;  throw(error(incomplete_paper_stage(invalid_certificate(Name)),
+                  context(process_paper/4, 'Staged certificate is not valid')))
    ).
 
 machine_records_match_metadata(Records, Contexts, Pmc, ParsedCount) :-
@@ -1136,7 +1202,9 @@ machine_record_consistent(Record) :-
    % Recompute the complete candidate set once using the indexed checker.
    % This verifies membership, order and completeness as well as labels.
    valid_boundaries(Record.raster, ExpectedBoundaries),
-   maplist(machine_record_candidate_consistent(Record.table_uid, FirstSlots),
+   maplist(machine_record_candidate_consistent(Record.table_uid,
+                                               Record.table_index,
+                                               Record.raster, FirstSlots),
            ExpectedBoundaries, Record.candidates).
 
 machine_record_cell_consistent(Id-(Row-Col), Cell) :-
@@ -1147,8 +1215,9 @@ machine_record_cell_consistent(Id-(Row-Col), Cell) :-
    -> string(Cell.source_xpath), Cell.source_xpath \== ""
    ; Cell.kind == "synthetic_gap", Cell.source_xpath == null ).
 
-machine_record_candidate_consistent(TableUid, FirstSlots, Boundary, Candidate) :-
-   machine_candidate(TableUid, FirstSlots, Boundary, Expected),
+machine_record_candidate_consistent(TableUid, Index, Raster, FirstSlots,
+                                    Boundary, Candidate) :-
+   machine_candidate(TableUid, Index, Raster, FirstSlots, Boundary, Expected),
    Candidate == Expected.
 
 is_dot_entry('.').
@@ -1278,13 +1347,27 @@ save_annotated_candidates(Stream, Context, Boundaries, Annotations) :-
    maplist(save_annotated_candidate(Stream, Context), Boundaries, Annotations).
 
 save_annotated_candidate(Stream, Context, json{hmd:Hmd,vmd:Vmd}, Annotation) :-
+   boundary_description(Hmd, Vmd, Description),
    contextual_table_annotation(Context, Annotation, WithContext),
    ( get_dict(table_uid, Context, TableUid)
    -> format(string(CandidateId), '~s/h~d_v~d', [TableUid, Hmd, Vmd])
    ;  format(string(CandidateId), 'h~d_v~d', [Hmd, Vmd]) ),
    format(Stream,
-          '<h3 class="boundary-candidate" data-candidate-id="~s" data-hmd="~d" data-vmd="~d">Candidate h~d_v~d (HMD=~d, VMD=~d)</h3>~n~s~n',
-          [CandidateId, Hmd, Vmd, Hmd, Vmd, Hmd, Vmd, WithContext]).
+          '<h3 class="boundary-candidate" data-candidate-id="~s" data-hmd="~d" data-vmd="~d">Candidate h~d_v~d (~s)</h3>~n~s~n',
+          [CandidateId, Hmd, Vmd, Hmd, Vmd, Description, WithContext]).
+
+% boundary_description(+Hmd, +Vmd, -Text), e.g. "2 HMD rows, no VMD columns".
+boundary_description(Hmd, Vmd, Text) :-
+   region_count_text(Hmd, "HMD row", HText),
+   region_count_text(Vmd, "VMD column", VText),
+   format(string(Text), "~s, ~s", [HText, VText]).
+
+region_count_text(0, Noun, Text) :- !,
+   format(string(Text), "no ~ss", [Noun]).
+region_count_text(1, Noun, Text) :- !,
+   format(string(Text), "1 ~s", [Noun]).
+region_count_text(N, Noun, Text) :-
+   format(string(Text), "~d ~ss", [N, Noun]).
 
 % Render external JATS metadata as separate HTML, NEVER as extra table cells:
 % otherwise the constraint checker would be given a different raster.
@@ -1358,15 +1441,15 @@ final_misaligned(Record, Review, [Heading, Reason, Details]) :-
    Heading = element(h2, [class='final-status'],
                      ['Error: Misalignment Between LLM And Formal Table Parser']),
    llm_reason_paragraph(Review, Reason),
-   findall(Id, ( member(C, Record.candidates), get_dict(candidate_id, C, Id0),
-                 format(string(Id), "~w", [Id0]) ), Ids),
-   atomics_to_string(Ids, ", ", IdText),
    (  is_dict(Review.llm_boundary)
-   -> format(string(LlmText),
-             "LLM: last column-header row ~w, last row-header column ~w.",
-             [Review.llm_boundary.hmd, Review.llm_boundary.vmd])
-   ;  LlmText = "LLM: the table has no column-header rows and row-header columns." ),
-   format(string(DetailText), "~s Formal table parser candidates: ~s.", [LlmText, IdText]),
+   -> boundary_description(Review.llm_boundary.hmd, Review.llm_boundary.vmd, Llm),
+      format(string(LlmText), "LLM: ~s.", [Llm])
+   ;  LlmText = "LLM: no answer." ),
+   findall(D, ( member(C, Record.candidates),
+                boundary_description(C.hmd, C.vmd, D0),
+                format(string(D), "~w (~s)", [C.candidate_id, D0]) ), Described),
+   atomics_to_string(Described, "; ", CandidateText),
+   format(string(DetailText), "~s Formal table parser candidates: ~s.", [LlmText, CandidateText]),
    Details = element(p, [class='final-details'], [DetailText]).
 
 final_nothing_to_do(Record, [Heading, Why]) :-

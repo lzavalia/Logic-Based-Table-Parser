@@ -4,6 +4,7 @@
 **Evidence base:** the 20-paper run in `first_test.zip` (49 tables), plus a Python reference model written for this design.
 **Reference model and property test (both run, both pass):** `tools/section_rows_model.py`, `tests/section_rows_property_test.py`.
 **Not yet done:** any Prolog implementation. The Prolog sketches below are untested.
+**Note:** this proposal predates the change to count-form boundaries. Its `(H, V)` and `{hmd, vmd}` are the old last HMD row and last VMD column (today's `(H+1, V+1)`), its schema versions are the 1.x ones, and it assumes both regions exist. Its measurements were also taken under the old rules, which required both HMD and VMD.
 
 ---
 

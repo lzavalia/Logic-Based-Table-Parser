@@ -1,7 +1,12 @@
-% F11 indexed boundary search.  The seven public predicates in
-% parse_constraints.pl remain the reference specification and are used by
-% omni_validate/3-4.  This evaluator compiles their exact adjacency tests
-% once per rectangular raster, so no candidate requires nth0/3 or a scan.
+% F11 indexed boundary search.  The public predicates in parse_constraints.pl
+% remain the reference specification and are used by omni_validate/3-4.
+% This evaluator compiles their exact adjacency tests once per rectangular
+% raster, so no candidate requires nth0/3 or a scan.
+%
+% Boundaries are counts (Hmd HMD rows, Vmd VMD columns). The summaries below
+% are indexed by the LAST HMD row H = Hmd-1 and the last VMD column V = Vmd-1,
+% the form of the original constraints; H = -1 or V = -1 stands for an empty
+% region and is handled separately (fast_count_candidate/4).
 %
 % For a raster with R rows and C columns, preparation costs O(R*C +
 % (R+C)*log(R+C)) with O(R+C) summary space.  Candidate evaluation costs
@@ -16,21 +21,51 @@
 % Caller has already established valid_raster_shape/3.
 fast_valid_boundaries(Raster, Rows, Cols, Boundaries) :-
    fast_boundary_features(Raster, Rows, Cols, Features),
-   LastH is Rows - 2,
-   LastV is Cols - 2,
-   findall(json{hmd:H, vmd:V},
-           ( between(0, LastH, H),
-             fast_candidate_v_range(Features, H, LastV, FirstV, EndV),
-             between(FirstV, EndV, V),
-             fast_column_checks(Features, H, V) ),
+   % Constraint 8: at least one data row and one data column remain.
+   MaxHmd is Rows - 1,
+   MaxVmd is Cols - 1,
+   findall(json{hmd:Hmd, vmd:Vmd},
+           ( between(0, MaxHmd, Hmd),
+             fast_count_candidate(Features, Hmd, MaxVmd, Vmd) ),
            Boundaries).
+
+% fast_count_candidate(+Features, +Hmd, +MaxVmd, -Vmd), Vmd ascending.
+% No HMD: only for a plain grid (constraint 9). The row rules (1, 2, 4, 6)
+% then have nothing to check, and (0, 0) is excluded by constraint 7, so Vmd
+% starts at 1.
+fast_count_candidate(Features, 0, MaxVmd, Vmd) :- !,
+   arg(8, Features, Plain),
+   Plain == true,
+   between(1, MaxVmd, Vmd),
+   V is Vmd - 1,
+   fast_column_checks(Features, -1, V).
+fast_count_candidate(Features, Hmd, MaxVmd, Vmd) :-
+   H is Hmd - 1,
+   LastV is MaxVmd - 1,
+   (  Vmd = 0,
+      fast_no_vmd_admissible(Features, H)
+   ;  fast_candidate_v_range(Features, H, LastV, FirstV, EndV),
+      between(FirstV, EndV, V),
+      fast_column_checks(Features, H, V),
+      Vmd is V + 1 ).
+
+% No VMD (V = -1): the column rules (0, 3, 5) have nothing to check. The row
+% rules then apply from column 0: no vertical merge across H/H+1 (C1) and no
+% horizontal merge in row H (C6) anywhere, no inversion in the HMD (C4), and
+% a splitting witness for every HMD row above H (C2).
+fast_no_vmd_admissible(features(Keys, Crossing, RSplit, RInvert,_,_,_,_), H) :-
+   get_assoc(H, Keys, KeyMax), KeyMax < 0,
+   get_assoc(H, Crossing, CrossMax), CrossMax < 0,
+   get_assoc(H, RInvert, InvMax), InvMax < 0,
+   get_assoc(H, RSplit, SplitMin), SplitMin >= 0.
 
 % features(KeyMax, CrossingRowMax, SplitRowPrefixMin,
 %          InversionRowPrefixMax, SameColumnMaxRow,
-%          SplitColumnPrefixMin, InversionColumnPrefixMax)
+%          SplitColumnPrefixMin, InversionColumnPrefixMax, PlainGrid)
 fast_boundary_features(Raster, Rows, Cols,
                        features(Keys, Crossing, RSplit, RInvert,
-                                CSame, CSplit, CInvert)) :-
+                                CSame, CSplit, CInvert, Plain)) :-
+   ( plain_grid(Raster) -> Plain = true ; Plain = false ),
    empty_assoc(E),
    scan_fast_rows(Raster, 0, fast_state(E,E,E,E,E,E,E),
                   fast_state(Keys,Crossing,RawRSplit,RawRInvert,
@@ -119,7 +154,7 @@ prefix_extrema_from(Index, Limit, RawSplit, RawInvert,
 % C2: for every I<H a splitting witness exists at J>V.
 % C4: no inverted horizontal pattern for I<H at J>V.
 % C6: no horizontal equality on H at J>=V.
-fast_candidate_v_range(features(Keys, Crossing, RSplit, RInvert,_,_,_),
+fast_candidate_v_range(features(Keys, Crossing, RSplit, RInvert,_,_,_,_),
                        H, LastV, FirstV, EndV) :-
    get_assoc(H, Keys, KeyMax),
    get_assoc(H, Crossing, CrossMax),
@@ -130,10 +165,11 @@ fast_candidate_v_range(features(Keys, Crossing, RSplit, RInvert,_,_,_),
 
 % C0: a horizontal merge across V/V+1 cannot occur below H.
 % C3: every J<V needs a vertical splitting witness at I>H.
-% C5: no inverted vertical pattern at I>=H for J<V.
-fast_column_checks(features(_,_,_,_,CSame,CSplit,CInvert), H, V) :-
+% C5: no inverted vertical pattern at I>=H for J<V; with no HMD (H = -1)
+%     that means at any row I >= 0.
+fast_column_checks(features(_,_,_,_,CSame,CSplit,CInvert,_), H, V) :-
    ( get_assoc(V, CSame, LastSame) -> LastSame =< H ; true ),
    get_assoc(V, CSplit, WitnessMin),
    WitnessMin > H,
    get_assoc(V, CInvert, LastInversion),
-   LastInversion < H.
+   LastInversion < max(H, 0).

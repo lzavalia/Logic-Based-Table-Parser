@@ -9,7 +9,7 @@ Given a phrase such as `"dementia with lewy bodies"`, the agent:
 1. **Selects papers.** Claude searches PubMed Central through one tool, `search_pmc`, and picks up to 20 open-access papers. It sees only short result lines (id, date, journal, title).
 2. **Downloads the full text** of each paper as XML from NCBI's public API, pausing and retrying when NCBI's rate limit is reached.
 3. **Extracts every `<table>` element** and lays it out as a *raster*: a grid in which each slot holds the id of the cell covering it, so merged cells span several slots (`table_layout_generator.pl`). Untrusted spans and raster dimensions are checked against explicit per-table and per-paper resource budgets before full grid materialization; oversized papers fail with a structured error rather than consuming unbounded memory.
-4. **Finds the header boundaries.** Every candidate pair (HMD boundary row, VMD boundary column) is tested against the seven parse constraints; the pairs that satisfy all of them are kept (`parse_constraints.pl`).
+4. **Finds the header boundaries.** Every candidate pair (number of HMD rows, number of VMD columns; either may be 0) is tested against the ten parse constraints: the seven original ones, "not entirely data", "not entirely metadata", and "no HMD rows only in a plain grid without merged cells"; the pairs that satisfy all of them are kept (`parse_constraints.pl`).
 5. **Annotates the table.** For each valid pair the original table is colored: HMD cells green, VMD cells blue, data cells gray (`table_annotator.pl`).
 6. **Saves the result** as `dataset/papers/PMC<id>/candidatesN.html`, with `metadata.json` for the article title, table counts, and JATS label/caption/footnote context with source paths and original unannotated table markup. Outputs are staged and replaced per PMC ID to avoid title collisions and stale tables.
 
@@ -41,7 +41,7 @@ Yellow is the only step that uses the language model; blue steps are determinist
 
 - **No model cost for the hard part.** Deciding where a table's headers end is done by logic, so the model never reads a table. A 20-paper run that produced 38 tables used about 16,600 tokens (roughly $0.06), all of it spent choosing papers.
 - **Deterministic and repeatable.** The same table always yields the same candidate boundaries, so results do not drift between runs. Repeatable is not the same as correct: candidates need comparison against human-labeled tables before they are used as training or evaluation labels.
-- **It abstains only when no boundary exists, and says so.** A table with no boundary satisfying all seven constraints is saved uncolored with an explicit abstention reason instead of being given a forced labelling. In the 20-paper run this happened for 1 of 38 tables. A table that does admit a boundary is *not* thereby labelled correctly: for example, an entirely unmerged grid always admits `(0,0)` whether or not it has real headers. Treat every candidate as unverified (`semantic_validation: "unverified"`).
+- **It abstains only when no boundary exists, and says so.** A table with no boundary satisfying all ten constraints is saved uncolored with an explicit abstention reason instead of being given a forced labelling. In the 20-paper run this happened for 1 of 38 tables. A table that does admit a boundary is *not* thereby labelled correctly: for example, an entirely unmerged grid always admits a header row `(1,0)`, a header column `(0,1)` and both `(1,1)`, whether or not it has real headers. Treat every candidate as unverified (`semantic_validation: "unverified"`).
 - **Every decision is explainable.** A rejected boundary can be traced to the first constraint it violates (`omni_validate/4`), so a wrong or missing annotation can be diagnosed rather than merely observed.
 - **Content-independent.** The constraints look only at the table's structure (which slots belong to the same merged cell), not at its text. They apply unchanged across subjects, languages and vocabularies.
 - **Merged cells are evidence, not noise.** Row and column spans, which make tables hard for text-based methods, are exactly what the constraints reason about.
@@ -58,7 +58,7 @@ PMC eFetch payloads are parsed as **JATS XML**, using SWI's XML dialect with
 parser diagnostics treated as errors. Standalone HTML helpers remain tolerant
 of loose HTML. The parser normalizes qualified JATS element names before
 extracting and rasterizing `<table>` elements; it does not change the
-semantics of the seven boundary constraints. Before publishing a paper,
+semantics of the boundary constraints. Before publishing a paper,
 `process_paper/4` requires exactly one JATS article and a matching `pmc`
 `article-id` inside `<front><article-meta>`. A genuine, well-formed paper
 with no tables may still produce a complete zero-table result.
@@ -75,12 +75,12 @@ for the fetch adapter. The local, network-free regression suite is
 
 ### Machine-readable output (F10)
 
-The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `candidatesN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot.
+The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `candidatesN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot. Each candidate also carries a geometric labelability certificate (schema 3.0): when the data columns (or rows) correspond one to one with the paths of the HMD (or VMD) graph, a self-checking `certificateN_hH_vV.pl` is written next to the table and verified by the trusted kernel `certificate_kernel.pl` before publication.
 
 ### Boundary scalability (F11)
 
 `valid_boundaries/2` now precomputes adjacency summaries and maintains the same
-ordered set of accepted boundaries as the original seven predicates. The
+ordered set of accepted boundaries as the reference predicates. The
 inspection renderer reuses the input raster and writes HTML candidates one at a
 time. Full per-candidate labels in `tables.jsonl` remain potentially quadratic
 in table size and candidate count, so attempts requiring more than 500,000
@@ -133,6 +133,12 @@ candidates do not is `unparseable`; a table the parser abstained on stays
 and `final_tableN.html` shows each table's outcome: "Parse Succeeded" with the
 agreed table, the misalignment error with the LLM's reason, or "Nothing To
 Do.".
+As the last stage, `table_export.pl` writes `papers/PMC<id>/final_tables.json`:
+each `valid` table as `subtables` (one for now), each with `horizontal metadata`
+and `vertical metadata` as nested `{"<text>": [children]}` trees mirroring the
+HTML header hierarchy, `data` as a grid with merged cells unmerged, and the
+`residual_corner`. Central
+metadata (subtables) is not supported yet.
 Agreement between parser and model is still not a verified label.
 
 ## Offline regression CI (F16)

@@ -6,14 +6,18 @@
 % same element-only numbering as jats_table_records/2. They remain unambiguous
 % when attributes/IDs are missing or duplicated, and do not rely on namespaces.
 %
-% Schema 1.0: one JSON object per table in tables.jsonl. Coordinates and cell
+% Schema 3.0: one JSON object per table in tables.jsonl. Coordinates and cell
 % IDs are zero-based; candidate IDs are stable within a PMC and table index.
+% Each candidate carries a geometric_certificate (table_certify.pl): either
+% the claim proved and the certificate file written next to the table, or
+% the kernel's reason for rejecting each claim.
 
 machine_table_record(Pmc, Index, Table, Context, Raster, Boundaries,
                      Record, TableMetadata) :-
    format(string(TableUid), '~s/t~d', [Pmc, Index]),
    machine_source_cells(Table, Context, Raster, Cells, FirstSlots),
-   maplist(machine_candidate(TableUid, FirstSlots), Boundaries, Candidates),
+   maplist(machine_candidate(TableUid, Index, Raster, FirstSlots),
+           Boundaries, Candidates),
    length(Candidates, NumCandidates),
    (  NumCandidates =:= 0
    -> Status = "abstained", Abstention = "no_boundary_satisfies_constraints"
@@ -23,14 +27,14 @@ machine_table_record(Pmc, Index, Table, Context, Raster, Boundaries,
    ),
    length(Raster, Rows),
    ( Raster = [FirstRow|_] -> length(FirstRow, Cols) ; Cols = 0 ),
-   Record = json{schema_version:"1.0", pmc_id:Pmc, table_index:Index,
+   Record = json{schema_version:"3.0", pmc_id:Pmc, table_index:Index,
                  table_uid:TableUid, source_table_id:Context.table_id,
                  source_path:Context.source_path,
                  source_table_html:Context.source_table_html,
                  context:Context, raster:Raster, rows:Rows, columns:Cols,
                  cells:Cells, candidates:Candidates, status:Status,
                  abstention_reason:Abstention,
-                 algorithm:"seven_structural_constraints_v1",
+                 algorithm:"ten_structural_constraints_counts_v2",
                  semantic_validation:"unverified",
                  interpretation_kind:"structural_boundary_hypotheses"},
    put_dict(_{table_uid:TableUid, jsonl_file:"tables.jsonl",
@@ -130,12 +134,47 @@ machine_cell_entry(PathsAssoc, RealCount, Id-(Row-Col), Cell) :-
    ;  Cell = json{cell_id:Id, kind:"synthetic_gap", row:Row, column:Col,
                   source_xpath: null, tag: null, text:""} ).
 
-machine_candidate(TableUid, FirstSlots, json{hmd:Hmd,vmd:Vmd}, Candidate) :-
+machine_candidate(TableUid, Index, Raster, FirstSlots, json{hmd:Hmd,vmd:Vmd},
+                  Candidate) :-
    format(string(CandidateId), '~s/h~d_v~d', [TableUid, Hmd, Vmd]),
    maplist(machine_cell_label(Hmd, Vmd), FirstSlots, Labels),
+   machine_certificate(TableUid, Index, Raster, Hmd, Vmd, Certificate),
    Candidate = json{candidate_id:CandidateId, hmd:Hmd, vmd:Vmd,
-                    labels:Labels, failed_constraints:[]}.
+                    labels:Labels, failed_constraints:[],
+                    geometric_certificate:Certificate}.
 
 machine_cell_label(Hmd, Vmd, Id-(R-C), json{cell_id:Id, region:Name}) :-
    slot_region(Hmd, Vmd, R, C, Region),
    atom_string(Region, Name).
+
+% machine_certificate(+TableUid, +Index, +Raster, +Hmd, +Vmd, -Certificate)
+% The JSON summary of certify/5: the claim proved and the file holding the
+% certificate, or, for a boundary that is not geometrically labelable, the
+% kernel's reason for rejecting each claim.
+machine_certificate(TableUid, Index, Raster, Hmd, Vmd, Certificate) :-
+   certify(Raster, Hmd, Vmd, TableUid, Result),
+   (  Result = certificate(Facts)
+   -> memberchk(claim(Claim), Facts),
+      atom_string(Claim, ClaimName),
+      certificate_file_name(Index, Hmd, Vmd, File),
+      atom_string(File, FileName),
+      Certificate = json{status:"certified", claim:ClaimName,
+                         file:FileName, rejections:null}
+   ;  Result = not_labelable([columns-ColumnWhy, rows-RowWhy]),
+      format(string(ColumnText), '~q', [ColumnWhy]),
+      format(string(RowText), '~q', [RowWhy]),
+      Certificate = json{status:"not_labelable", claim:null, file:null,
+                         rejections:json{columns:ColumnText, rows:RowText}}
+   ).
+
+certificate_file_name(Index, Hmd, Vmd, File) :-
+   format(atom(File), 'certificate~d_h~d_v~d.pl', [Index, Hmd, Vmd]).
+
+% machine_certificate_files(+TableUid, +Index, +Raster, +Boundaries, -Files)
+% Files is File-Facts for every boundary with an accepted certificate.
+machine_certificate_files(TableUid, Index, Raster, Boundaries, Files) :-
+   findall(File-Facts,
+           ( member(json{hmd:Hmd, vmd:Vmd}, Boundaries),
+             certify(Raster, Hmd, Vmd, TableUid, certificate(Facts)),
+             certificate_file_name(Index, Hmd, Vmd, File) ),
+           Files).

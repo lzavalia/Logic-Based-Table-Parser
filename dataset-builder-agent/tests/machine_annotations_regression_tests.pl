@@ -33,30 +33,100 @@ machine_outputs(Root, Pmc, Records, Metadata) :-
 
 :- begin_tests(machine_annotations).
 
-test(merged_cells_produce_two_distinct_qualified_candidates,
+test(merged_cells_produce_distinct_qualified_candidates,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
     Html = '<table id="T"><tr><th>A</th><th>B</th><th>C</th></tr><tr><th rowspan="2">R</th><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>',
     machine_input(Root, 801, Html, File),
     process_paper("801", File, Root, _),
     machine_outputs(Root, 801, [Record], Meta),
-    Record.schema_version == "1.0",
+    Record.schema_version == "3.0",
     Record.table_uid == "PMC801/t0",
     Record.raster == [[0,1,2],[3,4,5],[3,6,7]],
     Record.status == "ambiguous", Record.abstention_reason == null,
-    Record.candidates = [First, Second],
-    First.candidate_id == "PMC801/t0/h0_v0",
-    Second.candidate_id == "PMC801/t0/h0_v1",
-    First.hmd =:= 0, First.vmd =:= 0,
-    Second.hmd =:= 0, Second.vmd =:= 1,
-    First.failed_constraints == [], Second.failed_constraints == [],
+    % Counts: h1_v1 is one header row and one row-header column. The merged
+    % row header R also supports a second row-header column, and a header
+    % row without row headers fits too. With a merged cell in the table,
+    % there is no candidate without header rows (constraint 9).
+    findall(Id-H-V, ( member(C, Record.candidates), Id = C.candidate_id,
+                      H = C.hmd, V = C.vmd ), Candidates),
+    Candidates == ["PMC801/t0/h1_v0"-1-0, "PMC801/t0/h1_v1"-1-1,
+                   "PMC801/t0/h1_v2"-1-2],
+    forall(member(C, Record.candidates), C.failed_constraints == []),
     Meta.parsed_table_count =:= 1,
-    Meta.tables = [Context], Context.candidate_count =:= 2,
+    Meta.tables = [Context], Context.candidate_count =:= 3,
     Context.annotation_status == "ambiguous",
     machine_published(Root, 801, 'candidates0.html', HtmlFile),
     read_file_to_string(HtmlFile, Inspection, [encoding(utf8)]),
-    sub_string(Inspection, _, _, _, "Candidate h0_v0"),
-    sub_string(Inspection, _, _, _, "Candidate h0_v1"),
-    sub_string(Inspection, _, _, _, 'data-candidate-id="PMC801/t0/h0_v0"').
+    sub_string(Inspection, _, _, _, "Candidate h1_v1 (1 HMD row, 1 VMD column)"),
+    sub_string(Inspection, _, _, _, "Candidate h1_v0 (1 HMD row, no VMD columns)"),
+    sub_string(Inspection, _, _, _, 'data-candidate-id="PMC801/t0/h1_v1"').
+
+test(each_labelable_candidate_publishes_a_certificate,
+     [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
+    Html = '<table><tr><th>A</th><th>B</th><th>C</th></tr><tr><th rowspan="2">R</th><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>',
+    machine_input(Root, 803, Html, File),
+    process_paper("803", File, Root, _),
+    machine_outputs(Root, 803, [Record], _),
+    findall(Cert, ( member(C, Record.candidates),
+                    Cert = C.geometric_certificate ), Certs),
+    Certs = [_,_,_],
+    forall(member(Cert, Certs),
+           ( Cert.status == "certified", Cert.claim == "columns",
+             Cert.rejections == null )),
+    findall(Name, ( member(Cert, Certs), Name = Cert.file ), Names),
+    Names == ["certificate0_h1_v0.pl", "certificate0_h1_v1.pl",
+              "certificate0_h1_v2.pl"],
+    machine_published(Root, 803, 'tables.jsonl', Jsonl),
+    file_directory_name(Jsonl, Dir),
+    directory_files(Dir, Entries),
+    include([E]>>sub_atom(E, 0, _, _, certificate), Entries, Published),
+    msort(Published, ['certificate0_h1_v0.pl', 'certificate0_h1_v1.pl',
+                      'certificate0_h1_v2.pl']),
+    forall(member(Name, Published),
+           ( directory_file_path(Dir, Name, Path),
+             dataset_pipeline:check_certificate_file(Path, accepted),
+             dataset_pipeline:read_certificate_file(Path, Facts),
+             memberchk(table_uid("PMC803/t0"), Facts),
+             memberchk(raster([[0,1,2],[3,4,5],[3,6,7]]), Facts) )).
+
+% Constraint 1 lets the stub cell S cross the HMD line at (1, 2); the
+% certificate kernel does not, so that candidate is kept without a file.
+test(unlabelable_candidate_has_reasons_and_no_certificate,
+     [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
+    Html = '<table><tr><th rowspan="3">S</th><th>A</th><th>B</th></tr><tr><td>1</td><td rowspan="2">x</td></tr><tr><td>2</td></tr></table>',
+    machine_input(Root, 804, Html, File),
+    process_paper("804", File, Root, _),
+    machine_outputs(Root, 804, [Record], _),
+    Record.raster == [[0,1,2],[0,3,4],[0,5,4]],
+    member(C, Record.candidates), C.hmd =:= 1, C.vmd =:= 2, !,
+    Cert = C.geometric_certificate,
+    Cert.status == "not_labelable", Cert.claim == null, Cert.file == null,
+    Cert.rejections.columns == "cell_crosses_hmd_line(0,column(0))",
+    machine_published(Root, 804, 'tables.jsonl', Jsonl),
+    file_directory_name(Jsonl, Dir),
+    directory_file_path(Dir, 'certificate0_h1_v2.pl', Missing),
+    \+ exists_file(Missing).
+
+test(tampered_or_missing_certificate_fails_stage_verification,
+     [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
+    Html = '<table><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table>',
+    machine_input(Root, 805, Html, File),
+    process_paper("805", File, Root, _),
+    machine_outputs(Root, 805, Records, _),
+    machine_published(Root, 805, 'tables.jsonl', Jsonl),
+    file_directory_name(Jsonl, Dir),
+    dataset_pipeline:verify_staged_certificates(Dir, Records),
+    Records = [Record], Record.candidates = [Candidate|_],
+    atom_string(Name, Candidate.geometric_certificate.file),
+    directory_file_path(Dir, Name, Path),
+    dataset_pipeline:read_certificate_file(Path, Facts),
+    selectchk(boundary(_, _), Facts, boundary(9, 9), Bad),
+    dataset_pipeline:write_certificate(Path, Bad),
+    catch(dataset_pipeline:verify_staged_certificates(Dir, Records), E1, true),
+    E1 = error(incomplete_paper_stage(invalid_certificate(Name)), _),
+    delete_file(Path),
+    catch(dataset_pipeline:verify_staged_certificates(Dir, Records), E2, true),
+    E2 = error(incomplete_paper_stage(invalid_certificate(Name)), _).
 
 test(merged_id_labels_are_once_per_source_cell_and_have_xpath,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
@@ -87,9 +157,14 @@ test(synthetic_padding_has_no_false_source_xpath,
     last(Record.cells, Gap),
     Gap.cell_id =:= 3, Gap.kind == "synthetic_gap",
     Gap.source_xpath == null,
-    Record.candidates = [Candidate],
-    member(Label, Candidate.labels), Label.cell_id =:= 3,
-    Label.region == "data".
+    % The padding slot is a cell of its own, so the table is still a plain
+    % grid, with a candidate without header rows (constraint 9).
+    findall(Id, (member(C, Record.candidates), Id = C.candidate_id), Ids),
+    Ids == ["PMC803/t0/h0_v1", "PMC803/t0/h1_v0", "PMC803/t0/h1_v1"],
+    % Cell 3 (row 1, column 1) is data under every admissible boundary.
+    forall(member(Candidate, Record.candidates),
+           ( member(Label, Candidate.labels), Label.cell_id =:= 3,
+             Label.region == "data" )).
 
 test(no_valid_boundary_produces_explicit_abstention,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
@@ -148,7 +223,7 @@ test(each_of_multiple_tables_has_independent_stable_ids,
     One.table_uid == "PMC808/t0", Two.table_uid == "PMC808/t1",
     One.source_table_id == Two.source_table_id,
     One.source_path \== Two.source_path,
-    One.candidates = [C1], Two.candidates = [C2],
+    One.candidates = [C1|_], Two.candidates = [C2|_],
     C1.candidate_id \== C2.candidate_id,
     Meta.table_count =:= 2.
 
@@ -195,9 +270,9 @@ test(stage_rejects_tampered_candidate_label_map,
     machine_input(Root, 812, Html, File),
     process_paper("812", File, Root, _),
     machine_outputs(Root, 812, [Original], _),
-    Original.candidates = [Candidate],
+    Original.candidates = [Candidate|Others],
     put_dict(labels, Candidate, [], CorruptCandidate),
-    put_dict(candidates, Original, [CorruptCandidate], CorruptRecord),
+    put_dict(candidates, Original, [CorruptCandidate|Others], CorruptRecord),
     machine_published(Root, 812, 'tables.jsonl', JsonlFile),
     setup_call_cleanup(open(JsonlFile, write, Out, [encoding(utf8)]),
         ( atom_json_dict(Text, CorruptRecord, [width(0)]), format(Out, '~w~n', [Text]) ),

@@ -4,9 +4,11 @@
 % horizontal metadata (HMD), vertical metadata (VMD) and data, as given by the
 % boundaries that parse_constraints.pl validates:
 %
-%   rows =< Hmd                       horizontal metadata   springgreen
-%   rows >  Hmd and columns =< Vmd    vertical metadata     skyblue
+%   rows < Hmd                        horizontal metadata   springgreen
+%   rows >= Hmd and columns < Vmd     vertical metadata     skyblue
 %   everything else                   data                  lightgray
+%
+% Hmd and Vmd are counts: Hmd = 0 means no HMD rows, Vmd = 0 no VMD columns.
 %
 % A cell's row and column are those of its top-left slot in the raster built
 % by table_layout_generator.pl, so merged cells and <thead>/<tfoot> ordering
@@ -91,8 +93,8 @@ slot_color(Hmd, Vmd, R, Id, C-Colors0, C1-Colors) :-
    C1 is C + 1.
 
 slot_region(Hmd, Vmd, R, C, Region) :-
-   (  R =< Hmd -> Region = hmd
-   ;  C =< Vmd -> Region = vmd
+   (  R < Hmd -> Region = hmd
+   ;  C < Vmd -> Region = vmd
    ;  Region = data
    ).
 

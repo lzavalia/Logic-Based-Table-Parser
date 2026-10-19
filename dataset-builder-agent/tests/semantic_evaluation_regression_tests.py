@@ -11,13 +11,13 @@ from evaluate_structural_candidates import evaluate, records_from_jsonl
 class EvaluationTests(unittest.TestCase):
     def test_counts_denomination_and_no_headers(self):
         predictions = {
-            ("PMC1", 0): {"status": "unique", "candidates": [{"hmd": 0, "vmd": 0}]},
-            ("PMC1", 1): {"status": "ambiguous", "candidates": [{"hmd": 0, "vmd": 0}, {"hmd": 1, "vmd": 0}]},
+            ("PMC1", 0): {"status": "unique", "candidates": [{"hmd": 1, "vmd": 1}]},
+            ("PMC1", 1): {"status": "ambiguous", "candidates": [{"hmd": 1, "vmd": 1}, {"hmd": 2, "vmd": 1}]},
             ("PMC1", 2): {"status": "abstained", "candidates": []},
-            ("PMC1", 3): {"status": "unique", "candidates": [{"hmd": 0, "vmd": 0}]},
+            ("PMC1", 3): {"status": "unique", "candidates": [{"hmd": 1, "vmd": 1}]},
         }
-        gold = {("PMC1", 0): {"hmd": 0, "vmd": 0},
-                ("PMC1", 1): {"hmd": 1, "vmd": 0},
+        gold = {("PMC1", 0): {"hmd": 1, "vmd": 1},
+                ("PMC1", 1): {"hmd": 2, "vmd": 1},
                 ("PMC1", 2): None, ("PMC1", 3): None}
         result = evaluate(predictions, gold)
         c, m = result['counts'], result['metrics']

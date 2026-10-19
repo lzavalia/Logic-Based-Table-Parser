@@ -34,26 +34,30 @@ basename_is(Path, Expected) :-
     atom_string(Base, Text),
     Text == Expected.
 
-% A key/value table with one admissible boundary is colored for it.
-test(html_table_gets_one_colored_candidate,
+% A 2x2 key/value table without merged cells admits a header row, a header
+% column, or both; each candidate gets its own colored view, named by counts.
+test(html_table_gets_one_colored_view_per_candidate,
      [setup(make_workspace(Root)), cleanup(remove_workspace(Root))]) :-
     write_input(Root, 'a.html',
         '<table><tr><th>k</th><th>v</th></tr><tr><td>a</td><td>1</td></tr></table>',
         File),
     test_table_parser(File, Files),
-    Files = [Path],
-    basename_is(Path, "table0_hmd0_vmd0.html"),
-    contains(Path, "springgreen"),
-    contains(Path, "skyblue"),
-    contains(Path, "lightgray"),
-    contains(Path, "<meta charset=\"utf-8\">").
+    maplist([P, B]>>(file_base_name(P, B0), atom_string(B0, B)), Files, Names),
+    Names == ["table0_hmd0_vmd1.html", "table0_hmd1_vmd0.html", "table0_hmd1_vmd1.html"],
+    last(Files, Both),
+    contains(Both, "springgreen"),
+    contains(Both, "skyblue"),
+    contains(Both, "lightgray"),
+    contains(Both, "<meta charset=\"utf-8\">"),
+    Files = [VmdOnly|_],
+    \+ contains(VmdOnly, "springgreen").
 
-% A single-row table has no data region, hence no candidate: it is written
-% uncolored and clearly named, never silently omitted.
+% A single cell is entirely data or entirely metadata, hence no candidate:
+% it is written uncolored and clearly named, never silently omitted.
 test(table_without_boundary_is_written_uncolored,
      [setup(make_workspace(Root)), cleanup(remove_workspace(Root))]) :-
     write_input(Root, 'b.html',
-        '<table><tr><td>a</td><td>b</td></tr></table>', File),
+        '<table><tr><td>a</td></tr></table>', File),
     test_table_parser(File, Files),
     Files = [Path],
     basename_is(Path, "table0_unannotated.html"),
@@ -66,18 +70,18 @@ test(xml_extension_uses_jats_parser,
         '<article><body><table-wrap><table><thead><tr><th>k</th><th>v</th></tr></thead><tbody><tr><td>a</td><td>1</td></tr></tbody></table></table-wrap></body></article>',
         File),
     test_table_parser(File, Files),
-    Files = [Path],
-    basename_is(Path, "table0_hmd0_vmd0.html").
+    Files = [Path|_],
+    basename_is(Path, "table0_hmd0_vmd1.html").
 
 % Several tables are numbered in document order, from zero.
 test(tables_are_numbered_in_document_order,
      [setup(make_workspace(Root)), cleanup(remove_workspace(Root))]) :-
     write_input(Root, 'd.html',
-        '<table><tr><th>k</th><th>v</th></tr><tr><td>a</td><td>1</td></tr></table><table><tr><td>x</td><td>y</td></tr></table>',
+        '<table><tr><th>k</th><th>v</th></tr><tr><td>a</td><td>1</td></tr></table><table><tr><td>x</td></tr></table>',
         File),
     test_table_parser(File, Files),
-    Files = [P0, P1],
-    basename_is(P0, "table0_hmd0_vmd0.html"),
+    Files = [P0, _, _, P1],
+    basename_is(P0, "table0_hmd0_vmd1.html"),
     basename_is(P1, "table1_unannotated.html").
 
 % Active content and event handlers must not reach the browser-facing view.
@@ -86,10 +90,11 @@ test(output_is_sanitized,
     write_input(Root, 'e.html',
         '<table><tr><th onclick="evil()">k</th><th>v<script>alert(1)</script></th></tr><tr><td>a</td><td>1</td></tr></table>',
         File),
-    test_table_parser(File, [Path]),
-    \+ contains(Path, "onclick"),
-    \+ contains(Path, "script"),
-    \+ contains(Path, "alert").
+    test_table_parser(File, Paths),
+    forall(member(Path, Paths),
+           ( \+ contains(Path, "onclick"),
+             \+ contains(Path, "script"),
+             \+ contains(Path, "alert") )).
 
 % Rerunning replaces earlier table views but never touches unrelated files.
 test(rerun_removes_stale_views_only,
@@ -101,7 +106,7 @@ test(rerun_removes_stale_views_only,
     make_directory(OutDir),
     write_input(OutDir, 'table9_hmd9_vmd9.html', stale, Stale),
     write_input(OutDir, 'notes.txt', keep, Notes),
-    test_table_parser(File, OutDir, [_]),
+    test_table_parser(File, OutDir, [_|_]),
     \+ exists_file(Stale),
     exists_file(Notes).
 
@@ -111,7 +116,7 @@ test(default_output_directory_is_file_dot_tables,
     write_input(Root, 'g.html',
         '<table><tr><th>k</th><th>v</th></tr><tr><td>a</td><td>1</td></tr></table>',
         File),
-    test_table_parser(File, [Path]),
+    test_table_parser(File, [Path|_]),
     atomic_list_concat([File, '.tables'], Expected),
     file_directory_name(Path, Dir),
     atom_string(DirAtom, Dir),

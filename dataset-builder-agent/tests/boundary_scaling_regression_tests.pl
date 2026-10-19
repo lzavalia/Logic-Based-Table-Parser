@@ -1,4 +1,6 @@
-% F11: differential tests against the unchanged public seven-constraint oracle.
+% F11: differential tests of the indexed search against the public
+% constraints (omni_validate/3), the reference oracle. Boundaries are counts:
+% every pair 0..Rows x 0..Cols is tried.
 % swipl -q -s boundary_scaling_regression_tests.pl -g run_tests -t halt
 :- use_module(library(random)).
 :- use_module(library(lists)).
@@ -19,9 +21,8 @@ omni_validate(Raster, H, V, Offending) :-
 
 reference_boundaries(Raster, Boundaries) :-
    ( valid_raster_shape(Raster, Rows, Cols) ->
-       MaxH is Rows - 2, MaxV is Cols - 2,
        findall(json{hmd:H,vmd:V},
-               ( between(0, MaxH, H), between(0, MaxV, V),
+               ( between(0, Rows, H), between(0, Cols, V),
                  omni_validate(Raster, H, V) ), Boundaries)
    ; Boundaries = [] ).
 
@@ -56,6 +57,10 @@ random_raster(Rows, Cols, MaxId, Raster) :-
 
 % Exhaustively cover all equality configurations of modest size (including
 % those not geometrically realizable), not just convenient all-distinct rows.
+test(exhaustive_single_rows_and_columns) :-
+   forall(( between(1, 6, N),
+            ( binary_raster(1, N, Raster) ; binary_raster(N, 1, Raster) ) ),
+          same_as_reference(Raster)).
 test(exhaustive_2x2) :-
    forall(binary_raster(2,2,Raster), same_as_reference(Raster)).
 test(exhaustive_2x3) :-
@@ -70,8 +75,8 @@ test(exhaustive_3x4) :-
 test(randomized_rectangular_rasters) :-
    set_random(seed(20261009)),
    forall(between(1, 400, _),
-          ( random_between(2, 14, R),
-            random_between(2, 14, C),
+          ( random_between(1, 14, R),
+            random_between(1, 14, C),
             random_between(1, 4, M),
             random_raster(R, C, M, Raster),
             same_as_reference(Raster) )).
@@ -123,10 +128,11 @@ test(streaming_preserves_unmerged_html) :-
    legacy_vs_streamed('<table><tr><th>H</th><th>V</th></tr><tr><th>K</th><td>D</td></tr></table>').
 
 % The output budget limits candidates x distinct cells, whatever the solver
-% found. An all-distinct grid admits only (0,0): constraints 2 and 3 need a
-% merged cell above every extra header row and beside every extra stub
-% column. So the budget tests pass explicit candidate lists, sized like a
-% 50x50 table with 2401 candidates (6,002,500 labels, over the 500,000 limit).
+% found. An all-distinct grid admits only three boundaries (see below):
+% constraints 2 and 3 need a merged cell above every extra header row and
+% beside every extra stub column. So the budget tests pass explicit candidate
+% lists, sized like a 50x50 table with 2401 candidates (6,002,500 labels,
+% over the 500,000 limit).
 unique_raster(Rows, Cols, Raster) :-
    LastRow is Rows - 1, LastCol is Cols - 1,
    findall(Row, (between(0, LastRow, R),
@@ -138,10 +144,12 @@ all_pairs(Rows, Cols, Boundaries) :-
    findall(json{hmd:H, vmd:V}, (between(0, MaxH, H), between(0, MaxV, V)),
            Boundaries).
 
-test(all_distinct_grid_admits_only_origin) :-
+test(all_distinct_grid_admits_one_header_row_column_or_both) :-
+   % Without merged cells there is no evidence for a second header row or
+   % column, and rules 7 and 8 exclude all-data and all-metadata partitions.
    unique_raster(8, 8, Raster),
    valid_boundaries(Raster, Candidates),
-   Candidates == [json{hmd:0, vmd:0}].
+   Candidates == [json{hmd:0, vmd:1}, json{hmd:1, vmd:0}, json{hmd:1, vmd:1}].
 
 test(output_budget_allows_small_tables) :-
    unique_raster(8, 8, Raster),

@@ -74,7 +74,7 @@ test(sanitizer_discards_unrecognized_attributes) :-
 
 test(annotated_api_uses_sanitized_dom) :-
    unsafe_html_table(Input),
-   dataset_pipeline:annotate_table(0, 0, Input, Annotation),
+   dataset_pipeline:annotate_table(1, 1, Input, Annotation),
    sub_string(Annotation, _, _, _, 'background-color: springgreen'),
    \+ sub_string(Annotation, _, _, _, '!important'),
    \+ sub_string(Annotation, _, _, _, 'onmouseover'),
