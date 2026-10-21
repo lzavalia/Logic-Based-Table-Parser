@@ -1,12 +1,21 @@
 % Table annotator.
 %
 % Colors the cells of a table according to a partition of its raster into
-% horizontal metadata (HMD), vertical metadata (VMD) and data, as given by the
-% layer counts that valid_boundaries/2 of parse_constraints.pl reports:
+% horizontal metadata (HMD), vertical metadata (VMD), data and separators:
 %
-%   the first Hmd rows                        horizontal metadata   springgreen
-%   the first Vmd columns of the other rows   vertical metadata     skyblue
-%   everything else                           data                  lightgray
+%   horizontal metadata   springgreen
+%   vertical metadata     skyblue
+%   data                  lightgray
+%   separator             khaki
+%
+% The partition is either a layout found by table_layouts/2 of
+% parse_constraints.pl (annotate_layout_element/3), which may hold metadata in
+% the middle of the table and separator rows, or a pair of layer counts as
+% reported by valid_boundaries/2 (annotate_table/4), where
+%
+%   the first Hmd rows                        are horizontal metadata
+%   the first Vmd columns of the other rows   are vertical metadata
+%   everything else                           is data
 %
 % A cell's row and column are those of its top-left slot in the raster built
 % by table_layout_generator.pl, so merged cells and <thead>/<tfoot> ordering
@@ -17,7 +26,7 @@
 %                                   <tr><td>a</td><td>1</td></tr></table>", A).
 %   A = "<table><tr><th style=\"background-color: springgreen\">k</th>...".
 %
-% Requires table_layout_generator.pl to be loaded.
+% Requires table_layout_generator.pl and parse_constraints.pl to be loaded.
 
 :- use_module(library(sgml_write)).
 :- use_module(library(assoc)).
@@ -27,6 +36,7 @@
 region_color(hmd,  springgreen).
 region_color(vmd,  skyblue).
 region_color(data, lightgray).
+region_color(separator, khaki).
 
 % annotate_table(+Hmd, +Vmd, +HtmlTable, -AnnotatedTable)
 % HtmlTable is HTML text holding a table; AnnotatedTable is the same table as
@@ -41,9 +51,23 @@ annotate_table(Hmd, Vmd, HtmlTable, AnnotatedTable) :-
 % annotate_table_element(+Hmd, +Vmd, +Table, -Annotated)
 % Same as annotate_table/4, on a parsed element(table, Attrs, Children) term.
 annotate_table_element(Hmd, Vmd, Table, Annotated) :-
-   Table = element(table, Attrs, Children),
    rasterize_table(Table, Raster),
    cell_colors(Raster, Hmd, Vmd, Colors),
+   color_table_element(Colors, Table, Annotated).
+
+% annotate_layout_element(+Layout, +Table, -Annotated)
+% Table colored according to Layout, one of the layouts table_layouts/2 gives
+% for the raster of Table.
+annotate_layout_element(Layout, Table, Annotated) :-
+   rasterize_table(Table, Raster),
+   layout_labels(Raster, Layout, Labels),
+   label_colors(Raster, Labels, Colors),
+   color_table_element(Colors, Table, Annotated).
+
+% color_table_element(+Colors, +Table, -Annotated): Colors is an assoc from
+% cell id to color.
+color_table_element(Colors, Table, Annotated) :-
+   Table = element(table, Attrs, Children),
    first_cell_ids(Children, Ids0),
    annotate_children(Children, Colors, Ids0, _, NewChildren),
    Annotated = element(table, Attrs, NewChildren).
@@ -76,6 +100,23 @@ slot_color(Hmd, Vmd, R, Id, C-Colors0, C1-Colors) :-
       put_assoc(Id, Colors0, Color, Colors)
    ),
    C1 is C + 1.
+
+% label_colors(+Raster, +Labels, -Colors): the same for a grid of labels in
+% the shape of Raster (see layout_labels/3). A merged cell takes the label of
+% its top-left slot.
+label_colors(Raster, Labels, Colors) :-
+   empty_assoc(Colors0),
+   foldl(row_label_colors, Raster, Labels, Colors0, Colors).
+
+row_label_colors(Row, RowLabels, Colors0, Colors) :-
+   foldl(slot_label_color, Row, RowLabels, Colors0, Colors).
+
+slot_label_color(Id, Label, Colors0, Colors) :-
+   (  get_assoc(Id, Colors0, _)
+   -> Colors = Colors0
+   ;  region_color(Label, Color),
+      put_assoc(Id, Colors0, Color, Colors)
+   ).
 
 slot_region(Hmd, Vmd, R, C, Region) :-
    (  R < Hmd -> Region = hmd

@@ -9,8 +9,8 @@ Given a phrase such as `"dementia with lewy bodies"`, the agent:
 1. **Selects papers.** Claude searches PubMed Central through one tool, `search_pmc`, and picks up to 20 open-access papers. It sees only short result lines (id, date, journal, title).
 2. **Downloads the full text** of each paper as XML from NCBI's public API, pausing and retrying when NCBI's rate limit is reached.
 3. **Extracts every `<table>` element** and lays it out as a *raster*: a grid in which each slot holds the id of the cell covering it, so merged cells span several slots (`table_layout_generator.pl`).
-4. **Finds the header boundaries.** Every candidate pair (number of HMD rows, number of VMD columns) is tested against the seven parse constraints; the pairs that satisfy all of them are kept (`parse_constraints.pl`). Zero rows or zero columns is a candidate only when no merged cell lies along that margin, and never both at once.
-5. **Annotates the table.** For each valid pair the original table is colored: HMD cells green, VMD cells blue, data cells gray (`table_annotator.pl`).
+4. **Finds the candidate layouts.** Rows covered by a single cell (titles, footers, separators) are set aside. Every candidate pair (number of HMD rows, number of VMD columns) is then tested against the seven parse constraints; zero rows or zero columns is a candidate only when no merged cell lies along that margin, and never both at once. For each pair that passes, merged cells inside the data region are tried as metadata in the middle of the table, and kept where the pieces still satisfy the constraints (`parse_constraints.pl`).
+5. **Annotates the table.** For each layout the original table is colored: HMD cells green, VMD cells blue, data cells gray, separator rows khaki (`table_annotator.pl`).
 6. **Saves the result** as `dataset/<paper title>/annotated_tableN.html`.
 
 Steps 2–6 run inside DeepClause's own Prolog engine and never involve the model.

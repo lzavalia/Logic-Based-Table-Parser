@@ -160,7 +160,7 @@ Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
-| `dataset/<paper title>/annotated_tableN.html` | One file per table. The table is repeated once for each valid header boundary, colored green (HMD), blue (VMD) and gray (data). A table with no valid boundary is saved uncolored. |
+| `dataset/<paper title>/annotated_tableN.html` | One file per table. The table is repeated once for each candidate layout, colored green (HMD), blue (VMD), gray (data) and khaki (separator rows). Layouts with metadata in the middle of the table come first, the ones with metadata on the margins only last. A table with no layout is saved uncolored. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
 | `dataset/cache/` | The last PubMed Central search responses. |
 
@@ -207,7 +207,7 @@ swipl -g 'use_module(dataset_pipeline),
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/parse_constraints.pl` | The seven parse constraints, the search for valid HMD/VMD boundaries (`valid_boundaries/2`), and the search for candidate layouts with metadata in the middle of the table (`table_layouts/2`). |
 | `tests/parse_constraints_tests.pl` | Tests for `valid_boundaries/2` and `table_layouts/2` on hand-built rasters: `swipl -g run_tests -t halt tests/parse_constraints_tests.pl`. |
-| `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
+| `src/table_annotator.pl` | Colors a table's cells for a given layout. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 
 ## Troubleshooting

@@ -1,0 +1,7 @@
+# Local DeepClause configuration (may hold an API key) and run output.
+src/.deepclause/
+src/dataset/
+src/runtime_log.txt
+src/token_usage.json
+src/budget_guard.log
+.DS_Store

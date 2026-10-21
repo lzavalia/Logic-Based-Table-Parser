@@ -24,9 +24,9 @@
 %       Wait for Seconds.
 %   process_paper(+PmcId, +File, +DatasetDir, -Summary)
 %       Extract every <table> of the full text File, rasterize it with
-%       table_layout_generator.pl, check every header boundary against
-%       parse_constraints.pl, and color the table for each valid boundary
-%       with table_annotator.pl. The tables are saved as
+%       table_layout_generator.pl, find its candidate layouts with
+%       parse_constraints.pl, and color the table for each layout with
+%       table_annotator.pl. The tables are saved as
 %       <DatasetDir>/<paper title>/annotated_tableN.html, N counting from 0.
 %       Summary is a one-line report.
 
@@ -134,31 +134,32 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    directory_file_path(DatasetDir, PaperName, PaperDir),
    make_directory_path(PaperDir),
    findall(
-      Boundaries,
+      Layouts,
       ( nth0(N, Tables, Table),
         nth0(N, Rasters, Raster),
         table_file_name(PaperDir, N, TableFile),
-        save_table(TableFile, Table, Raster, Boundaries) ),
-      BoundaryLists
+        save_table(TableFile, Table, Raster, Layouts) ),
+      LayoutLists
    ),
    length(Tables, NumTables),
-   exclude(==([]), BoundaryLists, Parsed),
+   exclude(==([]), LayoutLists, Parsed),
    length(Parsed, NumParsed),
    format(string(Summary),
-          "PMC~w: ~w table(s), ~w with a valid header boundary -> ~w/",
+          "PMC~w: ~w table(s), ~w with a valid layout -> ~w/",
           [PmcId, NumTables, NumParsed, PaperName]).
 
 table_file_name(PaperDir, N, TableFile) :-
    format(string(Name), "annotated_table~w.html", [N]),
    directory_file_path(PaperDir, Name, TableFile).
 
-% save_table(+TableFile, +Table, +Raster, -Boundaries)
-% The file holds the table colored once for every valid pair of HMD and VMD
-% layer counts (a count of 0 meaning no metadata of that kind),
-% one copy after another; a table with no valid boundary is saved uncolored.
-save_table(TableFile, Table, Raster, Boundaries) :-
-   valid_boundaries(Raster, Boundaries),
-   table_annotations(Table, Boundaries, Annotations),
+% save_table(+TableFile, +Table, +Raster, -Layouts)
+% The file holds the table colored once for every layout table_layouts/2
+% finds, one copy after another: the layouts with the most metadata in the
+% middle of the table first, the ones with metadata on the margins only last.
+% A table with no layout is saved uncolored.
+save_table(TableFile, Table, Raster, Layouts) :-
+   table_layouts(Raster, Layouts),
+   table_annotations(Table, Layouts, Annotations),
    setup_call_cleanup(
       open(TableFile, write, Stream, [encoding(utf8)]),
       forall(member(Annotation, Annotations),
@@ -167,11 +168,11 @@ save_table(TableFile, Table, Raster, Boundaries) :-
 
 table_annotations(Table, [], [Html]) :- !,
    table_html(Table, Html).
-table_annotations(Table, Boundaries, Annotations) :-
+table_annotations(Table, Layouts, Annotations) :-
    findall(
       Annotation,
-      ( member(json{hmd: Hmd, vmd: Vmd}, Boundaries),
-        annotate_table_element(Hmd, Vmd, Table, Annotated),
+      ( member(Layout, Layouts),
+        annotate_layout_element(Layout, Table, Annotated),
         table_html(Annotated, Annotation) ),
       Annotations
    ).

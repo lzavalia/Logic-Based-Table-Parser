@@ -196,8 +196,9 @@ process_papers([Id|Ids], [Line|Lines]) :-
 % colspan, rowspan). process_paper/4 (dataset_pipeline.pl) then does, for
 % every table:
 %   table_layout_generator.pl  ->  raster
-%   parse_constraints.pl       ->  header boundaries that satisfy omni_validate/3
-%   table_annotator.pl         ->  the table colored as HMD / VMD / data
+%   parse_constraints.pl       ->  candidate layouts (table_layouts/2)
+%   table_annotator.pl         ->  the table colored as HMD / VMD / data /
+%                                  separator, once per layout
 % and saves it under dataset/<paper title>/, creating the directories if
 % needed.
 download_and_process(Id, Line) :-
