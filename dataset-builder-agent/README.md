@@ -768,7 +768,8 @@ label for a scientific table.
 | `tests/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/table_html_sanitizer.pl` | Removes executable markup from browser-facing table views while keeping source records unchanged. |
-| `src/parse_constraints.pl` | The ten reference constraints (HMD and VMD as counts) and public boundary validator. |
+| `src/parse_constraints.pl` | The ten reference constraints (HMD and VMD as counts), the public boundary validator (`valid_boundaries/2`), and the search for candidate layouts with metadata in the middle of the table (`table_layouts/2`, not yet used by the pipeline). |
+| `tests/table_layouts_regression_tests.pl` | Offline tests for `valid_boundaries/2` and `table_layouts/2` on hand-built rasters: separator rows, central HMD and VMD, nested and mixed cuts. |
 | `tests/legacy_index_constraints.pl` | The original last-index constraints, kept as a test reference only. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
