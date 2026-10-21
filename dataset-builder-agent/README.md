@@ -992,9 +992,9 @@ the subtables and separators partition the table: every slot is covered,
 a slot in several subtables has the same role in each, data is never shared
 between subtables, and no cell is part data and part metadata. A header
 cell may head several subtables, e.g. the HMD over both sides of a vertical
-cut. A separator of a data region also covers the VMD columns beside it, so
-the VMD cell next to a section title is set aside with the title, although
-`layout_labels/3` labels it VMD. Layouts are not yet passed through the
+cut. A separator of a data region also covers the VMD columns beside it: the
+VMD cell next to a section title heads no data, so it is set aside with the
+title, and `layout_labels/3` labels it a separator too. Layouts are not yet passed through the
 pipeline, so the build writes version 1 certificates only.
 
 For each candidate the build writes `certificateN_hH_vV.pl` if it is

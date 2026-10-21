@@ -100,12 +100,13 @@ test(separator_rows) :-
                     ["sss","hhh","ddd","sss","ddd","sss"],
                     ["sss","hhh","vdd","sss","vdd","sss"]]).
 
-% A title over the data columns only is a separator of the data region. With
-% no VMD the title no longer covers its whole row of the region, and is data.
+% A title over the data columns only is a separator of the data region, and
+% the VMD cell beside it is set aside with it. With no VMD the title no
+% longer covers its whole row of the region, and is data.
 test(data_title) :-
    labellings([[0,1,1],[2,3,4],[5,6,6],[7,8,9]], Ls),
    assertion(Ls == [["hhh","hhh","ddd","ddd"],
-                    ["hhh","hhh","vss","vdd"]]).
+                    ["hhh","hhh","sss","vdd"]]).
 
 % The header band is found with and without VMD; the marginal readings last.
 test(central_hmd) :-

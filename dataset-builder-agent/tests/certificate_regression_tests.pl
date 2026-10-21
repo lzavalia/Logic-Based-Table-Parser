@@ -312,16 +312,6 @@ certificate_slot_label(Facts, R, C, Label) :-
    ;  Label = data
    ).
 
-% The certificate labels the table as layout_labels/3 does, except that a
-% separator of a data region also sets aside the VMD slots beside it.
-labels_agree([], []).
-labels_agree([Row|Rows], [CRow|CRows]) :-
-   maplist(label_agrees, Row, CRow),
-   labels_agree(Rows, CRows).
-
-label_agrees(Label, Label) :- !.
-label_agrees(vmd, separator).
-
 % The generator's verdict on a hand-made split of Raster: the kernel rejects
 % the whole for Reason, although every subtable is labelable.
 rejected_layout(Raster, Separators, Subtables, Reason) :-
@@ -337,8 +327,7 @@ test(every_layout_of_the_hand_built_tables_is_certified) :-
             member(Layout, Layouts) ),
           ( layout_certified(Raster, Layout, Facts),
             certificate_labels(Facts, CertLabels),
-            layout_labels(Raster, Layout, Labels),
-            labels_agree(Labels, CertLabels) )).
+            layout_labels(Raster, Layout, CertLabels) )).
 
 test(central_hmd_is_two_subtables) :-
    layout_raster(central_hmd, Raster),
@@ -362,7 +351,7 @@ test(vertical_cut_shares_the_hmd) :-
 
 test(separator_sets_aside_the_vmd_cell_beside_it) :-
    layout_raster(data_title, Raster),
-   labelled_layout(Raster, ["hhh","hhh","vss","vdd"], Layout),
+   labelled_layout(Raster, ["hhh","hhh","sss","vdd"], Layout),
    layout_certified(Raster, Layout, Facts),
    memberchk(separator(2, [0,1,2]), Facts),
    memberchk(subtable(0, [0,1,3], [0,1,2]), Facts).
@@ -488,8 +477,7 @@ test(layouts_are_certifiable) :-
             certify_layout(Raster, Separators, Subtables, none, Result),
             (  Result = certificate(Facts)
             -> certificate_labels(Facts, CertLabels),
-               layout_labels(Raster, Layout, Labels),
-               labels_agree(Labels, CertLabels)
+               layout_labels(Raster, Layout, CertLabels)
             ;  Result = not_labelable(Reasons),
                forall(member(K-Why, Reasons),
                       ( nth0(K, Subtables, subtable(_, _, _, Vmd)),

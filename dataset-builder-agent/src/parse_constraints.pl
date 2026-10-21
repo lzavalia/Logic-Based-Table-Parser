@@ -521,7 +521,9 @@ piece_validate(Piece, Hmd, Vmd) :-
 % Labels has the shape of Raster, each slot holding hmd, vmd, data or
 % separator. As with the marginal boundaries, HMD rows are HMD across the
 % VMD columns too: the top-level ones across the whole table, central ones
-% across the VMD columns governing their region.
+% across the VMD columns governing their region. The same holds for the
+% separator rows of a region: the VMD cell beside a section title heads no
+% data, so it is set aside with the title.
 layout_labels(Raster, layout(Separators, block(HmdRows, VmdCols, Region)), Labels) :-
    raster_dimensions(Raster, NumRows, NumCols),
    indices(NumRows, AllRows),
@@ -544,7 +546,8 @@ region_rows(region(Rows, _, Separators, _), AllRows) :-
    append(Rows, Separators, AllRows).
 
 paint_region(region(Rows, Cols, Separators, Split), VmdCols, Slots0, Slots) :-
-   paint(Separators, Cols, separator, Slots0, Slots1),
+   append(VmdCols, Cols, Wide),
+   paint(Separators, Wide, separator, Slots0, Slots1),
    paint_split(Split, Rows, Cols, VmdCols, Slots1, Slots).
 
 paint_split(none, Rows, Cols, _, Slots0, Slots) :-
