@@ -574,6 +574,28 @@ paint_row(Cols, Label, R, Slots0, Slots) :-
 paint_slot(Label, R, C, Slots0, Slots) :-
    put_assoc(R-C, Slots0, Label, Slots).
 
+% --- candidates --------------------------------------------------------------
+
+% table_candidates(+Raster, -Candidates): the layouts of table_layouts/2, in
+% the same order, as the pipeline's candidates. A layout that is a plain
+% boundary, with no separator and no cut, is json{hmd: Hmd, vmd: Vmd}, as
+% valid_boundaries/2 gives it; any other is layout(K, Layout), K counting
+% those layouts from 0. A table without separator rows or central metadata
+% therefore has exactly the candidates of valid_boundaries/2.
+table_candidates(Raster, Candidates) :-
+   table_layouts(Raster, Layouts),
+   foldl(layout_candidate, Layouts, Candidates, 0, _).
+
+layout_candidate(Layout, Candidate, K0, K) :-
+   (  Layout = layout([], block(HmdRows, VmdCols, region(_, _, [], none)))
+   -> length(HmdRows, Hmd),
+      length(VmdCols, Vmd),
+      Candidate = json{hmd: Hmd, vmd: Vmd},
+      K = K0
+   ;  Candidate = layout(K0, Layout),
+      K is K0 + 1
+   ).
+
 % --- subtables --------------------------------------------------------------
 
 % layout_subtables(+Raster, +Layout, -Separators, -Subtables)

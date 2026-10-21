@@ -284,12 +284,13 @@ Each run writes a `dataset/` directory inside `src/`:
 
 | Path | Contents |
 |---|---|
-| `dataset/papers/PMC<id>/candidatesN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading and boundary coordinates; a table with no valid boundary has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), and gray (data). |
+| `dataset/papers/PMC<id>/candidatesN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading: boundary coordinates for a plain boundary, or the number of subtables and separator rows for a layout; a table with no candidate has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), gray (data), and khaki (rows set aside as separators). |
 | `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `candidatesN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
 | `dataset/papers/PMC<id>/certificateN_hH_vV.pl` | Geometric labelability certificate for candidate `(H, V)` of table `N`, written only when the candidate is labelable. A Prolog program that checks itself; see [Geometric labelability certificates](#geometric-labelability-certificates). |
+| `dataset/papers/PMC<id>/certificateN_layoutK.pl` | The version 2 certificate of layout candidate `K` of table `N` (rows set aside, or metadata in the middle of the table): one certificate covering every subtable. |
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
-| `dataset/papers/PMC<id>/final_tables.json` | Written by the last stage of the [LLM review](#reviewing-candidates-with-the-llm): every `valid` table as `subtables` with nested horizontal and vertical metadata, unmerged data, and the residual corner. |
+| `dataset/papers/PMC<id>/final_tables.json` | Written by the last stage of the [LLM review](#reviewing-candidates-with-the-llm): every `valid` table as `subtables` with nested horizontal and vertical metadata, unmerged data, and the residual corner, plus the text of the rows set aside as `separators`. |
 | `dataset/papers/PMC<id>/review.jsonl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one verdict per line of `tables.jsonl`. Absent until the paper has been reviewed; a rebuilt paper loses it. |
 | `dataset/papers/PMC<id>/final_tableN.html` | Also written by the review: the outcome for table `N`. "Parse Succeeded", the LLM's reason and the table colored for the boundary the parser and the LLM agree on; "Error: Misalignment Between LLM And Formal Table Parser" with the LLM's reason; or "Nothing To Do." when the parser found no candidate. |
 | `dataset/reviews/review-<timestamp>-<n>/manifest.json` | One per review run: model, prompt version, papers requested and one status line per paper. |
@@ -536,7 +537,13 @@ label, caption and notes) but *not* the parser's candidates, so it cannot
 simply agree with them. It answers with its own boundary: the number of
 column-header rows and the number of row-header columns, either of which may
 be 0 (`0` and `0` when the table has no headers at all). `src/table_review.pl` then compares that answer with the
-candidates:
+candidates that are a single table: plain boundaries, and layouts of one
+subtable whose rows covered by a single cell (titles, section rows) are set
+aside. Such a layout is read as the model reads the whole table: its
+header-row count runs from the top down to its last HMD row, so a title row
+set aside above the header counts as a header row. Layouts with metadata in
+the middle of the table (several subtables) are never matched, since they
+share their top-level counts with another candidate:
 
 | Parser | Model's answer | `final_status` | `decided_by` |
 |---|---|---|---|
@@ -544,6 +551,7 @@ candidates:
 | several candidates (`ambiguous`) | one of them | `valid`, with `selected_candidate_id` | `llm` |
 | `unique` or `ambiguous` | any other counts, including `0` and `0` | `unparseable` | `llm` |
 | no candidate (`abstained`) | not asked | `unparseable` | `parser` |
+| only layouts with metadata in the middle of the table | not asked | `unreviewed` | none |
 | `quarantined`, or more than 2,500 slots | not asked | `unreviewed` | none |
 | any | no usable answer after one retry | `unreviewed` (`review_status: "review_failed"`) | none |
 
@@ -629,8 +637,11 @@ two header rows and two row-header columns.
 Other tables keep their entry with `"subtables": null`. If a metadata cell
 sits under (or right of) more than one cell, so the metadata is not a forest,
 the table gets an `export_error` instead; the ten constraints rule this out
-for every candidate. Tables with central metadata (several subtables) are not
-supported yet; they have no candidate, so they are never `valid`. The file is
+for every candidate. A table read as a layout gets one subtable per subtable
+of the layout, each built from its own rows and columns, and `separators`
+lists the rows set aside, `{row, text}`; it is `[]` for a plain boundary.
+The review does not select layouts with metadata in the middle of the table
+yet, so a `valid` table has one subtable for now. The file is
 written under the paper's lock through a temporary file. Tests:
 `tests/table_export_regression_tests.pl`.
 
@@ -661,11 +672,13 @@ swipl -g 'consult(test_driver),
 ```
 
 For every `<table>` (numbered from 0 in document order) the driver writes one
-sanitized, colored view per structural candidate boundary to
+sanitized, colored view per structural candidate to
 `path/to/file.html.tables/`:
 
 - `table<N>_hmd<H>_vmd<V>.html`: table `N` colored for `H` HMD rows and `V`
   VMD columns.
+- `table<N>_layout<K>.html`: table `N` colored for its layout candidate `K`,
+  with rows set aside in khaki and any metadata in the middle of the table.
 - `table<N>_unannotated.html`: table `N` has no admissible boundary, so it is
   written uncolored instead of being omitted.
 
@@ -768,8 +781,9 @@ label for a scientific table.
 | `tests/machine_annotations_regression_tests.pl` | Offline tests for JSONL schema, ambiguous boundaries, merged cells, synthetic slots, abstention, IDs, and reruns. |
 | `src/table_layout_generator.pl` | Parses HTML and turns each `<table>` into a raster of cell ids. |
 | `src/table_html_sanitizer.pl` | Removes executable markup from browser-facing table views while keeping source records unchanged. |
-| `src/parse_constraints.pl` | The ten reference constraints (HMD and VMD as counts), the public boundary validator (`valid_boundaries/2`), and the search for candidate layouts with metadata in the middle of the table (`table_layouts/2`, not yet used by the pipeline). |
+| `src/parse_constraints.pl` | The ten reference constraints (HMD and VMD as counts), the public boundary validator (`valid_boundaries/2`), and the search for candidate layouts with metadata in the middle of the table (`table_layouts/2`), and the candidates the pipeline uses (`table_candidates/2`). |
 | `tests/table_layouts_regression_tests.pl` | Offline tests for `valid_boundaries/2` and `table_layouts/2` on hand-built rasters: separator rows, central HMD and VMD, nested and mixed cuts. |
+| `tests/layout_pipeline_regression_tests.pl` | Offline tests for layout candidates through the whole pipeline: records, version 2 certificates, HTML, the review, the final pages and the export. |
 | `tests/legacy_index_constraints.pl` | The original last-index constraints, kept as a test reference only. |
 | `src/fast_boundaries.pl` | Indexed adjacency summaries for efficient exhaustive-equivalent boundary enumeration. |
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
@@ -929,8 +943,16 @@ Do not derive labels from the inspection HTML/CSS. The JSONL records include:
   `cells`: each distinct cell ID with its top-left `row`/`column`, text, tag,
   and `source_xpath` using 1-based element-sibling XPath steps. Cells added
   to pad short rows have `kind: "synthetic_gap"` and `source_xpath: null`.
-- `candidates`: **all** structurally valid boundaries, in deterministic search
-  order. Each candidate has `candidate_id` such as `PMC123/t0/h1_v0`, `hmd`
+- `candidates`: **all** structurally valid candidates, in deterministic search
+  order (`table_candidates/2`). A candidate of `kind: "boundary"` is a plain
+  boundary. A candidate of `kind: "layout"` (`candidate_id` such as
+  `PMC123/t0/layout0`) sets aside rows covered by a single cell or has
+  metadata in the middle of the table: its `hmd` and `vmd` are those of the
+  top-level block, `separators` lists the slots set aside as `{row,
+  columns}`, `subtables` lists `{rows, columns, hmd, vmd}`, its labels may
+  also be `"separator"`, and its certificate is the version 2 certificate
+  `certificateN_layoutK.pl`, whose `claim` is a list with one claim per
+  subtable. Each candidate has `candidate_id` such as `PMC123/t0/h1_v0`, `hmd`
   and `vmd` as **counts** (the number of HMD rows and VMD columns; schema 1.x
   files stored the last HMD row and VMD column instead), and one
   `{cell_id, region}` label per distinct raster cell, with region `"hmd"`,
@@ -994,8 +1016,9 @@ between subtables, and no cell is part data and part metadata. A header
 cell may head several subtables, e.g. the HMD over both sides of a vertical
 cut. A separator of a data region also covers the VMD columns beside it: the
 VMD cell next to a section title heads no data, so it is set aside with the
-title, and `layout_labels/3` labels it a separator too. Layouts are not yet passed through the
-pipeline, so the build writes version 1 certificates only.
+title, and `layout_labels/3` labels it a separator too. The build writes
+`certificateN_layoutK.pl` for every layout candidate that is labelable, and
+checks it before publishing like the version 1 certificates.
 
 For each candidate the build writes `certificateN_hH_vV.pl` if it is
 labelable. Before publishing, the stage validator reads every certificate

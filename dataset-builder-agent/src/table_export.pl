@@ -35,9 +35,11 @@
 % appears in both residual_corner and the horizontal metadata. A padding cell
 % in a metadata region has the empty text "" as its key.
 %
-% For now every table has exactly one subtable. Tables with central metadata
-% (several subtables) are not supported yet: such tables have no candidate,
-% so they are never "valid" here. Every other table (unparseable,
+% A plain (Hmd, Vmd) candidate is one subtable. A layout candidate (rows set
+% aside, or metadata in the middle of the table) gives one subtable per
+% subtable of the layout, and "separators" lists the rows it sets aside with
+% their text; it is [] for a plain candidate. The review only selects
+% layouts of one subtable for now, so a valid table has one subtable. Every other table (unparseable,
 % unreviewed, no candidates) keeps its entry, with its final_status and
 % "subtables": null, so table_index still lines up with tables.jsonl and
 % review.jsonl.
@@ -181,7 +183,7 @@ export_table(Record, Review, Entry) :-
                label:Label, caption:Caption,
                final_status:Review.final_status},
    Empty = json{candidate_id:null, boundary:null, geometric_certificate:null,
-                export_error:null, subtables:null},
+                export_error:null, subtables:null, separators:null},
    (  Review.final_status == "valid",
       Id = Review.selected_candidate_id,
       member(Candidate, Record.candidates),
@@ -191,13 +193,14 @@ export_table(Record, Review, Entry) :-
       ; Certificate = null ),
       Selected = json{candidate_id:Id, boundary:json{hmd:Hmd, vmd:Vmd},
                       geometric_certificate:Certificate},
-      (  catch(table_structure(Record, Hmd, Vmd, Structure),
+      (  catch(candidate_structures(Record, Candidate, Structures, Separators),
               export_error(Why), true)
       -> true
       ;  Why = structure_not_built
       ),
       (  var(Why)
-      -> put_dict(subtables, Selected, [Structure], Exported)
+      -> put_dict(json{subtables:Structures, separators:Separators}, Selected,
+                  Exported)
       ;  format(string(WhyText), "~q", [Why]),
          put_dict(export_error, Selected, WhyText, Exported)
       ),
@@ -209,6 +212,38 @@ export_table(Record, Review, Entry) :-
    ;  Fields = Empty
    ),
    put_dict(Fields, Base, Entry).
+
+% candidate_structures(+Record, +Candidate, -Subtables, -Separators)
+% A plain candidate is one subtable, the whole table at its boundary. A
+% layout candidate (kind "layout") has a subtable for each of its subtables,
+% each built from the slots at its rows and columns as a table of its own,
+% and Separators gives the rows it sets aside as {row, text}, text being the
+% texts of the row's cells, joined by " | ".
+candidate_structures(Record, Candidate, Subtables, Separators) :-
+   (  get_dict(kind, Candidate, "layout")
+   -> maplist(subtable_structure(Record), Candidate.subtables, Subtables),
+      cell_texts(Record.cells, Texts),
+      maplist(separator_entry(Record.raster, Texts), Candidate.separators, Separators)
+   ;  table_structure(Record, Candidate.hmd, Candidate.vmd, Structure),
+      Subtables = [Structure],
+      Separators = []
+   ).
+
+subtable_structure(Record, Sub, Structure) :-
+   findall(Row,
+           ( member(R, Sub.rows), nth0(R, Record.raster, Full),
+             findall(Id, ( member(C, Sub.columns), nth0(C, Full, Id) ), Row) ),
+           View),
+   put_dict(raster, Record, View, SubRecord),
+   table_structure(SubRecord, Sub.hmd, Sub.vmd, Structure).
+
+separator_entry(Raster, Texts, Separator, json{row:R, text:Text}) :-
+   R = Separator.row,
+   nth0(R, Raster, Full),
+   findall(Id, ( member(C, Separator.columns), nth0(C, Full, Id) ), Ids0),
+   list_to_set(Ids0, Ids),
+   findall(T, ( member(Id, Ids), get_assoc(Id, Texts, T), T \== null, T \== "" ), Parts),
+   atomics_to_string(Parts, " | ", Text).
 
 % table_structure(+Record, +Hmd, +Vmd, -Subtable)
 % Subtable is the one subtable of the table at the boundary (Hmd, Vmd), as a

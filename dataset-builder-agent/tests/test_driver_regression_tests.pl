@@ -138,4 +138,20 @@ test(oversized_colspan_is_rejected,
         '<table><tr><td colspan="1000000000">a</td></tr></table>', File),
     test_table_parser(File, _).
 
+% Rows covered by one cell (a title above the header, a section row in the
+% middle) are set aside: every candidate is a layout, with its own view in
+% which the separator rows are khaki.
+test(rows_covered_by_one_cell_give_layout_views,
+     [setup(make_workspace(Root)), cleanup(remove_workspace(Root))]) :-
+    write_input(Root, 'a.html',
+        '<table><tr><th colspan="3">Table title</th></tr><tr><th>Drug</th><th>A</th><th>B</th></tr><tr><td>X</td><td>1</td><td>2</td></tr><tr><td colspan="3">Section two</td></tr><tr><td>Y</td><td>3</td><td>4</td></tr></table>',
+        File),
+    test_table_parser(File, Files),
+    maplist([P, B]>>(file_base_name(P, B0), atom_string(B0, B)), Files, Names),
+    Names == ["table0_layout0.html", "table0_layout1.html", "table0_layout2.html"],
+    last(Files, Last),
+    contains(Last, "khaki"),
+    contains(Last, "springgreen"),
+    contains(Last, "skyblue").
+
 :- end_tests(test_driver).

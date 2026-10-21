@@ -8,13 +8,17 @@
 % marks, label, caption and notes) but not the parser's candidates, and gives
 % its own boundary: the number H of column-header rows and the number V of
 % row-header columns, either of which may be 0. Prolog then matches that
-% answer against the candidates:
+% answer against the candidates that are a single table: plain (hmd, vmd)
+% boundaries, and layouts of one subtable with rows set aside (see
+% candidate_boundaries/2). Layouts with metadata in the middle of the table
+% are never matched:
 %
 %   parser status   model answer                 final_status   decided_by
 %   unique          equals the candidate          valid          llm
 %   ambiguous       equals one of the candidates  valid          llm
 %   unique/ambig.   any other counts, e.g. 0, 0   unparseable    llm
 %   abstained       (not asked)                   unparseable    parser
+%   only central    (not asked)                   unreviewed     null
 %   quarantined     (not asked)                   unreviewed     null
 %   too large       (not asked)                   unreviewed     null
 %   no valid answer after a retry                 unreviewed     null
@@ -253,6 +257,8 @@ review_item_for(Settings, Record, review_item(Uid, Action, Prompt, Info)) :-
    -> Action = skip, Prompt = "", put_dict(skip_reason, Info0, "quarantined", Info)
    ;  Record.status == "abstained"
    -> Action = skip, Prompt = "", put_dict(skip_reason, Info0, "parser_abstained", Info)
+   ;  Boundaries == []
+   -> Action = skip, Prompt = "", put_dict(skip_reason, Info0, "only_central_layouts", Info)
    ;  review_slots(Record, Slots), review_limit(max_slots, MaxSlots), Slots > MaxSlots
    -> Action = skip, Prompt = "", put_dict(skip_reason, Info0, "too_large_for_review", Info)
    ;  table_review_prompt(Record, Settings, Prompt0),
@@ -267,13 +273,38 @@ review_slots(Record, Slots) :-
    -> Slots is Record.rows * Record.columns
    ;  Slots = 0 ).
 
+% candidate_boundaries(+Record, -Boundaries): the candidates the model's
+% answer can be matched with, with the counts it must equal.
+%
+% A layout of one subtable (kind "layout", rows set aside but no metadata in
+% the middle) is read like a boundary of the whole table, as the model reads
+% it: H counts the rows from the top down to the last HMD row, so a title row
+% set aside above the HMD is counted with it, and V is the subtable's VMD
+% columns, which are always the first columns. Each such reading of a table
+% gives distinct counts, so a match is never ambiguous. A layout of several
+% subtables (metadata in the middle of the table) shares the counts of its
+% top-level block with another candidate; matching it would select a layout
+% the model never described, so it is never matched. A table whose
+% candidates are all of that kind is not reviewed.
 candidate_boundaries(Record, Boundaries) :-
    (  is_list(Record.candidates)
    -> findall(b{candidate_id:Id, hmd:H, vmd:V},
               ( member(C, Record.candidates),
-                Id = C.candidate_id, H = C.hmd, V = C.vmd ),
+                reviewable_counts(C, H, V),
+                Id = C.candidate_id ),
               Boundaries)
    ;  Boundaries = [] ).
+
+reviewable_counts(C, H, V) :-
+   (  get_dict(kind, C, "layout")
+   -> get_dict(subtables, C, [Sub]),
+      V = Sub.vmd,
+      (  Sub.hmd =:= 0
+      -> H = 0
+      ;  Last is Sub.hmd - 1,
+         nth0(Last, Sub.rows, LastRow),
+         H is LastRow + 1 )
+   ;  H = C.hmd, V = C.vmd ).
 
 review_item_action(review_item(_, Action, _, _), Action).
 review_item_prompt(review_item(_, _, Prompt, _), Prompt).

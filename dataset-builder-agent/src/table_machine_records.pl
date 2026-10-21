@@ -11,6 +11,16 @@
 % Each candidate carries a geometric_certificate (table_certify.pl): either
 % the claim proved and the certificate file written next to the table, or
 % the kernel's reason for rejecting each claim.
+%
+% A candidate is of one of two kinds (table_candidates/2):
+%   "boundary"  a plain (hmd, vmd) boundary, certified by a version 1
+%               certificate certificateN_hH_vV.pl;
+%   "layout"    a layout with rows set aside or metadata in the middle of
+%               the table, id .../layoutK. Its hmd and vmd are those of the
+%               top-level block; separators ({row, columns}) and subtables
+%               ({rows, columns, hmd, vmd}) give the split that the version 2
+%               certificate certificateN_layoutK.pl proves, whose claim is a
+%               list, one per subtable. Its labels may also be "separator".
 
 machine_table_record(Pmc, Index, Table, Context, Raster, Boundaries,
                      Record, TableMetadata) :-
@@ -139,13 +149,52 @@ machine_candidate(TableUid, Index, Raster, FirstSlots, json{hmd:Hmd,vmd:Vmd},
    format(string(CandidateId), '~s/h~d_v~d', [TableUid, Hmd, Vmd]),
    maplist(machine_cell_label(Hmd, Vmd), FirstSlots, Labels),
    machine_certificate(TableUid, Index, Raster, Hmd, Vmd, Certificate),
-   Candidate = json{candidate_id:CandidateId, hmd:Hmd, vmd:Vmd,
+   Candidate = json{candidate_id:CandidateId, kind:"boundary", hmd:Hmd, vmd:Vmd,
+                    labels:Labels, failed_constraints:[],
+                    geometric_certificate:Certificate}.
+% A layout (table_candidates/2): hmd and vmd are those of the top-level
+% block, the subtables and separators those of layout_subtables/4, and the
+% certificate is the version 2 certificate of the whole layout.
+machine_candidate(TableUid, Index, Raster, FirstSlots, layout(K, Layout),
+                  Candidate) :-
+   format(string(CandidateId), '~s/layout~d', [TableUid, K]),
+   Layout = layout(_, block(HmdRows, VmdCols, _)),
+   length(HmdRows, Hmd),
+   length(VmdCols, Vmd),
+   layout_labels(Raster, Layout, Grid),
+   maplist(machine_grid_label(Grid), FirstSlots, Labels),
+   layout_subtables(Raster, Layout, Separators, Subtables),
+   maplist(machine_separator_json, Separators, SeparatorJson),
+   maplist(machine_subtable_json, Subtables, SubtableJson),
+   machine_layout_certificate(TableUid, Index, Raster, K, Separators,
+                              Subtables, Certificate),
+   Candidate = json{candidate_id:CandidateId, kind:"layout", hmd:Hmd, vmd:Vmd,
+                    separators:SeparatorJson, subtables:SubtableJson,
                     labels:Labels, failed_constraints:[],
                     geometric_certificate:Certificate}.
 
 machine_cell_label(Hmd, Vmd, Id-(R-C), json{cell_id:Id, region:Name}) :-
    slot_region(Hmd, Vmd, R, C, Region),
    atom_string(Region, Name).
+
+machine_grid_label(Grid, Id-(R-C), json{cell_id:Id, region:Name}) :-
+   nth0(R, Grid, Row),
+   nth0(C, Row, Region),
+   atom_string(Region, Name).
+
+machine_separator_json(separator(Row, Cols), json{row:Row, columns:Cols}).
+
+machine_subtable_json(subtable(Rows, Cols, Hmd, Vmd),
+                      json{rows:Rows, columns:Cols, hmd:Hmd, vmd:Vmd}).
+
+% candidate_layout_parts(+Candidate, -Separators, -Subtables): the separators
+% and subtables a layout candidate's JSON records, as layout_subtables/4
+% gives them.
+candidate_layout_parts(Candidate, Separators, Subtables) :-
+   get_dict(separators, Candidate, SeparatorJson),
+   get_dict(subtables, Candidate, SubtableJson),
+   maplist(machine_separator_json, Separators, SeparatorJson),
+   maplist(machine_subtable_json, Subtables, SubtableJson).
 
 % machine_certificate(+TableUid, +Index, +Raster, +Hmd, +Vmd, -Certificate)
 % The JSON summary of certify/5: the claim proved and the file holding the
@@ -167,14 +216,53 @@ machine_certificate(TableUid, Index, Raster, Hmd, Vmd, Certificate) :-
                          rejections:json{columns:ColumnText, rows:RowText}}
    ).
 
+% machine_layout_certificate(+TableUid, +Index, +Raster, +K, +Separators,
+%                            +Subtables, -Certificate)
+% The same for a layout, from certify_layout/5. claim lists the claim proved
+% for each subtable; rejections lists the subtables that are not labelable,
+% or gives the kernel's reason for rejecting the partition.
+machine_layout_certificate(TableUid, Index, Raster, K, Separators, Subtables,
+                           Certificate) :-
+   certify_layout(Raster, Separators, Subtables, TableUid, Result),
+   (  Result = certificate(Facts)
+   -> findall(ClaimName, ( member(claim(_, Claim), Facts),
+                           atom_string(Claim, ClaimName) ), Claims),
+      layout_certificate_file_name(Index, K, File),
+      atom_string(File, FileName),
+      Certificate = json{status:"certified", claim:Claims,
+                         file:FileName, rejections:null}
+   ;  Result = not_labelable(Reasons)
+   -> findall(json{subtable:Sub, columns:ColumnText, rows:RowText},
+              ( member(Sub-[columns-ColumnWhy, rows-RowWhy], Reasons),
+                format(string(ColumnText), '~q', [ColumnWhy]),
+                format(string(RowText), '~q', [RowWhy]) ),
+              Rejections),
+      Certificate = json{status:"not_labelable", claim:null, file:null,
+                         rejections:json{subtables:Rejections}}
+   ;  Result = rejected(Why),
+      format(string(WhyText), '~q', [Why]),
+      Certificate = json{status:"not_labelable", claim:null, file:null,
+                         rejections:json{partition:WhyText}}
+   ).
+
 certificate_file_name(Index, Hmd, Vmd, File) :-
    format(atom(File), 'certificate~d_h~d_v~d.pl', [Index, Hmd, Vmd]).
 
-% machine_certificate_files(+TableUid, +Index, +Raster, +Boundaries, -Files)
-% Files is File-Facts for every boundary with an accepted certificate.
-machine_certificate_files(TableUid, Index, Raster, Boundaries, Files) :-
+layout_certificate_file_name(Index, K, File) :-
+   format(atom(File), 'certificate~d_layout~d.pl', [Index, K]).
+
+% machine_certificate_files(+TableUid, +Index, +Raster, +Candidates, -Files)
+% Files is File-Facts for every candidate with an accepted certificate.
+machine_certificate_files(TableUid, Index, Raster, Candidates, Files) :-
    findall(File-Facts,
-           ( member(json{hmd:Hmd, vmd:Vmd}, Boundaries),
-             certify(Raster, Hmd, Vmd, TableUid, certificate(Facts)),
-             certificate_file_name(Index, Hmd, Vmd, File) ),
+           ( member(Candidate, Candidates),
+             candidate_certificate(TableUid, Index, Raster, Candidate, File, Facts) ),
            Files).
+
+candidate_certificate(TableUid, Index, Raster, json{hmd:Hmd, vmd:Vmd}, File, Facts) :-
+   certify(Raster, Hmd, Vmd, TableUid, certificate(Facts)),
+   certificate_file_name(Index, Hmd, Vmd, File).
+candidate_certificate(TableUid, Index, Raster, layout(K, Layout), File, Facts) :-
+   layout_subtables(Raster, Layout, Separators, Subtables),
+   certify_layout(Raster, Separators, Subtables, TableUid, certificate(Facts)),
+   layout_certificate_file_name(Index, K, File).

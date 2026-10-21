@@ -25,9 +25,10 @@
 %       clock-polling fallback (DeepClause's WebAssembly engine).
 %   process_paper(+PmcId, +File, +DatasetDir, -Summary)
 %       Extract every <table> of the full text File, rasterize it with
-%       table_layout_generator.pl, check every header boundary against
-%       parse_constraints.pl, and color the table for each valid boundary
-%       with table_annotator.pl. The tables are saved as
+%       table_layout_generator.pl, find its candidates with
+%       parse_constraints.pl (table_candidates/2: header boundaries, and
+%       layouts with separator rows or metadata in the middle of the table),
+%       and color the table for each candidate with table_annotator.pl. The tables are saved as
 %       <DatasetDir>/papers/PMC<id>/candidatesN.html, N from 0, each
 %       beside an uncolored input_tableN.html for comparison.
 %       The directory is replaced as a whole after a successful run; the
@@ -470,7 +471,7 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
                 _, fail)),
    length(Tables, NumTables),
    format(string(Summary),
-          "~s: ~d table(s), ~d with a valid header boundary -> papers/~s/",
+          "~s: ~d table(s), ~d with a candidate -> papers/~s/",
           [PaperName, NumTables, NumParsed, PaperName]).
 
 
@@ -1140,9 +1141,10 @@ staged_certificate_names(Records, Names) :-
    sort(Names0, Names).
 
 % Every certificate a record names is read back as data and must be exactly
-% the certificate certify/5 gives for the record's raster and boundary, and
-% the kernel must accept it. The records themselves were already checked
-% against certify/5 by machine_record_consistent/1.
+% the certificate certify/5 gives for the record's raster and boundary (for a
+% layout, certify_layout/5 for its separators and subtables), and the kernel
+% must accept it. The records themselves were already checked against the
+% candidate search by machine_record_consistent/1.
 verify_staged_certificates(StageDir, Records) :-
    forall(( member(Record, Records),
             member(Candidate, Record.candidates),
@@ -1153,14 +1155,21 @@ verify_staged_certificate(StageDir, Record, Candidate) :-
    atom_string(Name, Candidate.geometric_certificate.file),
    directory_file_path(StageDir, Name, File),
    (  catch(read_certificate_file(File, Facts), _, fail),
-      certify(Record.raster, Candidate.hmd, Candidate.vmd, Record.table_uid,
-              certificate(Expected)),
+      expected_certificate(Record, Candidate, Expected),
       Facts == Expected,
       check_certificate(Facts)
    -> true
    ;  throw(error(incomplete_paper_stage(invalid_certificate(Name)),
                   context(process_paper/4, 'Staged certificate is not valid')))
    ).
+
+expected_certificate(Record, Candidate, Expected) :-
+   (  get_dict(kind, Candidate, "layout")
+   -> candidate_layout_parts(Candidate, Separators, Subtables),
+      certify_layout(Record.raster, Separators, Subtables, Record.table_uid,
+                     certificate(Expected))
+   ;  certify(Record.raster, Candidate.hmd, Candidate.vmd, Record.table_uid,
+              certificate(Expected)) ).
 
 machine_records_match_metadata(Records, Contexts, Pmc, ParsedCount) :-
    machine_records_match_metadata(Records, Contexts, Pmc, 0, 0, ParsedCount).
@@ -1199,9 +1208,9 @@ machine_record_consistent(Record) :-
    length(FirstSlots, NumCells),
    length(Record.cells, NumCells),
    maplist(machine_record_cell_consistent, FirstSlots, Record.cells),
-   % Recompute the complete candidate set once using the indexed checker.
-   % This verifies membership, order and completeness as well as labels.
-   valid_boundaries(Record.raster, ExpectedBoundaries),
+   % Recompute the complete candidate set once. This verifies membership,
+   % order and completeness as well as labels, subtables and separators.
+   table_candidates(Record.raster, ExpectedBoundaries),
    maplist(machine_record_candidate_consistent(Record.table_uid,
                                                Record.table_index,
                                                Record.raster, FirstSlots),
@@ -1280,16 +1289,19 @@ save_input_table(PaperDir, N, Table, Context) :-
              [WithContext]),
       close(Stream)).
 
-% save_table(+TableFile, +Table, +Raster, -Boundaries)
-% The file holds the table colored once for every valid (Hmd, Vmd) boundary,
-% one copy after another; a table with no valid boundary is saved uncolored.
+% save_table(+TableFile, +Table, +Raster, -Candidates)
+% Candidates are those of table_candidates/2: plain json{hmd, vmd}
+% boundaries, and layout(K, Layout) for layouts with rows set aside or
+% metadata in the middle of the table. The file holds the table colored once
+% for every candidate, one copy after another; a table with no candidate is
+% saved uncolored.
 save_table(TableFile, Table, Raster, Boundaries) :-
    table_source_context(Table, [], none, Context),
    save_table(TableFile, Table, Raster, Context, Boundaries).
 
 save_table(TableFile, Table, Raster, Context, Boundaries) :-
    Table = element(table, _, _),
-   valid_boundaries(Raster, Boundaries),
+   table_candidates(Raster, Boundaries),
    ensure_candidate_output_budget(Raster, Boundaries),
    % Stream candidate views one by one. Do not materialize the full table
    % once for every surviving boundary, and do not rasterize it again.
@@ -1336,6 +1348,19 @@ save_candidate_stream(Stream, Context, Table, Raster, Boundary) :-
    annotate_precleaned_table_raster(Hmd, Vmd, Table, Raster, Annotated),
    table_html(Annotated, Html),
    save_annotated_candidate(Stream, Context, Boundary, Html).
+save_candidate_stream(Stream, Context, Table, Raster, layout(K, Layout)) :-
+   layout_labels(Raster, Layout, Labels),
+   annotate_precleaned_table_labels(Labels, Table, Raster, Annotated),
+   table_html(Annotated, Html),
+   layout_subtables(Raster, Layout, Separators, Subtables),
+   layout_description(Layout, Separators, Subtables, Description),
+   contextual_table_annotation(Context, Html, WithContext),
+   ( get_dict(table_uid, Context, TableUid)
+   -> format(string(CandidateId), '~s/layout~d', [TableUid, K])
+   ;  format(string(CandidateId), 'layout~d', [K]) ),
+   format(Stream,
+          '<h3 class="layout-candidate" data-candidate-id="~s">Candidate layout~d (~s)</h3>~n~s~n',
+          [CandidateId, K, Description, WithContext]).
 
 save_annotated_candidates(Stream, Context, [], [Annotation]) :- !,
    contextual_table_annotation(Context, Annotation, WithContext),
@@ -1355,6 +1380,29 @@ save_annotated_candidate(Stream, Context, json{hmd:Hmd,vmd:Vmd}, Annotation) :-
    format(Stream,
           '<h3 class="boundary-candidate" data-candidate-id="~s" data-hmd="~d" data-vmd="~d">Candidate h~d_v~d (~s)</h3>~n~s~n',
           [CandidateId, Hmd, Vmd, Hmd, Vmd, Description, WithContext]).
+
+% layout_description(+Layout, +Separators, +Subtables, -Text), e.g.
+% "2 subtables, 1 separator row; top: 2 HMD rows, 1 VMD column".
+layout_description(layout(_, block(HmdRows, VmdCols, _)), Separators, Subtables,
+                   Text) :-
+   length(Subtables, NumSubtables),
+   length(Separators, NumSeparators),
+   length(HmdRows, Hmd),
+   length(VmdCols, Vmd),
+   ( NumSubtables =:= 1 -> SubText = "1 subtable"
+   ; format(string(SubText), "~d subtables", [NumSubtables]) ),
+   region_count_text(NumSeparators, "separator row", SepText),
+   boundary_description(Hmd, Vmd, Top),
+   format(string(Text), "~s, ~s; top: ~s", [SubText, SepText, Top]).
+
+% candidate_description(+Candidate, -Text): a tables.jsonl candidate.
+candidate_description(Candidate, Text) :-
+   (  get_dict(kind, Candidate, "layout")
+   -> length(Candidate.subtables, NumSubtables),
+      length(Candidate.separators, NumSeparators),
+      region_count_text(NumSeparators, "separator row", SepText),
+      format(string(Text), "layout of ~d subtable(s), ~s", [NumSubtables, SepText])
+   ;  boundary_description(Candidate.hmd, Candidate.vmd, Text) ).
 
 % boundary_description(+Hmd, +Vmd, -Text), e.g. "2 HMD rows, no VMD columns".
 boundary_description(Hmd, Vmd, Text) :-
@@ -1432,10 +1480,12 @@ final_succeeded(Record, Review, [Heading, Reason], Table) :-
    llm_reason_paragraph(Review, Reason),
    Id = Review.selected_candidate_id,
    (  member(C, Record.candidates), C.candidate_id == Id
-   -> Hmd = C.hmd, Vmd = C.vmd
+   -> true
    ;  throw(error(final_table_error(unknown_candidate(Id)),
                   context(final_table_html/3, 'Selected candidate is not in tables.jsonl'))) ),
-   final_colored_table(Record, Hmd, Vmd, Table).
+   (  get_dict(kind, C, "layout")
+   -> final_colored_layout(Record, C, Table)
+   ;  final_colored_table(Record, C.hmd, C.vmd, Table) ).
 
 final_misaligned(Record, Review, [Heading, Reason, Details]) :-
    Heading = element(h2, [class='final-status'],
@@ -1446,7 +1496,7 @@ final_misaligned(Record, Review, [Heading, Reason, Details]) :-
       format(string(LlmText), "LLM: ~s.", [Llm])
    ;  LlmText = "LLM: no answer." ),
    findall(D, ( member(C, Record.candidates),
-                boundary_description(C.hmd, C.vmd, D0),
+                candidate_description(C, D0),
                 format(string(D), "~w (~s)", [C.candidate_id, D0]) ), Described),
    atomics_to_string(Described, "; ", CandidateText),
    format(string(DetailText), "~s Formal table parser candidates: ~s.", [LlmText, CandidateText]),
@@ -1464,6 +1514,8 @@ final_not_reviewed(Review, [Heading, Why]) :-
    Heading = element(h2, [class='final-status'], ['Not Reviewed']),
    (  get_dict(not_reviewed_reason, Review, "too_large_for_review")
    -> Text = "The table is too large to send to the LLM."
+   ;  get_dict(not_reviewed_reason, Review, "only_central_layouts")
+   -> Text = "The formal table parser found only layouts with metadata in the middle of the table, which the LLM review cannot check yet."
    ;  Review.error \== null
    -> format(string(Text), "No usable answer from the LLM: ~w", [Review.error])
    ;  Text = "The table was not reviewed." ),
@@ -1477,6 +1529,30 @@ llm_reason_paragraph(Review, element(p, [class='llm-reason'], [Text])) :-
 % The source table is re-parsed from tables.jsonl and must rasterize to the
 % recorded raster, so the colors are those of the reviewed boundary.
 final_colored_table(Record, Hmd, Vmd, WithContext) :-
+   final_source_table(Record, Clean, Raster),
+   annotate_precleaned_table_raster(Hmd, Vmd, Clean, Raster, Annotated),
+   table_html(Annotated, TableHtml),
+   contextual_table_annotation(Record.context, TableHtml, WithContext).
+
+% The same for a layout candidate, colored by the region tables.jsonl
+% records for each cell, separators included.
+final_colored_layout(Record, Candidate, WithContext) :-
+   final_source_table(Record, Clean, Raster),
+   findall(Id-Region, ( member(L, Candidate.labels), Id = L.cell_id,
+                        atom_string(Region, L.region) ), Pairs),
+   list_to_assoc(Pairs, Regions),
+   maplist(row_regions(Regions), Raster, Labels),
+   annotate_precleaned_table_labels(Labels, Clean, Raster, Annotated),
+   table_html(Annotated, TableHtml),
+   contextual_table_annotation(Record.context, TableHtml, WithContext).
+
+row_regions(Regions, Row, Labels) :-
+   maplist(cell_region(Regions), Row, Labels).
+
+cell_region(Regions, Id, Region) :-
+   get_assoc(Id, Regions, Region).
+
+final_source_table(Record, Clean, Raster) :-
    parse_html(Record.source_table_html, Dom),
    (  extract_tables(Dom, [Table|_])
    -> true
@@ -1487,10 +1563,7 @@ final_colored_table(Record, Hmd, Vmd, WithContext) :-
    -> true
    ;  throw(error(final_table_error(raster_mismatch(Record.table_uid)),
                   context(final_table_html/3, 'Source table no longer matches its raster'))) ),
-   safe_table_dom(Table, Clean),
-   annotate_precleaned_table_raster(Hmd, Vmd, Clean, Raster, Annotated),
-   table_html(Annotated, TableHtml),
-   contextual_table_annotation(Record.context, TableHtml, WithContext).
+   safe_table_dom(Table, Clean).
 
 table_annotations(Table, [], [Html]) :- !,
    safe_table_dom(Table, SafeTable),

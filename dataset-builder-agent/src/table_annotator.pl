@@ -10,6 +10,10 @@
 %
 % Hmd and Vmd are counts: Hmd = 0 means no HMD rows, Vmd = 0 no VMD columns.
 %
+% A layout of table_layouts/2, which may hold metadata in the middle of the
+% table and rows set aside, is colored from its grid of labels instead
+% (annotate_table_element_labels/4), with separators in khaki.
+%
 % A cell's row and column are those of its top-left slot in the raster built
 % by table_layout_generator.pl, so merged cells and <thead>/<tfoot> ordering
 % are handled exactly as they are during rasterization.
@@ -30,6 +34,7 @@
 region_color(hmd,  springgreen).
 region_color(vmd,  skyblue).
 region_color(data, lightgray).
+region_color(separator, khaki).
 
 % annotate_table(+Hmd, +Vmd, +HtmlTable, -AnnotatedTable)
 % HtmlTable is HTML text holding a table; AnnotatedTable is the same table as
@@ -63,6 +68,20 @@ annotate_precleaned_table_raster(Hmd, Vmd, element(table, Attrs, Children),
    first_cell_ids(Children, Ids0),
    annotate_children(Children, Colors, Ids0, _, NewChildren).
 
+% annotate_table_element_labels(+Labels, +Table, +Raster, -Annotated)
+% Table colored by a grid of labels in the shape of Raster (hmd, vmd, data or
+% separator), as layout_labels/3 of parse_constraints.pl gives for a layout.
+% Like annotate_table_element_raster/5 it sanitizes the source first.
+annotate_table_element_labels(Labels, Table, Raster, Annotated) :-
+   safe_table_dom(Table, CleanTable),
+   annotate_precleaned_table_labels(Labels, CleanTable, Raster, Annotated).
+
+annotate_precleaned_table_labels(Labels, element(table, Attrs, Children),
+                                 Raster, element(table, Attrs, NewChildren)) :-
+   label_colors(Raster, Labels, Colors),
+   first_cell_ids(Children, Ids0),
+   annotate_children(Children, Colors, Ids0, _, NewChildren).
+
 % table_html(+Element, -Html): Element serialized as an HTML string.
 table_html(Element, Html) :-
    with_output_to(
@@ -91,6 +110,22 @@ slot_color(Hmd, Vmd, R, Id, C-Colors0, C1-Colors) :-
       put_assoc(Id, Colors0, Color, Colors)
    ),
    C1 is C + 1.
+
+% label_colors(+Raster, +Labels, -Colors): the same for a grid of labels in
+% the shape of Raster. A merged cell takes the label of its top-left slot.
+label_colors(Raster, Labels, Colors) :-
+   empty_assoc(Colors0),
+   foldl(row_label_colors, Raster, Labels, Colors0, Colors).
+
+row_label_colors(Row, RowLabels, Colors0, Colors) :-
+   foldl(slot_label_color, Row, RowLabels, Colors0, Colors).
+
+slot_label_color(Id, Label, Colors0, Colors) :-
+   (  get_assoc(Id, Colors0, _)
+   -> Colors = Colors0
+   ;  region_color(Label, Color),
+      put_assoc(Id, Colors0, Color, Colors)
+   ).
 
 slot_region(Hmd, Vmd, R, C, Region) :-
    (  R < Hmd -> Region = hmd

@@ -9,12 +9,16 @@
 % For every <table> in the file (in document order, an outer table before any
 % table nested in it) the driver
 %   1. rasterizes it (table_layout_generator.pl),
-%   2. enumerates the structural header boundaries (parse_constraints.pl),
-%   3. writes one sanitized, colored HTML view per candidate boundary
-%      (table_annotator.pl), or one uncolored view when no boundary exists.
+%   2. enumerates its candidates (table_candidates/2 of parse_constraints.pl):
+%      structural header boundaries, and layouts with rows set aside or
+%      metadata in the middle of the table,
+%   3. writes one sanitized, colored HTML view per candidate
+%      (table_annotator.pl), or one uncolored view when there is none.
 %
 % Output files go to OutDir (default: "<File>.tables"):
 %   table<N>_hmd<H>_vmd<V>.html   table N colored for H HMD rows, V VMD columns
+%   table<N>_layout<K>.html       table N colored for its K-th layout, with
+%                                 separator rows in khaki
 %   table<N>_unannotated.html     table N has no admissible boundary
 % N counts from 0. Before writing, previous files named table*.html in OutDir
 % are removed so stale candidates from an earlier run cannot be mistaken for
@@ -88,7 +92,7 @@ write_tables([Table|Tables], N, OutDir, [Written|More]) :-
 
 write_table_views(Table, N, OutDir, Written) :-
     rasterize_table(Table, Raster),
-    valid_boundaries(Raster, Boundaries),
+    table_candidates(Raster, Boundaries),
     (   Boundaries == []
     ->  safe_table_dom(Table, Safe),
         table_html(Safe, Html),
@@ -108,6 +112,16 @@ write_candidates([json{hmd:Hmd, vmd:Vmd}|Boundaries], Table, Raster, N, OutDir,
     format(atom(Name), 'table~d_hmd~d_vmd~d.html', [N, Hmd, Vmd]),
     format(atom(Title), 'table ~d: hmd ~d, vmd ~d (structural hypothesis)',
            [N, Hmd, Vmd]),
+    write_view(OutDir, Name, Title, Html, Path),
+    write_candidates(Boundaries, Table, Raster, N, OutDir, Paths).
+write_candidates([layout(K, Layout)|Boundaries], Table, Raster, N, OutDir,
+                 [Path|Paths]) :-
+    % annotate_table_element_labels/4 sanitizes the source before coloring.
+    layout_labels(Raster, Layout, Labels),
+    annotate_table_element_labels(Labels, Table, Raster, Annotated),
+    table_html(Annotated, Html),
+    format(atom(Name), 'table~d_layout~d.html', [N, K]),
+    format(atom(Title), 'table ~d: layout ~d (structural hypothesis)', [N, K]),
     write_view(OutDir, Name, Title, Html, Path),
     write_candidates(Boundaries, Table, Raster, N, OutDir, Paths).
 
