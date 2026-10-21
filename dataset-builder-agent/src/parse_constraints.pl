@@ -346,6 +346,7 @@ layout_uncut(Layout, Key) :-
 marginal_block(Raster, Rows, Cols, Boundary, block(HmdRows, VmdCols, Region)) :-
    boundary_split(Rows, Cols, Boundary, HmdRows, VmdCols, DataRows, DataCols),
    partition(region_separator_row(Raster, DataCols), DataRows, Separators, Rest),
+   Rest \== [],
    Region = region(Rest, DataCols, Separators, none).
 
 central_block(Raster, Rows, Cols, Boundary, block(HmdRows, VmdCols, Region)) :-
@@ -389,7 +390,7 @@ take(N, List, Front) :-
    ;  Front = List
    ).
 
-view_transpose([], []).
+view_transpose([], []) :- !.
 view_transpose([[]|_], []) :- !.
 view_transpose(Rows, [Col|Cols]) :-
    maplist(head_tail, Rows, Col, Tails),
@@ -423,8 +424,11 @@ region_separator_row(Raster, Cols, R) :-
 % Region is a reading of the data region Rows x Cols; on backtracking, every
 % reading. Ctx = ctx(HmdRows, VmdCols) is the metadata governing the region.
 % Cuts lists the kinds of cut (h, v) the region itself may start with.
+% A region whose rows are all separators holds no data, like a table that is
+% entirely metadata (constraint 8), and has no reading.
 region(Raster, Ctx, Rows0, Cols, Cuts, region(Rows, Cols, Separators, Split)) :-
    partition(region_separator_row(Raster, Cols), Rows0, Separators, Rows),
+   Rows \== [],
    region_split(Raster, Ctx, Rows, Cols, Cuts, Split).
 
 % The fusion checks of a cut depend only on the two pieces and on Ctx, not on
@@ -566,6 +570,54 @@ paint_row(Cols, Label, R, Slots0, Slots) :-
 
 paint_slot(Label, R, C, Slots0, Slots) :-
    put_assoc(R-C, Slots0, Label, Slots).
+
+% --- subtables --------------------------------------------------------------
+
+% layout_subtables(+Raster, +Layout, -Separators, -Subtables)
+% Layout split into the pieces it labels independently, the form in which
+% table_certify.pl certifies it:
+%   Separators  separator(Row, Cols) for every row set aside. A separator of a
+%               data region also covers the VMD columns governing the
+%               region, so that the VMD cell beside it, which heads no data,
+%               is set aside with it.
+%   Subtables   subtable(Rows, Cols, Hmd, Vmd) for every data region that is
+%               not cut further, fused with the metadata governing it: the
+%               first Hmd of Rows are its HMD, the first Vmd of Cols its VMD.
+% Subtables are in reading order: above before below, left before right.
+layout_subtables(Raster, layout(TopSeparators, block(HmdRows, VmdCols, Region)),
+                 Separators, Subtables) :-
+   raster_dimensions(Raster, _, NumCols),
+   indices(NumCols, AllCols),
+   findall(separator(R, AllCols), member(R, TopSeparators), Top),
+   region_pieces(Region, HmdRows, VmdCols, Pieces),
+   partition(is_separator, Pieces, Inner, Subtables),
+   append(Top, Inner, Separators0),
+   msort(Separators0, Separators).
+
+is_separator(separator(_, _)).
+
+% region_pieces(+Region, +HmdRows, +VmdCols, -Pieces): the separators and
+% subtables of Region, governed by HmdRows and VmdCols.
+region_pieces(region(Rows, Cols, RegionSeparators, Split), HmdRows, VmdCols, Pieces) :-
+   append(VmdCols, Cols, Wide),
+   findall(separator(R, Wide), member(R, RegionSeparators), Own),
+   split_pieces(Split, Rows, Cols, HmdRows, VmdCols, SplitPieces),
+   append(Own, SplitPieces, Pieces).
+
+split_pieces(none, Rows, Cols, HmdRows, VmdCols,
+             [subtable(SubRows, SubCols, Hmd, Vmd)]) :-
+   append(HmdRows, Rows, SubRows),
+   append(VmdCols, Cols, SubCols),
+   length(HmdRows, Hmd),
+   length(VmdCols, Vmd).
+split_pieces(hsplit(Before, block(CentralRows, [], After)), _, _, HmdRows, VmdCols, Pieces) :-
+   region_pieces(Before, HmdRows, VmdCols, Above),
+   region_pieces(After, CentralRows, VmdCols, Below),
+   append(Above, Below, Pieces).
+split_pieces(vsplit(Left, block([], CentralCols, Right)), _, _, HmdRows, VmdCols, Pieces) :-
+   region_pieces(Left, HmdRows, VmdCols, LeftPieces),
+   region_pieces(Right, HmdRows, CentralCols, RightPieces),
+   append(LeftPieces, RightPieces, Pieces).
 
 % distinct_layouts(+Raster, +Layouts, -Distinct): drops every layout that
 % labels the table exactly as an earlier one does.

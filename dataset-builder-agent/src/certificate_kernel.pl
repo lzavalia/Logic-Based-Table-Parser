@@ -35,6 +35,31 @@
 %   column_path(J, Path).            one per data column, for claim(columns)
 %   row_path(I, Path).               one per data row, for claim(rows)
 %
+% Version 2 certifies a table made of several subtables, each one labelled
+% on its own, as for a table with metadata in the middle (table_layouts/2 of
+% parse_constraints.pl):
+%   certificate_version(2).
+%   table_uid(Uid).                  optional, informational
+%   raster(Rows).
+%   separator(Row, Cols).            zero or more: slots set aside
+%   subtable(K, Rows, Cols).         K = 0, 1, ..: the subtable's rows and
+%                                    columns, increasing indices into raster
+%   boundary(K, Hmd, Vmd).           one per subtable, and
+%   claim(K, Claim).                 the version 1 facts of the subtable,
+%   column_path(K, J, Path).         keyed by K; J, I and the paths are
+%   row_path(K, I, Path).            those of the subtable alone
+%
+% Subtable K is the raster made of the slots at Rows x Cols. It must pass
+% every version 1 check at its boundary, and together the subtables and
+% separators must partition the table:
+%   - every slot is in a separator or in a subtable, never both;
+%   - a slot in several subtables has the same role (HMD, VMD or data) in
+%     each, and a data slot is in one subtable only;
+%   - all slots of a cell have the same role, separator included;
+%   - all slots of a data cell are in the same subtable.
+% So a header cell may head several subtables, but data is never shared, no
+% cell is split between data and metadata, and no slot is left unlabelled.
+%
 % This file is the whole trusted base: it depends only on SWI-Prolog's
 % standard libraries, and checks everything the certificate states rather
 % than trusting the generator (table_certify.pl).
@@ -54,13 +79,20 @@
 :- use_module(library(pairs)).
 :- use_module(library(assoc)).
 
-certificate_fact(certificate_version, 1).
-certificate_fact(table_uid, 1).
-certificate_fact(raster, 1).
-certificate_fact(boundary, 2).
-certificate_fact(claim, 1).
-certificate_fact(column_path, 2).
-certificate_fact(row_path, 2).
+% certificate_fact(Version, Name, Arity)
+certificate_fact(_, certificate_version, 1).
+certificate_fact(_, table_uid, 1).
+certificate_fact(_, raster, 1).
+certificate_fact(1, boundary, 2).
+certificate_fact(1, claim, 1).
+certificate_fact(1, column_path, 2).
+certificate_fact(1, row_path, 2).
+certificate_fact(2, separator, 2).
+certificate_fact(2, subtable, 3).
+certificate_fact(2, boundary, 3).
+certificate_fact(2, claim, 2).
+certificate_fact(2, column_path, 3).
+certificate_fact(2, row_path, 3).
 
 % --- entry points ----------------------------------------------------------
 
@@ -103,8 +135,9 @@ read_certificate_terms(Stream, Facts) :-
 % user. A generated certificate calls it as its main goal, so running the
 % certificate file exits with status 0 if it is accepted and 1 if not.
 check_loaded_certificate :-
+   setof(Name/Arity, Version^certificate_fact(Version, Name, Arity), Signatures),
    findall(Fact,
-           ( certificate_fact(Name, Arity),
+           ( member(Name/Arity, Signatures),
              current_predicate(user:Name/Arity),
              functor(Fact, Name, Arity),
              clause(user:Fact, true) ),
@@ -120,21 +153,39 @@ check_loaded_certificate :-
 
 check_steps(Facts) :-
    require(is_list(Facts), not_a_fact_list),
-   forall(member(Fact, Facts), known_fact(Fact)),
+   facts_named(certificate_version, 1, Facts, Versions),
+   (  Versions = [certificate_version(Version)], memberchk(Version, [1, 2])
+   -> forall(member(Fact, Facts), known_fact(Version, Fact))
+   ;  forall(member(Fact, Facts), known_fact(_AnyVersion, Fact))
+   ),
    one_fact(certificate_version(Version), Facts),
-   require(Version == 1, unsupported_version(Version)),
+   require(memberchk(Version, [1, 2]), unsupported_version(Version)),
    optional_fact(table_uid(_), Facts),
    one_fact(raster(Raster), Facts),
-   one_fact(boundary(Hmd, Vmd), Facts),
-   one_fact(claim(Claim), Facts),
    require(rectangular_raster(Raster, Rows, Cols), raster_not_rectangular),
    rectangular_cells(Raster),
+   check_version(Version, Facts, Raster, Rows, Cols).
+
+check_version(1, Facts, Raster, Rows, Cols) :-
+   one_fact(boundary(Hmd, Vmd), Facts),
+   one_fact(claim(Claim), Facts),
+   check_table(Raster, Rows, Cols, Hmd, Vmd, Claim, Facts).
+check_version(2, Facts, Raster, Rows, Cols) :-
+   subtable_keys(Facts, Keys),
+   foldl(check_subtable(Facts, Raster, Rows, Cols), Keys, [], Roles),
+   separator_slots(Facts, Rows, Cols, Separators),
+   check_partition(Raster, Separators, Roles).
+
+% check_table(+Raster, +Rows, +Cols, +Hmd, +Vmd, +Claim, +PathFacts): the
+% version 1 checks of a table whose cells are rectangles. PathFacts holds
+% its column_path/2 or row_path/2 facts.
+check_table(Raster, Rows, Cols, Hmd, Vmd, Claim, PathFacts) :-
    require(( integer(Hmd), integer(Vmd),
              between(0, Rows, Hmd), Hmd < Rows,
              between(0, Cols, Vmd), Vmd < Cols ),
            boundary_out_of_range(Hmd, Vmd)),
    closed_boundary(Raster, Hmd, Vmd),
-   claim_axis(Claim, Facts, Raster, Hmd, Vmd, AxisRaster, AxisHmd, AxisVmd, Claimed),
+   claim_axis(Claim, PathFacts, Raster, Hmd, Vmd, AxisRaster, AxisHmd, AxisVmd, Claimed),
    axis_labelable(AxisRaster, AxisHmd, AxisVmd, Claimed).
 
 require(Goal, Reason) :-
@@ -143,9 +194,11 @@ require(Goal, Reason) :-
    ;  throw(certificate_rejected(Reason))
    ).
 
-known_fact(Fact) :-
+% Without a usable version, Version is unbound and a fact of any version is
+% known, so the version itself is reported next.
+known_fact(Version, Fact) :-
    require(( callable(Fact), functor(Fact, Name, Arity),
-             certificate_fact(Name, Arity) ),
+             certificate_fact(Version, Name, Arity) ),
            unknown_fact(Fact)),
    require(ground(Fact), nonground_fact(Fact)).
 
@@ -162,6 +215,149 @@ optional_fact(Template, Facts) :-
 facts_named(Name, Arity, Facts, Found) :-
    functor(General, Name, Arity),
    include(subsumes_term(General), Facts, Found).
+
+% one_keyed(+Template, +Facts): Template, with its key bound, matches exactly
+% one fact of Facts, which it is unified with.
+one_keyed(Template, Facts) :-
+   include(subsumes_term(Template), Facts, Found),
+   functor(Template, Name, Arity),
+   arg(1, Template, Key),
+   require(Found = [Template], expected_one_fact(Name/Arity, Key)).
+
+% --- version 2: subtables --------------------------------------------------
+
+% subtable_keys(+Facts, -Keys): the subtables are numbered 0 .. N-1, N >= 1,
+% and every keyed fact names one of them.
+subtable_keys(Facts, Keys) :-
+   findall(K, member(subtable(K, _, _), Facts), Keys0),
+   msort(Keys0, Keys),
+   length(Keys, N),
+   require(N >= 1, no_subtables),
+   Last is N - 1,
+   require(numlist_or_empty(0, Last, Keys), subtables_not_numbered(Keys)),
+   forall(( member(Fact, Facts), keyed_fact(Fact, K) ),
+          require(memberchk(K, Keys), unknown_subtable(Fact))).
+
+numlist_or_empty(First, Last, List) :-
+   findall(I, between(First, Last, I), List).
+
+keyed_fact(boundary(K, _, _), K).
+keyed_fact(claim(K, _), K).
+keyed_fact(column_path(K, _, _), K).
+keyed_fact(row_path(K, _, _), K).
+
+% check_subtable(+Facts, +Raster, +Rows, +Cols, +K, +Roles0, -Roles)
+% Subtable K passes the version 1 checks; Roles adds its slots as
+% (R-C)-(K-Role), R and C in the whole raster.
+check_subtable(Facts, Raster, Rows, Cols, K, Roles0, Roles) :-
+   one_keyed(subtable(K, SubRows, SubCols), Facts),
+   one_keyed(boundary(K, Hmd, Vmd), Facts),
+   one_keyed(claim(K, Claim), Facts),
+   require(index_list(SubRows, Rows), subtable_rows_invalid(K)),
+   require(index_list(SubCols, Cols), subtable_columns_invalid(K)),
+   findall(column_path(J, Path), member(column_path(K, J, Path), Facts), ColumnPaths),
+   findall(row_path(I, Path), member(row_path(K, I, Path), Facts), RowPaths),
+   append(ColumnPaths, RowPaths, PathFacts),
+   view(Raster, SubRows, SubCols, View),
+   length(SubRows, ViewRows),
+   length(SubCols, ViewCols),
+   catch(( rectangular_cells(View),
+           check_table(View, ViewRows, ViewCols, Hmd, Vmd, Claim, PathFacts) ),
+         certificate_rejected(Why),
+         throw(certificate_rejected(subtable_rejected(K, Why)))),
+   findall((R-C)-(K-Role),
+           ( nth0(I, SubRows, R), nth0(J, SubCols, C),
+             slot_role(Hmd, Vmd, I, J, Role) ),
+           Mine),
+   append(Roles0, Mine, Roles).
+
+% index_list(+List, +Size): a non-empty, strictly increasing list of
+% indices below Size.
+index_list(List, Size) :-
+   is_list(List),
+   List = [_|_],
+   forall(member(X, List), ( integer(X), X >= 0, X < Size )),
+   sort(List, Sorted),
+   Sorted == List.
+
+% The roles of a table split at (Hmd, Vmd); the corner above the VMD is HMD.
+slot_role(Hmd, _, I, _, hmd) :- I < Hmd, !.
+slot_role(_, Vmd, _, J, vmd) :- J < Vmd, !.
+slot_role(_, _, _, _, data).
+
+view(Raster, Rows, Cols, View) :-
+   findall(Row,
+           ( member(R, Rows), nth0(R, Raster, Full),
+             findall(Id, ( member(C, Cols), nth0(C, Full, Id) ), Row) ),
+           View).
+
+% separator_slots(+Facts, +Rows, +Cols, -Slots): the R-C slots of every
+% separator/2 fact, no slot twice.
+separator_slots(Facts, Rows, Cols, Slots) :-
+   findall(separator(R, SepCols), member(separator(R, SepCols), Facts), Separators),
+   forall(member(separator(R, SepCols), Separators),
+          require(( integer(R), R >= 0, R < Rows, index_list(SepCols, Cols) ),
+                  separator_invalid(R, SepCols))),
+   findall(R-C, ( member(separator(R, SepCols), Separators), member(C, SepCols) ),
+           Slots0),
+   msort(Slots0, Slots),
+   (  append(_, [Slot, Slot|_], Slots)
+   -> throw(certificate_rejected(separators_overlap(Slot)))
+   ;  true
+   ).
+
+% check_partition(+Raster, +Separators, +Roles)
+check_partition(Raster, Separators, Roles) :-
+   keysort(Roles, Sorted),
+   group_pairs_by_key(Sorted, BySlot),
+   list_to_assoc(BySlot, SlotRoles),
+   forall(member(Slot, Separators),
+          require(\+ get_assoc(Slot, SlotRoles, _),
+                  separator_overlaps_subtable(Slot))),
+   empty_assoc(Empty),
+   foldl(put_separator, Separators, Empty, SepAssoc),
+   findall(Id-(Slot-Role),
+           ( nth0(R, Raster, Row), nth0(C, Row, Id), Slot = R-C,
+             slot_label(Slot, SlotRoles, SepAssoc, Role) ),
+           Labelled),
+   forall(member(_-(Slot-Role), Labelled),
+          require(Role \== uncovered, slot_not_covered(Slot))),
+   forall(member(_-(Slot-Role), Labelled),
+          require(Role \== disagree, slot_roles_disagree(Slot))),
+   forall(member(Slot-Entries, BySlot),
+          require(( Entries = [_-data] -> true ; \+ memberchk(_-data, Entries) ),
+                  data_slot_shared(Slot))),
+   keysort(Labelled, ByCell0),
+   group_pairs_by_key(ByCell0, ByCell),
+   forall(member(Id-Slots, ByCell),
+          (  pairs_values(Slots, CellRoles),
+             sort(CellRoles, Distinct),
+             require(Distinct = [_], cell_roles_disagree(Id)),
+             (  Distinct == [data]
+             -> findall(K, ( member(S-_, Slots), get_assoc(S, SlotRoles, [K-_]) ), Ks0),
+                sort(Ks0, Ks),
+                require(Ks = [_], data_cell_split(Id))
+             ;  true
+             )
+          )).
+
+put_separator(Slot, Assoc0, Assoc) :-
+   put_assoc(Slot, Assoc0, separator, Assoc).
+
+% slot_label(+Slot, +SlotRoles, +Separators, -Role): separator, the one role
+% every subtable holding Slot gives it, uncovered or disagree.
+slot_label(Slot, SlotRoles, Separators, Role) :-
+   (  get_assoc(Slot, Separators, _)
+   -> Role = separator
+   ;  get_assoc(Slot, SlotRoles, Entries)
+   -> pairs_values(Entries, Roles0),
+      sort(Roles0, Roles),
+      (  Roles = [Role]
+      -> true
+      ;  Role = disagree
+      )
+   ;  Role = uncovered
+   ).
 
 % --- raster shape ----------------------------------------------------------
 
@@ -220,6 +416,7 @@ closed_boundary(Raster, Hmd, Vmd) :-
 
 % Rows of the original are columns of the transposed raster, with the roles
 % of Hmd and Vmd exchanged, so both claims are checked by axis_labelable/4.
+% Facts are the version 1 path facts: column_path/2 and row_path/2.
 claim_axis(columns, Facts, Raster, Hmd, Vmd, Raster, Hmd, Vmd, Claimed) :- !,
    facts_named(row_path, 2, Facts, Other),
    require(Other == [], path_of_other_axis(row_path)),

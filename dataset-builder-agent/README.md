@@ -775,7 +775,7 @@ label for a scientific table.
 | `src/table_annotator.pl` | Colors a table's cells for a given boundary. |
 | `src/certificate_kernel.pl` | Trusted checker for geometric labelability certificates (see [Geometric labelability certificates](#geometric-labelability-certificates)). |
 | `src/table_certify.pl` | Builds and writes geometric labelability certificates; not trusted, every certificate is checked by the kernel. |
-| `tests/certificate_regression_tests.pl` | Offline tests for the certificate kernel and generator: both claims, the strong reading, boundary lines, tampering, and agreement with the constraints. |
+| `tests/certificate_regression_tests.pl` | Offline tests for the certificate kernel and generator: both claims, the strong reading, boundary lines, tampering, agreement with the constraints, and version 2 certificates of layouts split into subtables. |
 | `src/review_dataset.dml` | The review agent: asks the LLM to check every table's candidates (see [Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm)). |
 | `src/table_review.pl` | Builds the review prompts, checks the answers against the candidates, and writes `review.jsonl`. |
 | `src/table_export.pl` | Last stage: writes `final_tables.json` from `tables.jsonl` and `review.jsonl`. |
@@ -968,6 +968,34 @@ cross the HMD line (in any column) or, below the HMD, the VMD line.
 - `src/table_certify.pl` (not trusted) builds certificates with `certify/4,5`
   and writes them with `write_certificate/2`. Every certificate it returns
   has been accepted by the kernel.
+
+A table with metadata in the middle (a layout of `table_layouts/2`) is
+certified by a **version 2** certificate. `layout_subtables/4` splits the
+layout into subtables, each a data region fused with the metadata governing
+it, given as row and column indices into the raster, and separators, the
+slots set aside. `certify_layout/5` certifies each subtable as a table of
+its own, at its own boundary, and keys its facts by subtable number in one
+certificate:
+
+```prolog
+certificate_version(2).
+raster(Rows).
+separator(Row, Cols).              % zero or more
+subtable(K, Rows, Cols).           % K = 0, 1, ...
+boundary(K, Hmd, Vmd).
+claim(K, columns).                 % or claim(K, rows)
+column_path(K, J, Path).           % or row_path(K, I, Path)
+```
+
+The kernel checks each subtable with the version 1 rules, then checks that
+the subtables and separators partition the table: every slot is covered,
+a slot in several subtables has the same role in each, data is never shared
+between subtables, and no cell is part data and part metadata. A header
+cell may head several subtables, e.g. the HMD over both sides of a vertical
+cut. A separator of a data region also covers the VMD columns beside it, so
+the VMD cell next to a section title is set aside with the title, although
+`layout_labels/3` labels it VMD. Layouts are not yet passed through the
+pipeline, so the build writes version 1 certificates only.
 
 For each candidate the build writes `certificateN_hH_vV.pl` if it is
 labelable. Before publishing, the stage validator reads every certificate

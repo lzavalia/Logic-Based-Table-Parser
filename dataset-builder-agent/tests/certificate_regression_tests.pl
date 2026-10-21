@@ -252,3 +252,248 @@ test(structural_candidates_are_certifiable) :-
             ) )).
 
 :- end_tests(geometric_certificates).
+
+% --- version 2: tables split into subtables --------------------------------
+
+% Tables from table_layouts_regression_tests.pl.
+layout_raster(data_title, [[0,1,1],[2,3,4],[5,6,6],[7,8,9]]).
+layout_raster(separator_rows,
+              [[0,0,0],[1,2,3],[4,5,6],[7,7,7],[8,9,10],[11,11,11]]).
+layout_raster(central_hmd,
+              [[ 0, 1, 1, 2, 2],[ 3, 4, 5, 6, 7],[ 8, 9,10,11,12],
+               [13,14,14,15,15],[16,17,18,19,20],[21,22,23,24,25]]).
+layout_raster(central_vmd, [[0,1,2,3,4],[5,6,7,8,9],[10,11,7,12,13]]).
+layout_raster(mixed_cuts,
+              [[ 0, 1, 2, 3, 4],[ 5, 6, 7, 8, 9],[10,11, 7,12,13],
+               [14,15,15,16,16],[17,18,19,20,21],[22,23,24,25,26]]).
+% Every data row of the second marginal reading is a separator.
+layout_raster(all_separators, [[0,1,1],[0,2,3],[4,5,5],[4,5,5]]).
+
+% layout_certified(+Raster, +Layout, -Facts)
+layout_certified(Raster, Layout, Facts) :-
+   layout_subtables(Raster, Layout, Separators, Subtables),
+   certify_layout(Raster, Separators, Subtables, none, certificate(Facts)).
+
+% The layout of Raster whose labels, one string per row as in
+% table_layouts_regression_tests.pl, are Rows.
+labelled_layout(Raster, Rows, Layout) :-
+   table_layouts(Raster, Layouts),
+   member(Layout, Layouts),
+   layout_labels(Raster, Layout, Labels),
+   maplist([Row, String]>>( maplist(label_char, Row, Chars),
+                            string_chars(String, Chars) ),
+           Labels, Rows), !.
+
+label_char(hmd, h).
+label_char(vmd, v).
+label_char(data, d).
+label_char(separator, s).
+
+% certificate_labels(+Facts, -Labels): the role the certificate gives each
+% slot, in the shape of its raster.
+certificate_labels(Facts, Labels) :-
+   memberchk(raster(Raster), Facts),
+   findall(Row,
+           ( nth0(R, Raster, RasterRow),
+             findall(Label,
+                     ( nth0(C, RasterRow, _),
+                       certificate_slot_label(Facts, R, C, Label) ),
+                     Row) ),
+           Labels).
+
+certificate_slot_label(Facts, R, C, separator) :-
+   member(separator(R, Cols), Facts), memberchk(C, Cols), !.
+certificate_slot_label(Facts, R, C, Label) :-
+   member(subtable(K, Rows, Cols), Facts),
+   nth0(I, Rows, R), nth0(J, Cols, C), !,
+   memberchk(boundary(K, Hmd, Vmd), Facts),
+   (  I < Hmd -> Label = hmd
+   ;  J < Vmd -> Label = vmd
+   ;  Label = data
+   ).
+
+% The certificate labels the table as layout_labels/3 does, except that a
+% separator of a data region also sets aside the VMD slots beside it.
+labels_agree([], []).
+labels_agree([Row|Rows], [CRow|CRows]) :-
+   maplist(label_agrees, Row, CRow),
+   labels_agree(Rows, CRows).
+
+label_agrees(Label, Label) :- !.
+label_agrees(vmd, separator).
+
+% The generator's verdict on a hand-made split of Raster: the kernel rejects
+% the whole for Reason, although every subtable is labelable.
+rejected_layout(Raster, Separators, Subtables, Reason) :-
+   certify_layout(Raster, Separators, Subtables, none, rejected(Reason)).
+
+:- begin_tests(layout_certificates).
+
+% --- the generator ---------------------------------------------------------
+
+test(every_layout_of_the_hand_built_tables_is_certified) :-
+   forall(( layout_raster(_, Raster),
+            table_layouts(Raster, Layouts),
+            member(Layout, Layouts) ),
+          ( layout_certified(Raster, Layout, Facts),
+            certificate_labels(Facts, CertLabels),
+            layout_labels(Raster, Layout, Labels),
+            labels_agree(Labels, CertLabels) )).
+
+test(central_hmd_is_two_subtables) :-
+   layout_raster(central_hmd, Raster),
+   labelled_layout(Raster, ["hhhhh","hhhhh","vdddd","hhhhh","hhhhh","vdddd"], Layout),
+   layout_certified(Raster, Layout, Facts),
+   memberchk(certificate_version(2), Facts),
+   memberchk(subtable(0, [0,1,2], [0,1,2,3,4]), Facts),
+   memberchk(boundary(0, 2, 1), Facts),
+   memberchk(subtable(1, [3,4,5], [0,1,2,3,4]), Facts),
+   memberchk(boundary(1, 2, 1), Facts),
+   \+ memberchk(subtable(2, _, _), Facts).
+
+test(vertical_cut_shares_the_hmd) :-
+   layout_raster(central_vmd, Raster),
+   labelled_layout(Raster, ["hhhhh","vdvdd","vdvdd"], Layout),
+   layout_certified(Raster, Layout, Facts),
+   memberchk(subtable(0, [0,1,2], [0,1]), Facts),
+   memberchk(boundary(0, 1, 1), Facts),
+   memberchk(subtable(1, [0,1,2], [2,3,4]), Facts),
+   memberchk(boundary(1, 1, 1), Facts).
+
+test(separator_sets_aside_the_vmd_cell_beside_it) :-
+   layout_raster(data_title, Raster),
+   labelled_layout(Raster, ["hhh","hhh","vss","vdd"], Layout),
+   layout_certified(Raster, Layout, Facts),
+   memberchk(separator(2, [0,1,2]), Facts),
+   memberchk(subtable(0, [0,1,3], [0,1,2]), Facts).
+
+test(region_of_separators_only_has_no_layout) :-
+   layout_raster(all_separators, Raster),
+   table_layouts(Raster, Layouts),
+   forall(member(Layout, Layouts),
+          ( layout_labels(Raster, Layout, Labels),
+            \+ memberchk([vmd, separator, separator], Labels) )).
+
+test(unlabelable_subtable_is_reported_by_key) :-
+   Raster = [[0,0,1],[2,3,4],[5,6,7]],
+   certify_layout(Raster, [],
+                  [subtable([0,1,2], [0,1], 1, 0), subtable([0,1,2], [2], 1, 0)],
+                  none, not_labelable([0-Reasons])),
+   memberchk(columns-lines_share_a_path, Reasons).
+
+% --- the partition ---------------------------------------------------------
+
+test(data_in_two_subtables_is_rejected) :-
+   layout_raster(central_hmd, Raster),
+   rejected_layout(Raster, [],
+                   [subtable([0,1,2], [0,1,2,3,4], 2, 0),
+                    subtable([0,1,2,3,4,5], [0,1,2,3,4], 2, 0)],
+                   data_slot_shared(2-0)).
+
+test(slot_with_two_roles_is_rejected) :-
+   layout_raster(central_hmd, Raster),
+   rejected_layout(Raster, [],
+                   [subtable([0,1,2], [0,1,2,3,4], 2, 0),
+                    subtable([2,3,4,5], [0,1,2,3,4], 1, 0)],
+                   slot_roles_disagree(2-0)).
+
+test(uncovered_slot_is_rejected) :-
+   layout_raster(central_hmd, Raster),
+   rejected_layout(Raster, [], [subtable([0,1,2], [0,1,2,3,4], 2, 0)],
+                   slot_not_covered(3-0)).
+
+test(data_cell_in_two_subtables_is_rejected) :-
+   layout_raster(central_vmd, Raster),
+   rejected_layout(Raster, [],
+                   [subtable([0,1], [0,1,2,3,4], 1, 1),
+                    subtable([0,2], [0,1,2,3,4], 1, 1)],
+                   data_cell_split(7)).
+
+test(cell_both_data_and_metadata_is_rejected) :-
+   layout_raster(central_vmd, Raster),
+   rejected_layout(Raster, [],
+                   [subtable([0,1], [0,1,2,3,4], 1, 1),
+                    subtable([0,2], [0,1], 1, 1),
+                    subtable([0,2], [2,3,4], 1, 1)],
+                   cell_roles_disagree(7)).
+
+test(separator_over_a_subtable_is_rejected) :-
+   rejected_layout([[0,1],[2,3]], [separator(0, [0,1])],
+                   [subtable([0,1], [0,1], 1, 1)],
+                   separator_overlaps_subtable(0-0)).
+
+% --- the kernel rejects malformed or tampered certificates -----------------
+
+test(tampered_subtable_path_is_rejected) :-
+   layout_raster(central_hmd, Raster),
+   labelled_layout(Raster, ["hhhhh","hhhhh","vdddd","hhhhh","hhhhh","vdddd"], Layout),
+   layout_certified(Raster, Layout, Facts),
+   member(column_path(1, 1, Path), Facts), !,
+   replace_fact(column_path(1, 1, Path), column_path(1, 1, [99]), Facts, Bad),
+   rejected_for(Bad, subtable_rejected(1, paths_do_not_match_raster)).
+
+test(malformed_subtables_are_rejected) :-
+   layout_raster(central_hmd, Raster),
+   labelled_layout(Raster, ["hhhhh","hhhhh","vdddd","hhhhh","hhhhh","vdddd"], Layout),
+   layout_certified(Raster, Layout, Facts),
+   replace_fact(subtable(1, Rows, Cols), subtable(2, Rows, Cols), Facts, Gap),
+   rejected_for(Gap, subtables_not_numbered([0,2])),
+   selectchk(claim(1, _), Facts, NoClaim),
+   rejected_for(NoClaim, expected_one_fact(claim/2, 1)),
+   append(Facts, [boundary(5, 1, 1)], Stray),
+   rejected_for(Stray, unknown_subtable(boundary(5, 1, 1))),
+   replace_fact(subtable(1, _, _), subtable(1, [4,3,5], Cols), Facts, Unordered),
+   rejected_for(Unordered, subtable_rows_invalid(1)),
+   append(Facts, [separator(9, [0])], OutOfRange),
+   rejected_for(OutOfRange, separator_invalid(9, [0])),
+   append(Facts, [subtable(2, [0], [0])], NoBoundary),
+   rejected_for(NoBoundary, expected_one_fact(boundary/3, 2)).
+
+test(versions_do_not_mix) :-
+   rejected_for([certificate_version(1), raster([[0,1],[2,3]]),
+                 subtable(0, [0,1], [0,1]), boundary(1,1), claim(columns),
+                 column_path(1,[1])],
+                unknown_fact(subtable(0, [0,1], [0,1]))),
+   rejected_for([certificate_version(2), raster([[0,1],[2,3]]),
+                 boundary(1,1)],
+                unknown_fact(boundary(1,1))).
+
+% --- certificates as programs ----------------------------------------------
+
+test(written_layout_certificate_checks_itself_when_run) :-
+   layout_raster(mixed_cuts, Raster),
+   table_layouts(Raster, [Layout|_]),
+   layout_subtables(Raster, Layout, Separators, Subtables),
+   certify_layout(Raster, Separators, Subtables, "PMC1/t0", certificate(Facts)),
+   with_certificate_file(Facts, [File]>>check_certificate_file(File, accepted)),
+   with_certificate_file(Facts, [File]>>run_certificate_file(File, 0)),
+   member(column_path(K, J, Path), Facts), !,
+   replace_fact(column_path(K, J, Path), column_path(K, J, []), Facts, Bad),
+   with_certificate_file(Bad, [File]>>run_certificate_file(File, 1)).
+
+% --- agreement with the layout search --------------------------------------
+
+% Every layout of table_layouts/2 is certifiable, except when a VMD cell
+% crosses the HMD line of a subtable (see stub_crosses_hmd_line), and the
+% certificate labels the table as layout_labels/3 does.
+test(layouts_are_certifiable) :-
+   set_random(seed(7)),
+   forall(( between(1, 3000, _),
+            random_between(2, 8, Rows), random_between(2, 7, Cols),
+            random_between(1, 3, MaxSpan),
+            random_tiling(Rows, Cols, MaxSpan, Raster),
+            table_layouts(Raster, Layouts),
+            member(Layout, Layouts) ),
+          ( layout_subtables(Raster, Layout, Separators, Subtables),
+            certify_layout(Raster, Separators, Subtables, none, Result),
+            (  Result = certificate(Facts)
+            -> certificate_labels(Facts, CertLabels),
+               layout_labels(Raster, Layout, Labels),
+               labels_agree(Labels, CertLabels)
+            ;  Result = not_labelable(Reasons),
+               forall(member(K-Why, Reasons),
+                      ( nth0(K, Subtables, subtable(_, _, _, Vmd)),
+                        stub_crosses_hmd_line(Vmd, not_labelable(Why)) ))
+            ) )).
+
+:- end_tests(layout_certificates).
