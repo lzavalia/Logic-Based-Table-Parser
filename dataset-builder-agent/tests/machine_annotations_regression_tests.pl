@@ -61,7 +61,9 @@ test(merged_cells_produce_distinct_qualified_candidates,
     sub_string(Inspection, _, _, _, "Candidate h1_v0 (1 HMD row, no VMD columns)"),
     sub_string(Inspection, _, _, _, 'data-candidate-id="PMC801/t0/h1_v1"').
 
-test(each_labelable_candidate_publishes_a_certificate,
+% The build names a certificate file for each labelable candidate but
+% writes none: the review writes the one of the candidate it selects.
+test(labelable_candidates_name_a_certificate_the_build_does_not_write,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
     Html = '<table><tr><th>A</th><th>B</th><th>C</th></tr><tr><th rowspan="2">R</th><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>',
     machine_input(Root, 803, Html, File),
@@ -79,54 +81,57 @@ test(each_labelable_candidate_publishes_a_certificate,
     machine_published(Root, 803, 'tables.jsonl', Jsonl),
     file_directory_name(Jsonl, Dir),
     directory_files(Dir, Entries),
-    include([E]>>sub_atom(E, 0, _, _, certificate), Entries, Published),
-    msort(Published, ['certificate0_h1_v0.pl', 'certificate0_h1_v1.pl',
-                      'certificate0_h1_v2.pl']),
-    forall(member(Name, Published),
-           ( directory_file_path(Dir, Name, Path),
-             dataset_pipeline:check_certificate_file(Path, accepted),
-             dataset_pipeline:read_certificate_file(Path, Facts),
-             memberchk(table_uid("PMC803/t0"), Facts),
-             memberchk(raster([[0,1,2],[3,4,5],[3,6,7]]), Facts) )).
+    \+ ( member(E, Entries), sub_atom(E, 0, _, _, certificate) ),
+    dataset_pipeline:selected_certificates(
+        [Record], [json{final_status:"valid",
+                        selected_candidate_id:"PMC803/t0/h1_v1"}],
+        [Selected-Facts]),
+    Selected == 'certificate0_h1_v1.pl',
+    memberchk(table_uid("PMC803/t0"), Facts),
+    memberchk(raster([[0,1,2],[3,4,5],[3,6,7]]), Facts),
+    memberchk(boundary(1, 1), Facts).
 
-% Constraint 1 lets the stub cell S cross the HMD line at (1, 2); the
-% certificate kernel does not, so that candidate is kept without a file.
-test(unlabelable_candidate_has_reasons_and_no_certificate,
+% The stub cell S would cross the HMD line at every boundary, which
+% constraint 1 forbids in every column, so the table has no candidate.
+test(stub_cell_crossing_the_hmd_line_leaves_no_candidate,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
     Html = '<table><tr><th rowspan="3">S</th><th>A</th><th>B</th></tr><tr><td>1</td><td rowspan="2">x</td></tr><tr><td>2</td></tr></table>',
     machine_input(Root, 804, Html, File),
     process_paper("804", File, Root, _),
     machine_outputs(Root, 804, [Record], _),
     Record.raster == [[0,1,2],[0,3,4],[0,5,4]],
-    member(C, Record.candidates), C.hmd =:= 1, C.vmd =:= 2, !,
-    Cert = C.geometric_certificate,
-    Cert.status == "not_labelable", Cert.claim == null, Cert.file == null,
-    Cert.rejections.columns == "cell_crosses_hmd_line(0,column(0))",
-    machine_published(Root, 804, 'tables.jsonl', Jsonl),
-    file_directory_name(Jsonl, Dir),
-    directory_file_path(Dir, 'certificate0_h1_v2.pl', Missing),
-    \+ exists_file(Missing).
+    Record.status == "abstained",
+    Record.candidates == [].
 
-test(tampered_or_missing_certificate_fails_stage_verification,
+% Every candidate of valid_boundaries/2 is labelable, so a not_labelable
+% summary is checked on a boundary the constraints reject.
+test(unlabelable_boundary_has_reasons_and_no_certificate_file) :-
+    dataset_pipeline:machine_certificate("PMC804/t0", 0, [[0,1],[0,2]], 1, 0,
+                                         Cert),
+    Cert.status == "not_labelable", Cert.claim == null, Cert.file == null,
+    Cert.rejections.columns == "cell_crosses_hmd_line(0,column(0))".
+
+test(written_certificate_is_checked_and_a_rejected_one_fails,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
     Html = '<table><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table>',
     machine_input(Root, 805, Html, File),
     process_paper("805", File, Root, _),
-    machine_outputs(Root, 805, Records, _),
-    machine_published(Root, 805, 'tables.jsonl', Jsonl),
-    file_directory_name(Jsonl, Dir),
-    dataset_pipeline:verify_staged_certificates(Dir, Records),
-    Records = [Record], Record.candidates = [Candidate|_],
-    atom_string(Name, Candidate.geometric_certificate.file),
-    directory_file_path(Dir, Name, Path),
-    dataset_pipeline:read_certificate_file(Path, Facts),
+    machine_outputs(Root, 805, [Record], _),
+    Record.candidates = [Candidate|_],
+    dataset_pipeline:selected_certificates(
+        [Record], [json{final_status:"valid",
+                        selected_candidate_id:Candidate.candidate_id}],
+        [Name-Facts]),
+    directory_file_path(Root, Name, Path),
+    dataset_pipeline:write_checked_certificate(Path, Facts),
+    dataset_pipeline:check_certificate_file(Path, accepted),
     selectchk(boundary(_, _), Facts, boundary(9, 9), Bad),
-    dataset_pipeline:write_certificate(Path, Bad),
-    catch(dataset_pipeline:verify_staged_certificates(Dir, Records), E1, true),
-    E1 = error(incomplete_paper_stage(invalid_certificate(Name)), _),
-    delete_file(Path),
-    catch(dataset_pipeline:verify_staged_certificates(Dir, Records), E2, true),
-    E2 = error(incomplete_paper_stage(invalid_certificate(Name)), _).
+    catch(dataset_pipeline:write_checked_certificate(Path, Bad), E, true),
+    E = error(invalid_certificate(Name), _),
+    % A table that is not valid, or whose candidate is not selected, gets none.
+    dataset_pipeline:selected_certificates(
+        [Record], [json{final_status:"unparseable", selected_candidate_id:null}],
+        []).
 
 test(merged_id_labels_are_once_per_source_cell_and_have_xpath,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
@@ -179,14 +184,13 @@ test(no_valid_boundary_produces_explicit_abstention,
     read_file_to_string(HtmlFile, Html, [encoding(utf8)]),
     sub_string(Html, _, _, _, "Abstained: no valid boundary").
 
-test(zero_table_paper_still_publishes_empty_jsonl,
+test(zero_table_paper_is_not_published,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
     machine_input(Root, 805, '<p>No tables</p>', File),
-    process_paper("805", File, Root, _),
-    machine_outputs(Root, 805, Records, Meta),
-    Records == [], Meta.tables == [], Meta.table_count =:= 0,
-    machine_published(Root, 805, 'tables.jsonl', Jsonl),
-    size_file(Jsonl, 0).
+    catch(process_paper("805", File, Root, _), Error, true),
+    Error = error(paper_has_no_tables, _),
+    directory_file_path(Root, 'papers/PMC805', PaperDir),
+    \+ exists_directory(PaperDir).
 
 test(rerun_replaces_jsonl_and_candidate_ids_remain_stable,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-
@@ -197,10 +201,11 @@ test(rerun_replaces_jsonl_and_candidate_ids_remain_stable,
     process_paper("806", File, Root, _),
     machine_outputs(Root, 806, [New], _),
     Old == New,
+    % A table-free rerun is skipped and keeps the published snapshot.
     machine_input(Root, 806, '<p>No tables</p>', Empty),
-    process_paper("806", Empty, Root, _),
-    machine_outputs(Root, 806, [], Meta),
-    Meta.table_count =:= 0.
+    catch(process_paper("806", Empty, Root, _), error(paper_has_no_tables, _), true),
+    machine_outputs(Root, 806, [Kept], _),
+    Kept == New.
 
 test(table_source_xpath_matches_section_order_not_dom_order,
      [setup(machine_workspace(Root)), cleanup(machine_cleanup(Root))]) :-

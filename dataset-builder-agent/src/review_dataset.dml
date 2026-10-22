@@ -15,6 +15,11 @@
 %   - the parser found no candidate  -> unparseable, without asking
 %   - no usable answer after a retry -> unreviewed (never counted as unparseable)
 %
+% For every valid table whose selected candidate is labelable, the geometric
+% certificate of that candidate is written to papers/PMC<id>/ as well
+% (certificateN_hH_vV.pl or certificateN_layoutK.pl); the build writes none,
+% and certificates of candidates the review did not select are removed.
+%
 % Each table gets a fresh LLM call (prompt/2: no earlier conversation and no
 % tools), so verdicts cannot influence one another.
 %

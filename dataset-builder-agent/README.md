@@ -287,9 +287,9 @@ Each run writes a `dataset/` directory inside `src/`:
 | `dataset/papers/PMC<id>/candidatesN.html` | Optional inspection view for table `N`. Each candidate has an explicit heading: boundary coordinates for a plain boundary, or the number of subtables and separator rows for a layout; a table with no candidate has an explicit abstention heading. Cells are colored green (HMD), blue (VMD), gray (data), and khaki (rows set aside as separators). |
 | `dataset/papers/PMC<id>/input_tableN.html` | The input counterpart of `candidatesN.html`, for side-by-side comparison: the same sanitized table and JATS label, caption and notes, shown once and uncolored. Written for every table that has an annotated view, so a quarantined table has neither. |
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
-| `dataset/papers/PMC<id>/certificateN_hH_vV.pl` | Geometric labelability certificate for candidate `(H, V)` of table `N`, written only when the candidate is labelable. A Prolog program that checks itself; see [Geometric labelability certificates](#geometric-labelability-certificates). |
-| `dataset/papers/PMC<id>/certificateN_layoutK.pl` | The version 2 certificate of layout candidate `K` of table `N` (rows set aside, or metadata in the middle of the table): one certificate covering every subtable. |
-| `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Empty for papers containing no tables. |
+| `dataset/papers/PMC<id>/certificateN_hH_vV.pl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: the geometric labelability certificate of candidate `(H, V)` of table `N`, only when the review selects that candidate (`valid`) and it is labelable. A Prolog program that checks itself; see [Geometric labelability certificates](#geometric-labelability-certificates). |
+| `dataset/papers/PMC<id>/certificateN_layoutK.pl` | The same for layout candidate `K` of table `N` (rows set aside, or metadata in the middle of the table): the version 2 certificate, one covering every subtable. |
+| `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Papers containing no tables are not published, so it always holds at least one record. |
 | `dataset/papers/PMC<id>/final_tables.json` | Written by the last stage of the [LLM review](#reviewing-candidates-with-the-llm): every `valid` table as `subtables` with nested horizontal and vertical metadata, unmerged data, and the residual corner, plus the text of the rows set aside as `separators`. |
 | `dataset/papers/PMC<id>/review.jsonl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one verdict per line of `tables.jsonl`. Absent until the paper has been reviewed; a rebuilt paper loses it. |
 | `dataset/papers/PMC<id>/final_tableN.html` | Also written by the review: the outcome for table `N`. "Parse Succeeded", the LLM's reason and the table colored for the boundary the parser and the LLM agree on; "Error: Misalignment Between LLM And Formal Table Parser" with the LLM's reason; or "Nothing To Do." when the parser found no candidate. |
@@ -316,7 +316,9 @@ Each `tables` entry has `source_path` (1-based element-child indexes through
 the normalized JATS DOM), `table_id`, `wrap_path`, `wrap_id`, `label`,
 `caption`, `caption_external` (whether the caption is outside the table),
 `notes` (individual plain-text footnotes), and
-`source_table_html` (uncolored serialized table), plus `label_markup`,
+`source_table_html` (uncolored serialized table; the build reads it back
+and stops the paper if it is not the same table, since the review renders
+`final_tableN.html` from it), plus `label_markup`,
 `caption_markup`, and `foot_markup` (serialized source elements, retaining
 inline scientific notation). Empty strings and `[]`
 represent unavailable context for tables without a wrapping element.
@@ -470,7 +472,9 @@ and remains unresolved.
 
 | Setting | Where | Default |
 |---|---|---|
-| Papers per run | `max_papers/1` in `dataset_builder.dml` | 20 |
+| Papers with tables kept per run | `max_papers/1` in `dataset_builder.dml` | 15 |
+| Ranked candidates the model may list | `max_candidates/1` in `dataset_builder.dml` | 60 |
+| Papers listed per `search_pmc` call | `search_results_per_query/1` in `dataset_builder.dml` | 30 |
 | Shared minimum gap between NCBI request reservations (s) | `ncbi_request_gap/1` in `dataset_builder.dml` | 0.4 |
 | Waits before retrying a rate-limited request (s) | `ncbi_retry_waits/1` in `dataset_builder.dml` | 2, 5, 10, 20, 30 |
 | Model | `deepclause set-model`, or `--model` for one run | chosen in step 5 |
@@ -589,6 +593,18 @@ paper's lock, each through a temporary file, so a failure leaves the previous
 review and pages in place. A paper whose review is current but has no pages
 (reviewed before they existed) gets them on the next run, from `review.jsonl`
 and without new model calls.
+
+**Certificates.** For each `valid` table whose selected candidate is
+geometrically labelable, the review also writes that candidate's certificate,
+`certificateN_hH_vV.pl` or `certificateN_layoutK.pl` (see
+[Geometric labelability certificates](#geometric-labelability-certificates)).
+These are the only certificates in a paper's directory: the build writes
+none, and the review removes any certificate of a candidate it did not
+select. Certificates are written with the pages, through temporary files and
+before `review.jsonl`. A paper whose review is current but whose certificates
+do not match it (for example, one built when the build still wrote a
+certificate for every candidate) is brought in line on the next run, again
+without new model calls.
 
 `valid` means that the parser and the model agree, nothing more:
 `semantic_validation` is `"llm_reviewed_not_human_verified"`. The model can
@@ -736,8 +752,12 @@ abstention behavior).
 Constraints 0 to 6 are those of the original `ConstraintValidators.scala`,
 which named the last HMD row and the last VMD column. For `Hmd >= 1` and
 `Vmd >= 1` each tests exactly the cells the original tested at
-`(Hmd-1, Vmd-1)`; `tests/legacy_index_constraints.pl` keeps the original
-rules so a regression test can check this. A rule that compares a region with
+`(Hmd-1, Vmd-1)`, except constraint 1. The original checked the HMD line only
+from the last VMD column rightwards, so a VMD cell further left could reach
+into the HMD and be both; constraint 1 now checks the HMD line in every
+column, as the certificate kernel does. `tests/legacy_index_constraints.pl`
+keeps the original rules so a regression test can check that the two differ
+only there. A rule that compares a region with
 an empty one has nothing to compare and holds.
 
 Both forms of `omni_validate` enforce the same domain (`0..number_of_rows`,
@@ -836,8 +856,11 @@ label for a scientific table.
   published copy, so rename it back to `PMC<n>` instead of deleting it.
 - **`NCBI rate limit reached; pausing ...`**: expected now and then. The request
   is retried up to five times before that paper is reported as failed.
-- **A paper reports `0 table(s)`**: its tables are published as images, or NCBI
-  does not provide its full text as XML.
+- **A paper reports `skipped (no tables in the full text)`**: its tables are
+  published as images, or NCBI does not provide its full text as XML. The paper
+  is not added to the dataset and the next candidate is processed instead.
+- **`WARNING: only N of 15 papers kept`**: the model's ranked candidates ran out
+  before 15 of them had tables. Try a broader topic.
 
 ### Table raster resource limits (F04)
 
@@ -875,8 +898,8 @@ swipl -q -s raster_limits_regression_tests.pl -g run_tests -t halt
 
 A successful paper publication is now tagged `"status":"complete"` in its
 `metadata.json` and is preceded by a check that **exactly** the numbered
-`candidatesN.html` files, matching metadata and the certificate files the
-records name exist in the staging directory; empty table files, missing or unexpected files, and inconsistent
+`candidatesN.html` files and matching metadata exist in the staging
+directory (the build writes no certificate files); empty table files, missing or unexpected files, and inconsistent
 counts abort publication. Annotation rendering now requires an output for
 **each** valid boundary (instead of silently dropping failed candidates).
 
@@ -908,7 +931,8 @@ semantics of the seven boundary constraints. Before publishing a paper,
 `process_paper/4` requires exactly one JATS article and a matching `pmc` or
 `pmcid` `article-id` inside `<front><article-meta>` (current eFetch responses use
 `pmcid`; versioned and internal ids such as `pmcid-ver` and `pmcaid` are ignored). A genuine, well-formed paper
-with no tables may still produce a complete zero-table result.
+with no tables raises `paper_has_no_tables` and is never published; a
+previously published snapshot of it is left as it was.
 
 `download_status/3` distinguishes accepted ESearch/ESummary JSON, accepted
 JATS XML, rate-limited/transient error bodies, and invalid/empty/nonarticle
@@ -962,7 +986,9 @@ Do not derive labels from the inspection HTML/CSS. The JSONL records include:
   candidate also has `geometric_certificate`: `{status: "certified", claim:
   "columns"|"rows", file, rejections: null}` naming the certificate file, or
   `{status: "not_labelable", claim: null, file: null, rejections: {columns,
-  rows}}` with the kernel's reason for rejecting each claim.
+  rows}}` with the kernel's reason for rejecting each claim. The file is
+  only a name at this point: the review writes it if it selects the
+  candidate.
 - `status`: `"unique"` (one candidate), `"ambiguous"` (multiple), or
   `"abstained"` (none), plus nullable `abstention_reason`. Structural validity
   does **not** establish that a human would assign the same header semantics.
@@ -971,7 +997,7 @@ Do not derive labels from the inspection HTML/CSS. The JSONL records include:
 supplies `table_uid`, `candidate_count`, `annotation_status`, and `jsonl_file`.
 Publication validates the JSONL record count, identities, statuses, and
 candidate counts against this metadata and the HTML file count before replacing
-an existing paper snapshot. A zero-table paper publishes an empty `tables.jsonl`.
+an existing paper snapshot. A zero-table paper is not published.
 
 ### Geometric labelability certificates
 
@@ -1016,15 +1042,18 @@ between subtables, and no cell is part data and part metadata. A header
 cell may head several subtables, e.g. the HMD over both sides of a vertical
 cut. A separator of a data region also covers the VMD columns beside it: the
 VMD cell next to a section title heads no data, so it is set aside with the
-title, and `layout_labels/3` labels it a separator too. The build writes
-`certificateN_layoutK.pl` for every layout candidate that is labelable, and
-checks it before publishing like the version 1 certificates.
+title, and `layout_labels/3` labels it a separator too.
 
-For each candidate the build writes `certificateN_hH_vV.pl` if it is
-labelable. Before publishing, the stage validator reads every certificate
-back **as data** (its directives are never run), compares it with a freshly
-generated one, and has the kernel check it. Check a published certificate
-yourself with only the kernel:
+The build checks every candidate for labelability and records the result in
+`tables.jsonl`, but writes no certificate files. The review writes one per
+table, for the candidate it selects, and only if that candidate is labelable:
+`certificateN_hH_vV.pl` for a plain boundary, `certificateN_layoutK.pl` for
+a layout. A table that is `unparseable` or `unreviewed` gets none, and a new
+review removes the certificates of candidates it no longer selects. Each
+certificate is generated afresh from the record, written, read back **as
+data** (its directives are never run), compared with what was generated, and
+checked by the kernel before the review is saved. Check a published
+certificate yourself with only the kernel:
 
 ```bash
 swipl -p certificate_kernel=src dataset/papers/PMC123/certificate0_h1_v1.pl
@@ -1036,9 +1065,8 @@ the `certificate_kernel` search path, so whoever checks it decides which
 kernel to trust. In the Docker image the kernel is in `/app/src`.
 
 Labelability is checked independently of the ten constraints. On random
-tables the two agree on every candidate except one known case: constraint 1
-checks the HMD line only from column `Vmd-1` rightwards, so a VMD cell further
-left may cross it; such a candidate is kept with status `"not_labelable"`.
+tables every candidate, and every layout, is certifiable. A candidate the
+kernel rejects would still be kept, with status `"not_labelable"`.
 Tests: `tests/certificate_regression_tests.pl`.
 
 All coordinates, table indices, and cell IDs start at **zero**. XPath element

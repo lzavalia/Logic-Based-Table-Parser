@@ -1,0 +1,153 @@
+// Architecture of the dataset-builder-agent pipeline.
+//
+// Render with:
+//   dot -Tsvg docs/architecture.dot -o docs/architecture.svg
+//
+// Legend
+//   box, rounded        Prolog module (src/*.pl)
+//   box, double border  DML agent run by DeepClause (src/*.dml)
+//   component           shell entry point
+//   cylinder            external service
+//   note                file written under src/dataset/ (paths relative to it)
+//   bold red edge       LLM call
+
+digraph architecture {
+    graph [rankdir=TB, fontname="Helvetica", fontsize=12, newrank=true,
+           nodesep=0.35, ranksep=0.45, compound=true,
+           label="dataset-builder-agent pipeline", labelloc=t, fontsize=18];
+    node  [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+           fillcolor="#ffffff", color="#555555"];
+    edge  [fontname="Helvetica", fontsize=9, color="#555555"];
+
+    // ---------------------------------------------------------------- entry
+    run_agent    [label="run_agent.sh\n\"<search prompt>\" [--no-review]",
+                  shape=component, fillcolor="#eeeeee", style=filled];
+    review_agent [label="review_agent.sh\n--run <name> | --papers | --force",
+                  shape=component, fillcolor="#eeeeee", style=filled];
+
+    // ------------------------------------------------------------ externals
+    ncbi [label="NCBI E-utilities\nesearch / esummary / efetch\n(0.4 s request gap, retries)",
+          shape=cylinder, fillcolor="#fff4d6"];
+    llm  [label="LLM provider\n(paper selection)",
+          shape=cylinder, fillcolor="#fde2e2"];
+    llm2 [label="LLM provider\n(table review)",
+          shape=cylinder, fillcolor="#fde2e2"];
+
+    // ------------------------------------------------- step 1: build dataset
+    subgraph cluster_build {
+        label="Step 1 — build   (dataset_builder.dml → agent_main/1)";
+        style="rounded,filled"; fillcolor="#f3f7fc"; color="#8aa6c8";
+
+        builder [label="dataset_builder.dml", peripheries=2, fillcolor="#dde8f5"];
+
+        subgraph cluster_phase1 {
+            label="Phase 1 — select papers (LLM)";
+            style="rounded,dashed"; color="#c0392b"; fillcolor="#fff8f8";
+            search_tool [label="tool search_pmc/2\n→ pmc_search/2"];
+            select_task [label="task(): model picks\nup to 20 PMC ids"];
+            id_check    [label="pmc_id_parser.pl  parse_pmc_ids/3\n+ filter_search_selected_ids/3\n(only ids seen in search results)"];
+            qenc        [label="pmc_query_encoding.pl\nurl_encode/2"];
+        }
+
+        subgraph cluster_phase2 {
+            label="Phase 2 — per paper, no LLM   (dataset_pipeline.pl  process_paper/4)";
+            style="rounded"; color="#2e7d32"; fillcolor="#f5fbf5";
+
+            fetch     [label="efetch JATS XML\n(paper ingest lock)"];
+            jats      [label="parse_jats_xml + verify PMC id\njats_table_records/2\n(<table> + label/caption/notes)"];
+            raster    [label="table_layout_generator.pl\nrasterize (colspan/rowspan → grid)"];
+            prov      [label="provenance_manifest.pl\nSHA-256 source evidence"];
+
+            subgraph cluster_table {
+                label="for each table  (save_numbered_records)";
+                style="rounded,dashed"; color="#2e7d32"; fillcolor="#ffffff";
+                constraints [label="parse_constraints.pl\nomni_validate → valid (Hmd, Vmd)\nboundaries"];
+                fastb       [label="fast_boundaries.pl\nindexed boundary search", fillcolor="#f0f0f0"];
+                annot       [label="table_annotator.pl\ncolor HMD / VMD / data"];
+                sanit       [label="table_html_sanitizer.pl", fillcolor="#f0f0f0"];
+                machine     [label="table_machine_records.pl\nschema 3.0 JSONL record\nstatus unique / ambiguous / abstained"];
+                certify     [label="table_certify.pl\ncertify/5 (untrusted generator)"];
+                kernel      [label="certificate_kernel.pl\ntrusted checker", fillcolor="#fff0c0"];
+            }
+
+            stage [label="staging dir → validate_paper_stage\n→ publish_paper_directory (atomic)"];
+        }
+        manifest_step [label="record_dataset_run/8"];
+    }
+
+    // ---------------------------------------------- step 2: review + export
+    subgraph cluster_review {
+        label="Step 2 — review & export   (review_dataset.dml)";
+        style="rounded,filled"; fillcolor="#fbf6fc"; color="#a98ab8";
+
+        reviewer [label="review_dataset.dml", peripheries=2, fillcolor="#efe3f5"];
+        queue    [label="table_review.pl\nreview_queue (skip if review is current)"];
+        prompt   [label="table_review.pl\nreview_item_prompt\nblind: cells, <th>, caption, notes\n(no candidates shown)"];
+        ask      [label="prompt(): model answers own (H, V)\nfresh call, temp 0, 1 retry"];
+        judge    [label="table_review.pl  review_answer\nmatch against candidates\n→ valid / unparseable / unreviewed"];
+        finalhtml[label="dataset_pipeline.pl\nfinal_table_html/3"];
+        export   [label="table_export.pl\nexport_reviewed_papers/3\nHMD / VMD forests, data, residual corner"];
+    }
+
+    // ------------------------------------------------------------- outputs
+    {
+        node [shape=note, style=filled, fillcolor="#fffbe6", fontsize=10];
+
+        raw        [label="raw/PMC<id>.xml"];
+        paper_out  [label="papers/PMC<id>/\ntables.jsonl, metadata.json\ncandidatesN.html, input_tableN.html\ncertificateN_hH_vV.pl"];
+        run_man    [label="runs/<name>/manifest.json"];
+        review_out [label="papers/PMC<id>/\nreview.jsonl, final_tableN.html"];
+        final_json [label="papers/PMC<id>/final_tables.json"];
+        rev_man    [label="reviews/review-*/manifest.json"];
+    }
+
+    // ------------------------------------------------------------- edges
+    run_agent -> builder [label="1. deepclause run"];
+    run_agent -> review_agent [label="2. --run <name>\n(unless --no-review\nor build failed)", style=dashed];
+    review_agent -> reviewer [label="deepclause run"];
+
+    builder -> select_task;
+    select_task -> llm [color="#c0392b", penwidth=2, dir=both, label="task + tool loop"];
+    llm -> search_tool [color="#c0392b", style=dashed, label="calls search_pmc"];
+    search_tool -> qenc;
+    search_tool -> ncbi [label="esearch + esummary"];
+    select_task -> id_check [label="PaperIds"];
+    id_check -> fetch [label="verified ids", lhead=cluster_phase2];
+
+    fetch -> ncbi [label="efetch"];
+    fetch -> raw;
+    fetch -> jats;
+    jats -> raster;
+    jats -> prov;
+    raster -> constraints [label="raster"];
+    constraints -> fastb [style=dashed, arrowhead=odot, label="consults"];
+    constraints -> annot   [label="boundaries"];
+    annot -> sanit [style=dashed, arrowhead=odot, label="consults"];
+    constraints -> machine;
+    machine -> certify [label="per candidate"];
+    certify -> kernel [label="check"];
+    annot -> stage;
+    machine -> stage;
+    certify -> stage;
+    prov -> stage;
+    stage -> paper_out;
+    stage -> manifest_step [ltail=cluster_phase2, label="status lines"];
+    manifest_step -> run_man;
+
+    run_man -> queue [style=dashed, label="paper list"];
+    reviewer -> queue;
+    paper_out -> queue [label="tables.jsonl"];
+    queue -> prompt;
+    prompt -> ask;
+    ask -> llm2 [color="#c0392b", penwidth=2, dir=both, label="prompt / object answer"];
+    ask -> judge;
+    judge -> finalhtml;
+    judge -> review_out;
+    finalhtml -> review_out;
+    judge -> rev_man [label="record_review_run"];
+    // keep Step 2 below Step 1
+    run_man -> reviewer [style=invis];
+    { rank=same; run_man; paper_out; }
+    review_out -> export [label="review.jsonl\n+ tables.jsonl"];
+    export -> final_json;
+}

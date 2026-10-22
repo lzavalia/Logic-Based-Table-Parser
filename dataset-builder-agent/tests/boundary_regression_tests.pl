@@ -21,6 +21,14 @@ reference_pairs(Raster, Pairs) :-
                      omni_validate(Raster, H, V) ), Pairs)
    ;  Pairs = [] ).
 
+% A cell is in row Hmd-1 and row Hmd at a column left of column Vmd-1.
+crosses_hmd_line_left_of_vmd(Raster, Hmd, Vmd) :-
+   H0 is Hmd - 1,
+   until(0, Vmd - 1, J),
+   cell(Raster, H0, J, A),
+   cell(Raster, Hmd, J, B),
+   A == B, !.
+
 random_raster(Rows, Cols, MaxId, Raster) :-
    length(Raster, Rows),
    maplist(random_row(Cols, MaxId), Raster).
@@ -48,7 +56,9 @@ test(original_structural_constraints_still_report_offending_number) :-
     \+ omni_validate([[0,0],[1,2]], 1, 1).
 
 % For every table with HMD and VMD, the count-form rules accept exactly the
-% boundaries the original (last-index) rules accepted, shifted by one.
+% boundaries the original (last-index) rules accepted, shifted by one, except
+% those where a cell crosses the HMD line left of the last VMD column: the
+% original constraint 1 checked that line from the last VMD column only.
 test(counts_agree_with_the_original_rules_when_both_regions_exist) :-
     set_random(seed(7)),
     forall(between(1, 3000, _),
@@ -56,10 +66,20 @@ test(counts_agree_with_the_original_rules_when_both_regions_exist) :-
              random_between(1, 4, MaxId),
              random_raster(Rows, Cols, MaxId, Raster),
              legacy_valid_boundaries(Raster, Old),
-             findall(H1-V1, ( member(H-V, Old), H1 is H + 1, V1 is V + 1 ), Shifted),
+             findall(H1-V1, ( member(H-V, Old), H1 is H + 1, V1 is V + 1,
+                              \+ crosses_hmd_line_left_of_vmd(Raster, H1, V1) ),
+                     Shifted),
              reference_pairs(Raster, New),
              findall(H-V, ( member(H-V, New), H >= 1, V >= 1 ), Both),
              assertion(Both == Shifted) )).
+
+test(stub_cell_may_not_cross_the_hmd_line) :-
+    % Cell 0 is in the last HMD row and the first data row at column 0, left
+    % of the last VMD column. The original rules accepted (1, 2).
+    Raster = [[0,1,2],[0,3,4],[5,6,7],[5,8,9]],
+    legacy_valid_boundaries(Raster, [0-1]),
+    omni_validate(Raster, 1, 2, some(1)),
+    valid_boundaries(Raster, []).
 
 % --- HMD only and VMD only -------------------------------------------------
 

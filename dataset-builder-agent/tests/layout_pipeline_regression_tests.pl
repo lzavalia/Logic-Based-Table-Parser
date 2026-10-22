@@ -53,6 +53,12 @@ records(Root, Records) :-
     paper_file(Root, 'tables.jsonl', File),
     dataset_pipeline:read_table_jsonl(File, Records).
 
+certificate_names(Root, Names) :-
+    paper_file(Root, '', Dir),
+    directory_files(Dir, Entries),
+    include([E]>>sub_atom(E, 0, _, _, certificate), Entries, Names0),
+    msort(Names0, Names).
+
 file_text(File, Text) :-
     read_file_to_string(File, Text, [encoding(utf8)]).
 
@@ -118,24 +124,17 @@ test(central_metadata_gives_two_subtables_beside_plain_boundaries,
                      json{rows:[3,4,5], columns:[0,1,2,3,4], hmd:2, vmd:0}],
     L0.separators == [].
 
-test(every_layout_certificate_is_written_and_accepted,
+test(every_candidate_is_certified_but_the_build_writes_no_certificate,
      [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
     records(Root, Records),
     forall(( member(R, Records), member(C, R.candidates) ),
            ( Cert = C.geometric_certificate,
              Cert.status == "certified",
-             atom_string(Name, Cert.file),
-             paper_file(Root, Name, File),
-             check_certificate_file(File, accepted),
              (  C.kind == "layout"
-             -> read_certificate_file(File, Facts),
-                memberchk(certificate_version(2), Facts),
-                length(C.subtables, N),
+             -> length(C.subtables, N),
                 length(Cert.claim, N)
              ;  true ) )),
-    paper_file(Root, 'certificate1_layout0.pl', Central),
-    read_certificate_file(Central, Facts1),
-    memberchk(subtable(1, [3,4,5], [0,1,2,3,4]), Facts1).
+    certificate_names(Root, []).
 
 test(layouts_are_colored_with_separators,
      [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
@@ -159,6 +158,55 @@ test(review_reads_a_layout_of_one_subtable_like_the_whole_table,
     R1.final_status == "valid",
     R1.selected_candidate_id == "PMC905/t1/h2_v1",
     \+ memberchk("PMC905/t1/layout0", R1.candidate_ids).
+
+test(review_writes_only_the_certificates_of_the_selected_candidates,
+     [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
+    review_paper(Root),
+    certificate_names(Root, Names),
+    Names == ['certificate0_layout2.pl', 'certificate1_h2_v1.pl'],
+    paper_file(Root, 'certificate0_layout2.pl', Layout),
+    check_certificate_file(Layout, accepted),
+    read_certificate_file(Layout, Facts),
+    memberchk(certificate_version(2), Facts),
+    memberchk(table_uid("PMC905/t0"), Facts),
+    memberchk(separator(0, [0,1,2]), Facts),
+    paper_file(Root, 'certificate1_h2_v1.pl', Plain),
+    check_certificate_file(Plain, accepted),
+    read_certificate_file(Plain, Facts1),
+    memberchk(boundary(2, 1), Facts1).
+
+% A new review that selects other candidates, or none, removes the
+% certificates of the earlier selection.
+test(a_new_review_replaces_the_selected_certificates,
+     [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
+    review_paper(Root),
+    review_settings(Root, none, true, "test:model", S),
+    directory_file_path(Root, dataset, Dataset),
+    review_queue(Dataset, S, [Paper], _),
+    review_paper_items(Paper, Items),
+    Items = [I0, I1],
+    review_answer(I0, json{column_header_rows:0, row_header_columns:0,
+                           reason:"test"}, 1, done(R0)),
+    review_answer(I1, json{column_header_rows:2, row_header_columns:0,
+                           reason:"test"}, 1, done(R1)),
+    publish_paper_review(Dataset, Paper, S, [R0, R1], _),
+    certificate_names(Root, ['certificate1_h2_v0.pl']).
+
+% A current review of a paper whose directory still holds the certificate of
+% every candidate (as built before the review wrote them) is not asked
+% again: the certificates are brought in line with it.
+test(current_review_removes_certificates_it_did_not_select,
+     [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
+    review_paper(Root),
+    paper_file(Root, 'certificate1_h2_v1.pl', Kept),
+    paper_file(Root, 'certificate1_layout0.pl', Extra),
+    copy_file(Kept, Extra),
+    settings(Root, S),
+    directory_file_path(Root, dataset, Dataset),
+    review_queue(Dataset, S, [], [_-Reason]),
+    Reason == "review is up to date; final_tableN.html and certificates written from it",
+    certificate_names(Root, ['certificate0_layout2.pl', 'certificate1_h2_v1.pl']),
+    review_queue(Dataset, S, [], ["PMC905"-"review is up to date"]).
 
 test(final_page_colors_the_selected_layout,
      [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-

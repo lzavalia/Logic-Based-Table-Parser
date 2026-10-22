@@ -6,10 +6,10 @@ The dataset builder turns a search phrase into a set of scientific tables whose 
 
 Given a phrase such as `"dementia with lewy bodies"`, the agent:
 
-1. **Selects papers.** Claude searches PubMed Central through one tool, `search_pmc`, and picks up to 20 open-access papers. It sees only short result lines (id, date, journal, title).
+1. **Selects papers.** Claude searches PubMed Central through one tool, `search_pmc`, and ranks up to 60 open-access candidates. It sees only short result lines (id, date, journal, title). The candidates are processed in order until 15 papers with tables are kept; a paper with no tables is skipped and the next one takes its place.
 2. **Downloads the full text** of each paper as XML from NCBI's public API, pausing and retrying when NCBI's rate limit is reached.
 3. **Extracts every `<table>` element** and lays it out as a *raster*: a grid in which each slot holds the id of the cell covering it, so merged cells span several slots (`table_layout_generator.pl`). Untrusted spans and raster dimensions are checked against explicit per-table and per-paper resource budgets before full grid materialization; oversized papers fail with a structured error rather than consuming unbounded memory.
-4. **Finds the candidates.** Rows covered by a single cell (titles, section rows, footers) are set aside. Every candidate pair (number of HMD rows, number of VMD columns; either may be 0) is then tested against the ten parse constraints: the seven original ones, "not entirely data", "not entirely metadata", and "no HMD rows only in a plain grid without merged cells". For each pair that passes, merged cells inside the data region are tried as metadata in the middle of the table, and kept where the pieces, the subtables, still satisfy the constraints (`parse_constraints.pl`). Each candidate gets a geometric labelability certificate; a table split into subtables gets one certificate covering all of them (`table_certify.pl`, checked by `certificate_kernel.pl`).
+4. **Finds the candidates.** Rows covered by a single cell (titles, section rows, footers) are set aside. Every candidate pair (number of HMD rows, number of VMD columns; either may be 0) is then tested against the ten parse constraints: the seven original ones, "not entirely data", "not entirely metadata", and "no HMD rows only in a plain grid without merged cells". For each pair that passes, merged cells inside the data region are tried as metadata in the middle of the table, and kept where the pieces, the subtables, still satisfy the constraints (`parse_constraints.pl`). Each candidate is checked for geometric labelability; a table split into subtables is checked as a whole (`table_certify.pl`, checked by `certificate_kernel.pl`). The certificate file is written later, by the review, and only for the candidate it selects.
 5. **Annotates the table.** For each candidate the original table is colored: HMD cells green, VMD cells blue, data cells gray, rows set aside khaki (`table_annotator.pl`).
 6. **Saves the result** as `dataset/papers/PMC<id>/candidatesN.html`, with `metadata.json` for the article title, table counts, and JATS label/caption/footnote context with source paths and original unannotated table markup. Outputs are staged and replaced per PMC ID to avoid title collisions and stale tables.
 
@@ -61,7 +61,7 @@ extracting and rasterizing `<table>` elements; it does not change the
 semantics of the boundary constraints. Before publishing a paper,
 `process_paper/4` requires exactly one JATS article and a matching `pmc`
 `article-id` inside `<front><article-meta>`. A genuine, well-formed paper
-with no tables may still produce a complete zero-table result.
+with no tables is skipped and never published.
 
 `download_status/3` distinguishes accepted ESearch/ESummary JSON, accepted
 JATS XML, rate-limited/transient error bodies, and invalid/empty/nonarticle
@@ -75,7 +75,7 @@ for the fetch adapter. The local, network-free regression suite is
 
 ### Machine-readable output (F10)
 
-The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `candidatesN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot. Each candidate also carries a geometric labelability certificate (schema 3.0): when the data columns (or rows) correspond one to one with the paths of the HMD (or VMD) graph, a self-checking `certificateN_hH_vV.pl` is written next to the table and verified by the trusted kernel `certificate_kernel.pl` before publication.
+The canonical output is now `papers/PMC<id>/tables.jsonl`, with one JSON record for each table containing its raster, source cell XPaths, stable candidate IDs, labeled regions and explicit abstention. `candidatesN.html` remains an optional inspection view with candidate/boundary headings. `metadata.json` records schema/linkage, source JATS context and per-table candidate counts. Staging verifies the JSONL/metadata count and identity consistency before publishing. Synthetic padding cells have null source paths, and merged cell labels follow their top-left raster slot. Each candidate also carries a geometric labelability certificate (schema 3.0): when the data columns (or rows) correspond one to one with the paths of the HMD (or VMD) graph, the candidate is labelable, and once the review selects it a self-checking `certificateN_hH_vV.pl` is written next to the table and verified by the trusted kernel `certificate_kernel.pl`.
 
 ### Boundary scalability (F11)
 

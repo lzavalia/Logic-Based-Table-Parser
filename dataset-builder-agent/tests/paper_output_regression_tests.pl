@@ -7,6 +7,7 @@
 
 :- use_module('../src/dataset_pipeline').
 :- use_module(library(filesex)).
+:- use_module(library(http/json)).
 
 % Deliberately fail AFTER creating a staging artifact. The publication code
 % must remove the staging directory while retaining the old complete version.
@@ -34,6 +35,14 @@ write_article(Root, Id, Name, Title, TableCount, File) :-
                  write(Out,
                        '<table><tr><td>Country</td><td>Year</td></tr><tr><td>USA</td><td>42</td></tr></table>')),
           write(Out, '</body></article>') ),
+        close(Out)).
+
+% An article holding one table given as JATS markup.
+write_table_article(Root, Id, Name, TableXml, File) :-
+    directory_file_path(Root, Name, File),
+    setup_call_cleanup(
+        open(File, write, Out, [encoding(utf8)]),
+        format(Out, '<article><front><article-meta><article-id pub-id-type="pmc">~w</article-id></article-meta></front><article-title>T</article-title><body>~w</body></article>', [Id, TableXml]),
         close(Out)).
 
 published_file(Root, Pmc, Name, File) :-
@@ -72,17 +81,21 @@ test(shorter_rerun_drops_stale_tables_and_updates_title,
     Details.title == "New title",
     Details.table_count =:= 1.
 
-test(zero_table_rerun_drops_all_old_tables,
+% A paper without tables is never published; a table-free rerun is skipped
+% and leaves the previous snapshot as it was.
+test(zero_table_rerun_is_skipped_and_keeps_previous_paper,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
     write_article(Root, 104, 'previous.xml', "First", 1, Previous),
     write_article(Root, 104, 'zero.xml', "Empty", 0, Empty),
     process_paper("104", Previous, Root, _),
-    process_paper("104", Empty, Root, _),
-    published_file(Root, 'PMC104', 'candidates0.html', Obsolete),
+    catch(process_paper("104", Empty, Root, _), Error, true),
+    Error = error(paper_has_no_tables, _),
+    published_file(Root, 'PMC104', 'candidates0.html', Kept),
     published_file(Root, 'PMC104', 'metadata.json', Metadata),
-    \+ exists_file(Obsolete),
+    exists_file(Kept),
     dataset_pipeline:read_json_file(Metadata, Details),
-    Details.table_count =:= 0.
+    Details.title == "First",
+    Details.table_count =:= 1.
 
 test(failed_stage_preserves_previous_paper,
      [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
@@ -142,6 +155,90 @@ test(existing_per_paper_lock_blocks_concurrent_publication,
     \+ catch(process_paper("108", Input, Root, _), _, fail),
     published_file(Root, 'PMC108', 'candidates0.html', Completed),
     exists_file(Completed).
+
+% The review re-parses source_table_html from tables.jsonl. The stored HTML
+% writes <col> unclosed and < as &lt;; both must survive the round trip, or
+% the table has no rows (empty_table) and "<0.001" becomes "0.001".
+test(source_table_html_round_trips_cols_and_entities,
+     [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
+    write_table_article(Root, 110, 'cols.xml',
+        '<table><col span="1"/><col span="1"/><thead><tr><th>Outcome</th><th>P</th></tr></thead><tbody><tr><td>Response</td><td>&lt;0.001</td></tr></tbody></table>',
+        Input),
+    process_paper("110", Input, Root, _),
+    published_file(Root, 'PMC110', 'tables.jsonl', Jsonl),
+    setup_call_cleanup(open(Jsonl, read, In, [encoding(utf8)]),
+                       json_read_dict(In, Record, [value_string_as(string)]),
+                       close(In)),
+    dataset_pipeline:final_source_table(Record, Clean, Raster),
+    Raster == [[0,1],[2,3]],
+    sub_term(Text, Clean), atom(Text), sub_atom(Text, _, _, _, '<0.001'), !.
+
+% serialize_source_table/2 reads its own output back. Markup found in JATS
+% table cells must survive that check.
+test(source_table_html_round_trips_cell_markup) :-
+    dataset_pipeline:parse_jats_xml(
+        "<table><colgroup><col span=\"1\"/><col span=\"2\"/></colgroup><thead><tr><th>Dose&#160;(mg)</th><th colspan=\"2\">P &gt; 0.05 &amp; n</th></tr></thead><tbody><tr><td><bold>A</bold><break/>B</td><td><italic>x</italic><sup>2</sup></td><td>β <xref ref-type=\"fn\" rid=\"n1\">a</xref></td></tr></tbody></table>",
+        Dom),
+    dataset_pipeline:extract_tables(Dom, [Table]),
+    dataset_pipeline:serialize_source_table(Table, Html),
+    dataset_pipeline:deserialize_source_table(Html, Back),
+    \+ dataset_pipeline:source_table_difference(Table, Back, _).
+
+% parse_html/2 must not share its DTD with html_write: reading <break></break>
+% once taught the shared DTD that break is empty, so the next table with a
+% <break/> was written as an unclosed <break> that swallowed the cell text.
+test(source_table_html_does_not_depend_on_earlier_tables) :-
+    Table = element(table, [], [element(tr, [], [element(td, [], ['Younger', element(break, [], []), 'Older'])])]),
+    dataset_pipeline:serialize_source_table(Table, First),
+    dataset_pipeline:serialize_source_table(Table, Second),
+    First == Second.
+
+% Attribute values are compared as text: the HTML reader returns span=1
+% where the XML reader returns span='1'.
+test(source_table_difference_ignores_attribute_value_types) :-
+    \+ dataset_pipeline:source_table_difference(
+           element(table, [], [element(tr, [], [element(td, [colspan='1'], [a])])]),
+           element(table, [], [element(tr, [], [element(td, [colspan=1], [a])])]),
+           _).
+
+test(source_table_difference_finds_changed_text) :-
+    dataset_pipeline:source_table_difference(
+        element(table, [], [element(tr, [], [element(td, [], ['<0.001'])])]),
+        element(table, [], [element(tr, [], [element(td, [], ['0.001'])])]),
+        Difference),
+    Difference == difference([1,1,1,1], text("<0.001"), text("0.001")).
+
+test(source_table_difference_finds_missing_row) :-
+    dataset_pipeline:source_table_difference(
+        element(table, [], [element(tr, [], [element(td, [], [a])]),
+                            element(tr, [], [element(td, [], [b])])]),
+        element(table, [], [element(tr, [], [element(td, [], [a])])]),
+        Difference),
+    Difference == difference([1,2], element(tr, []), end).
+
+% A <p> inside a <p> is valid JATS, but HTML closes the outer <p> first, so
+% the stored HTML would read back as two sibling paragraphs. The writer must
+% stop the paper at parse time, in strict and in quarantine mode alike (it is
+% a serialization bug, not a bad source table), and keep the previous paper.
+test(source_html_round_trip_failure_stops_the_paper,
+     [setup(make_test_workspace(Root)), cleanup(cleanup_test_workspace(Root))]) :-
+    write_table_article(Root, 111, 'good.xml',
+        '<table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table>',
+        Good),
+    process_paper("111", Good, Root, _),
+    write_table_article(Root, 111, 'nested.xml',
+        '<table><tr><td>a</td><td><p>b<p>c</p></p></td></tr><tr><td>d</td><td>e</td></tr></table>',
+        Nested),
+    catch(process_paper("111", Nested, Root, _), Strict, true),
+    Strict = error(source_html_round_trip(difference(_, _, _)),
+                   context(source_path(_), _)),
+    catch(process_paper("111", Nested, Root, [on_table_error(quarantine)], _),
+          Quarantine, true),
+    Quarantine = error(source_html_round_trip(_), _),
+    format_paper_failure("111", Root, Strict, Line),
+    once(sub_string(Line, _, _, _, "source_table_html does not read back")),
+    published_file(Root, 'PMC111', 'candidates0.html', Previous),
+    exists_file(Previous).
 
 test(leading_zeroes_use_one_canonical_identity) :-
     dataset_pipeline:canonical_pmc_name("00107", Name),

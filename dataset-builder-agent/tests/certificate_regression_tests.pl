@@ -61,13 +61,6 @@ free_width(Grid, I, J, Cols, Max, Width0, Width) :-
    ;  Width = Width0
    ).
 
-% The one known way a candidate of valid_boundaries/2 is not certifiable:
-% constraint 1 checks the HMD line only from column Vmd-1 rightwards, so a
-% VMD cell further left may cross it. The kernel forbids that everywhere.
-stub_crosses_hmd_line(Vmd, not_labelable(Reasons)) :-
-   memberchk(columns-cell_crosses_hmd_line(_, column(J)), Reasons),
-   J < Vmd - 1.
-
 run_certificate_file(File, Status) :-
    current_prolog_flag(executable, Swipl),
    absolute_file_name('../src', Src, [file_type(directory)]),
@@ -148,12 +141,12 @@ test(vmd_line_inside_the_hmd_may_be_crossed) :-
    % A title spanning the whole first row is part of the HMD.
    certified([[0,0],[1,2],[3,4]], 2, 1, _).
 
+% Constraint 1 rejects this boundary too, so the two agree on it.
 test(stub_cell_crossing_the_hmd_line_is_rejected) :-
-   Raster = [[0,1,2],[0,3,4],[0,5,4]],
-   valid_boundaries(Raster, Boundaries),
-   memberchk(json{hmd:1, vmd:2}, Boundaries),
-   certify(Raster, 1, 2, Result),
-   stub_crosses_hmd_line(2, Result).
+   Raster = [[0,1,2],[0,3,4],[5,6,7],[5,8,9]],
+   omni_validate(Raster, 1, 2, some(1)),
+   certify(Raster, 1, 2, not_labelable(Reasons)),
+   memberchk(columns-cell_crosses_hmd_line(0, column(0)), Reasons).
 
 % --- the kernel rejects malformed or tampered certificates -----------------
 
@@ -235,8 +228,7 @@ test(reading_a_certificate_never_runs_its_directives) :-
 
 % --- agreement with the structural constraints -----------------------------
 
-% Every candidate of valid_boundaries/2 is certifiable, except when a VMD
-% cell left of column Vmd-1 crosses the HMD line (see stub_crosses_hmd_line).
+% Every candidate of valid_boundaries/2 is certifiable.
 test(structural_candidates_are_certifiable) :-
    set_random(seed(11)),
    forall(( between(1, 3000, _),
@@ -245,11 +237,7 @@ test(structural_candidates_are_certifiable) :-
             random_tiling(Rows, Cols, MaxSpan, Raster),
             valid_boundaries(Raster, Boundaries),
             member(json{hmd:Hmd, vmd:Vmd}, Boundaries) ),
-          ( certify(Raster, Hmd, Vmd, Result),
-            (  Result = certificate(_)
-            -> true
-            ;  stub_crosses_hmd_line(Vmd, Result)
-            ) )).
+          certify(Raster, Hmd, Vmd, certificate(_))).
 
 :- end_tests(geometric_certificates).
 
@@ -462,9 +450,8 @@ test(written_layout_certificate_checks_itself_when_run) :-
 
 % --- agreement with the layout search --------------------------------------
 
-% Every layout of table_layouts/2 is certifiable, except when a VMD cell
-% crosses the HMD line of a subtable (see stub_crosses_hmd_line), and the
-% certificate labels the table as layout_labels/3 does.
+% Every layout of table_layouts/2 is certifiable, and the certificate labels
+% the table as layout_labels/3 does.
 test(layouts_are_certifiable) :-
    set_random(seed(7)),
    forall(( between(1, 3000, _),
@@ -474,14 +461,9 @@ test(layouts_are_certifiable) :-
             table_layouts(Raster, Layouts),
             member(Layout, Layouts) ),
           ( layout_subtables(Raster, Layout, Separators, Subtables),
-            certify_layout(Raster, Separators, Subtables, none, Result),
-            (  Result = certificate(Facts)
-            -> certificate_labels(Facts, CertLabels),
-               layout_labels(Raster, Layout, CertLabels)
-            ;  Result = not_labelable(Reasons),
-               forall(member(K-Why, Reasons),
-                      ( nth0(K, Subtables, subtable(_, _, _, Vmd)),
-                        stub_crosses_hmd_line(Vmd, not_labelable(Why)) ))
-            ) )).
+            certify_layout(Raster, Separators, Subtables, none,
+                           certificate(Facts)),
+            certificate_labels(Facts, CertLabels),
+            layout_labels(Raster, Layout, CertLabels) )).
 
 :- end_tests(layout_certificates).

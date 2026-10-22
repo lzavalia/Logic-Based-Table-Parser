@@ -31,13 +31,27 @@ html_rasters(Html, Tables, Rasters) :-
 
 % max_errors(-1): real web pages have far more than the parser's default
 % limit of 50 syntax errors, which would otherwise abort the parse.
+% The HTML DTD is required: without it the parser knows neither the void
+% elements (an unclosed <col> swallows the <thead>/<tbody> after it, so the
+% table has no rows) nor the entities &lt; &gt; &amp; (silently dropped).
+% Each parse loads its own copy of the DTD (about 3 ms). The parser adds a
+% declaration to the DTD for every unknown element it meets, such as JATS
+% <break>, and the shared copy from dtd(html, _) is also the one html_write
+% uses, so the HTML written for a table would depend on the tables parsed
+% before it.
 parse_html(Html, Dom) :-
    text_to_string(Html, String),
-   load_structure(
-      string(String),
-      Dom,
-      [dialect(html), space(remove), syntax_errors(quiet), max_errors(-1)]
-   ).
+   absolute_file_name(dtd('HTML5'), DtdFile,
+                      [extensions([dtd]), access(read)]),
+   setup_call_cleanup(
+      ( new_dtd(html, DTD), load_dtd(DTD, DtdFile) ),
+      load_structure(
+         string(String),
+         Dom,
+         [dtd(DTD), dialect(html), space(remove), syntax_errors(quiet),
+          max_errors(-1)]
+      ),
+      free_dtd(DTD)).
 
 % PMC eFetch returns JATS XML, *not HTML*.  The XML entry point is
 % intentionally separate from parse_html/2: callers accepting loose HTML

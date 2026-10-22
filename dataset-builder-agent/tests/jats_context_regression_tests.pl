@@ -105,15 +105,17 @@ test(rerun_replaces_old_context,
     context_published_file(Root, 705, 'metadata.json', MetaFile),
     dataset_pipeline:read_json_file(MetaFile, Old),
     Old.tables = [_,_,_],
-    % Same PMC, but a newer no-table article: old captions must disappear.
-    directory_file_path(Root, 'empty.xml', Empty),
-    setup_call_cleanup(open(Empty, write, Out, [encoding(utf8)]),
-       write(Out, '<article><front><article-meta><article-id pub-id-type="pmc">705</article-id></article-meta></front><body/></article>'),
+    % Same PMC, but a newer article with one bare table: the old captions
+    % and the old extra tables must disappear.
+    directory_file_path(Root, 'bare.xml', Bare),
+    setup_call_cleanup(open(Bare, write, Out, [encoding(utf8)]),
+       write(Out, '<article><front><article-meta><article-id pub-id-type="pmc">705</article-id></article-meta></front><body><table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>1</td></tr></table></body></article>'),
        close(Out)),
-    process_paper("705", Empty, Root, _),
+    process_paper("705", Bare, Root, _),
     dataset_pipeline:read_json_file(MetaFile, New),
-    New.tables == [], New.table_count =:= 0,
-    context_published_file(Root, 705, 'candidates0.html', OldHtml),
+    New.tables = [Only], New.table_count =:= 1,
+    \+ sub_string(Only.label_markup, _, _, _, "Table"),
+    context_published_file(Root, 705, 'candidates1.html', OldHtml),
     \+ exists_file(OldHtml).
 
 test(no_wrap_with_namespaced_markup) :-

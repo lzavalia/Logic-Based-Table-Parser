@@ -30,6 +30,12 @@
 % one page per table showing the outcome (dataset_pipeline:final_table_html/3). A "valid" table means that
 % the parser and the model agree; it is not a verified label.
 %
+% The geometric certificate of the selected candidate, if it is labelable,
+% is written next to them (certificateN_hH_vV.pl or certificateN_layoutK.pl,
+% the file its record names). The build writes no certificates, and the
+% review removes any certificate of a candidate it did not select, so a
+% reviewed paper holds exactly one certificate per valid, labelable table.
+%
 %   review_settings(+WorkspaceDir, +Papers, +Force, +Model, -Settings)
 %   review_queue(+DatasetDir, +Settings, -Papers, -Skipped)
 %   review_paper_name(+Paper, -Name)
@@ -74,7 +80,9 @@
 :- use_module(library(lists)).
 :- use_module(library(apply)).
 :- use_module(provenance_manifest).
-:- use_module(dataset_pipeline, [final_table_html/3]).
+:- use_module(dataset_pipeline, [final_table_html/3, selected_certificates/3,
+                                  write_checked_certificate/2,
+                                  is_certificate_file_name/1]).
 
 % Bump this whenever the prompt text or the matching rules change, so that
 % reviews made with different prompts are never mixed up.
@@ -208,12 +216,10 @@ queue_paper(PapersDir, Settings, Name, Papers0-Skipped0, Papers-Skipped) :-
    ;  file_sha256(TablesFile, Hash), atom_string(Hash, Sha),
       (  Settings.force == false, current_review(PaperDir, Sha, Settings)
       -> Papers = Papers0,
-         directory_file_path(PaperDir, 'review.jsonl', ReviewFile),
-         read_jsonl(ReviewFile, Existing), length(Existing, Count),
-         (  final_pages_present(PaperDir, Count)
+         (  review_outputs_present(PaperDir)
          -> Reason = "review is up to date"
          ;  write_final_pages(PapersDir, Name, PaperDir),
-            Reason = "review is up to date; final_tableN.html written from it" ),
+            Reason = "review is up to date; final_tableN.html and certificates written from it" ),
          Skipped = [Name-Reason|Skipped0]
       ;  read_jsonl(TablesFile, Records),
          maplist(review_item_for(Settings), Records, Items),
@@ -568,10 +574,11 @@ write_review_file(PaperDir, Name, Sha, Results) :-
    format(string(TempName), ".review.jsonl.~d.tmp", [Stamp]),
    directory_file_path(PaperDir, TempName, TempFile),
    directory_file_path(PaperDir, 'review.jsonl', ReviewFile),
-   % Every page is rendered into a temporary file first, so a rendering error
-   % leaves the previous review and pages as they were. The pages are put in
-   % place before review.jsonl, which marks the review as current.
-   catch(( final_page_temps(PaperDir, Stamp, Tables, Records, Pages),
+   % Every page and certificate is written into a temporary file first, so an
+   % error leaves the previous review, pages and certificates as they were.
+   % They are put in place before review.jsonl, which marks the review as
+   % current.
+   catch(( review_output_temps(PaperDir, Stamp, Tables, Records, Outputs, Stale),
            setup_call_cleanup(
               open(TempFile, write, Out, [encoding(utf8)]),
               forall(member(Record, Records),
@@ -580,12 +587,39 @@ write_review_file(PaperDir, Name, Sha, Results) :-
               close(Out)),
            read_jsonl(TempFile, Check),
            length(Records, N), length(Check, N),
-           forall(member(Temp-Final, Pages), rename_file(Temp, Final)),
+           place_review_outputs(Outputs, Stale),
            rename_file(TempFile, ReviewFile) ),
          Error,
-         ( forall(( member(F, [TempFile]) ; final_temp_file(PaperDir, Stamp, F) ),
-                  ( exists_file(F) -> delete_file(F) ; true )),
+         ( forall(review_temp_file(PaperDir, Stamp, F), delete_file(F)),
            throw(Error) )).
+
+% review_output_temps(+PaperDir, +Stamp, +Tables, +Reviews, -Outputs, -Stale)
+% Writes the final pages (final_page_temps/5) and the certificate of every
+% selected, labelable candidate into temporary files. Outputs pairs each
+% temporary file with its final name; Stale lists the certificate files
+% already in PaperDir that the review does not select.
+review_output_temps(PaperDir, Stamp, Tables, Reviews, Outputs, Stale) :-
+   final_page_temps(PaperDir, Stamp, Tables, Reviews, Pages),
+   selected_certificates(Tables, Reviews, Certificates),
+   findall(Temp-Final,
+           ( member(Name-Facts, Certificates),
+             format(string(TempName), ".~w.~d.tmp", [Name, Stamp]),
+             directory_file_path(PaperDir, TempName, Temp),
+             directory_file_path(PaperDir, Name, Final),
+             write_checked_certificate(Temp, Facts) ),
+           CertificateFiles),
+   append(Pages, CertificateFiles, Outputs),
+   directory_files(PaperDir, Entries),
+   findall(File,
+           ( member(Entry, Entries),
+             is_certificate_file_name(Entry),
+             \+ memberchk(Entry-_, Certificates),
+             directory_file_path(PaperDir, Entry, File) ),
+           Stale).
+
+place_review_outputs(Outputs, Stale) :-
+   forall(member(Temp-Final, Outputs), rename_file(Temp, Final)),
+   forall(member(File, Stale), delete_file(File)).
 
 % final_page_temps(+PaperDir, +Stamp, +Tables, +Reviews, -Pages)
 % Writes .final_tableN.html.<Stamp>.tmp for every table; Pages pairs each
@@ -610,25 +644,41 @@ final_page_names(PaperDir, Stamp, Index, Temp, Final) :-
    directory_file_path(PaperDir, FinalName, Final),
    directory_file_path(PaperDir, TempName, Temp).
 
-final_temp_file(PaperDir, Stamp, File) :-
-   format(atom(Suffix), ".html.~d.tmp", [Stamp]),
+% review_temp_file(+PaperDir, +Stamp, -File): a temporary file of the review
+% written with Stamp (review.jsonl, a page or a certificate).
+review_temp_file(PaperDir, Stamp, File) :-
+   format(atom(Suffix), ".~d.tmp", [Stamp]),
    directory_files(PaperDir, Entries),
    member(Entry, Entries),
-   sub_atom(Entry, 0, _, _, '.final_table'),
+   sub_atom(Entry, 0, _, _, '.'),
    sub_atom(Entry, _, _, 0, Suffix),
    directory_file_path(PaperDir, Entry, File).
 
-% final_pages_present(+PaperDir, +Count): final_table0..Count-1.html exist.
-final_pages_present(PaperDir, Count) :-
+% review_outputs_present(+PaperDir): final_tableN.html exists for every
+% review, and the certificate files are exactly those the review selects.
+review_outputs_present(PaperDir) :-
+   directory_file_path(PaperDir, 'tables.jsonl', TablesFile),
+   directory_file_path(PaperDir, 'review.jsonl', ReviewFile),
+   read_jsonl(TablesFile, Tables),
+   read_jsonl(ReviewFile, Reviews),
+   length(Reviews, Count),
    Last is Count - 1,
    forall(between(0, Last, I),
           ( format(string(Name), "final_table~d.html", [I]),
             directory_file_path(PaperDir, Name, File),
-            exists_file(File) )).
+            exists_file(File) )),
+   selected_certificates(Tables, Reviews, Certificates),
+   findall(Name, member(Name-_, Certificates), Selected0),
+   sort(Selected0, Selected),
+   directory_files(PaperDir, Entries),
+   include(is_certificate_file_name, Entries, Present0),
+   sort(Present0, Present),
+   Present == Selected.
 
 % write_final_pages(+PapersDir, +Name, +PaperDir)
-% For a review that is current but predates final_tableN.html: render the
-% pages from review.jsonl without asking the LLM again.
+% For a review that is current but predates final_tableN.html or the
+% certificates being written by the review: render the pages and write the
+% selected certificates from review.jsonl without asking the LLM again.
 write_final_pages(PapersDir, Name, PaperDir) :-
    format(string(LockName), ".~s.lock", [Name]),
    directory_file_path(PapersDir, LockName, LockDir),
@@ -643,10 +693,11 @@ write_final_pages(PapersDir, Name, PaperDir) :-
         read_jsonl(TablesFile, Tables),
         read_jsonl(ReviewFile, Reviews),
         get_time(Now), Stamp is floor(Now * 1000000),
-        catch(( final_page_temps(PaperDir, Stamp, Tables, Reviews, Pages),
-                forall(member(Temp-Final, Pages), rename_file(Temp, Final)) ),
+        catch(( review_output_temps(PaperDir, Stamp, Tables, Reviews,
+                                    Outputs, Stale),
+                place_review_outputs(Outputs, Stale) ),
               Error,
-              ( forall(final_temp_file(PaperDir, Stamp, F), delete_file(F)),
+              ( forall(review_temp_file(PaperDir, Stamp, F), delete_file(F)),
                 throw(Error) )) ),
       delete_directory(LockDir)).
 

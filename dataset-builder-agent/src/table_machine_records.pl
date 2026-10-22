@@ -9,8 +9,9 @@
 % Schema 3.0: one JSON object per table in tables.jsonl. Coordinates and cell
 % IDs are zero-based; candidate IDs are stable within a PMC and table index.
 % Each candidate carries a geometric_certificate (table_certify.pl): either
-% the claim proved and the certificate file written next to the table, or
-% the kernel's reason for rejecting each claim.
+% the claim proved and the name of the certificate file, or the kernel's
+% reason for rejecting each claim. The build writes no certificate files; the
+% review writes the file of the candidate it selects (table_review.pl).
 %
 % A candidate is of one of two kinds (table_candidates/2):
 %   "boundary"  a plain (hmd, vmd) boundary, certified by a version 1
@@ -250,19 +251,3 @@ certificate_file_name(Index, Hmd, Vmd, File) :-
 
 layout_certificate_file_name(Index, K, File) :-
    format(atom(File), 'certificate~d_layout~d.pl', [Index, K]).
-
-% machine_certificate_files(+TableUid, +Index, +Raster, +Candidates, -Files)
-% Files is File-Facts for every candidate with an accepted certificate.
-machine_certificate_files(TableUid, Index, Raster, Candidates, Files) :-
-   findall(File-Facts,
-           ( member(Candidate, Candidates),
-             candidate_certificate(TableUid, Index, Raster, Candidate, File, Facts) ),
-           Files).
-
-candidate_certificate(TableUid, Index, Raster, json{hmd:Hmd, vmd:Vmd}, File, Facts) :-
-   certify(Raster, Hmd, Vmd, TableUid, certificate(Facts)),
-   certificate_file_name(Index, Hmd, Vmd, File).
-candidate_certificate(TableUid, Index, Raster, layout(K, Layout), File, Facts) :-
-   layout_subtables(Raster, Layout, Separators, Subtables),
-   certify_layout(Raster, Separators, Subtables, TableUid, certificate(Facts)),
-   layout_certificate_file_name(Index, K, File).

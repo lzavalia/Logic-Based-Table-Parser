@@ -19,7 +19,8 @@
 % Constraints 0 to 6 are those of ConstraintValidators.scala, which used the
 % index of the last HMD row and of the last VMD column. For Hmd >= 1 and
 % Vmd >= 1 each one tests exactly the cells the original tested at
-% (Hmd-1, Vmd-1). A rule that compares a region with one that is empty has
+% (Hmd-1, Vmd-1), except constraint 1, which also tests the VMD columns left
+% of the last one (see constraint 1). A rule that compares a region with one that is empty has
 % nothing to compare and holds. This is a structural contract, not evidence
 % that those cells are semantically headers.
 %
@@ -90,12 +91,16 @@ vertical_no_merged_cell_bisections(Raster, Hmd, Vmd) :-
 % --- constraint 1 ----------------------------------------------------------
 
 % No merged cell crosses the line between the last HMD row and the first row
-% below it, from the last VMD column rightwards.
-horizontal_no_merged_cell_bisections(Raster, Hmd, Vmd) :-
+% below it, in any column. The asymmetry with constraint 0 is intentional:
+% the HMD spans the whole width, the corner above the VMD included, so its
+% lower line runs through the VMD columns too, while the VMD line runs below
+% the HMD only. The original checked from the last VMD column rightwards,
+% which let a VMD cell further left reach into the HMD and so be both.
+horizontal_no_merged_cell_bisections(Raster, Hmd, _Vmd) :-
    raster_dimensions(Raster, _, NumCols),
    H0 is Hmd - 1,
    \+ ( Hmd > 0,
-        until(max(0, Vmd - 1), NumCols, J),  % asymmetry is intentional
+        until(0, NumCols, J),
         cell(Raster, H0, J, A),
         cell(Raster, Hmd, J, B),
         A == B ).

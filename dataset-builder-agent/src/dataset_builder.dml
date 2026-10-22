@@ -20,8 +20,6 @@
 % Output (relative to the workspace):
 %   dataset/papers/PMC<id>/candidatesN.html  the table colored for each candidate
 %   dataset/papers/PMC<id>/input_tableN.html      the same table, uncolored
-%   dataset/papers/PMC<id>/certificateN_hH_vV.pl  geometric labelability
-%                                             certificate per labelable candidate
 %   dataset/papers/PMC<id>/metadata.json      article title and table counts
 %   dataset/raw/PMC<id>.xml                    validated JATS full text as downloaded
 %   dataset/cache/requests/                    temporary per-search responses
@@ -48,8 +46,18 @@ user:file_search_path(workspace, '/workspace').
 
 % --- Settings ---
 
-% Maximum number of papers processed per run.
-max_papers(20).
+% Number of papers with tables each run keeps. A paper with no tables, or
+% one that fails, does not count: the next candidate is processed instead,
+% until this many papers are kept or the candidates run out.
+max_papers(15).
+
+% The model ranks up to this many candidates, so papers without tables can
+% be replaced. It is bounded by the search results (3 searches of
+% search_results_per_query/1 papers each).
+max_candidates(60).
+
+% Papers listed per search_pmc call (the ESearch retmax).
+search_results_per_query(30).
 
 % NCBI's no-key request budget is shared by all local workers using the
 % same workspace. Each request reserves a slot under an OS-atomic directory
@@ -66,7 +74,7 @@ ncbi_retry_waits([2, 5, 10, 20, 30]).
 
 % The only tool the model can call. Results are short text, never page HTML.
 tool(search_pmc(Query, Results),
-     "Search PubMed Central for open-access full-text papers. Query uses PubMed search syntax (plain keywords work). Returns up to 15 lines, one per paper: 'PMC<id> | date | journal | title'.") :-
+     "Search PubMed Central for open-access full-text papers. Query uses PubMed search syntax (plain keywords work). Returns up to 30 lines, one per paper: 'PMC<id> | date | journal | title'.") :-
     (   catch(pmc_search(Query, Found), _, fail)
     ->  Results = Found
     ;   Results = "No results (the search failed or matched nothing). Try a simpler query."
@@ -96,9 +104,10 @@ pmc_search_files(Query, SearchSave, SearchMounted,
                  SummarySave, SummaryMounted, Results) :-
     format(string(Term), "(~w) AND open access[filter]", [Query]),
     url_encode(Term, EncodedTerm),
+    search_results_per_query(RetMax),
     format(string(SearchUrl),
-           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&retmode=json&sort=relevance&retmax=15&term=~w",
-           [EncodedTerm]),
+           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&retmode=json&sort=relevance&retmax=~w&term=~w",
+           [RetMax, EncodedTerm]),
     ncbi_fetch(SearchUrl, SearchSave, esearch_json),
     esearch_ids(SearchMounted, Ids),
     Ids \== "",
@@ -166,17 +175,29 @@ take(N, [X|Xs], [X|Ys]) :-
 
 % --- Table pipeline (no LLM) ---
 
-% process_papers(+Ids, -Lines): one status line per paper. Never fails, so a
-% bad paper cannot abort the run or trigger the fallback clause.
-process_papers([], []).
-process_papers([Id|Ids], [Line|Lines]) :-
-    (   catch(download_and_process(Id, Result), Error,
-              format_paper_failure(Id, "/workspace/dataset", Error, Result))
+% process_papers(+Ids, +Need, -Kept, -Lines): process the candidates in
+% order until Need papers have been published, one status line per candidate
+% tried. Kept lists the published papers. A paper with no tables, or one that
+% fails, is not kept and the next candidate takes its place. Never fails, so
+% a bad paper cannot abort the run or trigger the fallback clause.
+process_papers([], _, [], []) :- !.
+process_papers(_, Need, [], []) :- Need =< 0, !.
+process_papers([Id|Ids], Need, Kept, [Line|Lines]) :-
+    (   catch(( download_and_process(Id, Result), Status = kept ), Error,
+              ( format_paper_failure(Id, "/workspace/dataset", Error, Result),
+                Status = dropped ))
     ->  Line = Result
-    ;   format_paper_failure(Id, "/workspace/dataset", pipeline_goal_failed, Line)
+    ;   format_paper_failure(Id, "/workspace/dataset", pipeline_goal_failed, Line),
+        Status = dropped
     ),
     output(Line),
-    process_papers(Ids, Lines).
+    (   Status == kept
+    ->  Kept = [Id|MoreKept],
+        Need1 is Need - 1
+    ;   Kept = MoreKept,
+        Need1 = Need
+    ),
+    process_papers(Ids, Need1, MoreKept, Lines).
 
 % download_and_process(+Id, -Line)
 % Id is digits only (see parse_pmc_ids/3). url_fetch saves the full text as
@@ -213,11 +234,13 @@ download_and_process_locked(Id, Line) :-
 
 agent_main(Topic) :-
     max_papers(Max),
+    max_candidates(MaxCandidates),
     reset_search_provenance,
 
     system("You select research papers for a dataset of tables.
 - Use search_pmc to find open-access PubMed Central papers on the topic.
 - Prefer original research and systematic reviews, which usually contain data tables.
+- Papers without tables are skipped, so list more candidates than are kept.
 - Run search_pmc at most 3 times, refining the query only if the results are off-topic.
 - Only choose PMC ids that appear in the search results. Never invent an id."),
 
@@ -225,13 +248,13 @@ agent_main(Topic) :-
     output(Msg),
 
     output("Phase 1: Selecting papers..."),
-    format(string(SelectTask), "Find papers on '~w' and choose the ~w most relevant ones.
-Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567) in PaperIds.", [Topic, Max]),
+    format(string(SelectTask), "Find papers on '~w'. The dataset keeps the ~w most relevant papers that contain tables; papers without tables are skipped and replaced by the next candidate. So rank up to ~w relevant papers from the search results, most relevant first.
+Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567) in PaperIds.", [Topic, Max, MaxCandidates]),
     task(SelectTask, string(PaperIds)),
 
     % Validate against the union of actually displayed search results,
-    % *before* applying max_papers: fabricated IDs must not displace real
-    % candidates when the model returns more than Max values.
+    % *before* applying max_candidates: fabricated IDs must not displace real
+    % candidates when the model returns more than MaxCandidates values.
     parse_pmc_ids(PaperIds, 1000000, ProposedIds),
     filter_search_selected_ids(ProposedIds, VerifiedIds, RejectedIds),
     (   RejectedIds == []
@@ -241,22 +264,39 @@ Store their PMC ids as a comma-separated list (for example: PMC123456,PMC234567)
                [RejectedIds]),
         output(Warning)
     ),
-    take(Max, VerifiedIds, Ids),
+    take(MaxCandidates, VerifiedIds, Ids),
     Ids \== [],
 
     output("Phase 2: Extracting, rasterizing and validating tables..."),
-    process_papers(Ids, Lines),
+    process_papers(Ids, Max, Kept, Lines),
+    length(Kept, NumKept),
+    length(Ids, NumCandidates),
+    (   NumKept < Max
+    ->  format(string(Shortfall),
+               "WARNING: only ~w of ~w papers kept; the ~w candidates ran out. Try a broader topic.",
+               [NumKept, Max, NumCandidates]),
+        output(Shortfall)
+    ;   true
+    ),
     % The archive of this run includes the search queries and grounded IDs.
+    % selected_pmc_ids holds only the kept papers, which the review reads;
+    % the status lines also cover the candidates that were skipped.
     % If persistence fails, disclose that fact instead of claiming provenance.
-    ( catch(record_dataset_run("/workspace/dataset", Topic, PaperIds, ProposedIds, Ids,
+    % With no paper kept there is nothing to review, so the manifest line is
+    % worded so that run_agent.sh does not start the review.
+    ( catch(record_dataset_run("/workspace/dataset", Topic, PaperIds, ProposedIds, Kept,
                                RejectedIds, Lines, RunFile), Error,
             (format(string(Warn), 'WARNING: could not save run manifest: ~w', [Error]),
              output(Warn), fail))
-    -> format(string(RunMsg), 'Run manifest: ~w', [RunFile]), output(RunMsg)
+    -> (   Kept == []
+       ->  format(string(RunMsg), 'Run manifest (no paper with tables): ~w', [RunFile])
+       ;   format(string(RunMsg), 'Run manifest: ~w', [RunFile])
+       ),
+       output(RunMsg)
     ;  output('WARNING: run manifest unavailable; inspect per-paper provenance') ),
 
     atomic_list_concat(Lines, "\n", Report),
-    format(string(Summary), "Dataset build complete for '~w'. Each paper's tables are in dataset/papers/PMC<id>/.\n~w", [Topic, Report]),
+    format(string(Summary), "Dataset build complete for '~w': ~w of ~w papers with tables kept. Each paper's tables are in dataset/papers/PMC<id>/.\n~w", [Topic, NumKept, Max, Report]),
     answer(Summary).
 
 % Fallback

@@ -41,6 +41,7 @@ fast_count_candidate(Features, 0, MaxVmd, Vmd) :- !,
    fast_column_checks(Features, -1, V).
 fast_count_candidate(Features, Hmd, MaxVmd, Vmd) :-
    H is Hmd - 1,
+   fast_no_hmd_crossing(Features, H),
    LastV is MaxVmd - 1,
    (  Vmd = 0,
       fast_no_vmd_admissible(Features, H)
@@ -49,13 +50,16 @@ fast_count_candidate(Features, Hmd, MaxVmd, Vmd) :-
       fast_column_checks(Features, H, V),
       Vmd is V + 1 ).
 
-% No VMD (V = -1): the column rules (0, 3, 5) have nothing to check. The row
-% rules then apply from column 0: no vertical merge across H/H+1 (C1) and no
-% horizontal merge in row H (C6) anywhere, no inversion in the HMD (C4), and
-% a splitting witness for every HMD row above H (C2).
-fast_no_vmd_admissible(features(Keys, Crossing, RSplit, RInvert,_,_,_,_), H) :-
+% C1: no vertical merge across H/H+1 in any column, whatever V is.
+fast_no_hmd_crossing(features(_, Crossing, _,_,_,_,_,_), H) :-
+   get_assoc(H, Crossing, CrossMax), CrossMax < 0.
+
+% No VMD (V = -1): the column rules (0, 3, 5) have nothing to check. The
+% remaining row rules then apply from column 0: no horizontal merge in row H
+% (C6) anywhere, no inversion in the HMD (C4), and a splitting witness for
+% every HMD row above H (C2).
+fast_no_vmd_admissible(features(Keys, _, RSplit, RInvert,_,_,_,_), H) :-
    get_assoc(H, Keys, KeyMax), KeyMax < 0,
-   get_assoc(H, Crossing, CrossMax), CrossMax < 0,
    get_assoc(H, RInvert, InvMax), InvMax < 0,
    get_assoc(H, RSplit, SplitMin), SplitMin >= 0.
 
@@ -149,18 +153,17 @@ prefix_extrema_from(Index, Limit, RawSplit, RawInvert,
    prefix_extrema_from(Next, Limit, RawSplit, RawInvert,
                        Min, Max, M1, X1, Mins, Maxes).
 
-% The first four row-dependent rules give an exact admissible range for V:
-% C1: no vertical equality on H/H+1 at any column J >= V.
+% The other row-dependent rules give an exact admissible range for V (C1
+% does not depend on V; fast_no_hmd_crossing/2 checks it):
 % C2: for every I<H a splitting witness exists at J>V.
 % C4: no inverted horizontal pattern for I<H at J>V.
 % C6: no horizontal equality on H at J>=V.
-fast_candidate_v_range(features(Keys, Crossing, RSplit, RInvert,_,_,_,_),
+fast_candidate_v_range(features(Keys, _, RSplit, RInvert,_,_,_,_),
                        H, LastV, FirstV, EndV) :-
    get_assoc(H, Keys, KeyMax),
-   get_assoc(H, Crossing, CrossMax),
    get_assoc(H, RSplit, SplitMin),
    get_assoc(H, RInvert, InvMax),
-   FirstV is max(0, max(KeyMax+1, max(CrossMax+1, InvMax))),
+   FirstV is max(0, max(KeyMax+1, InvMax)),
    EndV is min(LastV, SplitMin-1).
 
 % C0: a horizontal merge across V/V+1 cannot occur below H.

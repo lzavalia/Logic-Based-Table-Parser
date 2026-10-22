@@ -56,7 +56,10 @@
       acquire_paper_ingest_lock/2,
       acquire_paper_ingest_lock_at/3,
       release_paper_ingest_lock/1,
-      final_table_html/3
+      final_table_html/3,
+      selected_certificates/3,
+      write_checked_certificate/2,
+      is_certificate_file_name/1
    ]).
 
 % library(json) only exists in recent SWI-Prolog; DeepClause's bundled engine
@@ -458,6 +461,7 @@ process_paper(PmcId, File, DatasetDir, Summary) :-
    % Keep each table paired with its JATS table-wrap and its element path.
    % Rasterization still sees only the <table>, never captions/footnotes.
    jats_table_records(Dom, Records),
+   ensure_paper_has_tables(Records),
    maplist(record_table, Records, Tables),
    rasterize_tables_bounded(Tables, Rasters),
    ( paper_title(Dom, Title) -> true ; Title = "" ),
@@ -496,6 +500,7 @@ process_paper_quarantine(PmcId, File, DatasetDir, Summary) :-
    parse_jats_xml(Text, Dom),
    verify_jats_pmc_id(Dom, PaperName),
    jats_table_records(Dom, Records),
+   ensure_paper_has_tables(Records),
    length(Records, NumTables),
    ensure_paper_limit(max_tables, NumTables),
    ( paper_title(Dom, Title) -> true ; Title = "" ),
@@ -511,6 +516,15 @@ process_paper_quarantine(PmcId, File, DatasetDir, Summary) :-
    ignore(catch(record_paper_attempt(DatasetDir, PaperName, Status, Detail), _, fail)),
    format(string(Summary), '~s: ~s (~s) -> papers/~s/',
           [PaperName, Status, Detail, PaperName]).
+
+
+% A paper whose full text holds no <table> is not part of the dataset: it is
+% never published, and a previously published snapshot is left untouched.
+% The agent skips such a paper and processes the next candidate instead.
+ensure_paper_has_tables([]) :- !,
+   throw(error(paper_has_no_tables,
+               context(process_paper/4, 'Full text holds no tables'))).
+ensure_paper_has_tables(_).
 
 
 % --- JATS table provenance and context (F09) ------------------------------
@@ -628,7 +642,12 @@ table_source_context(Table, Path, Wrap, Context) :-
    ;  EffectiveCaption = Caption,
       EffectiveCaptionMarkup = CaptionMarkup,
       CaptionExternal = true ),
-   table_html(Table, RawTableHtml),
+   % Name the table in the error, as rasterize_tables_bounded/2 does.
+   catch(serialize_source_table(Table, RawTableHtml),
+         error(source_html_round_trip(Difference), _),
+         throw(error(source_html_round_trip(Difference),
+                     context(source_path(TablePath),
+                             'source_table_html does not read back as the same table')))),
    Context = json{source_path:TablePath, table_id:TableId,
                   wrap_path:WrapPathText, wrap_id:WrapId,
                   label:Label, caption:EffectiveCaption,
@@ -637,6 +656,90 @@ table_source_context(Table, Path, Wrap, Context) :-
                   label_markup:LabelMarkup,
                   caption_markup:EffectiveCaptionMarkup,
                   foot_markup:FootMarkup}.
+
+% --- source_table_html -----------------------------------------------------
+%
+% tables.jsonl keeps each source table as HTML (source_table_html), and the
+% review reads it back to render final_tableN.html. serialize_source_table/2
+% and deserialize_source_table/2 are the only writer and reader of that
+% field, and they must agree: the writer reads its own output back and
+% throws if the table differs, so a disagreement stops the paper at parse
+% time instead of surfacing at review. That is a bug in this code, not a bad
+% source table, so it is never quarantined (see recoverable_table_error/3).
+
+serialize_source_table(Table, Html) :-
+   table_html(Table, Html),
+   (  deserialize_source_table(Html, Back)
+   -> true
+   ;  throw(error(source_html_round_trip(no_table),
+                  context(serialize_source_table/2,
+                          'source_table_html holds no table'))) ),
+   (  source_table_difference(Table, Back, Difference)
+   -> throw(error(source_html_round_trip(Difference),
+                  context(serialize_source_table/2,
+                          'source_table_html does not read back as the same table')))
+   ;  true ).
+
+deserialize_source_table(Html, Table) :-
+   parse_html(Html, Dom),
+   extract_tables(Dom, [Table|_]).
+
+% source_table_difference(+Table, +Back, -Difference): Difference is the
+% first place where Back differs from Table, as difference(At, Expected,
+% Found). At is the list of 1-based positions among normalized child nodes
+% from the table down. Fails if the two are the same after normalization:
+% attributes as sorted Name=Text pairs (the HTML reader returns span=1 where
+% the XML reader returns span='1'), text with whitespace normalized, and
+% whitespace-only text dropped.
+source_table_difference(Table, Back, Difference) :-
+   source_nodes([Table], Expected),
+   source_nodes([Back], Found),
+   first_difference(Expected, Found, [], 1, Difference).
+
+source_nodes(Nodes, Normalized) :-
+   maplist(source_node, Nodes, Normalized0),
+   exclude(==(text("")), Normalized0, Normalized).
+
+source_node(element(Name, Attrs, Children),
+            element(Name, NormAttrs, NormChildren)) :- !,
+   maplist(source_attribute, Attrs, NormAttrs0),
+   msort(NormAttrs0, NormAttrs),
+   source_nodes(Children, NormChildren).
+source_node(Text, text(String)) :-
+   source_text(Text, String).
+
+source_attribute(Name=Value, Name=String) :-
+   source_text(Value, String).
+
+% With the HTML DTD, a multi-valued attribute can come back as a list.
+source_text(Value, String) :-
+   (  is_list(Value)
+   -> maplist(source_text, Value, Parts),
+      atomic_list_concat(Parts, ' ', Joined)
+   ;  format(string(Joined), '~w', [Value]) ),
+   normalize_space(string(String), Joined).
+
+first_difference([], [], _, _, _) :- !, fail.
+first_difference([Node|Expected], [Node|Found], Path, I, Difference) :- !,
+   I1 is I + 1,
+   first_difference(Expected, Found, Path, I1, Difference).
+first_difference([element(Name, Attrs, ExpectedChildren)|Expected],
+                 [element(Name, Attrs, FoundChildren)|Found],
+                 Path, I, Difference) :- !,
+   append(Path, [I], ChildPath),
+   (  first_difference(ExpectedChildren, FoundChildren, ChildPath, 1, Difference)
+   -> true
+   ;  I1 is I + 1,
+      first_difference(Expected, Found, Path, I1, Difference) ).
+first_difference(Expected, Found, Path, I,
+                 difference(At, ExpectedNode, FoundNode)) :-
+   append(Path, [I], At),
+   source_node_summary(Expected, ExpectedNode),
+   source_node_summary(Found, FoundNode).
+
+source_node_summary([], end).
+source_node_summary([element(Name, Attrs, _)|_], element(Name, Attrs)).
+source_node_summary([text(Text)|_], text(Text)).
 
 % Compatibility entry point for tests and callers supplying parsed <table>
 % elements instead of full JATS documents.
@@ -801,7 +904,6 @@ save_numbered_records(StageDir, PaperName, [table_record(Table,Context)|Rest],
              save_input_table(StageDir, N, Table, HtmlContext),
              machine_table_record(PaperName, N, Table, Context, Raster,
                                   Boundaries, MachineRecord, Meta),
-             save_table_certificates(StageDir, TableUid, N, Raster, Boundaries),
              atom_json_dict(JsonLine, MachineRecord, [width(0)]),
              format(JsonlStream, '~w~n', [JsonLine]) ),
            Error, throw(error(table_output_failure(N, Error),
@@ -896,8 +998,7 @@ try_recoverable_annotation(StageDir, PaperName, Index, Table, Context,
    catch(( save_table(TableFile, Table, Raster, HtmlContext, Boundaries),
            save_input_table(StageDir, Index, Table, HtmlContext),
            machine_table_record(PaperName, Index, Table, Context, Raster,
-                                Boundaries, Machine, Meta),
-           save_table_certificates(StageDir, TableUid, Index, Raster, Boundaries)
+                                Boundaries, Machine, Meta)
          -> Result = ok(Boundaries, Machine, Meta)
          ; throw(error(table_output_failed, context(process_paper/5, 'Writer failed'))) ),
          Error,
@@ -966,9 +1067,7 @@ validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
    -> true
    ; throw(error(incomplete_paper_stage(recovery_metadata_mismatch),
                  context(process_paper/5, 'Recovery snapshot inconsistent'))) ),
-   staged_certificate_names(Records, CertificateNames),
-   append(HtmlNames, CertificateNames, TableFiles),
-   sort(['metadata.json', 'tables.jsonl'|TableFiles], ExpectedFiles),
+   sort(['metadata.json', 'tables.jsonl'|HtmlNames], ExpectedFiles),
    directory_files(StageDir, RawFiles),
    exclude(is_dot_entry, RawFiles, ActualFiles0),
    sort(ActualFiles0, ActualFiles),
@@ -982,7 +1081,6 @@ validate_recoverable_stage(StageDir, ExpectedTables, ExpectedParsed,
             ( Size > 0 -> true
             ; throw(error(incomplete_paper_stage(empty_table(Name)),
                           context(process_paper/5, 'Empty staged table'))) ) )),
-   verify_staged_certificates(StageDir, Records),
    size_file(MetadataFile, MetaSize), MetaSize > 0,
    ( ExpectedTables =:= 0 -> true
    ; size_file(JsonlFile, JsonlSize), JsonlSize > 0 ).
@@ -1065,10 +1163,7 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
              format(atom(Name), Format, [N]) ),
            TableFiles),
    sort(['metadata.json', 'tables.jsonl'|TableFiles], Expected),
-   % Which certificates must exist depends on the records, read below.
-   partition(is_certificate_file_name, ActualFiles,
-             ActualCertificates0, OtherFiles),
-   sort(OtherFiles, Actual),
+   sort(ActualFiles, Actual),
    (  Actual == Expected
    -> true
    ;  throw(error(incomplete_paper_stage(file_set_mismatch(Expected, Actual)),
@@ -1104,63 +1199,58 @@ validate_paper_stage(StageDir, ExpectedTables, ExpectedParsed) :-
    -> true
    ;  throw(error(incomplete_paper_stage(metadata_mismatch),
                   context(process_paper/4, 'Staged metadata is inconsistent')))
-   ),
-   staged_certificate_names(MachineRecords, ExpectedCertificates),
-   sort(ActualCertificates0, ActualCertificates),
-   (  ActualCertificates == ExpectedCertificates
-   -> true
-   ;  throw(error(incomplete_paper_stage(
-                     certificate_set_mismatch(ExpectedCertificates,
-                                              ActualCertificates)),
-                  context(process_paper/4, 'Staged certificates mismatch')))
-   ),
-   verify_staged_certificates(StageDir, MachineRecords).
+   ).
 
 % --- geometric certificates ------------------------------------------------
 
-% save_table_certificates(+StageDir, +TableUid, +Index, +Raster, +Boundaries)
-% Writes one certificate per boundary that is geometrically labelable.
-save_table_certificates(StageDir, TableUid, Index, Raster, Boundaries) :-
-   machine_certificate_files(TableUid, Index, Raster, Boundaries, Files),
-   forall(member(Name-Facts, Files),
-          ( directory_file_path(StageDir, Name, File),
-            write_certificate(File, Facts) )).
+% The build writes no certificate files: each candidate's record only says
+% whether it is labelable and names the file its certificate would go to.
+% The review (table_review.pl) writes the certificate of the candidate it
+% selects, and only that one.
 
 is_certificate_file_name(Name) :-
    sub_atom(Name, 0, _, _, certificate),
    file_name_extension(_, pl, Name).
 
-% The certificate files the records name, sorted.
-staged_certificate_names(Records, Names) :-
-   findall(Name,
-           ( member(Record, Records),
+% selected_certificates(+Tables, +Reviews, -Files)
+% Tables are tables.jsonl records and Reviews the review.jsonl record of each,
+% in the same order. Files is Name-Facts for every table whose review is
+% valid and selected a certified candidate: the certificate certify/5 gives
+% for the record's raster and the candidate's boundary (for a layout,
+% certify_layout/5 for its separators and subtables). The records themselves
+% were already checked against the candidate search by
+% machine_record_consistent/1.
+selected_certificates(Tables, Reviews, Files) :-
+   findall(Name-Facts,
+           ( nth0(I, Tables, Record), nth0(I, Reviews, Review),
+             Review.final_status == "valid",
+             Id = Review.selected_candidate_id,
              member(Candidate, Record.candidates),
-             Candidate.geometric_certificate.status == "certified",
-             atom_string(Name, Candidate.geometric_certificate.file) ),
-           Names0),
-   sort(Names0, Names).
+             Candidate.candidate_id == Id,
+             get_dict(geometric_certificate, Candidate, Certificate),
+             is_dict(Certificate),
+             Certificate.status == "certified",
+             atom_string(Name, Certificate.file),
+             (  expected_certificate(Record, Candidate, Facts)
+             -> true
+             ;  throw(error(invalid_certificate(Name),
+                            context(selected_certificates/3,
+                                    'The record\'s certificate cannot be rebuilt'))) ) ),
+           Files).
 
-% Every certificate a record names is read back as data and must be exactly
-% the certificate certify/5 gives for the record's raster and boundary (for a
-% layout, certify_layout/5 for its separators and subtables), and the kernel
-% must accept it. The records themselves were already checked against the
-% candidate search by machine_record_consistent/1.
-verify_staged_certificates(StageDir, Records) :-
-   forall(( member(Record, Records),
-            member(Candidate, Record.candidates),
-            Candidate.geometric_certificate.status == "certified" ),
-          verify_staged_certificate(StageDir, Record, Candidate)).
-
-verify_staged_certificate(StageDir, Record, Candidate) :-
-   atom_string(Name, Candidate.geometric_certificate.file),
-   directory_file_path(StageDir, Name, File),
-   (  catch(read_certificate_file(File, Facts), _, fail),
-      expected_certificate(Record, Candidate, Expected),
-      Facts == Expected,
-      check_certificate(Facts)
+% write_checked_certificate(+File, +Facts): writes the certificate, then
+% reads it back as data (its directives are never run); it must be exactly
+% Facts and the kernel must accept it.
+write_checked_certificate(File, Facts) :-
+   write_certificate(File, Facts),
+   (  catch(read_certificate_file(File, Read), _, fail),
+      Read == Facts,
+      check_certificate(Read)
    -> true
-   ;  throw(error(incomplete_paper_stage(invalid_certificate(Name)),
-                  context(process_paper/4, 'Staged certificate is not valid')))
+   ;  file_base_name(File, Name),
+      throw(error(invalid_certificate(Name),
+                  context(write_checked_certificate/2,
+                          'Written certificate is not valid')))
    ).
 
 expected_certificate(Record, Candidate, Expected) :-
@@ -1553,8 +1643,7 @@ cell_region(Regions, Id, Region) :-
    get_assoc(Id, Regions, Region).
 
 final_source_table(Record, Clean, Raster) :-
-   parse_html(Record.source_table_html, Dom),
-   (  extract_tables(Dom, [Table|_])
+   (  deserialize_source_table(Record.source_table_html, Table)
    -> true
    ;  throw(error(final_table_error(no_source_table(Record.table_uid)),
                   context(final_table_html/3, 'tables.jsonl has no source table'))) ),
@@ -1611,6 +1700,14 @@ text_piece(Children, Piece) :-
 % failed reruns; this is distinct from an unsuccessful raw XML download.
 % Failure records are outside papers/ and never mark an incomplete snapshot
 % as complete. Logging is best effort and must not hide the original error.
+format_paper_failure(PmcId, DatasetDir, error(paper_has_no_tables, _), Line) :- !,
+   (  canonical_pmc_name(PmcId, PaperName)
+   -> true
+   ;  PaperName = "PMC-invalid-id"
+   ),
+   Reason = "no tables in the full text",
+   format(string(Line), "~s: skipped (~s)", [PaperName, Reason]),
+   ignore(catch(record_paper_attempt(DatasetDir, PaperName, skipped, Reason), _, fail)).
 format_paper_failure(PmcId, DatasetDir, Error, Line) :-
    (  canonical_pmc_name(PmcId, PaperName)
    -> true
@@ -1641,6 +1738,10 @@ paper_failure_reason(error(table_layout_error(Cause), _), Reason) :- !,
 paper_failure_reason(error(table_output_failure(N, Cause), _), Reason) :- !,
    exception_class(Cause, Class),
    format(string(Reason), "table ~d output: ~s", [N, Class]).
+paper_failure_reason(error(source_html_round_trip(Difference),
+                           context(source_path(Path), _)), Reason) :- !,
+   format(string(Reason), "table at ~s: source_table_html does not read back (~q)",
+          [Path, Difference]).
 paper_failure_reason(error(incomplete_paper_stage(Cause), _), Reason) :- !,
    exception_class(Cause, Class),
    format(string(Reason), "stage validation: ~s", [Class]).

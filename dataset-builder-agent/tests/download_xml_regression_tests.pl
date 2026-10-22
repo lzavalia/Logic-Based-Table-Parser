@@ -189,12 +189,17 @@ test(foreign_article_does_not_replace_a_complete_snapshot,
     Error = error(pmc_article_identity_mismatch("PMC100", ["PMC200"]), _),
     read_file_to_string(MetadataFile, Before, []).
 
-test(well_formed_jats_without_tables_is_valid,
+% A table-free article is a valid download, but it is not published.
+test(well_formed_jats_without_tables_is_valid_but_skipped,
      [setup(make_xml_fixture_dir(Root)), cleanup(cleanup_xml_fixture_dir(Root))]) :-
     jats_single(400, Xml),
     write_xml_fixture(Root, 'zero.xml', Xml, File),
     download_status(File, jats_xml, ok),
-    process_paper("400", File, Root, Summary),
-    sub_string(Summary, _, _, _, "0 table(s)").
+    catch(process_paper("400", File, Root, _), Error, true),
+    Error = error(paper_has_no_tables, _),
+    format_paper_failure("400", Root, Error, Line),
+    Line == "PMC400: skipped (no tables in the full text)",
+    directory_file_path(Root, 'papers/PMC400', PaperDir),
+    \+ exists_directory(PaperDir).
 
 :- end_tests(download_xml_regressions).
