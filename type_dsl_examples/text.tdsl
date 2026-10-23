@@ -1,0 +1,15 @@
+type Text
+
+type Word
+
+Word <: Text
+
+if regex "[a-zA-Z]+" decide Word
+
+type Citation
+
+Citation <: Text
+
+AbbreviatedCitation <: Citation
+
+guideline "List of names, followed by a year, and then a citation number" decide AbbreviatedCitation

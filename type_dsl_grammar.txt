@@ -1,0 +1,20 @@
+Start --> Import | Option | TypeDecl | SubtypeDecl | Guideline | Rule
+Import --> `import` STRING_LITERAL
+Option --> `set-option` OptionList
+OptionList --> `enable_caption_analysis`
+TypeDecl --> `type` VARIABLE | `type` VARIABLE = TypeExpr
+TypeExpr --> TupleExpr | UnionExpr | VARIABLE | `any` | `null`
+TupleExpr --> `(` TupleList `)`
+TupleList --> TypeExpr , TypeExpr | TypeExpr, TupleList
+UnionExpr --> TypeExpr `|` TypeExpr | TypeExpr `|` UnionExpr
+SubtypeDecl --> TypeExpr `<:` TypeExpr | TypeExpr `:>` TypeExpr
+Guideline --> `guideline` STRING_LITERAL `decide` TypeExpr
+Rule --> `if` SyntaxPattern `decide` TypeExpr
+SyntaxPattern --> SyntaxPattern `and` SyntaxPattern
+                  | SyntaxPattern `or` SyntaxPattern
+                  | `not` SyntaxPattern
+                  | `(` SyntaxPattern `)`
+                  | `suffix` STRING_LITERAL
+                  | `prefix` STRING_LITERAL
+                  | `regex` STRING_LITERAL
+                  | `equals` STRING_LITERAL

@@ -1,0 +1,13 @@
+type Numeric
+type Integer
+type Floating
+
+type Range = (Floating, Floating)
+
+
+Integer <: Numeric
+Floating <: Numeric
+
+if regex "-?[0-9]+" decide Integer
+if regex "-?[0-9]+\.[0-9]+" decide Floating
+if regex "-?[0-9]+\.[0-9]+[ \t\n]*([ \t\n]+-?[0-9]+\.[0-9]+[ \t\n]*)" decide Range
