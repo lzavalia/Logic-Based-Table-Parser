@@ -43,10 +43,11 @@ RUN patch -p1 -d "$(npm root -g)/deepclause-sdk" < /tmp/deepclause-0.0.86-compac
  && rm /tmp/deepclause-0.0.86-compaction.patch
 
 WORKDIR /app
-COPY README.md summary.md run_agent.sh review_agent.sh ./
+COPY README.md summary.md run_agent.sh guideline_agent.sh review_agent.sh ./
 COPY src/ src/
 COPY tests/ tests/
 COPY tools/ tools/
+COPY type_dsl_examples/ type_dsl_examples/
 
 # The agent loads its .pl files from the workspace root, so it runs from src/.
 # `deepclause init` creates the .deepclause/ configuration that is not kept in
@@ -65,9 +66,11 @@ RUN mkdir -p /app/src/dataset && chmod 1777 /app/src/dataset
 VOLUME /app/src/dataset
 ENV LOG_DIR=/app/src/dataset/logs
 
-# run_agent.sh builds the dataset, then has the LLM review the papers it
-# selected (add --no-review after the search phrase to skip that), and keeps
-# per-run logs. Other arguments after the search phrase are passed on to
+# run_agent.sh builds the dataset, then has the LLM type the cells of the
+# papers it selected and review the parses chosen by type inference (add
+# --no-guidelines or --no-review after the search phrase to skip a step, and
+# --scorer purity to change how parses are chosen), and keeps per-run logs.
+# Other arguments after the search phrase are passed on to
 # `deepclause run`. To review an existing mounted dataset only, use
-# --entrypoint /app/review_agent.sh.
+# --entrypoint /app/review_agent.sh; to type its cells, /app/guideline_agent.sh.
 ENTRYPOINT ["/app/run_agent.sh"]

@@ -1,0 +1,109 @@
+{
+  "baseline_papers": 150,
+  "prompt_version": "table-review-selected-v4",
+  "model": "anthropic:claude-sonnet-4-6",
+  "scorer": "bit-cost",
+  "repair_version": "empty-merge-v3",
+  "all": {
+    "tables": 472,
+    "asked": 424,
+    "disagree_without_repair": 42,
+    "rate_without_repair": 9.9,
+    "disagree_with_repair": 28,
+    "rate_with_repair": 6.6,
+    "repaired": 14,
+    "category_without_repair": {
+      "missing_hierarchy_evidence": 21,
+      "boundary_cuts_merged_cell": 15,
+      "header_row_required": 2,
+      "no_headers_or_no_data": 2,
+      "not_offered": 1,
+      "spanning_cell_in_last_header_row": 1
+    },
+    "category_with_repair": {
+      "boundary_cuts_merged_cell": 12,
+      "missing_hierarchy_evidence": 10,
+      "header_row_required": 2,
+      "no_headers_or_no_data": 2,
+      "not_offered": 1,
+      "spanning_cell_in_last_header_row": 1
+    },
+    "repair_status_of_remaining": {
+      "not_applicable": 25,
+      "not_repaired": 3
+    }
+  },
+  "dev": {
+    "tables": 244,
+    "asked": 214,
+    "disagree_without_repair": 19,
+    "rate_without_repair": 8.9,
+    "disagree_with_repair": 10,
+    "rate_with_repair": 4.7,
+    "repaired": 9,
+    "category_without_repair": {
+      "missing_hierarchy_evidence": 10,
+      "boundary_cuts_merged_cell": 9
+    },
+    "category_with_repair": {
+      "boundary_cuts_merged_cell": 7,
+      "missing_hierarchy_evidence": 3
+    },
+    "repair_status_of_remaining": {
+      "not_applicable": 9,
+      "not_repaired": 1
+    }
+  },
+  "test": {
+    "tables": 228,
+    "asked": 210,
+    "disagree_without_repair": 23,
+    "rate_without_repair": 11.0,
+    "disagree_with_repair": 18,
+    "rate_with_repair": 8.6,
+    "repaired": 5,
+    "category_without_repair": {
+      "missing_hierarchy_evidence": 11,
+      "boundary_cuts_merged_cell": 6,
+      "header_row_required": 2,
+      "no_headers_or_no_data": 2,
+      "not_offered": 1,
+      "spanning_cell_in_last_header_row": 1
+    },
+    "category_with_repair": {
+      "missing_hierarchy_evidence": 7,
+      "boundary_cuts_merged_cell": 5,
+      "header_row_required": 2,
+      "no_headers_or_no_data": 2,
+      "not_offered": 1,
+      "spanning_cell_in_last_header_row": 1
+    },
+    "repair_status_of_remaining": {
+      "not_applicable": 16,
+      "not_repaired": 2
+    }
+  },
+  "gold_tables": {
+    "tables": 111,
+    "asked": 111,
+    "disagree_without_repair": 20,
+    "rate_without_repair": 18.0,
+    "disagree_with_repair": 15,
+    "rate_with_repair": 13.5,
+    "repaired": 5,
+    "category_without_repair": {
+      "boundary_cuts_merged_cell": 12,
+      "missing_hierarchy_evidence": 6,
+      "header_row_required": 2
+    },
+    "category_with_repair": {
+      "boundary_cuts_merged_cell": 10,
+      "missing_hierarchy_evidence": 3,
+      "header_row_required": 2
+    },
+    "repair_status_of_remaining": {
+      "not_applicable": 13,
+      "not_repaired": 2
+    }
+  }
+}

@@ -122,11 +122,21 @@ one CPU core busy for the wait (0.4 seconds per request, longer on retries).
 Both engines share the F13 on-disk lock and timestamp. The offline tests are
 `tests/pause_regression_tests.pl` and `tests/concurrency_regression_tests.pl`.
 
+### Typing cells with guidelines
+
+After each build, `run_agent.sh` runs `guideline_agent.sh` on the papers that
+build selected, unless given `--no-guidelines`. The rules of a type DSL program
+(`type_dsl_examples/sci.tdsl`) type every cell into `types.jsonl`; the agent
+`type_guidelines.dml` then sends the LLM, in batches, the cells only a model can
+refine, and `guided_types.jsonl` records the result. Answers are cached, so a
+second run sends only what is unanswered. Nothing downstream reads these types
+yet.
+
 ### LLM review of candidates
 
-After each build, `run_agent.sh` runs a second agent, `review_dataset.dml`, on
-the papers that build selected (`review_agent.sh` runs it on its own). It shows
-the LLM each table without the parser's candidates and asks for its own header
+After the guideline step, `run_agent.sh` runs a further agent,
+`review_dataset.dml`, on the papers that build selected (`review_agent.sh`
+runs it on its own). It shows the LLM each table without the parser's candidates and asks for its own header
 boundary. A table whose candidate matches that answer is `valid`; one whose
 candidates do not is `unparseable`; a table the parser abstained on stays
 `unparseable` without a call. Verdicts go to `papers/PMC<id>/review.jsonl`,

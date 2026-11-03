@@ -169,10 +169,10 @@ docker build -t table-dataset-builder .
 ```
 
 Run the agent. The API key is passed in at run time and is not stored in the
-image. The container runs `run_agent.sh`, which builds the dataset and then
-has the LLM review it, and keeps a log of each run (see
-[Running the agent](#running-the-agent); add `--no-review` after the search
-phrase to skip the review):
+image. The container runs `run_agent.sh`, which builds the dataset, has the LLM
+type its cells and review it, and keeps a log of each run (see
+[Running the agent](#running-the-agent); add `--no-guidelines` or `--no-review`
+after the search phrase to skip a step):
 
 ```bash
 mkdir -p dataset
@@ -259,25 +259,33 @@ Useful options:
 | `--verbose` | Also print each tool call. |
 
 `run_agent.sh`, in `dataset-builder-agent/`, is the normal way to run it. One
-run does two steps: it builds the dataset with that command, then runs the
-[LLM review](#reviewing-candidates-with-the-llm) on exactly the papers this
-run selected, so every new table gets a verdict in its paper's
-`review.jsonl`. The review is skipped when the build fails or selects no
-papers, or with `--no-review`. Run it from any directory; it changes into
-`src/` itself:
+run does three steps: it builds the dataset with that command, runs the
+[guideline step](#typing-cells-with-guidelines) on exactly the papers this run
+selected, so that their cells are typed in `guided_types.jsonl`, then selects a
+candidate for each table by its types and runs the
+[LLM review](#reviewing-candidates-with-the-llm) on those candidates, so every new
+table gets a verdict in its paper's `review.jsonl`. Both later steps are
+skipped when the build fails or selects no papers; `--no-guidelines` and
+`--no-review` skip one each. A failed guideline step does not stop the review,
+which then works from the rule types, and the exit status is the first failure's. Run it from any directory; it
+changes into `src/` itself:
 
 ```bash
 ./run_agent.sh "<search prompt>"
 ./run_agent.sh "<search prompt>" --model anthropic:claude-sonnet-4-6
-./run_agent.sh "<search prompt>" --no-review      # build only
+./run_agent.sh "<search prompt>" --no-review      # no review
+./run_agent.sh "<search prompt>" --scorer purity  # select candidates by purity
+./run_agent.sh "<search prompt>" --no-guidelines  # no cell typing
+./run_agent.sh "<search prompt>" --no-review --no-guidelines  # build only
 ```
 
 Other arguments after the search prompt are passed on to `deepclause run` in
-both steps, so `--model` selects the model for both. The build step writes `runtime_log.txt` (everything the agent printed) and `token_usage.json`
+all steps, so `--model` selects the model for all of them. The build step writes `runtime_log.txt` (everything the agent printed) and `token_usage.json`
 (tokens per model) to `src/`, beside `dataset/`, replacing those of the
 previous run. With `LOG_DIR` set, they go instead to a new
 `LOG_DIR/<UTC timestamp>/` directory for each run; the Docker image uses
-`dataset/logs`. The review step's logs are described in
+`dataset/logs`. The later steps' logs are described in
+[Typing cells with guidelines](#typing-cells-with-guidelines) and
 [Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm).
 
 Each run writes a `dataset/` directory inside `src/`:
@@ -289,10 +297,16 @@ Each run writes a `dataset/` directory inside `src/`:
 | `dataset/papers/PMC<id>/metadata.json` | Paper identity, title, counts, and source context, plus JSONL record linkage, candidate counts and status per table. |
 | `dataset/papers/PMC<id>/certificateN_hH_vV.pl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: the geometric labelability certificate of candidate `(H, V)` of table `N`, only when the review selects that candidate (`valid`) and it is labelable. A Prolog program that checks itself; see [Geometric labelability certificates](#geometric-labelability-certificates). |
 | `dataset/papers/PMC<id>/certificateN_layoutK.pl` | The same for layout candidate `K` of table `N` (rows set aside, or metadata in the middle of the table): the version 2 certificate, one covering every subtable. |
+| `dataset/papers/PMC<id>/certificateN_repaired_hH_vV.pl` | The same for a table the review found valid by [repairing it](#reviewing-candidates-with-the-llm): the certificate of candidate `(H, V)` of the repaired table (`certificateN_repaired_layoutK.pl` for a layout). |
 | `dataset/papers/PMC<id>/tables.jsonl` | Canonical machine-readable export: one JSON object per source table, including raster, cell-to-XPath mapping, each structural candidate and its labels, and explicit abstention state. Papers containing no tables are not published, so it always holds at least one record. |
 | `dataset/papers/PMC<id>/final_tables.json` | Written by the last stage of the [LLM review](#reviewing-candidates-with-the-llm): every `valid` table as `subtables` with nested horizontal and vertical metadata, unmerged data, and the residual corner, plus the text of the rows set aside as `separators`. |
+| `dataset/papers/PMC<id>/type_inference.jsonl` | Written before the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one record per line of `tables.jsonl` with the candidate selected by its cell types, how it was selected, and the score of every candidate. |
 | `dataset/papers/PMC<id>/review.jsonl` | Written by the [LLM review](#reviewing-candidates-with-the-llm), not by the build: one verdict per line of `tables.jsonl`. Absent until the paper has been reviewed; a rebuilt paper loses it. |
 | `dataset/papers/PMC<id>/final_tableN.html` | Also written by the review: the outcome for table `N`. "Parse Succeeded", the LLM's reason and the table colored for the boundary the parser and the LLM agree on; "Error: Misalignment Between LLM And Formal Table Parser" with the LLM's reason; or "Nothing To Do." when the parser found no candidate. |
+| `dataset/papers/PMC<id>/types.jsonl` | Written by the [guideline step](#typing-cells-with-guidelines): every cell's type according to the rules of the type DSL program. |
+| `dataset/papers/PMC<id>/guided_types.jsonl` | The same records with the LLM's refinements: each refined cell has source `guideline` and keeps its rule type as `rule_type`. |
+| `dataset/papers/PMC<id>/guideline_requests.json` | The batches still to be sent to the LLM; absent when nothing is. |
+| `dataset/cache/guideline_answers.jsonl` | Every answer so far, by program hash, cell text and rule type. |
 | `dataset/reviews/review-<timestamp>-<n>/manifest.json` | One per review run: model, prompt version, papers requested and one status line per paper. |
 | `dataset/attempts/PMC<id>.<timestamp>.<sequence>.json` | Best-effort per-paper `complete` or `failed` attempt status, timestamp, and diagnostic. |
 | `dataset/raw/PMC<id>.xml` | Full text of each paper as downloaded. |
@@ -520,10 +534,51 @@ agent or NCBI network integration; those still require separate integration
 validation. The independent Python geometry and boundary-model scripts under
 `tools/` are supplementary checks, not native Prolog coverage.
 
+## Typing cells with guidelines
+
+The guideline step gives every cell of a table a type, from a program in the
+type DSL (`type_dsl_examples/sci.tdsl`). The program's rules type each cell by
+its form. The cells only a model can refine are sent to the LLM in batches: a
+cell no rule typed, or one whose rule type has guideline-decided subtypes.
+Every other cell keeps its rule type and is never sent. `run_agent.sh` runs the
+step on the papers it selected; to run it on an existing dataset, use
+`guideline_agent.sh`:
+
+```bash
+./guideline_agent.sh                                  # every paper
+./guideline_agent.sh --papers PMC7293797,PMC5831205   # only these papers
+./guideline_agent.sh --run <name>                     # the papers of build run dataset/runs/<name>
+./guideline_agent.sh --program my_types.tdsl --model anthropic:claude-sonnet-4-6
+```
+
+It needs SWI-Prolog as well as DeepClause, since the rules use PCRE; the Docker
+image has both. Other options are passed on to `deepclause run`, and the
+temperature defaults to 0. Answers are checked against each cell's allowed
+types and cached, so a second run sends only the cells still unanswered, and
+editing the program invalidates its answers (an edit to a file it imports does
+not: touch the importing file too). `guided_types.jsonl` is written from
+whatever answers there are, even after a failed model stage; its `counts` give
+the cells still `pending`, and the exit status reports the failure.
+
+A batch holds up to 40 cell texts, and one batch costs up to two model calls,
+each carrying DeepClause's overhead of about 1,900 input tokens. Expect about
+3,400 to 7,200 input tokens per batch: the top of that range when the model
+calls `set_result` and `finish` in separate turns, which resends the prompt.
+These are estimates at four characters per token.
+
+The logs are `src/guideline_log.txt` and `src/guideline_token_usage.json`,
+replaced by each run. With `LOG_DIR` set, they go to a new
+`LOG_DIR/<UTC timestamp>-guidelines/` directory instead.
+
+Type inference, the first stage of the review, reads `guided_types.jsonl` when
+it exists. Without it (`--no-guidelines`, or a failed step) it uses the rule
+types of `types.jsonl`.
+
 ## Reviewing candidates with the LLM
 
-The parser only finds *structurally* admissible header boundaries. A second
-agent, `src/review_dataset.dml`, asks the LLM whether it agrees. `run_agent.sh`
+The parser only finds *structurally* admissible header boundaries. Type
+inference selects one of them, and a second agent, `src/review_dataset.dml`,
+asks the LLM whether it is right. `run_agent.sh`
 runs it automatically after each build, on that run's papers (see
 [Running the agent](#running-the-agent)). To review an existing dataset
 without building, run it on its own with `review_agent.sh`:
@@ -532,43 +587,182 @@ without building, run it on its own with `review_agent.sh`:
 ./review_agent.sh                                  # every paper not yet reviewed
 ./review_agent.sh --papers PMC7293797,PMC5831205   # only these papers
 ./review_agent.sh --run <name>                     # the papers of build run dataset/runs/<name>
+./review_agent.sh --scorer purity                  # select candidates by purity
 ./review_agent.sh --force --model anthropic:claude-sonnet-4-6
 ```
 
-**How a table is judged.** The review is blind: for each table the model is
-shown the cell texts row by row (with merged cells, `<th>` header cells,
-label, caption and notes) but *not* the parser's candidates, so it cannot
-simply agree with them. It answers with its own boundary: the number of
-column-header rows and the number of row-header columns, either of which may
-be 0 (`0` and `0` when the table has no headers at all). `src/table_review.pl` then compares that answer with the
-candidates that are a single table: plain boundaries, and layouts of one
-subtable whose rows covered by a single cell (titles, section rows) are set
-aside. Such a layout is read as the model reads the whole table: its
-header-row count runs from the top down to its last HMD row, so a title row
-set aside above the header counts as a header row. Layouts with metadata in
-the middle of the table (several subtables) are never matched, since they
-share their top-level counts with another candidate:
+**Type inference comes first.** `review_agent.sh` starts by running
+`src/type_inference.pl`, which types the cells by rule and, in
+`src/table_type_scorer.pl`, selects the most viable candidate of every table
+from its cell types. It reads `guided_types.jsonl` when the guideline step has
+run for the table, and `types.jsonl` otherwise, and writes
+`dataset/papers/PMC<id>/type_inference.jsonl`. If it fails, the review is not
+started. `--scorer` picks how candidates are compared:
+
+| `--scorer` | Selects | Ties |
+|---|---|---|
+| `bit-cost` (default) | The candidate that describes the table's types in the fewest bits: a type distribution per data line and per header region, plus a BIC-style cost per distribution. Identifier cells count as data by role. | 60 of 860 ambiguous tables in the complex dataset |
+| `purity` | The candidate whose data lines are most uniform in type. It cannot see too much metadata, so it ties more and picks worse. | 209 of 860 |
+
+A tie is broken without types: the fewest steps from one header row and one
+row-header column, then the fewest subtables, then the candidate id. The record
+says so in `selected_by`. A table with candidates therefore always has a
+selection. Changing the scorer can change the selection, so those papers are
+reviewed again. It can also be run alone, from `src/`:
+
+```bash
+swipl type_inference.pl --scorer=purity --papers=PMC7293797
+```
+
+**How a table is judged.** For each table the model is shown the cell texts row
+by row (with merged cells, `<th>` header cells, label, caption and notes) and
+the selected parse. It sees no other candidates and no types. It answers
+whether that parse is right, and if not, gives its own boundary: the number of
+column-header rows and the number of row-header columns, either of which may be
+0 (`0` and `0` when the table has no headers at all).
+
+`src/table_review.pl` then decides, in Prolog. A confirmed parse is selected
+whatever its shape, including a layout with metadata in the middle of the
+table. A boundary from the model is compared with the candidates that are a
+single table: plain boundaries, and layouts of one subtable whose rows covered
+by a single cell (titles, section rows) are set aside. Such a layout is read
+as the model reads the whole table: its header-row count runs from the top
+down to its last HMD row, so a title row set aside above the header counts as a
+header row. Layouts with metadata in the middle of the table (several
+subtables) are never matched this way, since they share their top-level counts
+with another candidate:
 
 | Parser | Model's answer | `final_status` | `decided_by` |
 |---|---|---|---|
-| one candidate (`unique`) | the same boundary | `valid` | `llm` |
-| several candidates (`ambiguous`) | one of them | `valid`, with `selected_candidate_id` | `llm` |
+| `unique` or `ambiguous` | confirms the proposed parse | `valid`, with `selected_candidate_id` | `llm` |
+| `unique` or `ambiguous` | a boundary equal to a candidate | `valid`, with `selected_candidate_id` | `llm` |
+| `unique` or `ambiguous` | a boundary that the [repair](#reviewing-candidates-with-the-llm) makes a candidate | `valid`, with the repaired table's `selected_candidate_id` | `repair` |
 | `unique` or `ambiguous` | any other counts, including `0` and `0` | `unparseable` | `llm` |
 | no candidate (`abstained`) | not asked | `unparseable` | `parser` |
-| only layouts with metadata in the middle of the table | not asked | `unreviewed` | none |
+| no selected candidate in `type_inference.jsonl` | not asked | `unreviewed` | none |
 | `quarantined`, or more than 2,500 slots | not asked | `unreviewed` | none |
 | any | no usable answer after one retry | `unreviewed` (`review_status: "review_failed"`) | none |
 
 An API failure or an answer that cannot be read is never counted as
 `unparseable`. Each table gets a fresh call with no earlier conversation and
 no tools, so verdicts cannot influence one another, and the temperature is 0
-unless `--temperature` is passed. Text inside the table is presented as data;
+unless `--temperature` is passed. The label and caption are presented as data;
 only the typed answer is used.
+
+**Why a boundary is not a candidate.** When a table ends `unparseable`
+because the model's boundary is not a candidate, its record also has a
+`disagreement` (every other record has `disagreement: null`). It is worked
+out from the geometry alone by `src/boundary_explainer.pl`, without a further
+model call. The parser first sets aside the rows covered by a single cell; the
+explainer then lists every parse rule the model's boundary breaks, with the
+cells, rows or columns that break it, numbered as in the whole table. Each
+broken rule has a category:
+
+| Rules | `category` | The boundary ... |
+|---|---|---|
+| 7, 8 | `no_headers_or_no_data` | has no headers at all, or leaves no data |
+| 9 | `header_row_required` | has no header row, but the table has a merged cell |
+| 0, 1 | `boundary_cuts_merged_cell` | runs through a merged cell, such as a group label spanning the row-header column and some data columns |
+| 2, 3 | `missing_hierarchy_evidence` | has an upper header row (or left row-header column) with no cell spanning what the next one splits, often because a spanning label was written as a label followed by blank cells |
+| 4, 5 | `inverted_hierarchy` | has a header row (row-header column) that merges what the one before it splits |
+| 6 | `spanning_cell_in_last_header_row` | has a cell spanning several columns in its last header row |
+| none | `not_offered` | breaks no rule, but its header ends on a row the parser sets aside, or every row below the header is set aside |
+
+`category` is that of the first broken rule; `categories` lists them all, and
+`summary` says the same in sentences. The `violations` give each rule's
+message, its cells (`cell_id`, `text`, `rows`, `columns`, `empty`) and
+`count`, and `nearest_candidates` the closest candidates. The summary is also
+shown on the table's "Misalignment" page. Reviews made before this field
+existed can be explained without asking the model again, from `src/`:
+
+```bash
+swipl explain_disagreements.pl                      # every unparseable review
+swipl explain_disagreements.pl --papers=PMC7293797 --output=why.jsonl
+swipl explain_disagreements.pl --targets=gold.jsonl --dataset=<dir>
+```
+
+**Repairing blank cells.** Such a record also has a `repair`, from
+`src/table_repair.pl`. A boundary refused for missing hierarchy evidence
+(rules 2 and 3) is often a parent label written once with blank cells below
+it, where the source should have had a rowspan. The repair merges those empty
+cells into the label above (in a row-header column) or to the left (in a
+header row), and runs the parser again on the merged raster; rows and columns
+never change, so the boundary means the same.
+
+Soundness comes first: a table is left alone unless the evidence rules out
+every other reading of its blank cells. The grid alone never does. A blank
+below a label may repeat it or mean that the row has no value there, and a
+blank header cell right of a label may continue it or be the top of the label
+below it (in one gold table, `PMC9661877/t0`, merging to the left stretched
+"Corresponding risk" over four columns it does not head). The repair assumes
+only that a label heads the rows below it (the columns right of it), and that
+each row-header column (header row) is one level of the hierarchy. Its rules:
+
+- Only the columns that break rule 3, left to right, and the header rows that
+  break rule 2, top to bottom, are merged.
+- An empty cell may only join a label, never another empty cell. Only cells
+  one column wide are merged down a column (one row high along a row), and
+  never across a row the parser sets aside or across the boundary.
+- No merge is made where the parent column (the header row above) splits the
+  two cells, since that would invert the hierarchy (rules 5 and 4).
+- **Repeated children.** A label with the blanks merged into it is a block;
+  its children are the cells beside it in the next column (header row), in
+  order, compared by text. A merge is made only into a block whose children
+  are exactly those of another labelled block: the same treatments under
+  every year, the same SE and SP rows under every study.
+- **A label on top.** If a run of rows in the column (from the header or from
+  a row set aside) starts with a blank, or a header row's first cell is
+  blank, nothing in that line is merged: its labels may sit in the middle of
+  their blocks, where three or more blocks can repeat by coincidence.
+
+A boundary refused because it cuts a group row (rule 0) gets a second
+repair. A group row is a label such as "Gender, n (%)" that starts in column
+0 and already spans past the row-header columns, followed only by blank
+cells. The blanks are merged into it, so the label covers the row and the
+parser sets it aside as a section row over the rows below, exactly as it
+does for a source row of one cell. The evidence is the source's own: the
+author already stretched the label beyond the row-header columns and left
+nothing else in the row. The label must be one row high and so must the
+blanks. A label followed by any text, such as a p-value, is left alone:
+setting the row aside would drop that text from the data, and shrinking the
+label back to the row-header columns would lose the rows it groups.
+
+`repair.status` is `repaired` when the boundary is then a candidate
+(`matched` gives it); `not_repaired` when merges were made but the boundary
+is still refused (`remaining` explains the merged table); `refused` when
+blanks could have joined labels but none had the evidence; `not_applicable`
+when no blank sits beside a label. `merges` lists each merged cell and the
+label it joins, and `refused` each merge not made, with its reason
+(`children_not_repeated` or `block_without_label_on_top`) and a message.
+
+**A repaired table is valid.** When `repair.status` is `repaired`, the parser
+offers the model's boundary on the repaired table, so the table is `valid`
+with `decided_by: "repair"`, and `selected_candidate_id` names a candidate of
+the repaired table: `PMC<id>/tN/repaired/hH_vV` or
+`PMC<id>/tN/repaired/layoutK`. `tables.jsonl` is not changed. The final page,
+the certificate and the export rebuild the repaired table from it with
+`reviewed_record/3` (`src/table_repair.pl`): the merged raster, the cells
+without those merged away, and the parser's candidates on it, built as the
+build builds them. Before that, the repair is run again on the record and the
+model's boundary; unless it is still `repaired` with exactly the merges the
+review records, they stop with `repair_mismatch`, so a stale or edited
+`review.jsonl` never makes a table valid. The `disagreement` stays, saying
+why the table as published was refused.
+
+`src/explain_disagreements.pl` writes one JSON line per table, with its
+explanation and repair, and then the counts by category, by rule and by
+repair status. With `--targets`, each line
+`{table_uid, hmd, vmd}` names the boundary to explain instead of the model's,
+for example a gold label; a line with `hmd: null` is counted as excluded.
+
+A paper with no `type_inference.jsonl`, or one made from an older
+`tables.jsonl`, is skipped with that reason when `src/review_dataset.dml` is
+run directly; `review_agent.sh` always writes a current one first.
 
 **Output.** `dataset/papers/PMC<id>/review.jsonl` has one record per line of
 the paper's `tables.jsonl`, which itself is left unchanged. Each record has the
 statuses above, the candidate ids, the model's boundary and one-sentence
-reason, its raw answer, the number of attempts, the model and prompt version,
+reason, the `disagreement` described above, its raw answer, the number of attempts, the model and prompt version,
 and the SHA-256 of the `tables.jsonl` it reviewed. A paper whose review is
 current (same `tables.jsonl`, prompt version and model, and no failed
 reviews) is skipped on the next run; `--force` reviews it again. Each run also
@@ -582,13 +776,15 @@ rendered by `final_table_html/3` in `src/dataset_pipeline.pl` from the table's
 | Verdict | Heading | Then |
 |---|---|---|
 | `valid` | Parse Succeeded | the LLM's reason, then the table with its label, caption and notes, colored for the agreed candidate (green HMD, blue VMD, gray data) |
-| `unparseable`, decided by the LLM | Error: Misalignment Between LLM And Formal Table Parser | the LLM's reason, then the LLM's boundary and the parser's candidate ids |
+| `valid`, decided by the repair | Parse Succeeded After Repair | the LLM's reason, the repair (which empty cells were merged into which labels), then the table colored for the repaired candidate; a merged empty cell takes its label's color |
+| `unparseable`, decided by the LLM | Error: Misalignment Between LLM And Formal Table Parser | the LLM's reason, then the LLM's boundary and the parser's candidate ids, then why the parser does not offer that boundary and, when empty cells were merged, the repair |
 | no candidates (parser abstained, or the table was quarantined) | Nothing To Do. | one line saying why |
 | `unreviewed` (too large, or no usable answer) | Not Reviewed | one line saying why |
 
 The table in a "Parse Succeeded" page is re-parsed from `tables.jsonl` and
-must rasterize to the recorded raster, so its colors are exactly those of the
-reviewed boundary. The pages are written before `review.jsonl` under the
+must rasterize to the recorded raster (for a repaired table, the raster
+before the merges), so its colors are exactly those of the reviewed
+boundary. The pages are written before `review.jsonl` under the
 paper's lock, each through a temporary file, so a failure leaves the previous
 review and pages in place. A paper whose review is current but has no pages
 (reviewed before they existed) gets them on the next run, from `review.jsonl`
@@ -598,7 +794,9 @@ and without new model calls.
 geometrically labelable, the review also writes that candidate's certificate,
 `certificateN_hH_vV.pl` or `certificateN_layoutK.pl` (see
 [Geometric labelability certificates](#geometric-labelability-certificates)).
-These are the only certificates in a paper's directory: the build writes
+For a table valid by the repair it is the certificate of the repaired table,
+`certificateN_repaired_hH_vV.pl` or `certificateN_repaired_layoutK.pl`, whose
+table is `PMC<id>/tN/repaired`. These are the only certificates in a paper's directory: the build writes
 none, and the review removes any certificate of a candidate it did not
 select. Certificates are written with the pages, through temporary files and
 before `review.jsonl`. A paper whose review is current but whose certificates
@@ -656,16 +854,22 @@ the table gets an `export_error` instead; the ten constraints rule this out
 for every candidate. A table read as a layout gets one subtable per subtable
 of the layout, each built from its own rows and columns, and `separators`
 lists the rows set aside, `{row, text}`; it is `[]` for a plain boundary.
-The review does not select layouts with metadata in the middle of the table
-yet, so a `valid` table has one subtable for now. The file is
+The review selects a layout with metadata in the middle of the table only
+when the model confirms it as the proposed parse. A table valid by the
+[repair](#reviewing-candidates-with-the-llm) is exported from the repaired table, where a
+label spans the empty cells merged into it, and its `repair` gives
+`{repair_version, merges, summary}`; `repair` is `null` for every other
+table. The file is
 written under the paper's lock through a temporary file. Tests:
 `tests/table_export_regression_tests.pl`.
 
 **Cost.** One model call per table with candidates, which DeepClause turns
 into two API requests (the answer and a short follow-up), each carrying the
-whole table. In a trial with `anthropic:claude-sonnet-4-6` that was 6,000 to
-61,000 input tokens per table, depending on its size: roughly $0.02 to $0.20
-per table, about $0.06 on average.
+whole table. In a trial with `anthropic:claude-sonnet-4-6`, before type
+inference was added, that was 6,000 to 61,000 input tokens per table, depending
+on its size: roughly $0.02 to $0.20 per table, about $0.06 on average. Type
+inference adds no model calls, and sending one parse adds a few lines to the
+prompt.
 
 The model recorded in each review is the `--model` passed to `review_agent.sh`,
 or else the `run` model in `src/.deepclause/config.json`. When running
@@ -811,13 +1015,33 @@ label for a scientific table.
 | `src/table_certify.pl` | Builds and writes geometric labelability certificates; not trusted, every certificate is checked by the kernel. |
 | `tests/certificate_regression_tests.pl` | Offline tests for the certificate kernel and generator: both claims, the strong reading, boundary lines, tampering, agreement with the constraints, and version 2 certificates of layouts split into subtables. |
 | `src/review_dataset.dml` | The review agent: asks the LLM to check every table's candidates (see [Reviewing candidates with the LLM](#reviewing-candidates-with-the-llm)). |
-| `src/table_review.pl` | Builds the review prompts, checks the answers against the candidates, and writes `review.jsonl`. |
+| `src/type_inference.pl` | Command line of the type inference stage: `--scorer`, `--level`, `--papers`, `--program`, `--dataset`. |
+| `src/table_type_scorer.pl` | The `bit-cost` and `purity` scorers; writes `type_inference.jsonl`. |
+| `src/table_review.pl` | Builds the review prompts from the selected candidate, checks the answers, and writes `review.jsonl`. |
+| `src/boundary_explainer.pl` | Why a boundary is not a candidate: every parse rule it breaks, with the cells that break it; gives the review's `disagreement`. |
+| `src/explain_disagreements.pl` | Command line for the explainer: the unparseable reviews of a dataset, or `--targets` such as gold labels; `--dataset`, `--papers`, `--output`. |
+| `src/table_repair.pl` | Merges empty cells into their parent labels, only where repeated children rule out every other reading, and blank tails into group-row labels that already span past the row headers, so that a boundary refused for rules 0, 2 and 3 becomes a candidate; gives the review's `repair`, and rebuilds the repaired table for the final page, the certificate and the export. |
+| `tests/repair_pipeline_regression_tests.pl` | Offline tests for repaired tables through the rest of the pipeline: the review decision, the repaired record, the final page, the certificate, the export, and the refusal of a review whose repair no longer holds. |
+| `tests/table_repair_regression_tests.pl` | Offline tests for the repair: merges with repeated children, refusals without them (including the pattern of `PMC9661877/t0`), labels in the middle of their blocks, the rule 4 and 5 guards, group rows (blank tails merged; rows with a value, labels not starting the row and blanks over other rows left alone), other rules, partial repairs. |
+| `tests/boundary_explainer_regression_tests.pl` | Offline tests for the explainer: agreement with `omni_validate/4` on random rasters, each category, rows set aside, cell witnesses. |
 | `src/table_export.pl` | Last stage: writes `final_tables.json` from `tables.jsonl` and `review.jsonl`. |
 | `tests/table_export_regression_tests.pl` | Offline tests for the export: the reference example, trees, unmerged data, stale reviews, locking, paper filter. |
-| `tests/table_review_regression_tests.pl` | Offline tests for the review: blind prompts, answer checking, statuses, skipping current reviews, file safety. |
+| `tests/table_review_regression_tests.pl` | Offline tests for the review: prompts with the selected parse, answer checking, statuses, skipping current reviews, file safety. |
+| `tests/table_type_scorer_regression_tests.pl` | Offline tests for type inference: both scorers, selection and ties, `type_inference.jsonl`. |
+| `tests/review_fixtures.pl` | Test fixture: a `type_inference.jsonl` chosen by the test. |
 | `tests/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
 | `tests/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
 | `tests/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
+| `guideline_agent.sh` | Runs the guideline step on an existing dataset (see [Typing cells with guidelines](#typing-cells-with-guidelines)). |
+| `src/type_guidelines.dml` | The guideline agent: sends each batch of cells to the LLM. |
+| `src/type_guidelines.pl` | Routes cells to the guideline step, writes the request batches, and writes `guided_types.jsonl`. |
+| `src/guideline_answers.pl` | Reads the batches for the agent, checks the answers and appends them to the cache. |
+| `src/guideline_steps.pl` | The SWI-Prolog stages of the step as commands, for `guideline_agent.sh`. |
+| `src/table_type_abstraction.pl` | Types a table's cells by the rules of a type DSL program. |
+| `src/type_dsl_parser.pl`, `src/type_dsl_engine.pl` | Parser and engine of the type DSL. |
+| `type_dsl_examples/` | Type DSL programs; `sci.tdsl` is the default, `sci_text.tdsl` leaves text cells to guidelines. |
+| `tests/type_guidelines_regression_tests.pl` | Offline tests for routing, requests, the cache, applying answers and the paper filter, with a simulated model. |
+| `tests/guideline_agent_regression_tests.py` | Offline tests for `guideline_agent.sh` and its step in `run_agent.sh`, with a stub `deepclause`. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 | `tests/test_driver_regression_tests.pl` | Offline tests for the local driver: output naming, sanitization, stale-file replacement, strict errors. |
 

@@ -34,6 +34,15 @@
 %       The directory is replaced as a whole after a successful run; the
 %       title, counts and per-table JATS context are recorded in metadata.json.
 %       Summary is a one-line report.
+%   explain_boundary(+Record, +Candidates, +Hmd, +Vmd, -Explanation)
+%   boundary_violations(+Raster, +Hmd, +Vmd, -Violations)
+%       Why a boundary is not a candidate; see boundary_explainer.pl.
+%   repair_boundary(+Record, +Hmd, +Vmd, -Repair)
+%   repaired_raster(+Raster, +Merges, -Repaired)
+%   repaired_record(+Record, +Repair, -Repaired)
+%   reviewed_record(+Record, +Review, -Effective)
+%       Merging empty cells so that the boundary becomes a candidate; see
+%       table_repair.pl.
 
 :- module(dataset_pipeline, [
       esearch_ids/2,
@@ -59,7 +68,13 @@
       final_table_html/3,
       selected_certificates/3,
       write_checked_certificate/2,
-      is_certificate_file_name/1
+      is_certificate_file_name/1,
+      explain_boundary/5,
+      boundary_violations/4,
+      repair_boundary/4,
+      repaired_raster/3,
+      repaired_record/3,
+      reviewed_record/3
    ]).
 
 % library(json) only exists in recent SWI-Prolog; DeepClause's bundled engine
@@ -76,6 +91,8 @@
 
 :- consult(table_layout_generator).
 :- consult(parse_constraints).
+:- consult(boundary_explainer).
+:- consult(table_repair).
 :- consult(table_annotator).
 :- consult(table_certify).
 :- consult(table_machine_records).
@@ -1219,11 +1236,14 @@ is_certificate_file_name(Name) :-
 % for the record's raster and the candidate's boundary (for a layout,
 % certify_layout/5 for its separators and subtables). The records themselves
 % were already checked against the candidate search by
-% machine_record_consistent/1.
+% machine_record_consistent/1. For a review decided by the repair, the
+% record is the repaired one (reviewed_record/3), whose candidates are
+% rebuilt from tables.jsonl here.
 selected_certificates(Tables, Reviews, Files) :-
    findall(Name-Facts,
-           ( nth0(I, Tables, Record), nth0(I, Reviews, Review),
+           ( nth0(I, Tables, Record0), nth0(I, Reviews, Review),
              Review.final_status == "valid",
+             reviewed_record(Record0, Review, Record),
              Id = Review.selected_candidate_id,
              member(Candidate, Record.candidates),
              Candidate.candidate_id == Id,
@@ -1535,6 +1555,9 @@ note_list_item(Note, element(li, [], [Note])).
 % record, Review its review.jsonl record (table_review.pl).
 %   valid                   "Parse Succeeded", the LLM's reason, then the table
 %                           colored for the candidate both agree on
+%   valid, by the repair    "Parse Succeeded After Repair", the LLM's reason,
+%                           the repair (which empty cells were merged), then
+%                           the table colored for the repaired candidate
 %   unparseable, by the LLM "Error: Misalignment Between LLM And Formal Table
 %                           Parser" and the LLM's reason
 %   no candidates           "Nothing To Do." (parser abstained, or the table
@@ -1565,8 +1588,13 @@ final_table_html(Record, Review, Html) :-
    atomic_list_concat(Pieces, Body, Joined),
    format(string(Html), "~w~n", [Joined]).
 
-final_succeeded(Record, Review, [Heading, Reason], Table) :-
-   Heading = element(h2, [class='final-status'], ['Parse Succeeded']),
+final_succeeded(Record0, Review, [Heading, Reason|Repaired], Table) :-
+   reviewed_record(Record0, Review, Record),
+   (  get_dict(repair, Record, Repair)
+   -> Heading = element(h2, [class='final-status'], ['Parse Succeeded After Repair']),
+      Repaired = [element(p, [class='repair'], [Repair.summary])]
+   ;  Heading = element(h2, [class='final-status'], ['Parse Succeeded']),
+      Repaired = [] ),
    llm_reason_paragraph(Review, Reason),
    Id = Review.selected_candidate_id,
    (  member(C, Record.candidates), C.candidate_id == Id
@@ -1577,7 +1605,7 @@ final_succeeded(Record, Review, [Heading, Reason], Table) :-
    -> final_colored_layout(Record, C, Table)
    ;  final_colored_table(Record, C.hmd, C.vmd, Table) ).
 
-final_misaligned(Record, Review, [Heading, Reason, Details]) :-
+final_misaligned(Record, Review, [Heading, Reason, Details|Why]) :-
    Heading = element(h2, [class='final-status'],
                      ['Error: Misalignment Between LLM And Formal Table Parser']),
    llm_reason_paragraph(Review, Reason),
@@ -1590,7 +1618,23 @@ final_misaligned(Record, Review, [Heading, Reason, Details]) :-
                 format(string(D), "~w (~s)", [C.candidate_id, D0]) ), Described),
    atomics_to_string(Described, "; ", CandidateText),
    format(string(DetailText), "~s Formal table parser candidates: ~s.", [LlmText, CandidateText]),
-   Details = element(p, [class='final-details'], [DetailText]).
+   Details = element(p, [class='final-details'], [DetailText]),
+   disagreement_paragraphs(Review, Why).
+
+% The explanation of why the parser does not offer the LLM's boundary
+% (boundary_explainer.pl), and what merging empty cells would do
+% (table_repair.pl), when the review has them.
+disagreement_paragraphs(Review, Nodes) :-
+   (  get_dict(disagreement, Review, Disagreement),
+      is_dict(Disagreement), get_dict(summary, Disagreement, Summary)
+   -> Why = [element(p, [class='disagreement'], [Summary])]
+   ;  Why = [] ),
+   (  get_dict(repair, Review, Repair), is_dict(Repair),
+      get_dict(status, Repair, Status),
+      memberchk(Status, ["repaired", "not_repaired"])
+   -> Repairs = [element(p, [class='repair'], [Repair.summary])]
+   ;  Repairs = [] ),
+   append(Why, Repairs, Nodes).
 
 final_nothing_to_do(Record, [Heading, Why]) :-
    Heading = element(h2, [class='final-status'], ['Nothing To Do.']),
@@ -1604,8 +1648,8 @@ final_not_reviewed(Review, [Heading, Why]) :-
    Heading = element(h2, [class='final-status'], ['Not Reviewed']),
    (  get_dict(not_reviewed_reason, Review, "too_large_for_review")
    -> Text = "The table is too large to send to the LLM."
-   ;  get_dict(not_reviewed_reason, Review, "only_central_layouts")
-   -> Text = "The formal table parser found only layouts with metadata in the middle of the table, which the LLM review cannot check yet."
+   ;  get_dict(not_reviewed_reason, Review, "no_selected_candidate")
+   -> Text = "Type inference selected no candidate for this table."
    ;  Review.error \== null
    -> format(string(Text), "No usable answer from the LLM: ~w", [Review.error])
    ;  Text = "The table was not reviewed." ),
@@ -1617,7 +1661,10 @@ llm_reason_paragraph(Review, element(p, [class='llm-reason'], [Text])) :-
    ;  Text = "The LLM gave no reason." ).
 
 % The source table is re-parsed from tables.jsonl and must rasterize to the
-% recorded raster, so the colors are those of the reviewed boundary.
+% recorded raster, so the colors are those of the reviewed boundary. A
+% repaired record (table_repair.pl) has the same rows and columns, and every
+% merge stays within one region, so the boundary colors the source cells as
+% it colors the repaired ones.
 final_colored_table(Record, Hmd, Vmd, WithContext) :-
    final_source_table(Record, Clean, Raster),
    annotate_precleaned_table_raster(Hmd, Vmd, Clean, Raster, Annotated),
@@ -1625,13 +1672,15 @@ final_colored_table(Record, Hmd, Vmd, WithContext) :-
    contextual_table_annotation(Record.context, TableHtml, WithContext).
 
 % The same for a layout candidate, colored by the region tables.jsonl
-% records for each cell, separators included.
+% records for each cell, separators included. The regions are read slot by
+% slot on the record's raster, the repaired one if any, and the source table
+% is colored by them on its own raster.
 final_colored_layout(Record, Candidate, WithContext) :-
    final_source_table(Record, Clean, Raster),
    findall(Id-Region, ( member(L, Candidate.labels), Id = L.cell_id,
                         atom_string(Region, L.region) ), Pairs),
    list_to_assoc(Pairs, Regions),
-   maplist(row_regions(Regions), Raster, Labels),
+   maplist(row_regions(Regions), Record.raster, Labels),
    annotate_precleaned_table_labels(Labels, Clean, Raster, Annotated),
    table_html(Annotated, TableHtml),
    contextual_table_annotation(Record.context, TableHtml, WithContext).
@@ -1648,7 +1697,8 @@ final_source_table(Record, Clean, Raster) :-
    ;  throw(error(final_table_error(no_source_table(Record.table_uid)),
                   context(final_table_html/3, 'tables.jsonl has no source table'))) ),
    rasterize_table(Table, Raster),
-   (  Raster == Record.raster
+   (  get_dict(source_raster, Record, Expected) -> true ; Expected = Record.raster ),
+   (  Raster == Expected
    -> true
    ;  throw(error(final_table_error(raster_mismatch(Record.table_uid)),
                   context(final_table_html/3, 'Source table no longer matches its raster'))) ),

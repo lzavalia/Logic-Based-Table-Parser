@@ -15,4 +15,8 @@ dataset-builder-agent/src/token_usage.json
 dataset-builder-agent/src/budget_guard.log
 dataset-builder-agent/src/review_log.txt
 dataset-builder-agent/src/review_token_usage.json
+dataset-builder-agent/src/guideline_log.txt
+dataset-builder-agent/src/guideline_token_usage.json
 .DS_Store
+# Downloaded papers and rebuilt dataset of the type-abstraction experiment
+dataset-builder-agent/experiments/type_abstraction/data/

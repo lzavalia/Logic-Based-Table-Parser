@@ -1,0 +1,48 @@
+{"paper": "PMC7780720", "text": "Laryngeal malignancy risk", "prelabel": "EntityName", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC3605494", "text": "Aβ1-42", "prelabel": "EntityName", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Iron supplementation", "prelabel": "CategoryLevel", "model": "InterventionDescription", "reviewed_label": null}
+{"paper": "PMC3605494", "text": "Aβ1-40 a", "prelabel": "EntityName", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC10898946", "text": "DK 1", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC12434915", "text": "SHH", "prelabel": "CategoryLevel", "model": "EntityName", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "Biological Process", "prelabel": "VariableLabel", "model": "SectionLabel", "reviewed_label": null}
+{"paper": "PMC7780720", "text": "IPF risk", "prelabel": "EntityName", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC11559427", "text": "Characteristic", "prelabel": "VariableLabel", "model": "SectionLabel", "reviewed_label": null}
+{"paper": "PMC10694873", "text": "diabetes events (n)", "prelabel": "VariableLabel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Botswana (English speakers)", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC10694873", "text": "No of participants", "prelabel": "VariableLabel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC7780720", "text": "NAFLD risk 43", "prelabel": "EntityName", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC8427842", "text": "Validation Dataset (N=96)", "prelabel": "CategoryLevel", "model": "SectionLabel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "Expression Pattern", "prelabel": "VariableLabel", "model": "SectionLabel", "reviewed_label": null}
+{"paper": "PMC12539739", "text": "Ca 2+", "prelabel": "VariableLabel", "model": "EntityName", "reviewed_label": null}
+{"paper": "PMC11132289", "text": "Inconsistency", "prelabel": "ChecklistItem", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "1.1 (X = I)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC12322749", "text": "Neutrophil counts/PNI as continuous", "prelabel": "VariableLabel", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC3939643", "text": "Median year of publication (range)", "prelabel": "VariableLabel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "2.5 ( x = 0.5)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "2.6 (X = Cl)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "Cardiac metabolism, β-cell compensation", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4310929", "text": "N (total = 15)", "prelabel": "CategoryLevel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "2.0 (X = Cl)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4310929", "text": "N (total = 16)", "prelabel": "CategoryLevel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Canada (retrospective evaluation of ICP)", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Germany (patients participating in trial)", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "1.3 (X = Cl)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "2.1 (X = Cl)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "0.7 (X = Br)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Availability of alternative treatment if withdrawn", "prelabel": "VariableLabel", "model": "ChecklistItem", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Latin America group I", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC5387038", "text": "1.9 (X = Br)", "prelabel": "none", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Denmark (patients participating in trial)", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC12539739", "text": "Extractable micro nutrient in mg kg -1", "prelabel": "VariableLabel", "model": "SectionLabel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "Glucose-stimulated insulin secretion, β-cell proliferation", "prelabel": "EntityName", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Structured interview in person or by phone or mail", "prelabel": "StudyCharacteristic", "model": "CategoryLevel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "C=C stretching (Amide II, some protein modes) 36 , 37", "prelabel": "none", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "CH 2 bending (lipids, fatty acyl chains) 35", "prelabel": "none", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC3939643", "text": "Studies with unclear or high ROB (95% CI) (IV)", "prelabel": "CategoryLevel", "model": "StatisticLabel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "75% within 3 days of ICP, 99% within 2 weeks", "prelabel": "CategoryLevel", "model": "StudyCharacteristic", "reviewed_label": null}
+{"paper": "PMC12434915", "text": "SHH sonic hedgehog, G3 Group 3, and G4 Group 4 AUC area under the curve", "prelabel": "none", "model": "JudgmentRationale", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "Aromatic C=C stretches (tyrosine, tryptophan) 38 , 39", "prelabel": "none", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC13015447", "text": "CCH skeletal stretch or rocking mode (proline, collagen-like) 33", "prelabel": "none", "model": "VariableLabel", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Netherlands (relative consented, patients’ understanding of ICP assessed)", "prelabel": "EntityName", "model": "StudyCharacteristic", "reviewed_label": null}
+{"paper": "PMC12434915", "text": "WNT wingless, SHH sonic hedgehog, G3 Group 3, and G4 Group 4 P -values for demographic and imaging features were calculated to assess intergroup differences. No significant differences were observed in age or gender distributions across molecular subgroups", "prelabel": "none", "model": "JudgmentRationale", "reviewed_label": null}
+{"paper": "PMC4371493", "text": "Seven patients within 3 months and five within 5 months of randomization; eight patients after receiving treatment", "prelabel": "StudyCharacteristic", "model": "JudgmentRationale", "reviewed_label": null}

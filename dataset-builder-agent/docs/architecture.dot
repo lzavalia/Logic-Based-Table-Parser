@@ -6,6 +6,7 @@
 // Legend
 //   box, rounded        Prolog module (src/*.pl)
 //   box, double border  DML agent run by DeepClause (src/*.dml)
+//   box, dashed         tool outside the pipeline (tools/*.py)
 //   component           shell entry point
 //   cylinder            external service
 //   note                file written under src/dataset/ (paths relative to it)
@@ -20,7 +21,9 @@ digraph architecture {
     edge  [fontname="Helvetica", fontsize=9, color="#555555"];
 
     // ---------------------------------------------------------------- entry
-    run_agent    [label="run_agent.sh\n\"<search prompt>\" [--no-review]",
+    run_agent    [label="run_agent.sh\n\"<search prompt>\" [--no-review] [--no-guidelines]",
+                  shape=component, fillcolor="#eeeeee", style=filled];
+    guideline_agent [label="guideline_agent.sh\n--run <name> | --papers | --program",
                   shape=component, fillcolor="#eeeeee", style=filled];
     review_agent [label="review_agent.sh\n--run <name> | --papers | --force",
                   shape=component, fillcolor="#eeeeee", style=filled];
@@ -31,6 +34,8 @@ digraph architecture {
     llm  [label="LLM provider\n(paper selection)",
           shape=cylinder, fillcolor="#fde2e2"];
     llm2 [label="LLM provider\n(table review)",
+          shape=cylinder, fillcolor="#fde2e2"];
+    llm3 [label="LLM provider\n(cell typing)",
           shape=cylinder, fillcolor="#fde2e2"];
 
     // ------------------------------------------------- step 1: build dataset
@@ -75,16 +80,45 @@ digraph architecture {
         manifest_step [label="record_dataset_run/8"];
     }
 
-    // ---------------------------------------------- step 2: review + export
+    // ----------------------------------------- step 2: cell types + guidelines
+    subgraph cluster_guidelines {
+        label="Step 2 — type cells   (guideline_agent.sh; swipl stages run outside DeepClause)";
+        style="rounded,filled"; fillcolor="#f2fafa"; color="#6fb0b0";
+
+        steps [label="guideline_steps.pl\nrun-papers, prepare, apply", fillcolor="#dff1f1"];
+
+        subgraph cluster_types {
+            label="Type system — rules, no LLM";
+            style="rounded"; color="#2e7d32"; fillcolor="#f5fbf5";
+            tdsl     [label="type_dsl_examples/sci.tdsl\nrules (form), subtypes,\nguidelines (meaning)", shape=note, fillcolor="#fffbe6", style=filled, fontsize=10];
+            tparser  [label="type_dsl_parser.pl\nparse_tdsl_file"];
+            tengine  [label="type_dsl_engine.pl\ntdsl_file_analyzer\nruns every regex rule on a cell"];
+            tabstract[label="table_type_abstraction.pl\ntype_dataset/3\nmost specific matched type, else untyped"];
+        }
+
+        subgraph cluster_guideline_stages {
+            label="Guideline step — LLM refines what rules cannot";
+            style="rounded,dashed"; color="#c0392b"; fillcolor="#fff8f8";
+            grequests [label="type_guidelines.pl\nguideline_requests/4\nroute untyped cells and types with\nguideline subtypes; batches of 40;\nleave out cached answers"];
+            guider    [label="type_guidelines.dml", peripheries=2, fillcolor="#dff1f1"];
+            gask      [label="prompt(): model picks an allowed\ntype or \"none\" for each cell\nfresh call, temp 0, 1 retry"];
+            gcheck    [label="guideline_answers.pl\nguideline_answer/3\nkeep allowed answers only"];
+            gapply    [label="type_guidelines.pl\napply_guidelines/4\nunanswered cells stay pending"];
+        }
+    }
+
+    // ---------------------------------------------- step 3: review + export
     subgraph cluster_review {
-        label="Step 2 — review & export   (review_dataset.dml)";
+        label="Step 3 — review & export   (review_dataset.dml)";
         style="rounded,filled"; fillcolor="#fbf6fc"; color="#a98ab8";
 
         reviewer [label="review_dataset.dml", peripheries=2, fillcolor="#efe3f5"];
         queue    [label="table_review.pl\nreview_queue (skip if review is current)"];
-        prompt   [label="table_review.pl\nreview_item_prompt\nblind: cells, <th>, caption, notes\n(no candidates shown)"];
-        ask      [label="prompt(): model answers own (H, V)\nfresh call, temp 0, 1 retry"];
-        judge    [label="table_review.pl  review_answer\nmatch against candidates\n→ valid / unparseable / unreviewed"];
+        infer    [label="type_inference.pl  (swipl, --scorer)\ntable_type_scorer.pl\nbit-cost or purity → one candidate\n(fixed tie-break)"];
+        inferred [label="papers/PMC<id>/type_inference.jsonl"];
+        prompt   [label="table_review.pl\nreview_item_prompt\ncells, <th>, caption, notes, selected parse\n(no other candidates, no types)"];
+        ask      [label="prompt(): model confirms the parse\nor answers own (H, V)\nfresh call, temp 0, 1 retry"];
+        judge    [label="table_review.pl  review_answer\nconfirmed, or (H, V) matched to a candidate\n→ valid / unparseable / unreviewed"];
         finalhtml[label="dataset_pipeline.pl\nfinal_table_html/3"];
         export   [label="table_export.pl\nexport_reviewed_papers/3\nHMD / VMD forests, data, residual corner"];
     }
@@ -99,11 +133,18 @@ digraph architecture {
         review_out [label="papers/PMC<id>/\nreview.jsonl, final_tableN.html"];
         final_json [label="papers/PMC<id>/final_tables.json"];
         rev_man    [label="reviews/review-*/manifest.json"];
+        types_out  [label="papers/PMC<id>/types.jsonl"];
+        req_out    [label="papers/PMC<id>/\nguideline_requests.json"];
+        ans_cache  [label="cache/guideline_answers.jsonl\nkey: program hash, text, rule type"];
+        guided_out [label="papers/PMC<id>/guided_types.jsonl"];
     }
 
     // ------------------------------------------------------------- edges
     run_agent -> builder [label="1. deepclause run"];
-    run_agent -> review_agent [label="2. --run <name>\n(unless --no-review\nor build failed)", style=dashed];
+    run_agent -> guideline_agent [label="2. --run <name>\n(unless --no-guidelines\nor build failed)", style=dashed];
+    run_agent -> review_agent [label="3. --run <name>\n(unless --no-review\nor build failed)", style=dashed];
+    guideline_agent -> steps [label="swipl"];
+    guideline_agent -> guider [label="deepclause run"];
     review_agent -> reviewer [label="deepclause run"];
 
     builder -> select_task;
@@ -134,6 +175,31 @@ digraph architecture {
     stage -> manifest_step [ltail=cluster_phase2, label="status lines"];
     manifest_step -> run_man;
 
+    run_man -> steps [style=dashed, label="paper list"];
+    paper_out -> tabstract [label="tables.jsonl"];
+    steps -> tabstract [label="prepare"];
+    steps -> grequests [label="prepare"];
+    steps -> gapply [label="apply"];
+    tdsl -> tparser;
+    tparser -> tengine [label="AST"];
+    tengine -> tabstract [label="analyzer"];
+    tabstract -> types_out;
+    types_out -> grequests;
+    ans_cache -> grequests [style=dashed, label="already answered"];
+    grequests -> req_out;
+    req_out -> guider [label="batches"];
+    guider -> gask;
+    gask -> llm3 [color="#c0392b", penwidth=2, dir=both, label="prompt / object answer"];
+    gask -> gcheck;
+    gcheck -> ans_cache [label="append"];
+    types_out -> gapply;
+    ans_cache -> gapply;
+    gapply -> guided_out;
+    guided_out -> infer [style=dashed, label="if present"];
+    paper_out -> infer [label="tables.jsonl"];
+    infer -> inferred;
+    inferred -> queue;
+
     run_man -> queue [style=dashed, label="paper list"];
     reviewer -> queue;
     paper_out -> queue [label="tables.jsonl"];
@@ -145,8 +211,8 @@ digraph architecture {
     judge -> review_out;
     finalhtml -> review_out;
     judge -> rev_man [label="record_review_run"];
-    // keep Step 2 below Step 1
-    run_man -> reviewer [style=invis];
+    // keep Step 3 below Step 2, which is below Step 1
+    guided_out -> reviewer [style=invis];
     { rank=same; run_man; paper_out; }
     review_out -> export [label="review.jsonl\n+ tables.jsonl"];
     export -> final_json;

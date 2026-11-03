@@ -1,0 +1,299 @@
+{"stratum": "s", "text": "Lower slope", "paper": "PMC12539739", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Post. cing. gy.", "paper": "PMC4310929", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "After diagnosis", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Trigonal", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Laryngeal malignancy risk", "paper": "PMC7780720", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Aβ1-42", "paper": "PMC3605494", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "ENO2", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Condition studied:", "paper": "PMC3939643", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Q3 (n=529)", "paper": "PMC12322749", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Iron supplementation", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Sr 2+", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Crossover group design", "paper": "PMC3939643", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Gender (female)", "paper": "PMC4310929", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "McNally 112", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Aβ1-40 a", "paper": "PMC3605494", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Model II (HR,95%CI,P)", "paper": "PMC10694873", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "CsGeCl 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "> Inflection point", "paper": "PMC10694873", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Publication year", "paper": "PMC3939643", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Clay Loam", "paper": "PMC12539739", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "HR (95%CI)", "paper": "PMC10694873", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "DK 1", "paper": "PMC10898946", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Cardiology", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Thalamus", "paper": "PMC4310929", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Spontaneous reporting", "paper": "PMC3939643", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "RbGeBr 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Goodman 80", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "CKMT1A", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Race/ethnicity, n (%)", "paper": "PMC11559427", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "SHH", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "American", "paper": "PMC12322749", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Biological Process", "paper": "PMC13015447", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Not clear", "paper": "PMC3939643", "label": "QualityJudgment", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "XPNPEP1", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "IPF risk", "paper": "PMC7780720", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Ballard 85", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Before ICP signature", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "0-20 (Surface)", "paper": "PMC12539739", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Stenson 127", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "1CCS;1CSS", "paper": "PMC7780720", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Chu 94", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Region: Rotation diversity", "paper": "PMC13681253", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Clay (%)", "paper": "PMC12539739", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Vardenafil", "paper": "PMC3939643", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "CRP (mg/L)", "paper": "PMC12688946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Stroke (n (%))", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "CRRT (days)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Daugherty 58", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "z", "paper": "PMC4310929", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Characteristic", "paper": "PMC11559427", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Management", "paper": "PMC13681253", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Study design", "paper": "PMC11132289", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Pace 35", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "OASIS score (score)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Children with GORD", "paper": "PMC7780720", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "diabetes events (n)", "paper": "PMC10694873", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "USA (mothers)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Participants blinded adequately", "paper": "PMC3939643", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Chappuy 91", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "TC(mmol/L)", "paper": "PMC10694873", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Gender, n (%)", "paper": "PMC12688946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Diagnosis", "paper": "PMC3605494", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "ADI1", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Fortney 74", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Hemoglobin (g/dL)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Ventilation (hours)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "USA", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Botswana (English speakers)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Current drinker", "paper": "PMC11559427", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Age, years", "paper": "PMC10427416", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Eu 3+", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Dis. dur. (mo)", "paper": "PMC4310929", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Scr(umol/L)", "paper": "PMC10694873", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "No of participants", "paper": "PMC10694873", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "NAFLD risk 43", "paper": "PMC7780720", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "0D dimer", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Netherlands", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Validation Dataset (N=96)", "paper": "PMC8427842", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Placebo", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Expression Pattern", "paper": "PMC13015447", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Agrawal 48", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Durand-Zaleski 97", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Fisl 47", "paper": "PMC13015447", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Season", "paper": "PMC13681253", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Drug trial", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Kass 105", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Pd 2+", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "EOPMS vs. HC", "paper": "PMC4310929", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Case–control studies", "paper": "PMC7780720", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Total cholesterol (mg/dL)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Jenkins 104", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Phase of trial", "paper": "PMC4371493", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Ca 2+", "paper": "PMC12539739", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "After ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "CsSnI 2 Br", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "AFP", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Questionnaire", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Fold change", "paper": "PMC12416123", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Skewness", "paper": "PMC12539739", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "HERC4", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "ACY1", "paper": "PMC12416123", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Method", "paper": "PMC4371493", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Ritsuko 83", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Hietanen 60", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Functional diversity", "paper": "PMC13681253", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Gammelgaard 50", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Monoclinic (–)", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Simon 56", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "40 therapeutic trials", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "s", "text": "Inconsistency", "paper": "PMC11132289", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "1.1 (X = I)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Neutrophil counts/PNI as continuous", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "AD−/LB+ ( n = 106)", "paper": "PMC10427416", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Median year of publication (range)", "paper": "PMC3939643", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "WBC (×10 9 /L)", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "WBC (10 9 /L)", "paper": "PMC12688946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Adult patients and parents or guardians", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "4 weeks after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "P value of overall effects", "paper": "PMC7780720", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "BMI (kg/m 2 )", "paper": "PMC12688946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "United Kingdom (first study)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Recall [95% CI ]", "paper": "PMC12434915", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Upper slope * D 2", "paper": "PMC12539739", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Falls at any time", "paper": "PMC5831205", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Cs 2 AgBiCl 6", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "HCC− (matched, n = 219)", "paper": "PMC12416123", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Cs 2 SnI 6", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Total ( n = 883)", "paper": "PMC10427416", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Hydrazinium, [NH 3 NH 2 ] +", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Balanced baseline prognostic factors", "paper": "PMC3939643", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Prior experience with intervention (yes vs no)", "paper": "PMC3939643", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Within 1 week of ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "30 to < 40", "paper": "PMC10694873", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "LMM, n = 731 (7.3%)", "paper": "PMC11559427", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "P for log-likelihood ratio test", "paper": "PMC10694873", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Pseudocubic ( P 4 mm )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Raman shift (cm −1 )", "paper": "PMC13015447", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Cs 3 Sb 2 I 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Stratified by frequency of GORD symptoms", "paper": "PMC7780720", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "CH(NH 2 ) 2 MgI 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "1 CCS; 3 CSS", "paper": "PMC7780720", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Effect estimate and 95% CI", "paper": "PMC7780720", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "2.5 ( x = 0.5)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Age at death (years)", "paper": "PMC5831205", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Crystal system (space group)", "paper": "PMC5387038", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Within 1 hour of ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Lymphocyte (10 9 /L)", "paper": "PMC12688946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Cs 3 Bi 2 Br 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "USA (English-speaking ethnic minority)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "6–9 months after entering trial", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "USA (participants with nurse present at ICP)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "CH 3 NH 3 GeBr 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Netherlands (extremely urgent treatment)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "In-hospital mortality at 60-day", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "2.6 (X = Cl)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Cardiac metabolism, β-cell compensation", "paper": "PMC13015447", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "N (total = 15)", "paper": "PMC4310929", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Child Pugh Class, No. (%)", "paper": "PMC12416123", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Ca (cmol·kg −1 )", "paper": "PMC10898946", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "AD+/LB+ ( n = 98)", "paper": "PMC10427416", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Within 3 months of ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "2.0 (X = Cl)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Medical records and symptom questionnaire.", "paper": "PMC7780720", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "72 hours after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Orthorhombic ( Amm 2)", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "N (total = 16)", "paper": "PMC4310929", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Canada (retrospective evaluation of ICP)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Germany (patients participating in trial)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "< 10 weeks after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Orthorhombic ( Acam )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "1.3 (X = Cl)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "2.1 (X = Cl)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "LiBiI 4 5 H 2 O", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "ICU mortality at 60-day", "paper": "PMC12322749", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Delusions at any time", "paper": "PMC5831205", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "0.7 (X = Br)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Availability of alternative treatment if withdrawn", "paper": "PMC4371493", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Outcome assessors blinded adequately", "paper": "PMC3939643", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Latin America group I", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Within 1 month of ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "SHH ( n = 24)", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "ß ( P -value) on placebo effect*", "paper": "PMC3939643", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "F1 score [95% CI ]", "paper": "PMC12434915", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Model 3 OR (95% CI)", "paper": "PMC12688946", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Difference b (95% CI)", "paper": "PMC3939643", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "6–24 months after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "1.9 (X = Br)", "paper": "PMC5387038", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Mg 2+ (cmol(+)kg -1 )", "paper": "PMC12539739", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Study run-in phase with placebo reported", "paper": "PMC3939643", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Rb 2 TeBr 6", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Group 3 ( n = 28)", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Core and suggestive symptoms", "paper": "PMC5831205", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Within 48 hours of ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "50 to < 60", "paper": "PMC10694873", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Orthorhombic ( Pccn ) <335 K", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Interval between last assessment and death (months)", "paper": "PMC5831205", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "55 (57% were aged 45–64)", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Method of GORD diagnosed", "paper": "PMC7780720", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Questionnaire with staff assistance", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Denmark (patients participating in trial)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "3-Pyrrolinium, [NC 4 H 8 ] +", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "AD vs mixed, P = 0.04", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Effect of covariate on understanding of component", "paper": "PMC4371493", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "CsGe(Br x Cl 1− x ) 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Tl 2 TeBr 6", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "15–45 (68% were under 35)", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Smoking status, n (%)", "paper": "PMC11559427", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "CH(NH 2 ) 2 GeI 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "65 (53% were aged 60–69)", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Extractable micro nutrient in mg kg -1", "paper": "PMC12539739", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Median of 14 months after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "RbGeCl 3 ·x H 2 O", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Hexagonal ( P 6 3 )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Random sequence generated adequately", "paper": "PMC3939643", "label": "ChecklistItem", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Glucose-stimulated insulin secretion, β-cell proliferation", "paper": "PMC13015447", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Tetramethylammonium, [(CH 3 ) 4 N] +", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Orthorhombic ( Pbca )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "Trigonal ( P 321)", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "GORD questionnaire, pH monitoring, and OGD.", "paper": "PMC7780720", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "m", "text": "CH 3 NH 3 EuI 3", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "AD vs mixed, X = 2.49, df = 1, P = 0.13", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 11.88, df = 1, P < 0.01", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Cs 2 Au I Au III I 6", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "[C(NH 2 ) 3 ] 3 [Sb 2 I 9 ]", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(CH 3 NH 3 ) 2 PdCl 4", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(CH 3 NH 3 ) 2 FeCl 2 Br 2", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Cs 2 AgSbX 6 (X = Cl, Br, I)", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Structured interview in person or by phone or mail", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "G4 (chromosome 11 loss) ( n = 9)", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(CH 3 NH 3 ) 3 Sb 2 Br 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Median of 13 days (range: 10–16) after ICP", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 9.30, df = 1, P < 0.01", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "C=C stretching (Amide II, some protein modes) 36 , 37", "paper": "PMC13015447", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(CH 3 NH 3 ) 3 Sb 2 Cl 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(CH 3 NH 3 ) 2 CuCl 2 Br 2", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 8.63, df = 1, P < 0.01", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "AD vs mixed, X = 0.60, df = 1, P = 0.34", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Dimethylammonium, [(CH 3 ) 2 NH 2 ] +", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "SHH (TP53 mutant status) ( n = 19 )", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "GM areas with diagnostic information for EOPMS vs. LOPMS", "paper": "PMC4310929", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Dabconium, [C 6 H 14 N 2 ] 2+", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "CH 3 NH 3 CaI 3− x Cl x", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(C 8 H 17 NH 3 ) 2 PdCl 4", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "CH 2 bending (lipids, fatty acyl chains) 35", "paper": "PMC13015447", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Monoclinic ( P 2 1 / m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Imidazolium, [C 3 N 2 H 5 ] +", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Monoclinic ( P 12 1 / a 1)", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(C 5 H 5 NH) 3 Sb 2 Cl 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "AD vs mixed, X = 3.69, df = 1, P = 0.055", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "SMD 1.4 SD lower (1.74 lower to 1.05 lower)", "paper": "PMC11132289", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "GM areas with diagnostic information for LOPMS vs. HC", "paper": "PMC4310929", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Netherlands (patient consented, patients’ understanding of ICP assessed)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Monoclinic ( P 2 1 ) at 100 K", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "AD vs mixed, X = 0.81, df = 1, P = 0.36", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Studies with unclear or high ROB (95% CI) (IV)", "paper": "PMC3939643", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "75% within 3 days of ICP, 99% within 2 weeks", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "ß ( P -value) on intervention effect *", "paper": "PMC3939643", "label": "StatisticLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Two thirds were 20–30 and one third were 31–40", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Monoclinic ( C 2/ c ) at 160 K", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "WM areas with diagnostic information for EOPMS vs. LOPMS", "paper": "PMC4310929", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Hexagonal ( P 6 3 / mmc ) at 364 K", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "(C 2 H 5 NH 3 ) 2 FeCl 4", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "[NH(CH 3 ) 3 ] 3 Sb 2 Cl 9", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "SHH sonic hedgehog, G3 Group 3, and G4 Group 4 AUC area under the curve", "paper": "PMC12434915", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "6 months to 4 years after completion of trial", "paper": "PMC4371493", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Aromatic C=C stretches (tyrosine, tryptophan) 38 , 39", "paper": "PMC13015447", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Piperazinium, [C 4 H 12 N 2 ] 2+", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 1.80, df = 1, P = 0.15", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "AD vs mixed, X = 1.19, df = 1, P = 0.46", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "SHH (TP53 mutant status) ( n = 24)", "paper": "PMC12434915", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Prostate cancer or spinal cord injury (yes vs no)", "paper": "PMC3939643", "label": "VariableLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "CCH skeletal stretch or rocking mode (proline, collagen-like) 33", "paper": "PMC13015447", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Patients >18 years old with HD duration of at least 3 months", "paper": "PMC11132289", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "MED13 44 , SOX6 42 , CDKN1A 43", "paper": "PMC13015447", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Cs 2 AuBiX 6 (X = Cl, Br, I)", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "WM areas with diagnostic information for LOPMS vs. HC", "paper": "PMC4310929", "label": "SectionLabel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "MnBi 2 I 8 ·8 H 2 O", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 0.33, df = 1, P = 0.564", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "Netherlands (relative consented, patients’ understanding of ICP assessed)", "paper": "PMC4371493", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "l", "text": "DLB vs mixed, X = 4.82, df = 1, P = 0.03", "paper": "PMC5831205", "label": "FindingStatement", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Tetragonal ( I \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{4}$$\\end{document} 4 ¯ 2 d )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "[C 6 H 4 (NH 3 ) 2 ] 2 Bi 2 I 10 ·4 H 2 O", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Cubic ( Fm \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{3}$$\\end{document} 3 ¯ m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Cubic ( \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$Fm\\bar{3}$$\\end{document} F m 3 ¯ m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "CsTlF 3 \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$({\\text{CsTl}}_{0.5}^{ + } {\\text{Tl}}_{0.5}^{3 + } {\\text{F}}_{ 3} )$$\\end{document} ( CsTl 0.5 + Tl 0.5 3 + F 3 )", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Trigonal ( P \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{3}$$\\end{document} 3 ¯ m 1)", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "WNT wingless, SHH sonic hedgehog, G3 Group 3, and G4 Group 4 P -values for demographic and imaging features were calculated to assess intergroup differences. No significant differences were observed in age or gender distributions across molecular subgroups", "paper": "PMC12434915", "label": "none", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Patients >18 years old, on CAPD for at least a month with pruritus of more than 8 weeks", "paper": "PMC11132289", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "[NH 3 (CH 2 ) 7 NH 3 ] 2 [(Au I I 2 )(Au III I 4 )(I 3 ) 2 ]", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "1 g omega-3 capsules every 8 h for 20 days. Each capsule: 180 mg EPA + 120 mg DHA", "paper": "PMC11132289", "label": "InterventionDescription", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Cubic ( \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$Fm\\bar{3}m$$\\end{document} F m 3 ¯ m m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "CsTlCl 3 \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$({\\text{CsTl}}_{0.5}^{ + } {\\text{Tl}}_{0.5}^{3 + } {\\text{F}}_{ 3} {\\text{Cl}}_{ 3} )$$\\end{document} ( CsTl 0.5 + Tl 0.5 3 + F 3 Cl 3 )", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "[NH 3 (CH 2 ) 8 NH 3 ] 2 [(Au I I 2 )(Au III I 4 )(I 3 ) 2 ]", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Seven patients within 3 months and five within 5 months of randomization; eight patients after receiving treatment", "paper": "PMC4371493", "label": "StudyCharacteristic", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Triclinic ( P \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{1}$$\\end{document} 1 ¯ )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Trigonal ( R \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{3}$$\\end{document} 3 ¯ m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Tetragonal ( I 4/ m ) Cubic ( Fm \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\bar{3}$$\\end{document} 3 ¯ m )", "paper": "PMC5387038", "label": "CategoryLevel", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "Three capsules of 1 g omega-3 for 1 month. Each capsule: 180 mg EPA + 120 mg DHA", "paper": "PMC11132289", "label": "InterventionDescription", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}
+{"stratum": "x", "text": "( p -F-C 6 H 5 C 2 H 4 NH 3 ) 2 CuBr 4", "paper": "PMC5387038", "label": "EntityName", "labeler": "claude-opus-5-5, blind to model output", "reviewed": false}

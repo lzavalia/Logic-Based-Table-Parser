@@ -1,0 +1,75 @@
+{
+  "level": "family",
+  "min_confidence": "low",
+  "tables": 98,
+  "tables_without_correct_candidate": 10,
+  "coverage": {
+    "non_empty_cells": 9611,
+    "untyped_cells": 756,
+    "untyped_rate": 0.0787
+  },
+  "dependence": {
+    "labeled_cells": 9053,
+    "pooled_mi_bits": 0.1841,
+    "pooled_mi_normalized": 0.1864,
+    "pooled_null_mean_bits": 0.0016,
+    "pooled_null_max_bits": 0.004,
+    "pooled_p_value": 0.000999,
+    "macro_mi_bits": 0.4789,
+    "macro_null_mean_bits": 0.0589,
+    "macro_p_value": 0.000999,
+    "type_given_region": {
+      "data": {
+        "Numeric": 0.5679,
+        "Text": 0.3113,
+        "untyped": 0.0625,
+        "Missing": 0.0315,
+        "empty": 0.0268
+      },
+      "hmd": {
+        "Text": 0.7821,
+        "untyped": 0.0813,
+        "Numeric": 0.0683,
+        "empty": 0.065,
+        "Missing": 0.0033
+      },
+      "separator": {
+        "untyped": 0.5,
+        "Text": 0.3889,
+        "Numeric": 0.1111
+      },
+      "vmd": {
+        "Text": 0.8115,
+        "untyped": 0.1296,
+        "Numeric": 0.0523,
+        "empty": 0.0066
+      }
+    }
+  },
+  "gold_data_regions": {
+    "mostly_text": 32,
+    "mostly_numeric": 56
+  },
+  "purity": {
+    "column": {
+      "tables": 88,
+      "gold_mean_purity": 0.993,
+      "other_boundaries_mean_purity": 0.9743,
+      "gold_strictly_purest_share": 0.1023,
+      "gold_tied_purest_share": 0.8295
+    },
+    "row": {
+      "tables": 88,
+      "gold_mean_purity": 0.9294,
+      "other_boundaries_mean_purity": 0.908,
+      "gold_strictly_purest_share": 0.0909,
+      "gold_tied_purest_share": 0.6477
+    }
+  },
+  "contrast": {
+    "column_heading_differs_share": 0.5979,
+    "row_heading_differs_share": 0.5599,
+    "column_lines": 378,
+    "row_lines": 1118
+  }
+}

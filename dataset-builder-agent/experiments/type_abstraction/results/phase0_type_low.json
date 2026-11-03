@@ -1,0 +1,99 @@
+{
+  "level": "type",
+  "min_confidence": "low",
+  "tables": 98,
+  "tables_without_correct_candidate": 10,
+  "coverage": {
+    "non_empty_cells": 9611,
+    "untyped_cells": 756,
+    "untyped_rate": 0.0787
+  },
+  "dependence": {
+    "labeled_cells": 9053,
+    "pooled_mi_bits": 0.2404,
+    "pooled_mi_normalized": 0.2434,
+    "pooled_null_mean_bits": 0.0121,
+    "pooled_null_max_bits": 0.0167,
+    "pooled_p_value": 0.000999,
+    "macro_mi_bits": 0.6891,
+    "macro_null_mean_bits": 0.1365,
+    "macro_p_value": 0.000999,
+    "type_given_region": {
+      "data": {
+        "Decimal": 0.2242,
+        "Phrase": 0.1807,
+        "Word": 0.1195,
+        "ValueParen": 0.0961,
+        "MeanSD": 0.0697,
+        "Integer": 0.064,
+        "untyped": 0.0625,
+        "ValueInterval": 0.0416,
+        "NumberList": 0.0352,
+        "empty": 0.0268,
+        "Dash": 0.0168,
+        "NotAvailable": 0.0148,
+        "AnnotatedNumber": 0.0115,
+        "NumberRange": 0.0114,
+        "LabelWithUnit": 0.0111,
+        "Inequality": 0.0078,
+        "Measurement": 0.003,
+        "Scientific": 0.0023,
+        "TestStatistic": 0.0011
+      },
+      "hmd": {
+        "Phrase": 0.3203,
+        "Word": 0.3073,
+        "LabelWithUnit": 0.1463,
+        "untyped": 0.0813,
+        "empty": 0.065,
+        "Integer": 0.0569,
+        "Decimal": 0.0098,
+        "Unit": 0.0081,
+        "Dash": 0.0033,
+        "Inequality": 0.0016
+      },
+      "separator": {
+        "untyped": 0.5,
+        "Phrase": 0.25,
+        "LabelWithUnit": 0.1111,
+        "Integer": 0.1111,
+        "Word": 0.0278
+      },
+      "vmd": {
+        "Phrase": 0.4551,
+        "Word": 0.218,
+        "LabelWithUnit": 0.1384,
+        "untyped": 0.1296,
+        "Integer": 0.0508,
+        "empty": 0.0066,
+        "Inequality": 0.0015
+      }
+    }
+  },
+  "gold_data_regions": {
+    "mostly_text": 32,
+    "mostly_numeric": 56
+  },
+  "purity": {
+    "column": {
+      "tables": 88,
+      "gold_mean_purity": 0.9096,
+      "other_boundaries_mean_purity": 0.8803,
+      "gold_strictly_purest_share": 0.1136,
+      "gold_tied_purest_share": 0.4545
+    },
+    "row": {
+      "tables": 88,
+      "gold_mean_purity": 0.8017,
+      "other_boundaries_mean_purity": 0.7805,
+      "gold_strictly_purest_share": 0.125,
+      "gold_tied_purest_share": 0.3864
+    }
+  },
+  "contrast": {
+    "column_heading_differs_share": 0.8254,
+    "row_heading_differs_share": 0.7415,
+    "column_lines": 378,
+    "row_lines": 1118
+  }
+}

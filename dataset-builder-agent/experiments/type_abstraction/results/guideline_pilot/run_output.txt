@@ -1,0 +1,681 @@
+20 paper(s): 55 batch(es), 1773 cell text(s) to send
+Guideline typing: 55 batch(es) to send
+I'll analyze each cell and assign the most appropriate type.
+Here's my reasoning for the key assignments:
+
+- **1 (AD), 12 (DLB), 23 (PD), 28 (VaD)**: `CategoryLevel` — these are diagnostic categories/groups being compared
+- **2–5** (AD+/LB± combinations with n=): `CategoryLevel` — these are subgroups/arms defined by biomarker combinations
+- **6, 14** (Age/Education, years): `VariableLabel` — measured characteristics with units
+- **7, 16, 20, 21** (cognitive/motor z scores): `VariableLabel` — measured variables with statistic noted
+- **8–10, 26** (CSF/PET biomarkers): `VariableLabel` — measured biomarker variables
+- **11 (Clinical baseline diagnosis)**: `SectionLabel` — groups rows beneath it
+- **13, 17, 18, 24, 25** (Dementia/Hallucinations/MCI/Sex/REM, n): `VariableLabel` — measured characteristics
+- **15, 22** (FTD/tauopathy, Other etiology): `CategoryLevel` — diagnostic subcategories
+- **27 (Total, n=883)**: `CategoryLevel` — a group/column header representing the full cohort
+- **29 (Variable)**: `StatisticLabel` — a column heading labeling the variable column
+PMC10427416/1: 29 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+PMC10694873/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC10694873/2: 40 answered, 0 without an answer
+The cell "≤ Inflection point" describes a category or group defined by being at or below a threshold value (the inflection point). This fits best as a **CategoryLevel** — it represents a level/group of a categorical variable (e.g., a dose or value group defined relative to the inflection point).
+PMC10694873/3: 1 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+Here is my reasoning for the key assignments:
+
+- **VariableLabel** (1–6, 17–25, 27–32, 34, 36–37): These are named measured variables, often with units in parentheses (e.g., "Biomass weight (kg)", "Ca (%)", "Grain weight (t·ha⁻¹)", "Silt (%)").
+- **CategoryLevel** (7–16, 35): These are treatment groups or conditions being compared (e.g., "D₀N₀P₀K₀ (control)", "DN₁", "DK₂", "Sandy loam" as a soil texture category level).
+- **SectionLabel** (26, 33, 39): "Nutrient", "Property", and "Treatment" are column/row headers that group other entries beneath them rather than describing a single measured variable.
+- **StatisticLabel** (40): "Value" is a heading for a column of reported values/statistics.
+- **VariableLabel** (38): "Textural class" is a measured soil characteristic/variable label.
+PMC10898946/1: 40 answered, 0 without an answer
+"pH (water)" describes a measured variable (pH) with a qualifier indicating the measurement medium (water). This fits the **VariableLabel** type best.
+PMC10898946/2: 1 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC11132289/1: 40 answered, 0 without an answer
+I'll analyze each cell:
+
+1. "serious a" - This appears to be a quality/risk rating (like "serious" concern) with a footnote marker "a". In GRADE evidence tables, "serious" is used to rate the degree of concern for a domain (e.g., risk of bias, inconsistency). This fits **QualityJudgment**.
+
+2. "⊕⊕⊕⃝ MODERATE" - This is clearly a GRADE certainty of evidence rating using the circle symbols, indicating moderate certainty. This fits **QualityJudgment**.
+PMC11132289/2: 2 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC11559427/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Q4" - A quartile label, representing a group/category level → **CategoryLevel**
+2. "Race/ethnicity, n (%)" - A variable name with statistic format → **VariableLabel**
+3. "Sedentary" - A level of a physical activity categorical variable → **CategoryLevel**
+4. "Serum Vitamin D (nmol/L)" - A measured variable with unit → **VariableLabel**
+5. "Serum albumin (g/dL)" - A measured variable with unit → **VariableLabel**
+6. "Serum calcium (mg/dL)" - A measured variable with unit → **VariableLabel**
+7. "Serum total cholesterol (mg/dL)" - A measured variable with unit → **VariableLabel**
+8. "Severe deficiency" - A level of a deficiency classification variable → **CategoryLevel**
+9. "Smoking status, n (%)" - A variable name with statistic format → **VariableLabel**
+10. "Sufficient" - A level of a sufficiency/status categorical variable → **CategoryLevel**
+11. "Total energy intake (kcal/day)" - A measured variable with unit → **VariableLabel**
+12. "Unclear" - A rating in a quality/risk of bias assessment → **QualityJudgment**
+13. "Vitamin D intake (mcg/day)" - A measured variable with unit → **VariableLabel**
+14. "Yes" - A level of a binary categorical variable → **CategoryLevel**
+15. "p" - A statistic label (p-value) → **StatisticLabel**
+PMC11559427/2: 15 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+Here's a summary of my reasoning for key decisions:
+
+- **1** ("1.00 (Reference)"): `CategoryLevel` — a reference group marker used in regression tables
+- **2–8, 12–14, 16–18, 24–28, 30–35, 37–40**: `VariableLabel` — named measured variables with units or statistics in parentheses
+- **9, 10, 11, 20, 23, 36** ("American", "Asian", "Black", "Divorced", "F", "Hispanic/Latino"): `CategoryLevel` — levels of categorical variables (race/ethnicity, marital status, gender)
+- **15** ("Characteristics"): `SectionLabel` — groups rows describing patient characteristics
+- **19** ("Comorbidity"): `SectionLabel` — groups rows of comorbid conditions
+- **21** ("English"): `CategoryLevel` — likely a language category level
+- **22** ("Exposure"): `SectionLabel` — groups exposure-related rows/columns
+- **29** ("HR (95% CI)"): `StatisticLabel` — a named statistical measure (Hazard Ratio with confidence interval)
+PMC12322749/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC12322749/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "RBC (×10¹²/L)" - Red blood cell count with unit → **VariableLabel**
+2. "RDW (%)" - Red cell distribution width with unit → **VariableLabel**
+3. "Race, n (%)" - Demographic variable with statistic format → **VariableLabel**
+4. "SAPSII score (score)" - A clinical scoring variable → **VariableLabel**
+5. "SOFA score (score)" - A clinical scoring variable → **VariableLabel**
+6. "Scoring systems" - Groups rows about scoring systems → **SectionLabel**
+7. "Single" - A marital status category level → **CategoryLevel**
+8. "Sodium (mmol/L)" - Lab measurement with unit → **VariableLabel**
+9. "Statistic" - A heading for a statistic column → **StatisticLabel**
+10. "Stroke (n (%))" - Clinical outcome variable → **VariableLabel**
+11. "TT (S)" - Thrombin time with unit → **VariableLabel**
+12. "Total (n=2116)" - A group/column label with sample size → **CategoryLevel**
+13. "Total calcium (mmol/L)" - Lab measurement with unit → **VariableLabel**
+14. "Total cholesterol (mg/dL)" - Lab measurement with unit → **VariableLabel**
+15. "Treatment" - A section or column grouping treatments → **SectionLabel**
+16. "Triglyceride (mg/dL)" - Lab measurement with unit → **VariableLabel**
+17. "Type 2 diabetes mellitus (n (%))" - Clinical variable → **VariableLabel**
+18. "Unknown" - A category level (e.g., unknown race/status) → **CategoryLevel**
+19. "Variables" - A heading for a column of variable names → **StatisticLabel**
+20. "Ventilation (hours)" - Clinical variable with unit → **VariableLabel**
+21. "Ventilation (n (%))" - Clinical variable with statistic → **VariableLabel**
+22. "WBC (×10⁹/L)" - Lab measurement with unit → **VariableLabel**
+23. "Weight, Mean ± SD" - Variable with statistic reported → **VariableLabel**
+24. "Widowed" - A marital status category level → **CategoryLevel**
+25. "Yes" - A binary category level → **CategoryLevel**
+PMC12322749/3: 25 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "A" - Single letter, likely a category level (e.g., Child-Pugh Class A) → **CategoryLevel**
+2. "ACAA1" - Gene/protein name → **EntityName**
+3. "ACY1" - Gene/protein name → **EntityName**
+4. "ADH4" - Gene/protein name → **EntityName**
+5. "ADI1" - Gene/protein name → **EntityName**
+6. "AFP" - Gene/protein abbreviation (Alpha-fetoprotein) → **EntityName**
+7. "AFP, ng/mL" - Variable with unit → **VariableLabel**
+8. "ALD" - Gene/protein name (Aldolase) → **EntityName**
+9. "ALP, U/L" - Variable with unit → **VariableLabel**
+10. "ALPG" - Gene/protein name → **EntityName**
+11. "ALPP" - Gene/protein name → **EntityName**
+12. "ALT, U/L" - Variable with unit → **VariableLabel**
+13. "APLN" - Gene/protein name (Apelin) → **EntityName**
+14. "ARPC1B" - Gene/protein name → **EntityName**
+15. "AST, U/L" - Variable with unit → **VariableLabel**
+16. "Adjust p" - Statistical measure → **StatisticLabel**
+17. "Aetiology, No. (%)" - Statistical label with format → **StatisticLabel**
+18. "African American" - A racial/ethnic group category → **CategoryLevel**
+19. "Age mean (SD)" - Variable with statistic → **VariableLabel**
+20. "Age, mean (SD), y" - Variable with statistic and unit → **VariableLabel**
+21. "Albumin, g/dL" - Variable with unit → **VariableLabel**
+22. "Asian" - A racial/ethnic group category → **CategoryLevel**
+23. "B" - Single letter, likely a category level (e.g., Child-Pugh Class B) → **CategoryLevel**
+24. "BMI mean (SD), (kg/m 2 )" - Variable with statistic and unit → **VariableLabel**
+25. "BMI, mean (SD), kg/m 2" - Variable with statistic and unit → **VariableLabel**
+26. "Bilirubin, mg/dL" - Variable with unit → **VariableLabel**
+27. "C" - Single letter, likely a category level (e.g., Child-Pugh Class C) → **CategoryLevel**
+28. "C3" - Gene/protein name (Complement C3) → **EntityName**
+29. "C4A|C4B" - Gene/protein names → **EntityName**
+30. "CKB" - Gene/protein name → **EntityName**
+31. "CKMT1A" - Gene/protein name → **EntityName**
+32. "COX6C" - Gene/protein name → **EntityName**
+33. "Characteristics" - Section heading grouping rows → **SectionLabel**
+34. "Child Pugh Class, No. (%)" - Variable with statistic → **VariableLabel**
+35. "Cirrhosis only ( n = 294)" - A group/arm being compared → **CategoryLevel**
+36. "Creatinine, mg/dL" - Variable with unit → **VariableLabel**
+37. "DNAJC4" - Gene/protein name → **EntityName**
+38. "DYNLL1" - Gene/protein name → **EntityName**
+39. "Demographic or clinical parameter" - Section heading → **SectionLabel**
+40. "ENO2" - Gene/protein name → **EntityName**
+PMC12416123/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC12416123/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "RAB27B" - A gene name → **EntityName**
+2. "RNF128" - A gene name → **EntityName**
+3. "Race or Ethnicity, No. (%)" - A variable name with statistic format → **VariableLabel**
+4. "Race or ethnicity" - A variable/characteristic name → **VariableLabel**
+5. "SEMA3A" - A gene name → **EntityName**
+6. "SHMT2" - A gene name → **EntityName**
+7. "SSMEM1" - A gene name → **EntityName**
+8. "TIMP1" - A gene/protein name → **EntityName**
+9. "TP63" - A gene name → **EntityName**
+10. "UBL4A" - A gene name → **EntityName**
+11. "UGP2" - A gene name → **EntityName**
+12. "Unknown" - A level of a categorical variable → **CategoryLevel**
+13. "Unmatched ( n = 149)" - A group/condition being compared → **CategoryLevel**
+14. "VAMP3" - A gene/protein name → **EntityName**
+15. "White" - A level of a categorical variable (race/ethnicity) → **CategoryLevel**
+16. "XPNPEP1" - A gene name → **EntityName**
+17. "p" - A statistic label (p-value) → **StatisticLabel**
+PMC12416123/3: 17 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC12434915/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "SHH sonic hedgehog, G3 Group 3, and G4 Group 4 AUC area under the curve" - This is a footnote/legend explaining abbreviations used in the table → **JudgmentRationale** (closest fit as a clarifying note)
+
+2. "Sensitivity% [95% CI]" - This is a statistic name used as a heading → **StatisticLabel**
+
+3. "Specificity% [95% CI]" - This is a statistic name used as a heading → **StatisticLabel**
+
+4. "Subgroups" - This groups rows/columns under it → **SectionLabel**
+
+5. "T1W images foci-hyperintensity (present-absent)" - This is a measured imaging variable/characteristic → **VariableLabel**
+
+6. "T2W images foci-hypointensity (present-absent)" - This is a measured imaging variable/characteristic → **VariableLabel**
+
+7. "Training dataset ( n = 244)" - This is a group/condition being compared → **CategoryLevel**
+
+8. "Tumor volume (cm 3 )" - This is a measured variable with its unit → **VariableLabel**
+
+9. "Validation dataset" - This is a group/condition being compared → **CategoryLevel**
+
+10. "Validation dataset ( n = 81)" - This is a group/condition being compared → **CategoryLevel**
+
+11. "WNT" - This is a molecular subgroup name (entity/group) → **CategoryLevel**
+
+12. "WNT ( n = 20)" - This is a named group with sample size → **CategoryLevel**
+
+13. "WNT ( n = 21)" - This is a named group with sample size → **CategoryLevel**
+
+14. "WNT wingless, SHH sonic hedgehog, G3 Group 3, and G4 Group 4 P-values for demographic and imaging features were calculated to assess intergroup differences. No significant differences were observed in age or gender distributions across molecular subgroups" - This is a footnote with findings/rationale → **JudgmentRationale**
+PMC12434915/2: 14 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+Here is my reasoning for key decisions:
+
+- **1** `(cmol (+) kg -1)` → **Unit**: standalone unit in parentheses
+- **2, 3** `0-20 (Surface)`, `20-40 (Sub_surface)` → **CategoryLevel**: depth ranges representing soil layer groups
+- **4–7** AVP / Av. P / Av.p / AvP variants → **VariableLabel**: available phosphorus variable names
+- **8–11** BD variants → **VariableLabel**: bulk density (with or without units)
+- **12–14** CEC variants → **VariableLabel**: cation exchange capacity
+- **15** `CV (%)` → **StatisticLabel**: coefficient of variation, a statistical measure
+- **16–19** Ca / Ca²⁺ variants → **VariableLabel**: calcium measurements
+- **20** `Classes` → **StatisticLabel**: used as a column/row heading for classification
+- **21–24** Clay variants → **VariableLabel** except **23** `Clay Loam` → **CategoryLevel** (a soil texture class)
+- **25** `Communality Estimates` → **StatisticLabel**: factor analysis statistic
+- **27** `Cumulative Variance (%)` → **StatisticLabel**: statistical summary measure
+- **30** `Eigenvalue` → **StatisticLabel**: factor analysis statistic
+- **31, 32** `Exchangeable bases...`, `Extractable micro nutrient...` → **SectionLabel**: group headings for multiple variables
+- **38** `LSD (0.05%)` → **StatisticLabel**: Least Significant Difference, a statistical test result
+- **39, 40** `Lower slope`, `Lower slope * D1` → **CategoryLevel**: landscape position groups
+PMC12539739/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC12539739/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Soil Parameters" - Groups rows about soil parameters → **SectionLabel**
+2. "Soil Physical Properties" - Groups rows about physical properties → **SectionLabel**
+3. "Soil depth in centimeters (cm)" - A measured variable with unit → **VariableLabel**
+4. "Soil parameters" - Groups rows about soil parameters → **SectionLabel**
+5. "Statistic" - Name of a statistic/measure used as heading → **StatisticLabel**
+6. "TN" - Total Nitrogen, a measured variable/chemical → **VariableLabel**
+7. "TN (%)" - Total Nitrogen with percentage unit → **VariableLabel**
+8. "TP" - Total Phosphorus, a measured variable/chemical → **VariableLabel**
+9. "TP (%)" - Total Phosphorus with percentage unit → **VariableLabel**
+10. "Textural Classes" - Groups rows about texture classes → **SectionLabel**
+11. "Texture" - A measured soil characteristic → **VariableLabel**
+12. "Upper slope" - A landscape position/category level or site name → **CategoryLevel**
+13. "Upper slope * D 1" - An interaction term/category level → **CategoryLevel**
+14. "Upper slope * D 2" - An interaction term/category level → **CategoryLevel**
+15. "Variability" - A statistic/measure heading → **StatisticLabel**
+16. "Zn" - Zinc, a measured chemical element → **VariableLabel**
+17. "pH" - A measured soil variable → **VariableLabel**
+18. "pH (H 2 0)" - pH with water specification → **VariableLabel**
+19. "pH (H 2 O)" - pH with water specification → **VariableLabel**
+PMC12539739/3: 19 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC12688946/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Quartile variable" - This is a label for a column/section describing which variable is being divided into quartiles → **StatisticLabel** (used as a heading describing a measure)
+
+2. "Race, n (%)" - This is a variable name with its statistic format → **VariableLabel**
+
+3. "Reference" - In regression tables, this typically labels a reference category or column → **CategoryLevel** (reference group)
+
+4. "Smoking, n (%)" - Variable name with statistic format → **VariableLabel**
+
+5. "Total" - A group/summary label, typically a column or row summing all groups → **CategoryLevel**
+
+6. "Total cholesterol (mmol/L)" - Variable name with unit → **VariableLabel**
+
+7. "Variables" - A heading for a column listing variables → **StatisticLabel**
+
+8. "Vitamin D (10 nmol/L)" - Variable name with unit (per 10 nmol/L increment) → **VariableLabel**
+
+9. "Vitamin D (nmol/L)" - Variable name with unit → **VariableLabel**
+
+10. "Vitamin D (nmol/L), n (%)" - Variable name with unit and statistic → **VariableLabel**
+
+11. "WBC (10⁹/L)" - Variable name (White Blood Cell count) with unit → **VariableLabel**
+
+12. "Yes" - A level of a binary categorical variable → **CategoryLevel**
+
+13. "≤High school" - A level of an education categorical variable → **CategoryLevel**
+PMC12688946/2: 13 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Aromatic C=C stretches (tyrosine, tryptophan) 38, 39" - A spectral assignment description → **VariableLabel**
+2. "Assignment" - A column heading grouping spectral assignments → **SectionLabel**
+3. "Biological Process" - A column heading grouping biological processes → **SectionLabel**
+4. "C=C stretching (Amide II, some protein modes) 36, 37" - A spectral assignment → **VariableLabel**
+5. "CCH skeletal stretch or rocking mode (proline, collagen-like) 33" - A spectral assignment → **VariableLabel**
+6. "CH 2 bending (lipids, fatty acyl chains) 35" - A spectral assignment → **VariableLabel**
+7. "CH 2 twisting/rocking (lipids, membrane components) 35" - A spectral assignment → **VariableLabel**
+8. "Cardiac metabolism, β-cell compensation" - A biological process description → **FindingStatement** ... actually it's a cell value under "Biological Process" column → **VariableLabel** ... it's a category value → **CategoryLevel**
+9. "Expression Pattern" - A column heading → **SectionLabel**
+10. "Fisl 47" - A gene/protein name → **EntityName**
+11. "Glucose-stimulated insulin secretion, β-cell proliferation" - A biological process value → **CategoryLevel**
+12. "Insulin signaling, β-cell adaptation" - A biological process value → **CategoryLevel**
+13. "MED13 44, SOX6 42, CDKN1A 43" - Gene/protein names → **EntityName**
+14. "Mitochondrial dynamics, GSIS" - A biological process value → **CategoryLevel**
+15. "Mitochondrial fission regulation, ATP production" - A biological process value → **CategoryLevel**
+16. "Pathway Involvement" - A column heading → **SectionLabel**
+17. "Phenylalanine ring breathing (protein) 34" - A spectral assignment → **VariableLabel**
+18. "Primary Targets" - A column heading → **SectionLabel**
+19. "Raman shift (cm −1)" - A variable label with unit → **VariableLabel**
+20. "SOX6 41, CDKN1A 43" - Gene names → **EntityName**
+21. "Systemic energy homeostasis, insulin resistance" - A biological process value → **CategoryLevel**
+22. "Tyrosine ring breathing (protein) 32" - A spectral assignment → **VariableLabel**
+23. "miR-132" - A miRNA entity name → **EntityName**
+24. "miR-208a" - A miRNA entity name → **EntityName**
+25. "miR-484" - A miRNA entity name → **EntityName**
+26. "miRNA" - A column/section heading → **SectionLabel**
+27. "□ in Asian NWD" - A category/group level → **CategoryLevel**
+28. "□ in Asian OWD" - A category/group level → **CategoryLevel**
+PMC13015447/1: 28 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+Here is my reasoning for the key assignments:
+
+- **1 "ASV"** – Amplicon Sequence Variant, a measured variable label in microbiome studies
+- **2 "Abundance"** – A measured variable
+- **3 "Bacteria"**, **16 "Fungi"** – Taxonomic kingdom-level category levels (groups being compared)
+- **4 "CEC (meq/100 g)"**, **5 "Ca (ppm)"**, **20 "K (ppm)"**, **25 "Mg (ppm)"**, **28 "P (ppm)"** – Measured soil chemical variables with units
+- **6 "Chem"**, **23 "Manag"**, **29 "Path"** – Abbreviated section labels grouping rows/columns
+- **7 "Class"**, **10 "Family"**, **17 "Genus"**, **26 "Order"** – Taxonomic rank variable labels
+- **8 "EC"**, **19 "K"**, **27 "P"** – Abbreviated variable/statistic labels (soil electrical conductivity, potassium, phosphorus as statistics)
+- **9 "F"** – F-statistic label
+- **13 "Fumigation"**, **22 "Loam"**, **31 "Peat"** – Category levels of categorical variables
+- **33–39** – Interaction variable labels combining "Region" with another factor
+- **40 "Rotation diversity"** – A measured variable label
+PMC13681253/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+
+1. "Rotation length" - This is a measured variable/characteristic (length of crop rotation) → **VariableLabel**
+2. "SOM" - Soil Organic Matter, a measured variable → **VariableLabel**
+3. "SOM (%)" - Soil Organic Matter with unit/statistic in parentheses → **VariableLabel**
+4. "Sand" - A soil component that is measured (e.g., sand content) → **VariableLabel**
+5. "Season" - A categorical variable or grouping factor → **VariableLabel**
+6. "Soil chemistry" - This groups multiple soil chemistry variables together → **SectionLabel**
+7. "Spatial" - This appears to group spatial variables/factors → **SectionLabel**
+8. "Taxonomic composition" - A measured variable describing community composition → **VariableLabel**
+9. "Taxonomic diversity" - A measured variable describing diversity → **VariableLabel**
+10. "Taxonomic diversity (class)" - A measured variable with a qualifier in parentheses → **VariableLabel**
+11. "pH" - A measured chemical variable → **VariableLabel**
+PMC13681253/2: 11 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC3605494/1: 36 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC3939643/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC3939643/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Random sequence generated adequately" - A risk of bias checklist criterion → **ChecklistItem**
+2. "Renal failure" - A medical condition/variable → **VariableLabel**
+3. "Risk of bias:" - A section heading grouping rows → **SectionLabel**
+4. "Risk ratio for flushing" - A statistic/measure name → **StatisticLabel**
+5. "Risk ratio for headache" - A statistic/measure name → **StatisticLabel**
+6. "Sample size" - A measured variable/characteristic → **VariableLabel**
+7. "Sildenafil" - A drug name → **EntityName**
+8. "Single center study" - A study design characteristic → **StudyCharacteristic**
+9. "Single center study (yes vs no)" - A variable label with categories → **VariableLabel**
+10. "South America" - A region/location name → **EntityName**
+11. "Spinal cord injury" - A condition/variable → **VariableLabel**
+12. "Spontaneous reporting" - A category level (type of reporting method) → **CategoryLevel**
+13. "Studies with low ROB (95% CI) (IV)" - A statistic/measure label → **StatisticLabel**
+14. "Studies with unclear or high ROB (95% CI) (IV)" - A statistic/measure label → **StatisticLabel**
+15. "Study related:" - A section heading grouping rows → **SectionLabel**
+16. "Study run-in phase with placebo reported" - A checklist/bias criterion → **ChecklistItem**
+17. "Study run-in placebo" - A variable label → **VariableLabel**
+18. "Summary 4 ROB-domains" - A variable/statistic label summarizing ROB → **VariableLabel**
+19. "Systematic survey of patients" - A category level (type of reporting method) → **CategoryLevel**
+20. "Tadalafil" - A drug name → **EntityName**
+21. "Type of PDE-5 inhibitor (tadalafil = ref)" - A variable label → **VariableLabel**
+22. "Type of PDE-5 inhibitor:" - A section label grouping rows → **SectionLabel**
+23. "Unclear" - A quality/risk of bias rating → **QualityJudgment**
+24. "Univariate" - A category level (type of analysis) → **CategoryLevel**
+25. "Vardenafil" - A drug name → **EntityName**
+26. "Year of publication" - A measured variable/characteristic → **VariableLabel**
+27. "Yes" - A category level → **CategoryLevel**
+28. "ß ( P -value)" - A statistic label → **StatisticLabel**
+29. "ß ( P -value) on intervention effect *" - A statistic label → **StatisticLabel**
+30. "ß ( P -value) on placebo effect*" - A statistic label → **StatisticLabel**
+PMC3939643/3: 30 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4310929/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Onset (years)" - A measured variable with unit → **VariableLabel**
+2. "Pallidum" - A brain area/region → **EntityName**
+3. "Parahipp. gy." - Parahippocampal gyrus, a brain area → **EntityName**
+4. "Parameter" - A heading for a column of parameters → **StatisticLabel**
+5. "Post. cing. gy." - Posterior cingulate gyrus, a brain area → **EntityName**
+6. "Postcent. gy." - Postcentral gyrus, a brain area → **EntityName**
+7. "Precuneus" - A brain area → **EntityName**
+8. "Putamen" - A brain area → **EntityName**
+9. "R" - Correlation coefficient statistic → **StatisticLabel**
+10. "RMSE" - Root Mean Square Error, a statistic → **StatisticLabel**
+11. "Rolandic op." - Rolandic operculum, a brain area → **EntityName**
+12. "SEN" - Sensitivity, a classification metric → **StatisticLabel**
+13. "SPE" - Specificity, a classification metric → **StatisticLabel**
+14. "Sensible s." - Likely "Sensible sulcus/system", a brain area → **EntityName**
+15. "Sup. front gy." - Superior frontal gyrus, a brain area → **EntityName**
+16. "Sup. front. gy." - Superior frontal gyrus, a brain area → **EntityName**
+17. "Sup. temp. gy." - Superior temporal gyrus, a brain area → **EntityName**
+18. "Thalamus" - A brain area → **EntityName**
+19. "Unspec. s." - Unspecified sulcus/system, a brain area → **EntityName**
+20. "Visual s." - Visual system/sulcus, a brain area → **EntityName**
+21. "WM areas with diagnostic information for EOPMS vs. HC" - A section grouping rows → **SectionLabel**
+22. "WM areas with diagnostic information for EOPMS vs. LOPMS" - A section grouping rows → **SectionLabel**
+23. "WM areas with diagnostic information for LOPMS vs. HC" - A section grouping rows → **SectionLabel**
+24. "p" - p-value statistic → **StatisticLabel**
+25. "t" - t-statistic → **StatisticLabel**
+26. "x" - Coordinate axis, a statistic/parameter label → **StatisticLabel**
+27. "y" - Coordinate axis → **StatisticLabel**
+28. "z" - Coordinate axis or z-statistic → **StatisticLabel**
+29. "Δ tp" - Change in time point, a statistic → **StatisticLabel**
+30. "χ 2" - Chi-squared statistic → **StatisticLabel**
+PMC4310929/2: 30 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+
+- Cells 1-3, 8-16, 19, 21, 23-26, 29, 38: These describe time points relative to ICP (intracranial pressure/intrahepatic cholestasis of pregnancy) or study events — these are **CategoryLevel** (time points/conditions being compared).
+- Cells 6, 7, 12, 31, 32, 39: Time points relative to trial/study completion — **CategoryLevel**.
+- Cells 4, 5, 20, 22, 30, 34, 35, 36, 37, 40: These look like age/demographic data values (numbers with ranges or percentages) — these appear to be **StudyCharacteristic** (describing who was covered, e.g., age ranges of participants).
+- Cells 17, 18, 27, 28, 33: These describe counts/types of trials — **StudyCharacteristic**.
+PMC4371493/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4371493/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4371493/3: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4371493/4: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+
+- Cells 1-7, 27, 29-36, 38-40: These follow the pattern "Lastname Number" which are clearly study/author citations → **EntityName**
+- Cells 8-16: Roman numerals (I, II, III, IV and combinations) — likely phase categories or stages → **CategoryLevel**
+- Cell 17: "Immediately after ICP" — a time point → **CategoryLevel**
+- Cell 18: "Increased" — a finding/result descriptor, likely a **CategoryLevel** (e.g., direction of change) or FindingStatement. Given it's a single word result, → **CategoryLevel**
+- Cell 19: "Infectious disease" — a category/condition → **CategoryLevel** (disease category or section label). More likely a **SectionLabel** or **CategoryLevel**. As a disease type grouping → **CategoryLevel**
+- Cell 20: "Influenza vaccine" — an intervention → **InterventionDescription**
+- Cells 21-24: "Interview", "Interview based on a questionnaire", "Interview by telephone", "Interviews" — methods of data collection → **StudyCharacteristic**
+- Cell 25: "Involved patients with critical conditions" — describes study population → **StudyCharacteristic**
+- Cell 26: "Iron supplementation" — an intervention → **InterventionDescription**
+- Cell 28: "Japan" — a country/location → **EntityName**
+- Cell 37: "Knowing that treatments were being compared" — sounds like a checklist item or bias-related criterion → **ChecklistItem**
+PMC4371493/5: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4371493/6: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC4371493/7: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+Here's my reasoning for key decisions:
+
+- **1–3, 16–20, 32–34**: Data collection methods (Questionnaire, Semi-structured interview, etc.) → **CategoryLevel** (levels of a "data collection method" variable)
+- **4**: "Randomization" → **ChecklistItem** (a domain in risk of bias assessments)
+- **5, 22, 28, 39, 40**: Country names → **EntityName**
+- **6, 38**: "Rheumatology", "Surgical intensive care unit" → **EntityName** (settings/departments)
+- **7, 10–15, 25–27, 31, 37**: Author + number citations (e.g., "Riecken 81") → **EntityName** (study names)
+- **8, 29, 30**: Time points or condition groups → **CategoryLevel**
+- **9**: "Risks and side-effects" → **VariableLabel**
+- **21**: Detailed description of patient timing → **JudgmentRationale**
+- **23, 24**: Descriptions of study scope → **StudyCharacteristic**
+- **35, 36**: "Study", "Subject" → **SectionLabel** (column/row headers grouping entries)
+PMC4371493/8: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+Here is my reasoning for key decisions:
+
+- **1, 24, 32, 33** ("Tankanow 77", "Unguru 128", "Vallely 29", "Verheggen 130"): Study/author citations → **EntityName**
+- **2, 8–30, 23, 25, 30** (country/region names with or without qualifiers): Named locations/study sites → **EntityName**
+- **3** ("Timing"): A variable label describing when something occurred → **VariableLabel**
+- **4** ("Trial"): Groups rows/columns of trials → **SectionLabel**
+- **5** ("Two African and one Caribbean country"): Describes study setting/coverage → **StudyCharacteristic**
+- **6** ("Two thirds were 20–30 and one third were 31–40"): Describes population characteristics → **StudyCharacteristic**
+- **7** ("Type"): A variable label for a type classification → **VariableLabel**
+- **31** ("Urinary retention treatment"), **34** ("Vitamin A supplementation"): Descriptions of interventions → **InterventionDescription**
+- **35** ("Voluntary nature of participation"): An appraisal/checklist criterion → **ChecklistItem**
+- **36–40** ("Within 1 hour/week/month/30 days/3 months of ICP"): Time point categories → **CategoryLevel**
+PMC4371493/9: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Within 48 hours of ICP" - This describes a time point or condition (when something was done/measured), fitting **CategoryLevel** (a time point being compared).
+
+2. "Within 48 hours of consent" - Similarly, this describes a time point or condition, fitting **CategoryLevel**.
+
+3. "Written questionnaire" - This describes a method/instrument used in a study, fitting **StudyCharacteristic** (how a study was done).
+
+4. "Year" - This is a unit of time on its own, fitting **Unit**.
+
+5. "Yes" - This is a categorical response level, fitting **CategoryLevel**.
+
+6. "Yoong 129" - This appears to be a study name with a reference number, fitting **EntityName**.
+
+7. "van Stuijvenberg 62" - Similarly, this is a study name with a reference number, fitting **EntityName**.
+PMC4371493/10: 7 answered, 0 without an answer
+Looking at each cell:
+
+- Cells 1–34: These are all chemical formulas for specific compounds (materials/chemicals). They fit "EntityName" — the name of an individual entity (a chemical/material) that a row or column describes.
+
+- Cells 35, 36, 37, 39: These look like values with a condition (e.g., "0 (X = I)", "0.5 (X = I)", "0.7 (X = Br)", "0.9 (X = I)"). They appear to be category levels or specific conditions/parameter values used to label groups or conditions in a table. "CategoryLevel" fits best.
+
+- Cell 38: "0.86, 7.8 a" — This looks like a data value (possibly two numeric values, one with a footnote marker). None of the types perfectly fit a raw data value; "none" is most appropriate.
+
+- Cell 40: "0D dimer" — This describes a structural/dimensional classification of a material (0-dimensional dimer). It fits "CategoryLevel" as a level/type of structural category being compared.
+PMC5387038/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+
+- Cells 1–16: These are numerical values (band gaps in eV) with a condition specifying the halide substituent (X = Br, Cl, I) or composition parameter (x = 0.25, etc.). These are data values with a categorical qualifier — best fit is **CategoryLevel** (they represent specific conditions/compositions being compared).
+
+- Cells 17, 19, 23: Named organic cations with chemical formulas — these are chemical entities: **EntityName**.
+
+- Cell 18, 21, 22, 24, 26, 27: Metal ions (Am³⁺, Au⁺, Au³⁺, Ba²⁺, Bi³⁺, Bk³⁺) — chemical entities: **EntityName**.
+
+- Cell 20 "Anion X": A label for a variable (the anion): **VariableLabel**.
+
+- Cell 25 "Band gap/eV": A variable name with unit — **VariableLabel**.
+
+- Cell 28 "Bromide, Br−": A named chemical entity: **EntityName**.
+
+- Cells 29–40: Chemical formulas for specific perovskite compounds (e.g., CH₃NH₃SnI₃) — these are individual named materials: **EntityName**.
+PMC5387038/2: 40 answered, 0 without an answer
+Looking at these cells, I need to classify each one:
+
+- Cells 1-6, 14-40: These are chemical formulas for specific perovskite compounds (e.g., "CH₃NH₃SrI₃", "Cs₂AgBiBr₆", "CsGeI₃"). These are names of individual chemical entities/materials → **EntityName**
+- Cells 7, 10, 13: "Ca 2+", "Ce 3+", "Cs +" — these are ion names, individual chemical entities → **EntityName**
+- Cell 8: "Cation A" — a label for a categorical position/variable in a crystal structure, used as a column/row label describing a variable → **VariableLabel**
+- Cell 9: "Cation B" — same as above → **VariableLabel**
+- Cell 11: "Chloride, Cl −" — this is a specific ion/chemical entity → **EntityName**
+- Cell 12: "Crystal system (space group)" — this is the name of a measured/reported characteristic with its statistic type in parentheses → **VariableLabel**
+PMC5387038/3: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+
+- Cells 1-11, 33, 37: Chemical formulas for specific compounds (e.g., CsMgI₃, CsSnBr₂Cl, GUAGeI₃, HDABiI₅) → **EntityName**
+- Cell 12: "Cu 2+" — an ion, used as a label for a row/column describing a chemical species → **EntityName**
+- Cells 13-16, 38-40: Crystal structure descriptions with space groups (e.g., "Cubic (Fm3̄m)", "Hexagonal (P6₃/mmc)") — these are category levels of a crystal structure variable → **CategoryLevel**
+- Cells 17, 19, 25, 31, 36: Named organic cations with formulas (e.g., "Dabconium, [C₆H₁₄N₂]²⁺") → **EntityName**
+- Cell 18: "Dimensionality" — a measured variable/characteristic → **VariableLabel**
+- Cells 20, 24, 26, 27, 29, 34, 35: Ion labels (e.g., "Dy 3+", "Eu 2+", "Fe 2+", "Ge 2+") → **EntityName**
+- Cells 21, 22, 23: "Effective radius r_A,eff /pm" etc. — variable names with units → **VariableLabel**
+- Cell 28: "Exp." — abbreviation for "Experimental", likely a column heading for a statistic or data type → **StatisticLabel**
+- Cells 30, 32: Named anions ("Fluoride, F−", "Formate, HCOO−") → **EntityName**
+PMC5387038/4: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+
+- Cells 1, 21-34, 36-40: These describe crystal structures with space groups (e.g., "Hexagonal (P 6₃/mmc) at 364 K", "Monoclinic (C 2/c)"). These are values describing a crystal system/structure property — they fit **CategoryLevel** (levels of a categorical variable like crystal structure type).
+
+- Cells 2, 3, 5, 6, 17: These name ionic species with chemical formulas (e.g., "Hydrazinium, [NH₃NH₂]⁺", "Iodide, I⁻"). These are names of chemical entities — **EntityName**.
+
+- Cells 4, 8, 9, 10, 11, 12, 14, 16, 19, 20: These are chemical compound names/formulas (e.g., "IPAGeI₃", "K₂TeBr₆", "KBiI₄·H₂O"). These are names of individual chemical materials — **EntityName**.
+
+- Cells 7, 13, 15, 18, 35: These are ionic species (K⁺, La³⁺, Lu³⁺, Mg²⁺, Nd³⁺) — names of chemical entities — **EntityName**.
+PMC5387038/5: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+
+1-6: Crystal structure descriptions (orthorhombic with space groups) - these describe crystal phases/structures of materials → **CategoryLevel**
+7. "PCE/%" - Power Conversion Efficiency with unit → **VariableLabel**
+8-9, 11-12, 14-15, 26, 29-32, 34: Ion names (chemical species with charge) - these are names of chemical entities used as row/column identifiers → **EntityName**
+10. "Perovskite" - a material/structure type used as a category or section label → **CategoryLevel**
+11. "Piperazinium, [C 4 H 12 N 2 ] 2+" - a chemical entity name → **EntityName**
+13. "Pseudocubic ( P 4 mm )" - crystal structure description → **CategoryLevel**
+16-24, 33: Specific chemical compound names → **EntityName**
+25. "References" - a section/column label → **SectionLabel**
+27. "Sim." - abbreviation for "Simulated" - a column/category label → **CategoryLevel**
+28. "Sim./exp." - "Simulated/experimental" ratio or comparison → **StatisticLabel**
+35-40: Crystal structure descriptions (tetragonal with space groups) → **CategoryLevel**
+PMC5387038/6: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+
+- Cells 1, 2, 10-16: Crystal system names with space groups (e.g., "Tetragonal (P 4/mnc)", "Trigonal", "Triclinic") — these are categorical levels describing crystal structure types → **CategoryLevel**
+- Cells 3, 4, 17: Named ions with chemical formulas (e.g., "Tetramethylammonium, [(CH₃)₄N]⁺") — these are named chemical entities → **EntityName**
+- Cells 5, 8, 9, 18: Ion symbols (Tl⁺, Tm²⁺, Tm³⁺, Yb²⁺) — these are chemical entity names → **EntityName**
+- Cells 6, 7: Chemical compound names (Tl₂TeBr₆, Tl₂TeI₆) → **EntityName**
+- Cells 19-28, 31, 32: Chemical compound formulas — individual named chemical materials → **EntityName**
+- Cells 29, 30: Numeric values ("ca. 0.5", "ca. 2.5") — approximate numeric data values, none of the types fit perfectly, but these look like data values in a cell, not labels → **none**
+PMC5387038/7: 32 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+
+- Cells 1 ("AD") and 24 ("DLB"): These are abbreviations for disease types (Alzheimer's Disease, Dementia with Lewy Bodies) used as column/group labels → **EntityName** (names of disease entities/groups)
+
+- Cells 2–13 ("AD vs mixed, P = ..."): These report statistical comparisons between groups with p-values (and sometimes chi-square statistics) → **FindingStatement** (they state a statistical result/finding comparing two groups)
+
+- Cells 14 ("Age at baseline (years)"), 15 ("Age at death (years)"), 16 ("Anxiety at any time"), 17 ("Baseline MMSE"), 18 ("Behavioural disturbance at any time"), 19 ("Cognitive fluctuations ever"), 20 ("Complex visual hallucinations at any time"), 21 ("Complex visual hallucinations at baseline"), 22 ("Complex visual hallucinations emerging later"): These are names of measured variables/characteristics → **VariableLabel**
+
+- Cell 23 ("Core and suggestive symptoms"): This groups rows of symptoms together → **SectionLabel**
+
+- Cells 25–35 ("DLB vs AD, P = ..." and "DLB vs mixed, P = ..."): Same as cells 2–13, statistical comparisons → **FindingStatement**
+
+- Cells 36–40 ("DLB vs mixed, X = ..., df = 1, P = ..."): Same pattern → **FindingStatement**
+PMC5831205/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "DLB vs mixed, X = 8.63, df = 1, P < 0.01" - This is a statistical test result comparing groups, fits as a **FindingStatement** (it states a statistical finding/result)
+2. "DLB vs mixed, X = 9.30, df = 1, P < 0.01" - Same as above, a statistical finding
+3. "Delusions at any time" - A measured clinical variable → **VariableLabel**
+4. "Depression at any time" - A measured clinical variable → **VariableLabel**
+5. "Exposed to use of neuroleptic" - A measured variable/characteristic → **VariableLabel**
+6. "Falls at any time" - A measured clinical variable → **VariableLabel**
+7. "Final MMSE" - A measured variable (MMSE score) → **VariableLabel**
+8. "Gender (male:female)" - A measured variable → **VariableLabel**
+9. "Interval between baseline and death (years)" - A measured variable with unit → **VariableLabel**
+10. "Interval between last assessment and death (months)" - A measured variable with unit → **VariableLabel**
+11. "Mixed AD+DLB" - A group/category being compared → **CategoryLevel**
+12. "Neuroleptic sensitivity at any time" - A measured clinical variable → **VariableLabel**
+13. "Other hallucinations at any time" - A measured clinical variable → **VariableLabel**
+14. "Parkinsonism at any time" - A measured clinical variable → **VariableLabel**
+15. "Parkinsonism at baseline" - A measured clinical variable (time point specified) → **VariableLabel**
+16. "Parkinsonism emerging later" - A measured clinical variable → **VariableLabel**
+17. "RBD at any time" - A measured clinical variable → **VariableLabel**
+18. "RBD at baseline" - A measured clinical variable → **VariableLabel**
+19. "RBD emerging later" - A measured clinical variable → **VariableLabel**
+20. "Supportive symptoms" - A section grouping related variables → **SectionLabel**
+PMC5831205/2: 20 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type.
+PMC7780720/1: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type based on the cell text alone.
+PMC7780720/2: 40 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "Stratified by diagnostic methods of GORD" - This describes a subgroup/section grouping rows by diagnostic method → **SectionLabel**
+
+2. "Stratified by duration of GORD symptoms" - This describes a subgroup/section grouping rows by symptom duration → **SectionLabel**
+
+3. "Stratified by ethnicity of participants" - This describes a subgroup/section grouping rows by ethnicity → **SectionLabel**
+
+4. "Stratified by frequency of GORD symptoms" - This describes a subgroup/section grouping rows by symptom frequency → **SectionLabel**
+
+5. "Stratified by study design" - This describes a subgroup/section grouping rows by study design → **SectionLabel**
+
+6. "Study, year" - This is a column header naming a variable (study identifier with year) → **VariableLabel**
+
+7. "Subgroup classification" - This is a column/row header labeling a classification variable → **VariableLabel**
+
+8. "Subjective methods" - This is a level/category of a diagnostic method variable → **CategoryLevel**
+
+9. "Symptom questionnaire and interview." - This describes specific diagnostic tools used in a study → **StudyCharacteristic**
+
+10. "Symptom questionnaire, De Meester's criteria, OGD, pH monitoring; RFS; RSI score." - This describes specific diagnostic tools/methods used → **StudyCharacteristic**
+
+11. "Type of metric*" - This is a column header naming a variable type → **VariableLabel**
+
+12. "Weekly symptoms" - This is a level of a categorical variable (frequency of symptoms) → **CategoryLevel**
+
+13. "pH monitoring or symptom questionnaire." - This describes diagnostic methods used → **StudyCharacteristic**
+PMC7780720/3: 13 answered, 0 without an answer
+I'll analyze each cell and assign the most appropriate type:
+
+1. "A" - CategoryLevel (a level of BCLC stage or Child-Pugh class)
+2. "AB" - CategoryLevel (a combined level, e.g., Child-Pugh A+B)
+3. "AFP level (ng/mL, N)" - VariableLabel (measured variable with unit)
+4. "AUC" - StatisticLabel (Area Under Curve, a statistical measure)
+5. "Age" - VariableLabel (measured characteristic)
+6. "B" - CategoryLevel (a level of BCLC stage or Child-Pugh class)
+7. "BCLC stage" - VariableLabel (measured/classified variable)
+8. "Child-Pugh class (N)" - VariableLabel (measured variable with statistic)
+9. "Cirrhosis a" - VariableLabel (a clinical characteristic)
+10. "Female" - CategoryLevel (level of Sex variable)
+11. "HBV infection (N)" - VariableLabel (measured variable with statistic)
+12. "Initial treatment" - VariableLabel (a clinical characteristic)
+13. "Liver resection" - CategoryLevel (a type of initial treatment)
+14. "Male" - CategoryLevel (level of Sex variable)
+15. "Max diameter (mm)" - VariableLabel (measured variable with unit)
+16. "Model CS" - EntityName (name of a specific model)
+17. "Model CSD" - EntityName (name of a specific model)
+18. "Model D" - EntityName (name of a specific model)
+19. "Negative" - CategoryLevel (a level of a test result)
+20. "Number of lesions" - VariableLabel (measured characteristic)
+21. "Positive" - CategoryLevel (a level of a test result)
+22. "SEN" - StatisticLabel (Sensitivity, a statistical measure)
+23. "SPE" - StatisticLabel (Specificity, a statistical measure)
+24. "Sex" - VariableLabel (measured characteristic)
+25. "TACE" - CategoryLevel (a type of initial treatment)
+26. "Training Dataset" - SectionLabel (groups rows/columns under it)
+27. "Training Dataset (N=236)" - SectionLabel (groups rows/columns under it)
+28. "Validation Dataset" - SectionLabel (groups rows/columns under it)
+29. "Validation Dataset (N=96)" - SectionLabel (groups rows/columns under it)
+30. "p -value" - StatisticLabel (a statistical measure)
+PMC8427842/1: 30 answered, 0 without an answer
+
+Guideline typing complete: 1773 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in dataset/cache/guideline_answers.jsonl.
+
+20 paper(s): 3491 routed cell(s), 3487 typed by guidelines, 4 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-sonnet-4-6": {
+    "calls": 110,
+    "inputTokens": 468198,
+    "outputTokens": 37459,
+    "totalTokens": 505657,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+

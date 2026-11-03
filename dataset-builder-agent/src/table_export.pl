@@ -44,6 +44,12 @@
 % "subtables": null, so table_index still lines up with tables.jsonl and
 % review.jsonl.
 %
+% A table the review found valid by repairing it (merging empty cells into
+% the labels beside them, table_repair.pl) is exported from the repaired
+% table: a label spans the empty cells merged into it, so they are its
+% slots, not cells of their own. Its "repair" gives {repair_version, merges,
+% summary}; "repair" is null for every other table.
+%
 %   export_reviewed_papers(+DatasetDir, +Settings, -Lines)
 %   export_paper(+PapersDir, +Name, -Line)
 %   table_structure(+Record, +Hmd, +Vmd, -Subtable)
@@ -65,6 +71,7 @@
 :- use_module(library(pairs)).
 :- use_module(library(assoc)).
 :- use_module(provenance_manifest).
+:- use_module(dataset_pipeline, [reviewed_record/3]).
 
 % --- papers ------------------------------------------------------------------
 
@@ -174,14 +181,25 @@ write_json_atomically(Dir, Name, Json) :-
 % --- tables ------------------------------------------------------------------
 
 % export_table(+Record, +Review, -Entry): Record is a tables.jsonl record,
-% Review its review.jsonl record.
-export_table(Record, Review, Entry) :-
-   Context = Record.context,
+% Review its review.jsonl record. A table valid by the repair is exported
+% from the repaired table (dataset_pipeline:reviewed_record/3), whose merged
+% cells span the empty cells merged into them, and "repair" gives the
+% merges; it is null for every other table.
+export_table(Record0, Review, Entry) :-
+   Context = Record0.context,
    ( get_dict(label, Context, Label) -> true ; Label = null ),
    ( get_dict(caption, Context, Caption) -> true ; Caption = null ),
-   Base = json{table_uid:Record.table_uid, table_index:Record.table_index,
-               label:Label, caption:Caption,
-               final_status:Review.final_status},
+   Base0 = json{table_uid:Record0.table_uid, table_index:Record0.table_index,
+                label:Label, caption:Caption,
+                final_status:Review.final_status},
+   (  Review.final_status == "valid"
+   -> reviewed_record(Record0, Review, Record)
+   ;  Record = Record0 ),
+   (  get_dict(repair, Record, Repair)
+   -> put_dict(repair, Base0,
+               json{repair_version:Repair.repair_version, merges:Repair.merges,
+                    summary:Repair.summary}, Base)
+   ;  put_dict(repair, Base0, null, Base) ),
    Empty = json{candidate_id:null, boundary:null, geometric_certificate:null,
                 export_error:null, subtables:null, separators:null},
    (  Review.final_status == "valid",

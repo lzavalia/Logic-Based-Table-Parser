@@ -1,0 +1,220 @@
+% Cell types for scientific tables (PubMed Central), for the type-abstraction
+% experiment. Rules were written from the cells of the dev split only.
+%
+% Five families, each with a root type: Numeric, Text, Missing, Symbol and
+% Identifier.
+% table_type_abstraction.pl reports a cell's most specific matching type
+% and, as its coarse type, the root above it. Empty cells are typed by the
+% abstraction itself, not here.
+%
+% When a cell matches types of different families, the rule that comes
+% first wins, so the order of the sections below is their precedence.
+%
+% Guideline types (at the end) refine text cells by role; see there.
+%
+% Cell text reaches the rules trimmed, with runs of whitespace collapsed to
+% one space. Superscripts and subscripts are flattened by the extraction, so
+% "1 × 10^-5" arrives as "1 × 10 −5" and "TiO2" as "TiO 2".
+%
+% Building blocks, repeated in the regexes below since the DSL has none:
+%   number   [-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)
+%   marks    (?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?
+%            significance stars, compact letter displays ("ab") and
+%            footnote marks after a value
+
+type Numeric
+type Integer
+type Decimal
+type Percent
+type Scientific
+type Inequality
+type AnnotatedNumber
+type MeanSD
+type ValueParen
+type ValueInterval
+type NumberRange
+type Ratio
+type NumberList
+type TestStatistic
+type Measurement
+
+Integer <: Numeric
+Decimal <: Numeric
+Percent <: Numeric
+Scientific <: Numeric
+Inequality <: Numeric
+AnnotatedNumber <: Numeric
+MeanSD <: Numeric
+ValueParen <: Numeric
+ValueInterval <: Numeric
+NumberRange <: Numeric
+Ratio <: Numeric
+NumberList <: Numeric
+TestStatistic <: Numeric
+Measurement <: Numeric
+
+type Text
+type Word
+type Phrase
+type LabelWithUnit
+type LabeledStatistic
+type Unit
+
+Word <: Text
+Phrase <: Text
+LabelWithUnit <: Text
+LabeledStatistic <: Text
+Unit <: Text
+
+type Missing
+type Dash
+type NotAvailable
+
+Dash <: Missing
+NotAvailable <: Missing
+
+type Symbol
+type Arrow
+type Mark
+
+Arrow <: Symbol
+Mark <: Symbol
+
+type Identifier
+type Citation
+type TrialID
+type VariantID
+
+Citation <: Identifier
+TrialID <: Identifier
+VariantID <: Identifier
+
+% --- numeric ---------------------------------------------------------------
+
+if regex "[-−–]?[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+" decide Integer
+if regex "[-−–]?(?:[0-9]+\.[0-9]+|\.[0-9]+)" decide Decimal
+if regex "[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%" decide Percent
+
+% 4.1 × 10 −5, 1 × 10 10, 3.94E-4; a trailing citation number may follow.
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?[×x] ?10 ?[-−–+]?[0-9]+(?: [0-9]+)?" decide Scientific
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?[eE][-−–+]?[0-9]+" decide Scientific
+
+% <0.01, < 0.001, ≥ 5, >1000
+if regex "[<>≤≥⩽⩾] ?[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)" decide Inequality
+
+% 6.49ab, 180.24***, 0.47 a, 3A
+if regex "[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)? ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+)" decide AnnotatedNumber
+
+% 524.58 ± 9.53 a, 12.705 (±0.518) ab, 27.7 d (± 0.57), 0.93 (0.94 ± 0.06)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?%)? ?± ?[0-9]+(?:\.[0-9]+)?(?: ?%)?(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide MeanSD
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}))? ?\( ?± ?[0-9]+(?:\.[0-9]+)? ?\)(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide MeanSD
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?\( ?[-−–]?[0-9]+(?:\.[0-9]+)? ?± ?[0-9]+(?:\.[0-9]+)? ?\)" decide MeanSD
+
+% 123 (40.7%), 0.087 (0.027), 2.858(3), 25 (8.3%) b, 21 (19.8%)***, –0.1 (cliff) is not one
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?\( ?[-−–]?[0-9]+(?:\.[0-9]+)? ?%? ?\)(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide ValueParen
+
+% 1.06, [0.761, 1.476] ab, 18.10 [18.04, 18.15], 1.2 (0.8–1.9), 1.2 (0.8, 1.9)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?,? ?[\[(] ?[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:,|;|–|−|-|to) ?[-−–]?[0-9]+(?:\.[0-9]+)? ?[\])](?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide ValueInterval
+
+% 0.36–0.58, −0.70–−0.07, 0-44, 60+, 10 to 20
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:–|—|-|to|~) ?[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?%)?" decide NumberRange
+if regex "[0-9]+\+" decide NumberRange
+
+% 90:45:17.5
+if regex "[0-9]+(?:\.[0-9]+)?(?::[0-9]+(?:\.[0-9]+)?)+" decide Ratio
+
+% 1.02, 1.03 and 2.17 61 (a value with a citation number after it)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?:(?:, ?| |/)[-−–]?[0-9]+(?:\.[0-9]+)?)+" decide NumberList
+
+% P = 0.004, X = 0.41, df = 2, P = 0.82, F (10,33) = 3.435, F = (2,56) 3.4, P = 0.04
+if regex "(?:[A-Za-zχΧ²]{1,3}2? ?(?:\( ?[0-9]+ ?, ?[0-9]+ ?\))? ?[=<>≤≥] ?(?:\( ?[0-9]+ ?, ?[0-9]+ ?\) )?[-−–]?[0-9]*\.?[0-9]+(?:, ?)?)+" decide TestStatistic
+
+% 130 °C, 973 cm −1, 5 mg/kg, 20 mmHg
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:°[CF]?|[µμ]?[a-zA-Z]{1,3}(?: ?[-−–]?[0-9])?(?:[/·][a-zA-Z]{1,3}(?: ?[-−–]?[0-9])?)*)" decide Measurement
+
+% --- missing and symbols ---------------------------------------------------
+
+if regex "[-–—−]{1,3}|\.{2,3}|…" decide Dash
+if regex "(?i)n\.? ?/? ?[ad]\.?|nr|ns|nd|none|not (?:available|reported|applicable)" decide NotAvailable
+
+if regex "[↑↓→←⇑⇓]+" decide Arrow
+if regex "[✓✔✗✘×+*•○●]+" decide Mark
+
+% --- identifiers: cells that name the entity of a row ----------------------
+%
+% Under the labelling convention of the experiment these are data, not VMD:
+% a column of study citations or trial ids names the rows it belongs to.
+% Written from the dev split only.
+
+% Smith 2017, Smith et al. (2019) [ 16 ], Sawada et al., 2019 [ 16 ],
+% Bernard [ 35 ], Shargie 2006 ETH, Van der Worp (2007), Rubenstein, 2019 41,
+% Ghobadi 2019a [ 46 ], Kendler et al. [ 18 ] (2018), Alabed et al., 2022 (DH)
+% [ 53 ]; not Year 2014, Phase 3 or other time/study words followed by a year
+if regex "(?!(?:Year|Years|Season|Week|Weeks|Month|Months|Day|Days|Phase|Stage|Trial|Study|Model|Wave|Cohort|Visit|Round|Period|Total|Average|Mean|Spring|Summer|Autumn|Fall|Winter|Baseline|Follow)\b)(?:(?:[Vv]an|[Vv]on|[Dd]e|[Dd]en|[Dd]er|[Dd]el|[Dd]a|[Dd]i|[Ll]e|[Ll]a) )*\p{Lu}[\p{L}’'\-‐]+(?:(?: and | & | )(?:(?:[Vv]an|[Vv]on|[Dd]e|[Dd]en|[Dd]er|[Dd]el|[Dd]a|[Dd]i|[Ll]e|[Ll]a) )*\p{Lu}[\p{L}’'\-‐]+)?(?:,? et al\.?)?(?:,? ?\(?(?:19|20)[0-9]{2}[a-z]?\)?(?: \(\p{Lu}+\))?(?: ?\[ ?[0-9]+(?: ?[,–-] ?[0-9]+)* ?\]| [0-9]{1,3})?| ?\[ ?[0-9]+(?: ?[,–-] ?[0-9]+)* ?\](?: ?\((?:19|20)[0-9]{2}[a-z]?\))?)(?: \p{Lu}{3}(?: (?:AND|and|&) \p{Lu}{3})*)?(?: \(\p{Lu}+\))?" decide Citation
+
+% NCT01193101, ISRCTN12345678, ChiCTR-IOR-17012345
+if regex "NCT[0-9]{8}|ISRCTN[0-9]{6,8}|ChiCTR[A-Za-z0-9-]+" decide TrialID
+
+% rs1882694, rs10421768 (AG/GG vs AA)
+if regex "rs[0-9]{3,}(?: \(.*\))?" decide VariantID
+
+% --- text ------------------------------------------------------------------
+
+if regex "\p{L}[\p{L}'’\-]*" decide Word
+
+% Crystallite Size (nm), FF (%), Age, years, Prevalence, %, P (mg·kg −1 )
+if regex "\p{L}[\p{L}\p{N} '’.\-–/&]*(?: ?\([^()]{1,25}\)|, ?(?:%|[\p{L}%/ ]{1,15}))" decide LabelWithUnit
+
+% DLB vs AD, P = 0.03 and AD vs mixed, X = 5.31, df = 1, P = 0.02
+if regex "\p{L}[\p{L}\p{N} '’.\-–/&]*, (?:[A-Za-zχΧ²]{1,3}2? ?[=<>≤≥] ?[-−–]?[0-9]*\.?[0-9]+(?:, ?)?)+" decide LabeledStatistic
+
+% %, (mmHg), (µg g −1 )
+if regex "%|\( ?(?:%|[µμ°]?[\p{L}]{1,4}(?: ?[-−–]?[0-9])?(?:[ /·][µμ]?[\p{L}]{1,4}(?: ?[-−–]?[0-9])?)*) ?\)" decide Unit
+
+% 100% NPK + HW, 95% CI, 2C as reference: a label that starts with a number.
+% Measurement, earlier, keeps a number followed by a short unit.
+if regex "[0-9]+(?:\.[0-9]+)?%? ?\p{L}{1,}[\p{L}\p{N} '’.,;:\-–/&+()\[\]%@]*" decide Phrase
+
+% Any run of words, possibly with numbers and light punctuation, starting
+% with a letter (or a % sign, as in "% DM").
+if regex "(?:\p{L}|% ?\p{L})[\p{L}\p{N} '’.,;:\-–/&+()\[\]%]*" decide Phrase
+
+% --- guidelines: roles of text cells, decided by a model -------------------
+%
+% Rules decide a cell's form; guidelines decide what only its meaning shows.
+% A cell is sent to the guideline step when no rule types it (it may then
+% take any guideline type), or when its rule type has subtypes that only
+% guidelines decide (it may then take those). Word, Phrase and LabelWithUnit
+% are refined this way; every other rule type, Citation included, is final.
+% Each guideline type is declared below Text first, so Text is its family.
+
+type VariableLabel
+type CategoryLevel
+type EntityName
+type StatisticLabel
+type Description
+
+VariableLabel <: Text
+VariableLabel <: Word
+VariableLabel <: Phrase
+VariableLabel <: LabelWithUnit
+CategoryLevel <: Text
+CategoryLevel <: Word
+CategoryLevel <: Phrase
+CategoryLevel <: LabelWithUnit
+EntityName <: Text
+EntityName <: Word
+EntityName <: Phrase
+EntityName <: LabelWithUnit
+StatisticLabel <: Text
+StatisticLabel <: Word
+StatisticLabel <: Phrase
+StatisticLabel <: LabelWithUnit
+Description <: Text
+Description <: Phrase
+
+guideline "The name of a measured variable or characteristic, possibly with its unit or the statistic reported for it, such as 'Age, years', 'Body mass index', 'Serum creatinine (mg/dL)' or 'Grain yield (t/ha)'" decide VariableLabel
+guideline "A level of a categorical variable, or the name of a group, arm or condition being compared, such as 'Male', 'Yes', 'Never smoker', 'Placebo', 'Control', 'No tillage' or '>65 years'" decide CategoryLevel
+guideline "The name of an individual entity that a row or column describes: a study or trial, a drug, chemical or material, a gene or protein, a species, a sample, site or brain region, such as 'Chalmers 2020', 'Rituximab', 'CH3NH3PbI3', 'BRCA1' or 'Putamen'" decide EntityName
+guideline "The name of a statistic or measure, as used in a heading, such as 'OR (95% CI)', 'P value', 'Mean (SD)', 'n (%)', 'Sensitivity' or 'Hazard ratio'" decide StatisticLabel
+guideline "Free text of several words that states a finding, method, comment or definition rather than naming something, such as 'Decreased putaminal uptake in DLB' or 'Not possible to blind participants'" decide Description

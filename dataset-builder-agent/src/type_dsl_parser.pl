@@ -4,7 +4,7 @@
 %
 % From dataset-builder-agent/src/:
 %   swipl -g 'use_module(type_dsl_parser),
-%             parse_tdsl_file("../../type_dsl_examples/num.tdsl", S),
+%             parse_tdsl_file("../type_dsl_examples/num.tdsl", S),
 %             print_term(S, [])' -t halt
 %
 %   parse_tdsl_file(+File, -Statements)

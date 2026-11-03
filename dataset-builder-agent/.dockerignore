@@ -4,6 +4,7 @@
 # Generated output and large files the image does not need.
 **/dataset/
 first_test.zip
+experiments/
 docs/
 **/__pycache__/
 # Local debugging aid and per-run output of run_agent.sh.
@@ -13,4 +14,6 @@ src/token_usage.json
 src/budget_guard.log
 src/review_log.txt
 src/review_token_usage.json
+src/guideline_log.txt
+src/guideline_token_usage.json
 src/dataset.zip

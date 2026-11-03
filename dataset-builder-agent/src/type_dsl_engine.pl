@@ -24,7 +24,7 @@
 %
 % From dataset-builder-agent/src/:
 %   swipl -g 'use_module(type_dsl_engine),
-%             tdsl_file_analyzer("../../type_dsl_examples/num.tdsl", A, _),
+%             tdsl_file_analyzer("../type_dsl_examples/num.tdsl", A, _),
 %             call(A, "3.14", Matches), print_term(Matches, [])' -t halt
 %
 %   type_dsl_analyzer_generator(+AST, -Analyzer, -Guidelines)
@@ -43,7 +43,8 @@
 %   tdsl_analyzer_property(+Analyzer, ?Property)
 %       caption_analysis(Bool), base_types(Names), type_aliases(Name-Type
 %       pairs), subtypes(Sub-Super pairs), rules(rule(Origin, Pattern)-Type
-%       pairs), in declaration order.
+%       pairs), guidelines(Prompt-Type pairs, the same list as the
+%       Guidelines output), in declaration order.
 %
 % The analyzer is a closure of arity 2: call(Analyzer, Text, Matches) runs
 % every rule against Text (a string, atom or code list) and unifies Matches
@@ -107,7 +108,7 @@ type_dsl_analyzer_generator(AbstractSyntaxTree, Analyzer, Guidelines, Options) :
                     [BaseTypes, Aliases, Subtypes, Guidelines, Rules]),
    Analyzer = type_dsl_engine:analyze(
                  tdsl_program(CaptionAnalysis, BaseTypes, Aliases, Subtypes,
-                              Rules)).
+                              Rules, Guidelines)).
 
 tdsl_file_analyzer(File, Analyzer, Guidelines) :-
    absolute_file_name(File, Path, [access(read)]),
@@ -119,11 +120,12 @@ tdsl_file_analyzer(File, Analyzer, Guidelines) :-
 tdsl_analyzer_property(type_dsl_engine:analyze(Program), Property) :-
    program_property(Property, Program).
 
-program_property(caption_analysis(C), tdsl_program(C, _, _, _, _)).
-program_property(base_types(B), tdsl_program(_, B, _, _, _)).
-program_property(type_aliases(A), tdsl_program(_, _, A, _, _)).
-program_property(subtypes(S), tdsl_program(_, _, _, S, _)).
-program_property(rules(Summary), tdsl_program(_, _, _, _, Rules)) :-
+program_property(caption_analysis(C), tdsl_program(C, _, _, _, _, _)).
+program_property(base_types(B), tdsl_program(_, B, _, _, _, _)).
+program_property(type_aliases(A), tdsl_program(_, _, A, _, _, _)).
+program_property(subtypes(S), tdsl_program(_, _, _, S, _, _)).
+program_property(guidelines(G), tdsl_program(_, _, _, _, _, G)).
+program_property(rules(Summary), tdsl_program(_, _, _, _, Rules, _)) :-
    findall(rule(Origin, Pattern)-Type,
            member(rule(Origin, Pattern, _, Type), Rules),
            Summary).
@@ -218,7 +220,7 @@ match_pattern(Var, Goal, Text) :-
 
 % --- the analyzer ----------------------------------------------------------
 
-analyze(tdsl_program(_, _, _, _, Rules), Text, Matches) :-
+analyze(tdsl_program(_, _, _, _, Rules, _), Text, Matches) :-
    text_to_string(Text, String),
    findall(rule(Origin, Pattern)-Type,
            ( member(rule(Origin, Pattern, Predicate, Type), Rules),

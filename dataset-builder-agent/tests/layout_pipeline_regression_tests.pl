@@ -7,6 +7,8 @@
 %   swipl -q -s layout_pipeline_regression_tests.pl -g run_tests -t halt
 :- use_module('../src/dataset_pipeline').
 :- use_module('../src/table_review').
+:- use_module(review_fixtures).
+:- use_module(review_fixtures).
 :- use_module('../src/table_export').
 :- use_module('../src/certificate_kernel').
 :- use_module(library(filesex)).
@@ -36,7 +38,8 @@ layout_workspace(Root) :-
        [T0, T1]),
     directory_file_path(Root, 'input.xml', Input),
     write_text(Input, Article),
-    process_paper("905", Input, Dataset, _).
+    process_paper("905", Input, Dataset, _),
+    write_inference(Dataset, []).
 
 layout_cleanup(Root) :-
     ( exists_directory(Root) -> delete_directory_and_contents(Root) ; true ).
@@ -81,7 +84,7 @@ review_paper(Root) :-
     review_queue(Dataset, S, [Paper], _),
     review_paper_items(Paper, Items),
     findall(R, ( member(Item, Items),
-                 review_answer(Item, json{column_header_rows:2, row_header_columns:1,
+                 review_answer(Item, json{parse_correct:false, column_header_rows:2, row_header_columns:1,
                                           reason:"test"}, 1, done(R)) ),
             Results),
     publish_paper_review(Dataset, Paper, S, Results, _).
@@ -156,8 +159,37 @@ test(review_reads_a_layout_of_one_subtable_like_the_whole_table,
     % The central layouts share (2, 1)-like counts with their top-level
     % block but are never matched; the plain boundary is.
     R1.final_status == "valid",
-    R1.selected_candidate_id == "PMC905/t1/h2_v1",
-    \+ memberchk("PMC905/t1/layout0", R1.candidate_ids).
+    R1.selected_candidate_id == "PMC905/t1/h2_v1".
+
+% A layout with metadata in the middle cannot be stated as (H, V), so only a
+% proposal can select it.
+test(confirmed_central_layout_is_selected_and_exported,
+     [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
+    directory_file_path(Root, dataset, Dataset),
+    write_inference(Dataset, ["PMC905/t1"-"PMC905/t1/layout0"]),
+    settings(Root, S),
+    review_queue(Dataset, S, [Paper], _),
+    review_paper_items(Paper, [I0, I1]),
+    review_item_prompt(I1, Prompt),
+    sub_string(Prompt, _, _, _, "a subtable of rows 0-2 and columns 0-4"),
+    sub_string(Prompt, _, _, _, "a subtable of rows 3-5 and columns 0-4"),
+    review_answer(I0, json{parse_correct:false, column_header_rows:2, row_header_columns:1,
+                           reason:"test"}, 1, done(R0)),
+    review_answer(I1, json{parse_correct:true, reason:"test"}, 1, done(R1)),
+    R1.final_status == "valid",
+    R1.selected_candidate_id == "PMC905/t1/layout0",
+    R1.llm_boundary == null,
+    publish_paper_review(Dataset, Paper, S, [R0, R1], _),
+    certificate_names(Root, Names),
+    memberchk('certificate1_layout0.pl', Names),
+    paper_file(Root, 'final_table1.html', Page),
+    read_file_to_string(Page, Html, [encoding(utf8)]),
+    sub_string(Html, _, _, _, "Parse Succeeded"),
+    export_reviewed_papers(Dataset, S, _),
+    paper_file(Root, 'final_tables.json', Export),
+    dataset_pipeline:read_json_file(Export, Json),
+    member(Entry, Json.tables), Entry.table_uid == "PMC905/t1", !,
+    length(Entry.subtables, 2).
 
 test(review_writes_only_the_certificates_of_the_selected_candidates,
      [setup(layout_workspace(Root)), cleanup(layout_cleanup(Root))]) :-
@@ -185,9 +217,9 @@ test(a_new_review_replaces_the_selected_certificates,
     review_queue(Dataset, S, [Paper], _),
     review_paper_items(Paper, Items),
     Items = [I0, I1],
-    review_answer(I0, json{column_header_rows:0, row_header_columns:0,
+    review_answer(I0, json{parse_correct:false, column_header_rows:0, row_header_columns:0,
                            reason:"test"}, 1, done(R0)),
-    review_answer(I1, json{column_header_rows:2, row_header_columns:0,
+    review_answer(I1, json{parse_correct:false, column_header_rows:2, row_header_columns:0,
                            reason:"test"}, 1, done(R1)),
     publish_paper_review(Dataset, Paper, S, [R0, R1], _),
     certificate_names(Root, ['certificate1_h2_v0.pl']).

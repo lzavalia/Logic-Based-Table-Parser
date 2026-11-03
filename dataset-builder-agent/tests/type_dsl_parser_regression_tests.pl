@@ -9,7 +9,7 @@
 :- use_module('../src/type_dsl_parser').
 
 :- prolog_load_context(directory, Dir),
-   atom_concat(Dir, '/../../type_dsl_examples', Examples),
+   atom_concat(Dir, '/../type_dsl_examples', Examples),
    asserta(user:tdsl_examples_dir(Examples)).
 
 example(Name, Path) :-

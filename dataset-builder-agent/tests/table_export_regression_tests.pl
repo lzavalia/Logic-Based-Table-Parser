@@ -4,6 +4,8 @@
 %   swipl -q -s table_export_regression_tests.pl -g run_tests -t halt
 :- use_module('../src/dataset_pipeline').
 :- use_module('../src/table_review').
+:- use_module(review_fixtures).
+:- use_module(review_fixtures).
 :- use_module('../src/table_export').
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
@@ -26,7 +28,8 @@ export_workspace(Root) :-
     directory_file_path(Root, 'input.xml', Input),
     write_text(Input,
        '<article><front><article-meta><article-id pub-id-type="pmc">902</article-id></article-meta></front><body><table-wrap><label>Table 1</label><caption><p>Doses</p></caption><table><tr><th rowspan="2">Gene</th><th colspan="2">Group A</th><th colspan="2">Group B</th></tr><tr><th>mean</th><th>sd</th><th>mean</th><th>sd</th></tr><tr><th rowspan="2">X</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><td>5</td><td colspan="3">6</td></tr><tr><th>Y</th><td>7</td><td>8</td><td>9</td><td>10</td></tr></table></table-wrap><table><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table><table><tr><td>only</td></tr></table></body></article>'),
-    process_paper("902", Input, Dataset, _).
+    process_paper("902", Input, Dataset, _),
+    write_inference(Dataset, []).
 
 % A workspace with PMC903, whose only table is example_table.html (the
 % reference example of the final_tables.json schema).
@@ -41,7 +44,8 @@ example_workspace(Root) :-
        '<article><front><article-meta><article-id pub-id-type="pmc">903</article-id></article-meta></front><body><table><thead><tr><th colspan="2" rowspan="2">Corner</th><th colspan="3" rowspan="1">HMD 0</th></tr><tr><th>HMD 1</th><th>HMD 1</th><th>HMD 1</th></tr></thead><tbody><tr><td colspan="1" rowspan="2">VMD 0</td><td>VMD 1</td>~w</tr><tr><td>VMD 1</td>~w</tr><tr><td colspan="1" rowspan="2">VMD 0</td><td>VMD 1</td>~w</tr><tr><td>VMD 1</td>~w</tr></tbody></table></body></article>',
        [Data, Data, Data, Data]),
     write_text(Input, Article),
-    process_paper("903", Input, Dataset, _).
+    process_paper("903", Input, Dataset, _),
+    write_inference(Dataset, []).
 
 % example_table.json
 reference_json('{"subtables":[{"horizontal metadata":[{"HMD 0":[{"HMD 1":[]},{"HMD 1":[]},{"HMD 1":[]}]}],"vertical metadata":[{"VMD 0":[{"VMD 1":[]},{"VMD 1":[]}]},{"VMD 0":[{"VMD 1":[]},{"VMD 1":[]}]}],"data":[["DATA","DATA","DATA"],["DATA","DATA","DATA"],["DATA","DATA","DATA"],["DATA","DATA","DATA"]],"residual_corner":[{"Corner":[]}]}]}').
@@ -83,7 +87,7 @@ result_for(Pmc, Item, I, Result) :-
     (   Action == skip
     ->  review_skip_result(Item, Result)
     ;   answer(Pmc, I, H, V),
-        review_answer(Item, json{column_header_rows:H, row_header_columns:V,
+        review_answer(Item, json{parse_correct:false, column_header_rows:H, row_header_columns:V,
                                  reason:"test"}, 1, done(Result))
     ).
 

@@ -1,0 +1,279 @@
+% Cell types for scientific tables (PubMed Central), for the guideline typing
+% of text: sci.tdsl with the rules for text replaced by guidelines. Rules
+% decide cells by form, so numbers, missing values, symbols and identifiers
+% keep theirs; what a text cell is shows only in its meaning, so a model
+% decides it. sci.tdsl stays frozen as the baseline.
+%
+% Five families, each with a root type: Numeric, Text, Missing, Symbol and
+% Identifier. Text is split into four groups: MetadataText, CategoricalValue,
+% EntityText and QualitativeData. table_type_abstraction.pl reports a cell's
+% most specific matching type and, as its coarse types, the group and root
+% above it. Empty cells are typed by the abstraction itself, not here.
+%
+% When a cell matches types of different families, the rule that comes
+% first wins, so the order of the sections below is their precedence.
+%
+% Cell text reaches the rules trimmed, with runs of whitespace collapsed to
+% one space. Superscripts and subscripts are flattened by the extraction, so
+% "1 × 10^-5" arrives as "1 × 10 −5" and "TiO2" as "TiO 2".
+%
+% Building blocks, repeated in the regexes below since the DSL has none:
+%   number   [-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)
+%   marks    (?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?
+%            significance stars, compact letter displays ("ab") and
+%            footnote marks after a value
+
+type Numeric
+type Integer
+type Decimal
+type Percent
+type Scientific
+type Inequality
+type AnnotatedNumber
+type MeanSD
+type ValueParen
+type ValueInterval
+type NumberRange
+type Ratio
+type NumberList
+type TestStatistic
+type Measurement
+
+Integer <: Numeric
+Decimal <: Numeric
+Percent <: Numeric
+Scientific <: Numeric
+Inequality <: Numeric
+AnnotatedNumber <: Numeric
+MeanSD <: Numeric
+ValueParen <: Numeric
+ValueInterval <: Numeric
+NumberRange <: Numeric
+Ratio <: Numeric
+NumberList <: Numeric
+TestStatistic <: Numeric
+Measurement <: Numeric
+
+type Text
+type Unit
+
+type MetadataText
+type VariableLabel
+type StatisticLabel
+type SectionLabel
+type ChecklistItem
+
+type CategoricalValue
+type CategoryLevel
+type QualityJudgment
+
+type EntityText
+type EntityName
+
+type QualitativeData
+type StudyCharacteristic
+type InterventionDescription
+type FindingStatement
+type JudgmentRationale
+type PhenomenologicalData
+
+MetadataText <: Text
+Unit <: MetadataText
+VariableLabel <: MetadataText
+StatisticLabel <: MetadataText
+SectionLabel <: MetadataText
+ChecklistItem <: MetadataText
+
+CategoricalValue <: Text
+CategoryLevel <: CategoricalValue
+QualityJudgment <: CategoricalValue
+
+EntityText <: Text
+EntityName <: EntityText
+
+QualitativeData <: Text
+StudyCharacteristic <: QualitativeData
+InterventionDescription <: QualitativeData
+FindingStatement <: QualitativeData
+JudgmentRationale <: QualitativeData
+PhenomenologicalData <: QualitativeData
+
+type Missing
+type Dash
+type NotAvailable
+
+Dash <: Missing
+NotAvailable <: Missing
+
+type Symbol
+type Arrow
+type Mark
+
+Arrow <: Symbol
+Mark <: Symbol
+
+type Identifier
+type Citation
+type TrialID
+type VariantID
+
+Citation <: Identifier
+TrialID <: Identifier
+VariantID <: Identifier
+
+% --- numeric ---------------------------------------------------------------
+
+if regex "[-−–]?[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+" decide Integer
+if regex "[-−–]?(?:[0-9]+\.[0-9]+|\.[0-9]+)" decide Decimal
+if regex "[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%" decide Percent
+
+% 4.1 × 10 −5, 1 × 10 10, 3.94E-4; a trailing citation number may follow.
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?[×x] ?10 ?[-−–+]?[0-9]+(?: [0-9]+)?" decide Scientific
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?[eE][-−–+]?[0-9]+" decide Scientific
+
+% <0.01, < 0.001, ≥ 5, >1000
+if regex "[<>≤≥⩽⩾] ?[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)" decide Inequality
+
+% 6.49ab, 180.24***, 0.47 a, 3A
+if regex "[-−–]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)? ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+)" decide AnnotatedNumber
+
+% 524.58 ± 9.53 a, 12.705 (±0.518) ab, 27.7 d (± 0.57), 0.93 (0.94 ± 0.06)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?%)? ?± ?[0-9]+(?:\.[0-9]+)?(?: ?%)?(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide MeanSD
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}))? ?\( ?± ?[0-9]+(?:\.[0-9]+)? ?\)(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide MeanSD
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?\( ?[-−–]?[0-9]+(?:\.[0-9]+)? ?± ?[0-9]+(?:\.[0-9]+)? ?\)" decide MeanSD
+
+% 123 (40.7%), 0.087 (0.027), 2.858(3), 25 (8.3%) b, 21 (19.8%)***, –0.1 (cliff) is not one
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?\( ?[-−–]?[0-9]+(?:\.[0-9]+)? ?%? ?\)(?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide ValueParen
+
+% 1.06, [0.761, 1.476] ab, 18.10 [18.04, 18.15], 1.2 (0.8–1.9), 1.2 (0.8, 1.9)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?,? ?[\[(] ?[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:,|;|–|−|-|to) ?[-−–]?[0-9]+(?:\.[0-9]+)? ?[\])](?: ?(?:\*{1,3}|[a-h]{1,4}|[A-H]{1,2}|[†‡§¶#]+))?" decide ValueInterval
+
+% 0.36–0.58, −0.70–−0.07, 0-44, 60+, 10 to 20
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:–|—|-|to|~) ?[-−–]?[0-9]+(?:\.[0-9]+)?(?: ?%)?" decide NumberRange
+if regex "[0-9]+\+" decide NumberRange
+
+% 90:45:17.5
+if regex "[0-9]+(?:\.[0-9]+)?(?::[0-9]+(?:\.[0-9]+)?)+" decide Ratio
+
+% 1.02, 1.03 and 2.17 61 (a value with a citation number after it)
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)?(?:(?:, ?| |/)[-−–]?[0-9]+(?:\.[0-9]+)?)+" decide NumberList
+
+% P = 0.004, X = 0.41, df = 2, P = 0.82, F (10,33) = 3.435, F = (2,56) 3.4, P = 0.04
+if regex "(?:[A-Za-zχΧ²]{1,3}2? ?(?:\( ?[0-9]+ ?, ?[0-9]+ ?\))? ?[=<>≤≥] ?(?:\( ?[0-9]+ ?, ?[0-9]+ ?\) )?[-−–]?[0-9]*\.?[0-9]+(?:, ?)?)+" decide TestStatistic
+
+% 130 °C, 973 cm −1, 5 mg/kg, 20 mmHg
+if regex "[-−–]?[0-9]+(?:\.[0-9]+)? ?(?:°[CF]?|[µμ]?[a-zA-Z]{1,3}(?: ?[-−–]?[0-9])?(?:[/·][a-zA-Z]{1,3}(?: ?[-−–]?[0-9])?)*)" decide Measurement
+
+% --- numeric forms the rules above miss ------------------------------------
+%
+% Added for sci_text.tdsl: Word and Phrase no longer catch what these describe,
+% so without them the cells would go to the model. Written from the dev split.
+%
+% More building blocks:
+%   number   as above, with thousands commas and a spaced sign (− 0.006)
+%   marks    as above, several of them, up to two letters and with hyphens
+
+% − 0.006
+if regex "[-−–] [0-9]+(?:\.[0-9]+)?" decide Decimal
+
+% 8.30 a b, 273.10b-e, 71 b c d, 5.16 a §, 4.29 b †
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)" decide AnnotatedNumber
+
+% < 0.001 ***
+if regex "[<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)" decide Inequality
+
+% 37.9 ± 12.7 i, 1,629.22 ± 1,050.02, 4.81 ± 1.72 d, e, 9.4±0.31a ¶
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)? ?± ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)?(?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)?" decide MeanSD
+% 28.6 ± 8.7 (29, 23–35)
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?± ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?, ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?[–-] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)" decide MeanSD
+
+% 1,420 (179), 4,170 (48%), -0.42 (<0.001), 0.00 (−), (0.06)
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)? ?\( ?(?:[<>≤≥] ?)?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?\)(?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)?" decide ValueParen
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?[-−–] ?\)" decide ValueParen
+if regex "\( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?\)" decide ValueParen
+% 678/6163 (11), 20/30 (10/13), 5 (1,202)/16 (3,006), 77% (79 of 103)
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)/(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?\)" decide ValueParen
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)/(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)/(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)" decide ValueParen
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)/(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)" decide ValueParen
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?% \( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) of (?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)" decide ValueParen
+
+% 1.06 (1.04 ~ 1.09), 74.68% [53.10%–88.88%], 1.24 (1.08–1.43, P = 0.002),
+% −6.4 (−10.0 – -2.4)* ¤§, 2,140 [1,370, 2,530]; a p-value or I² may follow:
+% 0.387 (0.321, 0.466) < 0.0001, 0.744 (0.640, 0.864) 0.00011,
+% 0.87 (0.76–1.01) I 2 =42%
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)?,? ?[\[(] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?(?:,|;|–|—|−|-|~|to) ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%?(?:, ?[pP] ?[=<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+))? ?[\])](?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)?" decide ValueInterval
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)?,? ?[\[(] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?(?:,|;|–|—|−|-|~|to) ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%?(?:, ?[pP] ?[=<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+))? ?[\])](?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)? (?:(?:[<>≤≥] ?)?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)|[Ii] ?2 ?= ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%)" decide ValueInterval
+% (1.797–2.692); square brackets are left to the citation rule below
+if regex "\( ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?(?:,|;|–|—|−|-|~|to) ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?\)" decide ValueInterval
+% 0.90 (0.77–1.05) 0.95 (0.84–1.06) f
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)?,? ?[\[(] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?(?:,|;|–|—|−|-|~|to) ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%?(?:, ?[pP] ?[=<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+))? ?[\])](?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)?(?: (?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: ?%)?,? ?[\[(] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%? ?(?:,|;|–|—|−|-|~|to) ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?%?(?:, ?[pP] ?[=<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+))? ?[\])](?: ?(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+)(?:(?:, ?| )(?:\*{1,3}|[a-l]{1,2}(?:-[a-l])?|[A-H]{1,2}|[†‡§¶#¤]+))*)?)+" decide ValueInterval
+
+% 5 / 5
+if regex "(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?: / (?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+))+" decide NumberList
+
+% χ 2 = 9.21, (N = 5332)
+if regex "[χΧ] ?2 ?[=<>≤≥] ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+)" decide TestStatistic
+if regex "\( ?[nN] ?= ?(?:[-−–] ?)?(?:[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+) ?\)" decide TestStatistic
+
+% --- missing and symbols ---------------------------------------------------
+
+if regex "[-–—−]{1,3}|\.{2,3}|…" decide Dash
+if regex "(?i)n\.? ?/? ?[ad]\.?|nr|ns|nd|none|not (?:available|reported|applicable)" decide NotAvailable
+
+if regex "[↑↓→←⇑⇓]+" decide Arrow
+if regex "[✓✔✗✘×+*•○●]+" decide Mark
+
+% --- identifiers: cells that name the entity of a row ----------------------
+%
+% Under the labelling convention of the experiment these are data, not VMD:
+% a column of study citations or trial ids names the rows it belongs to.
+% Written from the dev split only.
+
+% Smith 2017, Smith et al. (2019) [ 16 ], Sawada et al., 2019 [ 16 ],
+% Bernard [ 35 ], Shargie 2006 ETH, Van der Worp (2007), Rubenstein, 2019 41,
+% Ghobadi 2019a [ 46 ], Kendler et al. [ 18 ] (2018), Alabed et al., 2022 (DH)
+% [ 53 ]; not Year 2014, Phase 3 or other time/study words followed by a year
+if regex "(?!(?:Year|Years|Season|Week|Weeks|Month|Months|Day|Days|Phase|Stage|Trial|Study|Model|Wave|Cohort|Visit|Round|Period|Total|Average|Mean|Spring|Summer|Autumn|Fall|Winter|Baseline|Follow)\b)(?:(?:[Vv]an|[Vv]on|[Dd]e|[Dd]en|[Dd]er|[Dd]el|[Dd]a|[Dd]i|[Ll]e|[Ll]a) )*\p{Lu}[\p{L}’'\-‐]+(?:(?: and | & | )(?:(?:[Vv]an|[Vv]on|[Dd]e|[Dd]en|[Dd]er|[Dd]el|[Dd]a|[Dd]i|[Ll]e|[Ll]a) )*\p{Lu}[\p{L}’'\-‐]+)?(?:,? et al\.?)?(?:,? ?\(?(?:19|20)[0-9]{2}[a-z]?\)?(?: \(\p{Lu}+\))?(?: ?\[ ?[0-9]+(?: ?[,–-] ?[0-9]+)* ?\]| [0-9]{1,3})?| ?\[ ?[0-9]+(?: ?[,–-] ?[0-9]+)* ?\](?: ?\((?:19|20)[0-9]{2}[a-z]?\))?)(?: \p{Lu}{3}(?: (?:AND|and|&) \p{Lu}{3})*)?(?: \(\p{Lu}+\))?" decide Citation
+
+% NCT01193101, ISRCTN12345678, ChiCTR-IOR-17012345
+if regex "NCT[0-9]{8}|ISRCTN[0-9]{6,8}|ChiCTR[A-Za-z0-9-]+" decide TrialID
+
+% rs1882694, rs10421768 (AG/GG vs AA)
+if regex "rs[0-9]{3,}(?: \(.*\))?" decide VariantID
+
+% [ 35 ], [ 74 , 75 ], ( 4 , 34 – 36 , 38 ): reference numbers in a column
+if regex "\[ ?[0-9]+(?: ?[,–-] ?[0-9]+)* ?\]" decide Citation
+if regex "\( ?[0-9]+(?: ?[,–-] ?[0-9]+){2,} ?\)" decide Citation
+
+% --- text ------------------------------------------------------------------
+
+% %, (mmHg), (µg g −1 ). A rule and a guideline both decide Unit: a cell this
+% rule matches is a Unit and is final; a cell it misses may still be given
+% Unit by the guideline below.
+if regex "%|\( ?(?:%|[µμ°]?[\p{L}]{1,4}(?: ?[-−–]?[0-9])?(?:[ /·][µμ]?[\p{L}]{1,4}(?: ?[-−–]?[0-9])?)*) ?\)" decide Unit
+
+% Everything else with a letter in it. The form of text says little, so this
+% is the only other rule: the guidelines decide what the cell is. It comes
+% last, so every rule above keeps precedence over it.
+if regex ".*\p{L}.*" decide Text
+
+% --- guidelines: what a text cell is, decided by a model -------------------
+%
+% Every cell typed Text may take any of the types below; every other rule
+% type is final. The groups are the first level below Text, and they are
+% what the scorer compares with --level=group: MetadataText leans towards
+% headers, QualitativeData towards data. Examples are from the dev split.
+
+guideline "The name of a measured variable or characteristic, possibly with its unit or the statistic reported for it, such as 'Age, years', 'Chronic kidney disease', 'HDL-C (mmol/L)' or 'Silt (%)'" decide VariableLabel
+guideline "A unit of measurement on its own, such as 'mg/dL' or 'per 1000 person years'" decide Unit
+guideline "The name of a statistic or measure, as used in a heading, such as 'Risk Ratio (Random, 95% CI)', 'p value', 'Aetiology, No. (%)' or 'Cumulative Variance (%)'" decide StatisticLabel
+guideline "The title of a section or block of a table, which groups the rows or columns under it rather than describing one of them, such as 'Secondary outcomes', 'Classification metrics' or 'Block 2 Occupation-specific variables'" decide SectionLabel
+guideline "A question or criterion of an appraisal or reporting checklist, or of a domain such as risk of bias, such as 'Was a list of studies (included and excluded) provided?' or 'Blinding of outcome assessment (detection bias) All outcomes'" decide ChecklistItem
+guideline "A level of a categorical variable, or the name of a group, arm, time point or condition being compared, such as 'Male', 'College or above', 'Never', 'At sowing', 'Placebo' or '0–15 cm'" decide CategoryLevel
+guideline "A rating on a fixed scale, as given in quality, risk of bias or certainty assessments, such as 'Low', 'Unclear', 'Partial yes', 'High risk' or '⊕⊕⊝⊝ LOW'" decide QualityJudgment
+guideline "The name of an individual entity that a row or column describes: a study or trial, a drug, chemical or material, a gene or protein, a species, a sample, site, region or brain area, such as 'Tirlazad', 'ZRSR2', 'Bromus inermis Leyss.', 'Korea' or 'Putamen'" decide EntityName
+guideline "A description of how a study was done or who it covered: design, setting, population, eligibility criteria, or search strategy, such as 'Double blind randomized controlled trial', 'Cluster‐RCT Unit of randomization: household', 'Patients >18 years old with HD duration of at least 3 months' or 'Diagnos* OR detect* OR screen*'" decide StudyCharacteristic
+guideline "A description of what was given or done to the participants or samples, such as 'HC bolus 200 mg, followed by an infusion rate of 10 mg/h for 7 days' or 'Mosquito coils (0.03% transfluthrin) and no treatment'" decide InterventionDescription
+guideline "A statement in words of what a study found or concluded, such as 'Decreased amplitude responses in the left insula.' or 'Screening with health promotion may have little or no effect on mortality.'" decide FindingStatement
+guideline "A reason, quotation, comment or limitation that supports or qualifies an assessment, such as 'Comment: Not described, but usually low risk in cluster‐randomized trials' or 'Only data from the intervention areas are presented.'" decide JudgmentRationale
+guideline "A description of a person's subjective experience" decide PhenomenologicalData

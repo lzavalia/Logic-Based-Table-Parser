@@ -2,18 +2,19 @@
 % Table Review
 % ============================================================================
 %
-% Asks the LLM to check the parser's candidate boundaries for every table in
-% dataset/papers/, and writes the verdicts to papers/PMC<id>/review.jsonl and
+% Asks the LLM to check the candidate type inference selected for every table
+% in dataset/papers/, and writes the verdicts to papers/PMC<id>/review.jsonl and
 % one page per table, papers/PMC<id>/final_tableN.html, with the outcome.
 %
-% The review is blind: for each table the model sees the cells, merged
-% cells, label, caption and notes, but not the candidates, and gives its own
-% header boundary or says the table has none. table_review.pl then compares
-% that answer with the candidates:
-%   - it equals a candidate          -> valid, with that candidate
-%   - another boundary, or none      -> unparseable
-%   - the parser found no candidate  -> unparseable, without asking
-%   - no usable answer after a retry -> unreviewed (never counted as unparseable)
+% The review works from papers/PMC<id>/type_inference.jsonl, which
+% review_agent.sh writes first. For each table the model sees the cells, merged
+% cells, label, caption and notes and the one selected parse, but no other
+% candidates and no types. table_review.pl then decides:
+%   - it confirms the parse           -> valid, with that candidate
+%   - its own boundary is a candidate -> valid, with that candidate
+%   - another boundary, or none       -> unparseable
+%   - the parser found no candidate   -> unparseable, without asking
+%   - no usable answer after a retry  -> unreviewed (never counted as unparseable)
 %
 % For every valid table whose selected candidate is labelable, the geometric
 % certificate of that candidate is written to papers/PMC<id>/ as well
@@ -56,7 +57,7 @@ agent_main :-
     ( param(force, Force) -> true ; Force = none ),
     ( param(model, Model) -> true ; Model = none ),
     review_settings("/workspace", Papers, Force, Model, Settings),
-    output("Reviewing candidate parses..."),
+    output("Reviewing the selected candidates..."),
     review_queue("/workspace/dataset", Settings, Queue, Skipped),
     report_skipped(Skipped),
     review_papers(Queue, Settings, Lines),

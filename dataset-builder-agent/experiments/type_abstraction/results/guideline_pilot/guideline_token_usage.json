@@ -1,0 +1,11 @@
+{
+  "anthropic:claude-sonnet-4-6": {
+    "calls": 110,
+    "inputTokens": 468198,
+    "outputTokens": 37459,
+    "totalTokens": 505657,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}

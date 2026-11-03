@@ -1,0 +1,89 @@
+% ============================================================================
+% Guideline typing
+% ============================================================================
+%
+% The model-facing stage of the type DSL's guideline step (type_guidelines.pl
+% has the whole picture). For every batch in dataset/papers/PMC<id>/
+% guideline_requests.json, written beforehand by guideline_requests/3, the
+% model is asked to give each cell one of its allowed types, or "none". The
+% answer is checked (guideline_answers.pl) and the accepted answers are
+% appended to dataset/cache/guideline_answers.jsonl; apply_guidelines/3 then
+% writes guided_types.jsonl without the model.
+%
+% Each batch gets a fresh call (prompt/2: no earlier conversation and no
+% tools), retried once when the answer is unusable. Cells left without an
+% answer stay pending and are sent again by the next guideline_requests/3.
+%
+% Parameters (deepclause run ... -P key=value), all optional:
+%   papers=PMC123,PMC456   only these papers' requests
+%
+% guideline_agent.sh runs this between the two swipl stages. By hand, from
+% the directory that holds the .pl files:
+%   deepclause run type_guidelines.dml --headless
+%
+% ============================================================================
+
+% Loaded through a search-path alias so the module runs as compiled Prolog;
+% see dataset_builder.dml.
+user:file_search_path(workspace, '/workspace').
+:- use_module(workspace(guideline_answers)).
+
+agent_main :-
+    (   param(papers, Text)
+    ->  split_string(Text, ",", " ", Parts),
+        exclude(==(""), Parts, Names0),
+        maplist(atom_string, Names, Names0),
+        Papers = Names
+    ;   Papers = none
+    ),
+    guideline_queue("/workspace/dataset", Papers, Queue),
+    length(Queue, NumBatches),
+    format(string(Start), "Guideline typing: ~d batch(es) to send", [NumBatches]),
+    output(Start),
+    send_batches(Queue, 0, Answered, 0, Missing, 0, Failed),
+    format(string(Summary),
+           "Guideline typing complete: ~d cell(s) answered, ~d left without an answer, ~d batch(es) failed. Answers are in dataset/cache/guideline_answers.jsonl.",
+           [Answered, Missing, Failed]),
+    answer(Summary).
+
+send_batches([], A, A, M, M, F, F).
+send_batches([batch(Paper, Sha, Batch)|Rest], A0, A, M0, M, F0, F) :-
+    ask_model(Batch, 1, Outcome),
+    (   Outcome = done(Answers, Missing)
+    ->  (   catch(append_guideline_answers("/workspace/dataset", Sha, Batch, Answers),
+                  Error,
+                  ( format(string(Warn), "~w: answers not saved (~w)", [Paper, Error]),
+                    output(Warn), fail ))
+        ->  length(Answers, N),
+            A1 is A0 + N, M1 is M0 + Missing, F1 = F0,
+            guideline_batch_id(Batch, Id),
+            format(string(Line), "~w: ~d answered, ~d without an answer",
+                   [Id, N, Missing]),
+            output(Line)
+        ;   A1 = A0, M1 = M0, F1 is F0 + 1
+        )
+    ;   Outcome = failed(Why),
+        A1 = A0, M1 = M0, F1 is F0 + 1,
+        guideline_batch_id(Batch, Id),
+        format(string(Line), "~w: no usable answer (~w)", [Id, Why]),
+        output(Line)
+    ),
+    send_batches(Rest, A1, A, M1, M, F1, F).
+
+% ask_model(+Batch, +Attempt, -Outcome): one retry when the answer is missing
+% or unusable, then failed(Reason).
+ask_model(Batch, Attempt, Outcome) :-
+    guideline_batch_prompt(Batch, Prompt),
+    (   catch(prompt(Prompt, object(Answer)), Error, true)
+    ->  ( var(Error) -> Reply = Answer ; Reply = error(Error) )
+    ;   Reply = no_answer
+    ),
+    guideline_answer(Batch, Reply, Result),
+    (   Result = done(_, _)
+    ->  Outcome = Result
+    ;   Result = retry(_), Attempt < 2
+    ->  Next is Attempt + 1,
+        ask_model(Batch, Next, Outcome)
+    ;   Result = retry(Why),
+        Outcome = failed(Why)
+    ).
