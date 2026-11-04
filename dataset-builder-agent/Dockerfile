@@ -12,6 +12,14 @@
 #
 # Run the offline tests:
 #   docker run --rm --entrypoint /app/tests/run_regression_tests.sh table-dataset-builder
+#
+# Run the ablation study (experiments/ablation/README.md); the sample papers come
+# from a checkout's experiments/type_abstraction/data/, and results land in the
+# second mount:
+#   docker run --rm -it -e ANTHROPIC_API_KEY \
+#     -v "$PWD/experiments/type_abstraction/data:/app/experiments/type_abstraction/data:ro" \
+#     -v "$PWD/experiments/ablation/results:/app/experiments/ablation/results" \
+#     --entrypoint /app/experiments/ablation/run_ablation.sh table-dataset-builder
 
 FROM node:24-bookworm-slim
 
@@ -48,6 +56,7 @@ COPY src/ src/
 COPY tests/ tests/
 COPY tools/ tools/
 COPY type_dsl_examples/ type_dsl_examples/
+COPY experiments/ablation/ experiments/ablation/
 
 # The agent loads its .pl files from the workspace root, so it runs from src/.
 # `deepclause init` creates the .deepclause/ configuration that is not kept in
@@ -65,6 +74,13 @@ RUN deepclause init --model "${DEFAULT_MODEL}"
 RUN mkdir -p /app/src/dataset && chmod 1777 /app/src/dataset
 VOLUME /app/src/dataset
 ENV LOG_DIR=/app/src/dataset/logs
+
+# The ablation study writes each run to experiments/ablation/results/; mount a
+# host directory there to keep them. Its sample papers are read from
+# experiments/type_abstraction/data/, which is downloaded rather than kept in
+# the repository, so mount that read-only from a checkout that has it.
+RUN mkdir -p /app/experiments/ablation/results && chmod 1777 /app/experiments/ablation/results
+VOLUME /app/experiments/ablation/results
 
 # run_agent.sh builds the dataset, then has the LLM type the cells of the
 # papers it selected and review the parses chosen by type inference (add

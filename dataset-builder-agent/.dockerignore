@@ -4,7 +4,10 @@
 # Generated output and large files the image does not need.
 **/dataset/
 first_test.zip
-experiments/
+# Of the experiments only the ablation study ships, without earlier results.
+experiments/*
+!experiments/ablation
+experiments/ablation/results/
 docs/
 **/__pycache__/
 # Local debugging aid and per-run output of run_agent.sh.
