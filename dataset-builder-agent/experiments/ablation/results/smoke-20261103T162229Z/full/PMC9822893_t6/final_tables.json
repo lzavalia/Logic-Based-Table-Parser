@@ -1,0 +1,187 @@
+{
+  "pmc_id":"PMC9822893",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The plant height of Italian ryegrass.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC9822893/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The leaf area of Italian ryegrass.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC9822893/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The leaf SPAD value of Italian ryegrass.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC9822893/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The leaf photosynthesis chlorophyll parameters of Italian ryegrass at the second clipping stage.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC9822893/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The root morphology of Italian ryegrass at the fourth clipping stage.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC9822893/t4"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The dry yield of Italian ryegrass in 2019 and 2020.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC9822893/t5"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC9822893/t6/layout2",
+      "caption":"The N uptake, K uptake, N use efficiency (NUE) and K use efficiency (KUE) of Italian ryegrass.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate6_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 7",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"N fertilizer type"},
+	{"row":4,"text":"K fertilizer rate (kg ha −1 )"},
+	{"row":8,"text":"N × K interaction"},
+	{"row":16,"text":"Source of variance"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"N uptake (kg ha −1 )": []},
+	    {"K uptake (kg ha −1 )": []},
+	    {"NUE (%)": []},
+	    {"KUE (%)": []}
+	  ],
+	  "vertical metadata": [
+	    {"CRU": []},
+	    {"Urea": []},
+	    {"150": []},
+	    {"300": []},
+	    {"450": []},
+	    {"Control": []},
+	    {"CRU × KCl150": []},
+	    {"CRU × KCl300": []},
+	    {"CRU × KCl450": []},
+	    {"Urea × KCl150": []},
+	    {"Urea × KCl300": []},
+	    {"Urea × KCl450": []},
+	    {"N": []},
+	    {"K": []},
+	    {"N × K": []}
+	  ],
+	  "data": [
+	    ["313.56 a", "298.78 a", "38.37 a", "31.77 a" ],
+	    ["298.78 b", "297.22 a", "33.45 b", "30.46 a" ],
+	    ["305.50 a", "270.67 c", "35.82 a", "33.58 a" ],
+	    ["308.01 a", "304.00 b", "36.05 a", "34.79 a" ],
+	    ["305.32 a", "319.33 a", "35.86 a", "24.98 b" ],
+	    ["202.33 c", "212.61 d", "–", "–" ],
+	    ["312.00 a", "270.04 c", "38.15 b", "33.69 a" ],
+	    ["315.67 a", "306.33 ab", "38.59 a", "36.59 a" ],
+	    ["313.22 b", "320.09 a", "38.36 ab", "25.03 b" ],
+	    ["299.12 b", "271.33 c", "33.49 c", "33.46 a" ],
+	    ["300.36 b", "301.67 b", "33.50 c", "32.99 a" ],
+	    ["297.11 b", "318.64 a", "33.35 c", "24.93 b" ],
+	    ["< 0.0001", "0.6245", "< 0.0001", "0.2911" ],
+	    ["0.2975", "< 0.0001", "0.1275", "0.0002" ],
+	    ["0.7215", "0.7333", "0.1572", "0.417" ]
+	  ],
+	  "residual_corner": [ {"Treatment": []} ]
+	}
+      ],
+      "table_index":6,
+      "table_uid":"PMC9822893/t6"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Correlations between different forms of soil K and N.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 8",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":7,
+      "table_uid":"PMC9822893/t7"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Part properties of tested soil before ryegrass planting in 2019.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 9",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":8,
+      "table_uid":"PMC9822893/t8"
+    }
+  ],
+  "tables_jsonl_sha256":"fed6c9cc72cfbb2a287b2092d58f76950a60baa6860141b13c60f63444faa286"
+}

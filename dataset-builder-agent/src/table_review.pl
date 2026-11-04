@@ -76,6 +76,10 @@
 %       dataset/runs/RunName, for review_settings/5.
 %   candidate_boundaries(+Record, -Boundaries)
 %       The candidates a model's boundary can match, b{candidate_id, hmd, vmd}.
+%   review_table_filter(+Tables, -Filter)
+%       Filter is all or the table uids to review (Settings.tables).
+%   table_block(+Record, -Block)
+%       The table as every review prompt shows it.
 
 :- module(table_review, [
       review_settings/5,
@@ -92,7 +96,19 @@
       record_review_run/5,
       review_run_papers/3,
       table_review_prompt/3,
-      candidate_boundaries/2
+      candidate_boundaries/2,
+      review_filtered_settings/6,
+      review_table_filter/2,
+      review_dataset_dir/3,
+      table_block/2,
+      review_limit/2,
+      review_slots/2,
+      answer_dict/2,
+      answer_integer/2,
+      answer_problem/2,
+      dict_value/3,
+      shorten/3,
+      read_jsonl/2
    ]).
 
 :- if(exists_source(library(json))).
@@ -161,6 +177,63 @@ review_pmc_name(Part, Name) :-
    ;  throw(error(domain_error(pmc_id, Part),
                   context(review_settings/5, 'papers must be PMC ids')))
    ).
+
+% review_filtered_settings(+WorkspaceDir, +Papers, +Tables, +Force, +Model,
+%                          -Settings)
+% review_settings/5 with the table filter of review_table_filter/2 added.
+review_filtered_settings(WorkspaceDir, Papers, Tables0, Force, Model, Settings) :-
+   review_settings(WorkspaceDir, Papers, Force, Model, Settings0),
+   review_table_filter(Tables0, Tables),
+   put_dict(tables, Settings0, Tables, Settings).
+
+% review_table_filter(+Tables, -Filter): Tables is none or a comma-separated
+% string of table uids (PMC<id>/t<index>); Filter is all or their list. A
+% filter is added to the settings as tables: Filter; the other tables of a
+% queued paper are then not sent and are recorded as not_selected.
+review_table_filter(none, all) :- !.
+review_table_filter("", all) :- !.
+review_table_filter(Text0, Uids) :-
+   text_to_string(Text0, Text),
+   split_string(Text, ",; ", ",; ", Parts0),
+   exclude(==(""), Parts0, Parts),
+   maplist(review_table_uid, Parts, Uids).
+
+review_table_uid(Part, Uid) :-
+   (  split_string(Part, "/", "", [Paper, Table]),
+      review_pmc_name(Paper, Name),
+      sub_string(Table, 0, 1, _, "t"),
+      sub_string(Table, 1, _, 0, Digits),
+      catch(number_string(Index, Digits), _, fail),
+      integer(Index), Index >= 0
+   -> format(string(Uid), "~s/t~d", [Name, Index])
+   ;  throw(error(domain_error(table_uid, Part),
+                  context(review_table_filter/2, 'tables must be PMC<id>/t<index>')))
+   ).
+
+% review_dataset_dir(+WorkspaceDir, +Dataset, -Dir): the dataset to review.
+% Dataset is none (WorkspaceDir/dataset) or a relative directory inside the
+% workspace, since DeepClause sees no files outside it.
+review_dataset_dir(WorkspaceDir, none, Dir) :- !,
+   directory_file_path(WorkspaceDir, dataset, Dir0),
+   atom_string(Dir0, Dir).
+review_dataset_dir(WorkspaceDir, Dataset0, Dir) :-
+   text_to_string(Dataset0, Dataset1),
+   split_string(Dataset1, "", "/", [Dataset]),
+   split_string(Dataset, "/", "", Parts),
+   (  Dataset \== "", \+ sub_string(Dataset1, 0, 1, _, "/"),
+      \+ memberchk("..", Parts), \+ memberchk("", Parts)
+   -> directory_file_path(WorkspaceDir, Dataset, Dir0),
+      atom_string(Dir0, Dir)
+   ;  throw(error(domain_error(dataset_dir, Dataset0),
+                  context(review_dataset_dir/3,
+                          'dataset must be a relative directory inside the workspace')))
+   ).
+
+% table_selected(+Settings, +Uid): no table filter, or Uid is in it.
+table_selected(Settings, Uid) :-
+   (  get_dict(tables, Settings, Tables), Tables \== all
+   -> memberchk(Uid, Tables)
+   ;  true ).
 
 % review_run_papers(+DatasetDir, +RunName, -Papers)
 % RunName is a directory under dataset/runs/ (as printed by the build as
@@ -292,7 +365,9 @@ current_review(PaperDir, Sha, InferenceSha, Settings) :-
             get_dict(type_inference_sha256, R, InferenceSha),
             R.prompt_version == Settings.prompt_version,
             R.model == Settings.model,
-            R.review_status \== "review_failed" )).
+            R.review_status \== "review_failed",
+            % A review made with a table filter left the other tables out.
+            \+ get_dict(not_reviewed_reason, R, "not_selected") )).
 
 review_paper_name(review_paper(Name, _, _, _), Name).
 review_paper_items(review_paper(_, _, _, Items), Items).
@@ -313,7 +388,9 @@ review_item_for(Settings, InferenceSha, Record, Inference,
                 table:Record},
    record_candidate_ids(Record, Ids),
    put_dict(candidate_ids, Info0, Ids, Info1),
-   (  Record.status == "quarantined"
+   (  \+ table_selected(Settings, Uid)
+   -> Action = skip, Prompt = "", put_dict(skip_reason, Info1, "not_selected", Info)
+   ;  Record.status == "quarantined"
    -> Action = skip, Prompt = "", put_dict(skip_reason, Info1, "quarantined", Info)
    ;  Record.status == "abstained"
    -> Action = skip, Prompt = "", put_dict(skip_reason, Info1, "parser_abstained", Info)
@@ -389,16 +466,8 @@ review_item_uid(review_item(Uid, _, _, _), Uid).
 % table_review_prompt(+Record, +Proposed, -Prompt)
 % Proposed is the selected candidate; the others are deliberately left out.
 table_review_prompt(Record, Proposed, Prompt) :-
-   Rows = Record.rows, Cols = Record.columns,
-   MaxH is Rows - 1, MaxV is Cols - 1,
-   Context = Record.context,
-   context_line("Label", Context.label, LabelLine),
-   context_line("Caption", Context.caption, CaptionLine),
-   ( is_list(Context.notes) -> atomics_to_string(Context.notes, " ", Notes0)
-   ; Notes0 = "" ),
-   context_line("Notes", Notes0, NotesLine),
-   table_grid_lines(Record, GridLines),
-   atomics_to_string(GridLines, "\n", Grid),
+   MaxH is Record.rows - 1, MaxV is Record.columns - 1,
+   table_block(Record, Block),
    parse_description(Proposed, Parse),
    format(string(Prompt),
 "You are checking the layout of one table from a scientific article. A parse of its headers is proposed below; decide whether it is right.
@@ -421,10 +490,26 @@ Store an object in Answer with these keys:
 - \"reason\": one short sentence explaining the decision.
 If the table has no headers at all, answer false, and 0 for both.
 
-~s~s~sBEGIN TABLE (~d rows x ~d columns)
+~s",
+          [Parse, MaxH, MaxV, Block]).
+
+% table_block(+Record, -Block): the label, caption and notes lines and the
+% table between BEGIN TABLE and END TABLE, as every review prompt shows them
+% (also the prompts of ablation_review.pl).
+table_block(Record, Block) :-
+   Rows = Record.rows, Cols = Record.columns,
+   Context = Record.context,
+   context_line("Label", Context.label, LabelLine),
+   context_line("Caption", Context.caption, CaptionLine),
+   ( is_list(Context.notes) -> atomics_to_string(Context.notes, " ", Notes0)
+   ; Notes0 = "" ),
+   context_line("Notes", Notes0, NotesLine),
+   table_grid_lines(Record, GridLines),
+   atomics_to_string(GridLines, "\n", Grid),
+   format(string(Block), "~s~s~sBEGIN TABLE (~d rows x ~d columns)
 ~s
 END TABLE",
-          [Parse, MaxH, MaxV, LabelLine, CaptionLine, NotesLine, Rows, Cols, Grid]).
+          [LabelLine, CaptionLine, NotesLine, Rows, Cols, Grid]).
 
 parse_description(Candidate, Text) :-
    (  get_dict(kind, Candidate, "layout")

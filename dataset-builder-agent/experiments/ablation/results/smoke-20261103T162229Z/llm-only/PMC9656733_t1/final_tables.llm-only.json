@@ -1,0 +1,97 @@
+{
+  "pmc_id":"PMC9656733",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The theoretical lattice constants a, b, c, α, β, γ, and space groups of A i PbI 3 with the different cations.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC9656733/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Estimated radii ( R A ), band gap ( E g ), formation energy ( E f ), polyhedral factor ( μ ) and tolerance factor ( t ) of (A i )PbI 3 Perovskites with GGA-PBE (vdW) by theoretical calculations.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":5,
+	    "last_row":9,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"R A (pm)": []},  {"E g (eV)": []},  {"E f (eV)": []},  {"μ": []},  {"t": []} ],
+	  "vertical metadata": [
+	    {"NH 4 PbI 3": []},
+	    {"PH 4 PbI 3": []},
+	    {"[Li 3 O] PbI 3": []},
+	    {"HAPbI 3": []},
+	    {"[Li 3 S] PbI 3": []},
+	    {"MAPbI 3": []},
+	    {"FAPbI 3": []},
+	    {"AcePbI 3": []},
+	    {"GuPbI 3": []}
+	  ],
+	  "data": [
+	    ["146", "1.7611", "−0.32564", "0.468182", "0.801242" ],
+	    ["167", "1.8411", "−0.34885", "0.468182", "0.847215" ],
+	    ["170", "0.5932", "−0.34170", "0.468182", "0.853782" ],
+	    ["216", "1.5348", "−0.35955", "0.468182", "0.954485" ],
+	    ["220", "0.4146", "−0.34944", "0.468182", "0.963241" ],
+	    ["222", "1.5971", "−0.36116", "0.468182", "0.967620" ],
+	    ["253", "1.4815", "−0.36469", "0.468182", "1.035485" ],
+	    ["277", "1.9645", "−0.37708", "0.468182", "1.088025" ],
+	    ["278", "2.1517", "−0.37980", "0.468182", "1.090214" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC9656733/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Calculated open-circuit voltages ( V OC ), short circuit currents ( J SC ) and power conversion efficiencies ( η ) for the hypothetical perovskites A i PbI 3 and MAPbI 3 .",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC9656733/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"49844d845a0ad025dccacb44b2b7398c2ee4d224669590d0ec80d4ed0a99034f"
+}

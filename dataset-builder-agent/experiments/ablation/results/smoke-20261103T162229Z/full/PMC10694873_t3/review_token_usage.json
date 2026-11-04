@@ -1,0 +1,11 @@
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 8951,
+    "outputTokens": 401,
+    "totalTokens": 9352,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}

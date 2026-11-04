@@ -53,11 +53,15 @@
 %   export_reviewed_papers(+DatasetDir, +Settings, -Lines)
 %   export_paper(+PapersDir, +Name, -Line)
 %   table_structure(+Record, +Hmd, +Vmd, -Subtable)
+%   candidate_structures(+Record, +Candidate, -Subtables, -Separators)
+%       Also used by ablation_review.pl, for a segmentation the LLM gave.
 
 :- module(table_export, [
       export_reviewed_papers/3,
       export_paper/3,
-      table_structure/4
+      table_structure/4,
+      candidate_structures/4,
+      write_json_atomically/3
    ]).
 
 :- if(exists_source(library(json))).

@@ -1,0 +1,38 @@
+<table>
+   <tbody>
+      <tr>
+         <td colspan="5" bgcolor="springgreen" >Process Metadata</td>
+      </tr>
+      <tr>
+         <td bgcolor="springgreen" >Software</td>
+         <td bgcolor="springgreen" >JSON-LD</td>
+         <td bgcolor="springgreen" >Schema.org</td>
+         <td bgcolor="springgreen" >CouchDB</td>
+         <td bgcolor="springgreen" ></td>
+      </tr>
+      <tr>
+         <td bgcolor="skyblue" >Description</td>
+         <td bgcolor="lightgray" >A serialization technique for linked data (LD) objects using the JavaScript Object Notation (JSON) [21, 22]⁠. This technique allows assigning unique identifiers using Internationalized Resource Identifiers (IRIs) for JSON objects and consequently to use these identifiers as references [23]⁠</td>
+         <td bgcolor="lightgray" >The collaborative and hierarchical vocabulary allows to create semantically standardized and linked metadata information [24]⁠. It is serializable in different formats including JSON-LD. All elements from Schema.org are described in detail, allowing to define metadata understandable by humans and machines alike. Predefined types like Schema.org Dataset or DataDownload summarize relevant metadata elements that can be attached to data from the UMG-MeDIC [24]⁠</td>
+         <td bgcolor="lightgray" >Apache Cluster of unreliable commodity hardware Data Base (CouchDB) is a JSON based document database [25]⁠. Data can be read, written, modified, or deleted using a Representational State Transfer Application Programming Interface (REST API). Built for large deployments, CouchDB allows to be quickly replicated to multiple servers while maintaining the ACID (atomic, consistent, isolated, durable) properties of the database. Solution to store JSON-LD process metadata documents</td>
+         <td bgcolor="lightgray" ></td>
+      </tr>
+      <tr>
+         <td colspan="5" bgcolor="springgreen" >Process Flow</td>
+      </tr>
+      <tr>
+         <td bgcolor="springgreen" >Software</td>
+         <td bgcolor="springgreen" >ActiveWorkflow</td>
+         <td bgcolor="springgreen" >Docker</td>
+         <td bgcolor="springgreen" >Celery</td>
+         <td bgcolor="springgreen" >Data Storage CDSTAR</td>
+      </tr>
+      <tr>
+         <td bgcolor="skyblue" >Description</td>
+         <td bgcolor="lightgray" >A web-based automation engine to orchestrate and monitor workflows [26]. A web-GUI allows to define and run a workflow consisting of individual agents. Each agent is an autonomous software service that communicates with the workflow engine via a standardized REST API. Workflows can be executed event based or on a predefined schedule</td>
+         <td bgcolor="lightgray" >A runtime for software containers [27]⁠. A software container is a lightweight and interoperable application bundle. These bundles include all requirements and can be run by the Docker engine, which manages networking, data storage and monitoring of run containers. Running containers with Docker is a lightweight, software-defined alternative to server virtualization. Runtime environment templates called Docker images enable fully reproducible process execution as well as encapsulation and preservation of the entire virtualized runtime environment</td>
+         <td bgcolor="lightgray" >Highly scalable distributed message queue for task scheduling [28]⁠. It works message-based, brokering messages to worker nodes and collecting results into a backend. Used to asynchronously execute atomic data processing tasks</td>
+         <td bgcolor="lightgray" >Common Data Storage Architecture (CDSTAR) is a data storage abstraction layer [29]. It abstracts physical storage solutions and offers storing, reading and modifying data via a REST API. CDSTAR is organized into vaults, for which individual authorization can be set. A vault holds archives, uniquely identified by an archive ID. An archive contains individual files, identified in turn by internal ID or a filename. CDSTAR is used as a lightweight data lake solution</td>
+      </tr>
+   </tbody>
+</table>

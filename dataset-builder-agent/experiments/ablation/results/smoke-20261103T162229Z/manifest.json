@@ -1,0 +1,13 @@
+{
+ "name": "smoke",
+ "model": "anthropic:claude-haiku-5-5",
+ "arms": [
+  "llm-only",
+  "constraints",
+  "full"
+ ],
+ "dataset": "src/ablation/smoke/dataset",
+ "started_unix": 1793722971.6215591,
+ "git_commit": "3fdd398889d9f18f51584a8d4dad3f6739fbdf1d",
+ "git_dirty": true
+}

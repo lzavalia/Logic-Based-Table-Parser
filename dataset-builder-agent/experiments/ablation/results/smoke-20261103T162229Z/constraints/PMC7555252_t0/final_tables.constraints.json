@@ -1,0 +1,78 @@
+{
+  "pmc_id":"PMC7555252",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Main characteristics of the eligible studies.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":37,
+	    "row_header_columns":3
+	  },
+	  {
+	    "column_header_rows":2,
+	    "first_column":5,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":37,
+	    "row_header_columns":3
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC7555252/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Diagnostic accuracy of ultrasonography-guided fine-needle aspiration cytology and core needle biopsy in the axillary lymph node of breast cancers.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC7555252/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Sensitivity, specificity, diagnostic odds ratio and area under curve of summary receiver operation characteristics curve of ultrasonography-guided fine-needle aspiration cytology and core needle biopsy in axillary lymph node of breast cancers.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC7555252/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"055d012f03d1ba661835d2f90bcb105bb1bbbc218287ff9c066ba7c854b9cafe"
+}

@@ -35,6 +35,10 @@
 %   force=true             review again even when review.jsonl is current
 %   model=<provider:model> the model in use, recorded in each review; pass the
 %                          same value as --model (review_agent.sh does this)
+%   dataset=<dir>          the dataset to review, a directory relative to the
+%                          workspace (default dataset)
+%   tables=<uid,uid>       send only these tables (PMC<id>/t<index>); the other
+%                          tables of a queued paper are recorded as not_selected
 %
 % Run from the directory that holds the .pl files:
 %   deepclause run review_dataset.dml --headless
@@ -48,20 +52,23 @@ user:file_search_path(workspace, '/workspace').
 :- use_module(workspace(table_export)).
 
 agent_main :-
+    ( param(dataset, Dataset0) -> true ; Dataset0 = none ),
+    review_dataset_dir("/workspace", Dataset0, Dataset),
     (   param(run, Run)
-    ->  review_run_papers("/workspace/dataset", Run, Papers)
+    ->  review_run_papers(Dataset, Run, Papers)
     ;   param(papers, Papers)
     ->  true
     ;   Papers = none
     ),
     ( param(force, Force) -> true ; Force = none ),
     ( param(model, Model) -> true ; Model = none ),
-    review_settings("/workspace", Papers, Force, Model, Settings),
+    ( param(tables, Tables0) -> true ; Tables0 = none ),
+    review_filtered_settings("/workspace", Papers, Tables0, Force, Model, Settings),
     output("Reviewing the selected candidates..."),
-    review_queue("/workspace/dataset", Settings, Queue, Skipped),
+    review_queue(Dataset, Settings, Queue, Skipped),
     report_skipped(Skipped),
-    review_papers(Queue, Settings, Lines),
-    (   catch(record_review_run("/workspace/dataset", Settings, Lines, Skipped, RunFile),
+    review_papers(Queue, Dataset, Settings, Lines),
+    (   catch(record_review_run(Dataset, Settings, Lines, Skipped, RunFile),
               Error,
               ( format(string(Warning), "WARNING: could not save the review manifest: ~w", [Error]),
                 output(Warning),
@@ -74,7 +81,7 @@ agent_main :-
     % above as up to date) gets final_tables.json. A failure is reported and
     % does not undo the review.
     output("Exporting reviewed tables..."),
-    (   catch(export_reviewed_papers("/workspace/dataset", Settings, ExportLines),
+    (   catch(export_reviewed_papers(Dataset, Settings, ExportLines),
               ExportError,
               ( format(string(ExportWarning), "WARNING: export failed: ~w", [ExportError]),
                 output(ExportWarning),
@@ -100,21 +107,22 @@ report_skipped([Name-Reason|Rest]) :-
     output(Line),
     report_skipped(Rest).
 
-% review_papers(+Queue, +Settings, -Lines): one status line per paper. A
-% failure to write one paper's review is reported and does not stop the run.
-review_papers([], _, []).
-review_papers([Paper|Papers], Settings, [Line|Lines]) :-
+% review_papers(+Queue, +Dataset, +Settings, -Lines): one status line per
+% paper. A failure to write one paper's review is reported and does not stop
+% the run.
+review_papers([], _, _, []).
+review_papers([Paper|Papers], Dataset, Settings, [Line|Lines]) :-
     review_paper_name(Paper, Name),
     review_paper_items(Paper, Items),
     review_items(Items, Results),
-    (   catch(publish_paper_review("/workspace/dataset", Paper, Settings, Results, Line0),
+    (   catch(publish_paper_review(Dataset, Paper, Settings, Results, Line0),
               Error,
               format(string(Line0), "~w: review not saved (~w)", [Name, Error]))
     ->  Line = Line0
     ;   format(string(Line), "~w: review not saved", [Name])
     ),
     output(Line),
-    review_papers(Papers, Settings, Lines).
+    review_papers(Papers, Dataset, Settings, Lines).
 
 review_items([], []).
 review_items([Item|Items], [Result|Results]) :-

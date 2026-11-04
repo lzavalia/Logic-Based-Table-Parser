@@ -1,0 +1,124 @@
+% ============================================================================
+% Ablation Review (arms A and B)
+% ============================================================================
+%
+% The two LLM arms of the ablation study (see ablation_review.pl). For every
+% table in dataset/papers/ the LLM is shown the cells, merged cells, label,
+% caption and notes, and asked for the table's whole segmentation: separator
+% rows and subtables, each with its column-header rows and row-header
+% columns. It sees no candidates and no types.
+%
+%   arm=llm-only     (A) the segmentation is the result; no parse
+%                    constraints, type inference or repair are used
+%   arm=constraints  (B) the segmentation is valid only if it equals one of
+%                    the parser's candidates; no types, no repair
+%
+% Arm C, the full pipeline, is review_dataset.dml.
+%
+% Verdicts go to papers/PMC<id>/review.<arm>.jsonl and the structured tables
+% to papers/PMC<id>/final_tables.<arm>.json. The files of the full pipeline
+% are not touched.
+%
+% Each table gets a fresh LLM call (prompt/2: no earlier conversation and no
+% tools), so verdicts cannot influence one another.
+%
+% Parameters (deepclause run ... -P key=value):
+%   arm=llm-only|constraints   required
+%   papers=PMC123,PMC456       review only these papers
+%   tables=PMC123/t0,...       send only these tables; the other tables of a
+%                              queued paper are recorded as not_selected
+%   dataset=<dir>              the dataset, relative to the workspace
+%                              (default dataset)
+%   force=true                 review again even when the review is current
+%   model=<provider:model>     the model in use, recorded in each review
+%
+% Run from the directory that holds the .pl files (review_agent.sh --arm
+% does this):
+%   deepclause run ablation_review.dml --headless -P arm=llm-only
+%
+% ============================================================================
+
+% Loaded through a search-path alias so the module runs as compiled Prolog;
+% see dataset_builder.dml.
+user:file_search_path(workspace, '/workspace').
+:- use_module(workspace(table_review), [review_dataset_dir/3]).
+:- use_module(workspace(ablation_review)).
+
+agent_main :-
+    (   param(arm, Arm)
+    ->  true
+    ;   answer("No arm given: pass -P arm=llm-only or -P arm=constraints."),
+        fail
+    ),
+    ( param(dataset, Dataset0) -> true ; Dataset0 = none ),
+    review_dataset_dir("/workspace", Dataset0, Dataset),
+    ( param(papers, Papers) -> true ; Papers = none ),
+    ( param(tables, Tables) -> true ; Tables = none ),
+    ( param(force, Force) -> true ; Force = none ),
+    ( param(model, Model) -> true ; Model = none ),
+    ablation_settings("/workspace", Arm, Papers, Tables, Force, Model, Settings),
+    format(string(Start), "Segmenting tables (arm ~w)...", [Arm]),
+    output(Start),
+    ablation_queue(Dataset, Settings, Queue, Skipped),
+    report_skipped(Skipped),
+    review_papers(Queue, Dataset, Settings, Lines),
+    length(Queue, Reviewed),
+    length(Skipped, NumSkipped),
+    arm_files(Arm, ReviewFile, ExportFile),
+    format(string(Summary),
+           "Ablation review (arm ~w) complete: ~d paper(s) reviewed, ~d skipped. Verdicts are in papers/PMC<id>/~w, structured tables in ~w.",
+           [Arm, Reviewed, NumSkipped, ReviewFile, ExportFile]),
+    answer(Summary).
+
+report_skipped([]).
+report_skipped([Name-Reason|Rest]) :-
+    format(string(Line), "~w: skipped (~w)", [Name, Reason]),
+    output(Line),
+    report_skipped(Rest).
+
+% review_papers(+Queue, +Dataset, +Settings, -Lines): one status line per
+% paper. A failure to write one paper's review is reported and does not stop
+% the run.
+review_papers([], _, _, []).
+review_papers([Paper|Papers], Dataset, Settings, [Line|Lines]) :-
+    ablation_paper_name(Paper, Name),
+    ablation_paper_items(Paper, Items),
+    review_items(Items, Results),
+    (   catch(publish_ablation_review(Dataset, Paper, Settings, Results, Line0),
+              Error,
+              format(string(Line0), "~w: review not saved (~w)", [Name, Error]))
+    ->  Line = Line0
+    ;   format(string(Line), "~w: review not saved", [Name])
+    ),
+    output(Line),
+    review_papers(Papers, Dataset, Settings, Lines).
+
+review_items([], []).
+review_items([Item|Items], [Result|Results]) :-
+    review_item(Item, Result),
+    review_items(Items, Results).
+
+review_item(Item, Result) :-
+    ablation_item_action(Item, Action),
+    (   Action == ask
+    ->  ask_model(Item, 1, Result)
+    ;   ablation_skip_result(Item, Result)
+    ).
+
+% ask_model(+Item, +Attempt, -Result): one retry when the answer is missing
+% or does not follow the requested format, then review_failed.
+ask_model(Item, Attempt, Result) :-
+    ablation_item_prompt(Item, Prompt),
+    (   catch(prompt(Prompt, object(Answer)), Error, true)
+    ->  ( var(Error) -> Reply = Answer ; Reply = error(Error) )
+    ;   Reply = no_answer
+    ),
+    ablation_answer(Item, Reply, Attempt, Outcome),
+    (   Outcome = done(Result)
+    ->  true
+    ;   Outcome = retry(_), Attempt < 2
+    ->  Next is Attempt + 1,
+        ask_model(Item, Next, Result)
+    ;   Outcome = retry(Why),
+        ablation_failed_result(Item, Why, Attempt, Result)
+    ).

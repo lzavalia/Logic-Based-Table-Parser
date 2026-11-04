@@ -589,7 +589,18 @@ without building, run it on its own with `review_agent.sh`:
 ./review_agent.sh --run <name>                     # the papers of build run dataset/runs/<name>
 ./review_agent.sh --scorer purity                  # select candidates by purity
 ./review_agent.sh --force --model anthropic:claude-sonnet-4-6
+./review_agent.sh --tables PMC7293797/t0           # only this table (its paper's others: not_selected)
+./review_agent.sh --dataset ablation/smoke/dataset # another dataset under src/
+./review_agent.sh --arm llm-only                   # an ablation arm, see below
 ```
+
+`--arm` selects an arm of the ablation study
+([experiments/ablation/README.md](experiments/ablation/README.md)): `full`
+(the default) is the review described here; `constraints` and `llm-only` run
+`src/ablation_review.dml` instead, where the LLM segments each table itself
+and the result is matched against the parser's candidates (`constraints`) or
+taken as it is (`llm-only`), without type inference or repair. They write
+`review.<arm>.jsonl` and `final_tables.<arm>.json`.
 
 **Type inference comes first.** `review_agent.sh` starts by running
 `src/type_inference.pl`, which types the cells by rule and, in
