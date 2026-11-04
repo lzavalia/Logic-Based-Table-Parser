@@ -1,0 +1,72 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":2,
+  "pmc_id":"PMC12632427",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC12632427/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC12632427.xml",
+    "input_file_sha256":"622f6ca57f3422b69706f5e1c0b3d5f5bcb5278fa3fef4adbe93bb7e244e6586",
+    "input_file_size_bytes":94977,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by-nc-nd/4.0/ This is an open access article under the terms of the http://creativecommons.org/licenses/by-nc-nd/4.0/ License, which permits use and distribution in any medium, provided the original work is properly cited, the use is non‐commercial and no modifications or adaptations are made.",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC12632427",
+    "processing_timestamp_unix":1793033203.785999,
+    "retrieval_timestamp":"2026-10-26T16:46:12Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793033172.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":2,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Lattice parameters, cell volumes, and bandgaps of tin‐perovskites with and without DMA. (Lattice parameters and cell volumes were derived from Rietveld refinement of XRD data using the TOPAS, and Bandgaps were derived from Tauc plots).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Lattice parameters, cell volumes, and bandgaps of tin‐perovskites with and without DMA. (Lattice parameters and cell volumes were derived from Rietveld refinement of XRD data using the TOPAS, and Bandgaps were derived from Tauc plots).<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [],
+      "source_path":"1/1/3/2/5/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><col align=\"left\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><thead><tr style=\"border-bottom:solid 1px #000000\"><th align=\"left\" rowspan=\"1\" colspan=\"1\">Sample<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\"><italic toggle=\"yes\">a<\/italic>=<italic toggle=\"yes\">b<\/italic>[Å]<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\"><italic toggle=\"yes\">c<\/italic>[Å]<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\">Volume [Å<sup>3<\/sup>]<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\">Bandgap [eV]<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Control<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">8.8466(3)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">12.5478(4)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">982.03<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">1.63<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Target<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">8.8988(2)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">12.5394(4)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">992.97<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">1.72<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC12632427/t0",
+      "wrap_id":"smll202501876-tbl-0001",
+      "wrap_path":"1/1/3/2/5"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Photovoltaic performance summary of the champion devices and averages.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Photovoltaic performance summary of the champion devices and averages.<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [],
+      "source_path":"1/1/3/2/15/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><col align=\"left\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><col align=\"center\" span=\"1\"><thead><tr style=\"border-bottom:solid 1px #000000\"><th align=\"left\" rowspan=\"1\" colspan=\"1\">–<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\">–<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\"><italic toggle=\"yes\">V<\/italic><sub>OC<\/sub>[V]<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\"><italic toggle=\"yes\">J<\/italic><sub>SC<\/sub>[mA cm<sup>−2<\/sup>]<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\">FF<\/th><th align=\"center\" rowspan=\"1\" colspan=\"1\">PCE [%]<\/th><\/tr><\/thead><tbody><tr><td rowspan=\"2\" align=\"left\" colspan=\"1\">Control Champion<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">Forward<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.64<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">17.18<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.659<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">7.21<\/td><\/tr><tr><td align=\"center\" rowspan=\"1\" colspan=\"1\">Reverse<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.60<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">15.46<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.683<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">6.35<\/td><\/tr><tr><td colspan=\"2\" align=\"left\" rowspan=\"1\">Control Average<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.59 (±0.03)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">16.42 (±0.61)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.667 (±0.02)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">6.47 (±0.63)<\/td><\/tr><tr><td rowspan=\"2\" align=\"left\" colspan=\"1\">Target Champion<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">Forward<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.88<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">14.88<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.796<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">10.37<\/td><\/tr><tr><td align=\"center\" rowspan=\"1\" colspan=\"1\">Reverse<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.88<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">14.87<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.753<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">9.88<\/td><\/tr><tr><td colspan=\"2\" align=\"left\" rowspan=\"1\">Target Average<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.84 (±0.03)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">14.39 (±0.31)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">0.744 (±0.02)<\/td><td align=\"center\" rowspan=\"1\" colspan=\"1\">9.00 (±0.59)<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC12632427/t1",
+      "wrap_id":"smll202501876-tbl-0002",
+      "wrap_path":"1/1/3/2/15"
+    }
+  ],
+  "title":"Lead‐Free, Sn‐Based All‐Perovskite Tandem Solar Cells with an Efficiency Over 15%"
+}

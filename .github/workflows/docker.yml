@@ -60,7 +60,9 @@ jobs:
           docker run --rm --entrypoint python3 table-dataset-builder:ci -m py_compile \
             /app/experiments/ablation/prepare_dataset.py /app/experiments/ablation/score_ablation.py \
             /app/experiments/ablation/make_sample.py
-          docker run --rm --entrypoint test table-dataset-builder:ci -f /app/experiments/ablation/smoke_sample.jsonl
+          docker run --rm --entrypoint python3 table-dataset-builder:ci \
+            /app/experiments/ablation/prepare_dataset.py /app/experiments/ablation/smoke_sample.jsonl \
+            /app/src/ablation/ci/dataset
           docker run --rm --entrypoint swipl -w /app/tests table-dataset-builder:ci \
             -q -f none -s boundary_regression_tests.pl \
             -g '(run_tests -> halt(0) ; halt(1))' -t 'halt(2)'

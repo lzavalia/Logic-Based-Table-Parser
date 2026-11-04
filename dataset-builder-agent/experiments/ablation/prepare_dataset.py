@@ -9,6 +9,10 @@ which .gitignore covers). It is emptied first. Only tables.jsonl and
 metadata.json are copied, from the dataset each sample line names: every arm
 starts from the same built tables, and nothing from an earlier review or
 type inference is carried over.
+
+A sample line's source (e.g. data/complex/ds) is looked up first here, where
+the smoke sample's papers are kept in the repository, then under
+../type_abstraction/, whose downloaded data/ is not.
 """
 import json
 import shutil
@@ -35,7 +39,9 @@ def main():
     for row in sample:
         if row["pmc_id"] in copied:
             continue
-        source = TA / row["source"] / "papers" / row["pmc_id"]
+        source = HERE / row["source"] / "papers" / row["pmc_id"]
+        if not source.exists():
+            source = TA / row["source"] / "papers" / row["pmc_id"]
         target = papers / row["pmc_id"]
         target.mkdir()
         for name in ("tables.jsonl", "metadata.json"):

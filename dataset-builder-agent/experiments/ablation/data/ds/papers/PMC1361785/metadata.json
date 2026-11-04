@@ -1,0 +1,120 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":4,
+  "pmc_id":"PMC1361785",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC1361785/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC1361785.xml",
+    "input_file_sha256":"55b71d93858d63218818a522a1136a2d2fbe402f05ffa2425dd339cdebce5952",
+    "input_file_size_bytes":77734,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/2.0/ This is an Open Access article distributed under the terms of the Creative Commons Attribution License ( ), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.",
+      "license_type":"open-access",
+      "license_url":"http://creativecommons.org/licenses/by/2.0",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC1361785",
+    "processing_timestamp_unix":1793033200.990156,
+    "retrieval_timestamp":"2026-10-26T16:46:21Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793033181.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":4,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Demographic Characteristics of hypertensive subjects and controls",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Demographic Characteristics of hypertensive subjects and controls<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Bpm = beat per minute, BMI = Body mass index, BSA = Body surface area, SBP = Systolic blood pressure, DBP = Diastolic blood pressure, MAP = Mean arterial pressure<\/p><p>* = Statistical significance<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"Bpm = beat per minute, BMI = Body mass index, BSA = Body surface area, SBP = Systolic blood pressure, DBP = Diastolic blood pressure, MAP = Mean arterial pressure",
+	"* = Statistical significance"
+      ],
+      "source_path":"1/1/2/3/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Variable<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Hypertensives (n = 100)<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Controls (n = 100)<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P value<\/italic><\/bold><\/td><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Age (years)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">56.06 (7.68)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">56.10 (7.68)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.971<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Sex (Male/Female)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">53/47<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">53/47<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Heart Rate (bpm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">82.32 (13.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">80.69 (12.64)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.38<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Weight (Kg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">71.74 (12.32)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">67.27 (8.57)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.003*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Height (m)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.63 (0.09)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.66 (0.08)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.005*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">BMI (Kg/m2)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">27.29 (4.87)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">24.45 (2.70)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">BSA (m2)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.76 (0.16)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.75 (0.14)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.382<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">SBP (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">164.54 (15.27)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">118.22 (8.10)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">DBP (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">101.74 (7.13)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">70.30 (6.70)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Pulse Pressure (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">62.95 (14.57)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">47.93 (8.80)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.001*<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC1361785/t0",
+      "wrap_id":"T1",
+      "wrap_path":"1/1/2/3/3"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Echocardiographic Characteristics in hypertensive subjects and controls",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Echocardiographic Characteristics in hypertensive subjects and controls<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>IVSD = Interventricular septal thickness in diastole, PWTD = Posterior wall thickness in diastole, EDD = End diastolic diameter, FS = Fractional shortening, EF = Ejection fraction, AVO = Aortic valve opening, LA = Left atrium, RWT = Relative wall thickness, LVM = Left ventricular mass<\/p><p>* = Statistical significance<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [
+	"IVSD = Interventricular septal thickness in diastole, PWTD = Posterior wall thickness in diastole, EDD = End diastolic diameter, FS = Fractional shortening, EF = Ejection fraction, AVO = Aortic valve opening, LA = Left atrium, RWT = Relative wall thickness, LVM = Left ventricular mass",
+	"* = Statistical significance"
+      ],
+      "source_path":"1/1/2/3/5/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Variable<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">Hypertensives (n = 100)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">Controls (n = 100)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">P value<\/td><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">IVSD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.08 (0.23)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.83 (0.12)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">PWTD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.05 (0.18)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.83 (0.11)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">EDD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.51 (0.60)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.53 (0.52)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.822<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">ESD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.02 (0.56)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.94 (0.45)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.295<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">FS (%)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">34.43 (6.18)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">35.49 (6.62)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.246<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">EF (%)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">69.42 (8.74)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">72.16 (8.12)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.02*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aorta (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.81 (0.36)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.85 (0.34)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.504<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">AVO (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.93 (0.27)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.00 (0.32)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.09<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LA (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.44 (0.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.06 (0.38)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">RWT<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.48 (0.14)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.37 (0.07)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LVM (g)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">170.60 (46.05)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">121.70 (28.63)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LVM/HT<sup>2.7<\/sup>(g/m<sup>2.7<\/sup>)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">46.43 (13.35)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">31.13 (7.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LV Geometry<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Normal<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">28<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">86<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Concentric remodeling<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">26<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">11<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Concentric hypertrophy<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">28<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Eccentric hypertrophy<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">18<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC1361785/t1",
+      "wrap_id":"T2",
+      "wrap_path":"1/1/2/3/5"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Demographic characteristics of different geometric patterns",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Demographic characteristics of different geometric patterns<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>bmp = beat per minute, BMI = body mass index, SBP = systolic blood pressure, DBP = diastolic blood pressure.<\/p><p>* = Statistical significance<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"bmp = beat per minute, BMI = body mass index, SBP = systolic blood pressure, DBP = diastolic blood pressure.",
+	"* = Statistical significance"
+      ],
+      "source_path":"1/1/2/3/7/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Variable<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Concentric hypertrophy n = 28<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Eccentric hypertrophy n = 21<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Concentric remodeling n = 36<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Normal n = 114<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P value<\/italic><\/bold><\/td><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Age (years)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">56.07 (6.98)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">55.86 (8.01)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">56.56 (7.50)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">55.97 (7.93)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.98<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Heart Rate (bpm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">83.14 (12.94)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">77.05 (12.93)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">84.92 (13.27)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">80.82 (12.85)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.12<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Weight (kg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">69.21 (10.02)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">71.38 (13.06)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">69.67 (12.21)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">69.25 (10.24)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.87<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Height (m)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.60 (0.10)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.61 (0.08)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.65 (0.07)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.67 (0.09)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.002*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">BMI (kg/m<sup>2<\/sup>)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">27.29 (4.67)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">27.96 (4.27)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">26.06 (4.81)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">25.09 (3.63)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.005<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">SBP (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">166.07 (18.12)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">159.14 (19.59)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">148.67 (4.06)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">129.75 (22.77)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">DBP (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">103.21 (8.72)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">97.43 (2.54)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">91.00 (16.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">78.00 (14.96)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Pulse Pressure (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">62.32 (15.15)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">61.71 (14.32)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">58.25 (15.50)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">51.84 (12.32)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Mean Arterial Pressure (mmHg)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">123.99 (10.51)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">118.00 (13.16)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">110.42 (8.67)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">95.28 (16.98)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC1361785/t2",
+      "wrap_id":"T3",
+      "wrap_path":"1/1/2/3/7"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Echo characteristics of different geometric patterns",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Echo characteristics of different geometric patterns<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>IVSD = Intraventricular septum in diastole, PWTD = Posterior wall thickness in diastole, EDD = End diastolic diameter, LA = Left atrium, FS = Fractional shortening, EF = Ejection fraction, LVM = Left ventricular mass, SV = Stroke Volume, CO = Cardiac Output<\/p><p>* = Statistical significance<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 4",
+      "label_markup":"<label>Table 4<\/label>",
+      "notes": [
+	"IVSD = Intraventricular septum in diastole, PWTD = Posterior wall thickness in diastole, EDD = End diastolic diameter, LA = Left atrium, FS = Fractional shortening, EF = Ejection fraction, LVM = Left ventricular mass, SV = Stroke Volume, CO = Cardiac Output",
+	"* = Statistical significance"
+      ],
+      "source_path":"1/1/2/3/9/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Variable<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Concentric hypertrophy n = 28<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Eccentric hypertrophy n = 21<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Concentric remodeling n = 36<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">Normal n = 114<\/italic><\/bold><\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P value<\/italic><\/bold><\/td><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">IVSD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.24 (0.18)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.08 (0.18)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.01 (0.25)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.84 (0.13)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">PWTD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.23 (0.09)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.01 (0.10)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.03 (0.15)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.83 (0.11)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">EDD (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.49 (0.51)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">5.15 (0.27)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.86 (0.48)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.63 (0.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LA (cm)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.45 (0.40)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.43 (0.43)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.28 (0.52)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.16 (0.42)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.03*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">FS (%)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">33.43 (5.25)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">33.38 (6.50)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">35.25 (6.45)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">35.70 (6.56)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.22<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">EF (%)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">67.07 (7.65)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">68.95 (9.28)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">70.97 (9.04)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">72.15 (8.15)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.03*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">RWT<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.56 (0.08)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.39 (0.04)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.55 (0.15)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.36 (0.05)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LVM (g)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">206.60 (39.93)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">204.21 (30.50)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">126.76 (31.68)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">126.90 (27.20)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">LVM/HT<sup>2.7<\/sup>(g/m<sup>2.7<\/sup>)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">58.19 (8.48)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">58.04 (8.95)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">33.00 (7.25)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">32.26 (6.68)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">SV (ml)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">56.29 (16.15)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">74.69 (11.71)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">40.42 (11.91)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">63.88 (16.40)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">CO (L/min)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.66 (1.47)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">5.75 (1.39)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.42 (1.09)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">5.2 (1.70)<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">&lt;0.0001*<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC1361785/t3",
+      "wrap_id":"T4",
+      "wrap_path":"1/1/2/3/9"
+    }
+  ],
+  "title":"Left ventricular geometric patterns in newly presenting nigerian hypertensives: An echocardiographic study"
+}

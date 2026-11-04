@@ -43,7 +43,8 @@ changed.
 | `smoke_sample.jsonl` | The 15-table smoke sample: 10 drawn with seed 20261103, 5 complex added with `--extend smoke_sample.jsonl --quota multi_level=3,subtables=1,separator_rows=1 --seed 20261104` |
 | `smoke_gold.jsonl` | Its gold labels (see below) |
 | `<PMC>_t<N>_input.html`, `<PMC>_t<N>_candidates.html` | Each sample table as published, and coloured once per parser candidate |
-| `prepare_dataset.py` | Copies the sample's papers (`tables.jsonl`, `metadata.json`) into a fresh dataset under `src/`, where DeepClause can see it |
+| `data/<source>/papers/<PMC>/` | The smoke sample's papers (`tables.jsonl`, `metadata.json`), copied from `../type_abstraction/data/`, which is downloaded rather than kept in the repository |
+| `prepare_dataset.py` | Copies the sample's papers (`tables.jsonl`, `metadata.json`) into a fresh dataset under `src/`, where DeepClause can see it; each paper comes from `data/` here if present, otherwise from `../type_abstraction/` |
 | `run_ablation.sh` | Runs every arm on every table, one DeepClause run per table and arm, then collects and scores |
 | `../../src/ablation_collect.pl` | Turns each arm's verdict into a segmentation comparable with the gold (rebuilding repaired tables) |
 | `score_ablation.py` | Outcomes, cell accuracy and tokens per arm |

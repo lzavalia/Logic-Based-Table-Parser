@@ -13,13 +13,13 @@
 # Run the offline tests:
 #   docker run --rm --entrypoint /app/tests/run_regression_tests.sh table-dataset-builder
 #
-# Run the ablation study (experiments/ablation/README.md); the sample papers come
-# from a checkout's experiments/type_abstraction/data/, and results land in the
-# second mount:
+# Run the ablation study's smoke sample (experiments/ablation/README.md), whose
+# papers ship in the image; results land in the mounted directory:
 #   docker run --rm -it -e ANTHROPIC_API_KEY \
-#     -v "$PWD/experiments/type_abstraction/data:/app/experiments/type_abstraction/data:ro" \
 #     -v "$PWD/experiments/ablation/results:/app/experiments/ablation/results" \
 #     --entrypoint /app/experiments/ablation/run_ablation.sh table-dataset-builder
+# Other samples also need a checkout's experiments/type_abstraction/data/:
+#     -v "$PWD/experiments/type_abstraction/data:/app/experiments/type_abstraction/data:ro"
 
 FROM node:24-bookworm-slim
 
@@ -76,7 +76,8 @@ VOLUME /app/src/dataset
 ENV LOG_DIR=/app/src/dataset/logs
 
 # The ablation study writes each run to experiments/ablation/results/; mount a
-# host directory there to keep them. Its sample papers are read from
+# host directory there to keep them. The smoke sample's papers are in
+# experiments/ablation/data/; any other sample reads them from
 # experiments/type_abstraction/data/, which is downloaded rather than kept in
 # the repository, so mount that read-only from a checkout that has it.
 RUN mkdir -p /app/experiments/ablation/results && chmod 1777 /app/experiments/ablation/results
