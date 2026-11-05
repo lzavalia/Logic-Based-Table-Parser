@@ -1,0 +1,74 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":2,
+  "pmc_id":"PMC8915277",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC8915277/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC8915277.xml",
+    "input_file_sha256":"f87eb29fb93ca9e5f2676746975836c8140251ab2b7fd95daa9424b94e17c6a2",
+    "input_file_size_bytes":89376,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by-nc/4.0/ This is an open access article distributed in accordance with the Creative Commons Attribution Non Commercial (CC BY-NC 4.0) license, which permits others to distribute, remix, adapt, build upon this work non-commercially, and license their derivative works on different terms, provided the original work is properly cited, appropriate credit is given, any changes made indicated, and the use is non-commercial. See: http://creativecommons.org/licenses/by-nc/4.0/ .",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by-nc/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC8915277",
+    "processing_timestamp_unix":1793042774.164222,
+    "retrieval_timestamp":"2026-10-26T19:23:01Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042581.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":2,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Inclusion and exclusion criteria",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Inclusion and exclusion criteria<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"T1_FN1\"><p>HF, heart failure; NYC, New York City.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": ["HF, heart failure; NYC, New York City." ],
+      "source_path":"1/1/3/3/5/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Inclusion<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Exclusion<\/td><\/tr><\/thead><tbody><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><list list-type=\"bullet\"><list-item><p>Patients with a confirmed diagnosis of HF<\/p><\/list-item><list-item><p>Medicare and/or Medicaid recipients<\/p><\/list-item><list-item><p>Receiving care at New York Presbyterian or Mount Sinai hospitals.<\/p><\/list-item><list-item><p>Live in NYC, specifically Manhattan, Brooklyn, Queens or the Bronx<\/p><\/list-item><list-item><p>Speak and read any of the following languages: English, Spanish, Mandarin, French or Russian<\/p><\/list-item><\/list><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><list list-type=\"bullet\"><list-item><p>Left ventricular assist device candidate or heart transplant candidate.<\/p><\/list-item><list-item><p>Diagnosis of dementia or psychosis that prevents ability to provide consent or participate in the study<\/p><\/list-item><list-item><p>Anticipated discharge to, or current residence in, skilled nursing facility or rehabilitation centre<\/p><\/list-item><list-item><p>Anticipated discharge to, or currently receiving, hospice including home hospice<\/p><\/list-item><\/list><\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC8915277/t0",
+      "wrap_id":"T1",
+      "wrap_path":"1/1/3/3/5/3"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Schedule of baseline questionnaires, study outcomes and data sources",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Schedule of baseline questionnaires, study outcomes and data sources<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"T2_FN1\"><p>D, day; HF, heart failure; KCCQ, Kansas City Cardiomyopathy Questionnaire; MIH, mobile integrated health; PROMIS-29, Patient-Reported Outcomes Measurement Information System-29; SCHFI, Self-Care for Heart Failure Index; TOCC, transition of care coordinator.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [
+	"D, day; HF, heart failure; KCCQ, Kansas City Cardiomyopathy Questionnaire; MIH, mobile integrated health; PROMIS-29, Patient-Reported Outcomes Measurement Information System-29; SCHFI, Self-Care for Heart Failure Index; TOCC, transition of care coordinator."
+      ],
+      "source_path":"1/1/3/3/6/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><td align=\"left\" valign=\"bottom\" rowspan=\"2\" colspan=\"1\">Timepoint<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"2\" colspan=\"1\">Baseline<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"3\">Post allocation/follow-up<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"2\" colspan=\"1\">Data sources<\/td><\/tr><tr><td align=\"char\" char=\".\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">30D<\/td><td align=\"char\" char=\".\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">60D<\/td><td align=\"char\" char=\".\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">90D<\/td><\/tr><\/thead><tbody><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"6\"><bold><italic toggle=\"yes\">Enrolment<\/italic><\/bold><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Eligibility screen<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Informed consent<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Past medical history<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">INSIGHT<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Medications<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">INSIGHT<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Index HF admission data<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Medicare claims/INSIGHT<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Sociodemographic data<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">REDCap survey<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Allocation<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"6\"><bold><italic toggle=\"yes\">Interventions<\/italic><\/bold><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>MIH<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>TOCC<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"6\"><bold><italic toggle=\"yes\">Assessments and outcomes<\/italic><\/bold><\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Healthcare utilisation<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Medicare claims/INSIGHT<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>Healthcare quality<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Medicare claims/INSIGHT<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>KCCQ<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">REDCap survey<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>PROMIS-29<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">REDCap survey<\/td><\/tr><tr><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><named-content content-type=\"indent\"><\/named-content>SCHFI<\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" style=\"background-color:#548DD4\" colspan=\"1\"><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">REDCap survey<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC8915277/t1",
+      "wrap_id":"T2",
+      "wrap_path":"1/1/3/3/6/3"
+    }
+  ],
+  "title":"Using Mobile Integrated Health and telehealth to support transitions of care among patients with heart failure (MIGHTy-Heart): protocol for a pragmatic randomised controlled trial"
+}

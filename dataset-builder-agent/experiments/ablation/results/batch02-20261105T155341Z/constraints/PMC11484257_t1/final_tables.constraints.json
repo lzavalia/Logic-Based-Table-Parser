@@ -1,0 +1,123 @@
+{
+  "pmc_id":"PMC11484257",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristic of participants.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11484257/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC11484257/t1/layout1",
+      "caption":"Associations between NLR and LTBI.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate1_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [3 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":7,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":3,"text":"NLR tertile"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"n.event_%": []},
+	    {"Model 1": [ {"OR (95%CI)": []},  {"P -value": []} ]},
+	    {"Model 2": [ {"OR (95%CI)": []},  {"P -value": []} ]},
+	    {"Model 3": [ {"OR (95%CI)": []},  {"P -value": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"NLR": []},
+	    {"T1 (<1.61)": []},
+	    {"T2(1.61–2.36)": []},
+	    {"T3(> 2.36)": []},
+	    {"P for trend": []}
+	  ],
+	  "data": [
+	    [
+	      "512 (10.4)",
+	      "0.86 (0.78∼0.94)",
+	      "0.002",
+	      "0.83 (0.75∼0.92)",
+	      "<0.001",
+	      "0.84 (0.76∼0.93)",
+	      "0.001"
+	    ],
+	    ["189 (11.5)", "1 (Ref)", "", "1 (Ref)", "", "1 (Ref)", "" ],
+	    [
+	      "177 (10.7)",
+	      "0.93 (0.75∼1.15)",
+	      "0.494",
+	      "0.93 (0.74∼1.17)",
+	      "0.546",
+	      "0.94 (0.74∼1.18)",
+	      "0.576"
+	    ],
+	    [
+	      "146 (8.9)",
+	      "0.75 (0.6∼0.95)",
+	      "0.015",
+	      "0.69 (0.54∼0.89)",
+	      "0.003",
+	      "0.71 (0.56∼0.92)",
+	      "0.008"
+	    ],
+	    ["", "", "0.015", "", "0.004", "", "0.009" ]
+	  ],
+	  "residual_corner": [ {"Variable": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11484257/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Associations of NLR with all-cause mortality in participants with LTBI and non-LTBI.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11484257/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"a6532ec25a718ef8a52362b544b92aa17c01f1d705dbfe196c4085d8be6a88b5"
+}

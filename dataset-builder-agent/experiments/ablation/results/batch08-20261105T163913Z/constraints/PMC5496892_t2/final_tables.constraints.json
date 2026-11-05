@@ -1,0 +1,133 @@
+{
+  "pmc_id":"PMC5496892",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Participant characteristics by hepatitis virus infection at baseline in cross-sectional analysis ( n = 439,708).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5496892/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds ratios for prevalent diabetes by hepatitis virus infection at baseline ( n = 439,708).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC5496892/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC5496892/t2/h2_v1",
+      "caption":"Baseline participant characteristics by incidence of diabetes in cohort analysis ( n = 219,448).",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":3,
+	    "last_row":17,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Incident diabetes": [ {"No": []},  {"Yes": []} ]},  {"P value": []} ],
+	  "vertical metadata": [
+	    {"Number": []},
+	    {"Age, years *": []},
+	    {"Men, %": []},
+	    {"Current smoker, %": []},
+	    {"Alcohol intake, g/day †": []},
+	    {"Vigorous exercise, % ‡": []},
+	    {"12+ years of education, % §": []},
+	    {"BMI, kg/m 2*": []},
+	    {"ALT, U/l †": []},
+	    {"AST, U/l †": []},
+	    {"GGT, U/l †": []},
+	    {"Glucose, mg/dl *": []},
+	    {"Family history of DM, %": []},
+	    {"USG Fatty liver disease, %": []},
+	    {"HBsAg (+), %": []},
+	    {"HCV Ab (+), %": []}
+	  ],
+	  "data": [
+	    ["211,957", "7,491", "" ],
+	    ["37.4 (7.6)", "41.5 (8.5)", "<0.001" ],
+	    ["57.6", "78.7", "<0.001" ],
+	    ["26.9", "39.1", "<0.001" ],
+	    ["5 (0–14)", "8 (0–19)", "<0.001" ],
+	    ["14.8", "17.2", "<0.001" ],
+	    ["78.1", "69.7", "<0.001" ],
+	    ["23.2 (3.1)", "25.7 (3.2)", "<0.001" ],
+	    ["20 (14–29)", "31 (21–48)", "<0.001" ],
+	    ["21 (18–26)", "26 (21–33)", "<0.001" ],
+	    ["19 (12–32)", "37 (22–63)", "<0.001" ],
+	    ["92.0 (8.3)", "104.4 (10.9)", "<0.001" ],
+	    ["14.0", "22.9", "<0.001" ],
+	    ["23.8", "58.5", "<0.001" ],
+	    ["4.0", "4.0", "0.71" ],
+	    ["0.1", "0.1", "0.91" ]
+	  ],
+	  "residual_corner": [ {"Characteristics": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC5496892/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Hazard ratios for incident diabetes by hepatitis virus infection status ( n = 219,448).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC5496892/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"4006a7e3b93403874b94c4e2d7cfb615aab9fbbf0b710daa89f05eb033d400c0"
+}

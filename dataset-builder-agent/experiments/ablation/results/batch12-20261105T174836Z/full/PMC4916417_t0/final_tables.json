@@ -1,0 +1,123 @@
+{
+  "pmc_id":"PMC4916417",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC4916417/t0/layout1",
+      "caption":"Effect of mulching (M), urea types (U) and there interactions (M × U) on soil CO 2 emissions (g m −2 h −1 ) during the seedling, jointing, flare opening, blooming, filling, and milk stages of maize in 2013 and 2014.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "separators": [
+	{"row":2,"text":"Seedling stage"},
+	{"row":6,"text":"Jointing stage"},
+	{"row":10,"text":"Flare opening stage"},
+	{"row":14,"text":"Blooming stage"},
+	{"row":18,"text":"Filling stage"},
+	{"row":22,"text":"Milk stage"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"2013": [ {"df": []},  {"F value": []},  {"Sig. (P)": []} ]},
+	    {"2014": [ {"df": []},  {"F value": []},  {"Sig. (P)": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []},
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []},
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []},
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []},
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []},
+	    {"M": []},
+	    {"U": []},
+	    {"M × U": []}
+	  ],
+	  "data": [
+	    ["2", "455.99", "<0.0001 ***", "2", "21.29", "0.0074 **" ],
+	    ["1", "2.97", "0.1354", "1", "9.58", "0.0212 *" ],
+	    ["2", "1.44", "0.3085", "2", "30.63", "0.0007 **" ],
+	    ["2", "22.88", "0.0065 **", "2", "29.86", "0.0039 **" ],
+	    ["1", "3.40", "0.1150", "1", "0.03", "0.8688" ],
+	    ["2", "0.45", "0.6598", "2", "2.74", "0.1426" ],
+	    ["2", "1356.15", "<0.0001 ***", "2", "45.18", "0.0018 **" ],
+	    ["1", "56.96", "0.0003 **", "1", "484.84", "<0.0001 ***" ],
+	    ["2", "16.51", "0.0036 **", "2", "258.42", "<0.0001 ***" ],
+	    ["2", "93.12", "0.0004 **", "2", "68.12", "0.0008 **" ],
+	    ["1", "18.60", "0.0050 **", "1", "24.00", "0.0027 **" ],
+	    ["2", "3.66", "0.0915", "2", "5.18", "0.0494 *" ],
+	    ["2", "3.48", "0.1333", "2", "24.75", "0.0056 **" ],
+	    ["1", "3.84", "0.0978", "1", "1.94", "0.2129" ],
+	    ["2", "0.26", "0.7812", "2", "0.56", "0.5976" ],
+	    ["2", "2.19", "0.2282", "2", "14.99", "0.0139 *" ],
+	    ["1", "5.67", "0.0546", "1", "2.97", "0.1353" ],
+	    ["2", "6.39", "0.0326 *", "2", "0.59", "0.5843" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC4916417/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Correlations between soil CO 2 emissions (F), soil temperature (T) and soil water content (W) at a 5-cm depth under NU, NC, TU, TC, BU and BC in 2013 and 2014.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4916417/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of mulching (M), urea types (U) and there interactions (M × U) on cumulative soil CO 2 emissions (t ha −1 ), grain yield (t ha −1 ), and cumulative soil CO 2 emissions per unit grain yield during the two growing seasons.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC4916417/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Cumulative soil CO 2 emissions (t ha −1 ), grain yield (t ha −1 ), and cumulative soil CO 2 emission per unit grain yield in the mulching and urea treatments during the two growing seasons.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC4916417/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"5522f8188642de10c266b6d5152ed21b3b2181e108fce789282a16b12eba841d"
+}

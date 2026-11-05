@@ -1,0 +1,86 @@
+{
+  "pmc_id":"PMC11397705",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"Phosphorus activation coefficient in different fertilization treatments. Values represent the means of four plots ± SE (standard errors).",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":5,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Phosphorus Activation Coefficient (PAC 1 , %)": [ {"0–10 cm": []},  {"10–20 cm": []},  {"20–30 cm": []},  {"30–40 cm": []} ]
+	    }
+	  ],
+	  "vertical metadata": [ {"CK": []},  {"NPK": []},  {"0.75NPK": []},  {"SNPK": []} ],
+	  "data": [
+	    ["20.4 ± 0.5 b", "19.3 ± 0.2 ab", "5.16 ± 0.64 b", "2.16 ± 0.32 a" ],
+	    ["22.6 ± 0.4 b", "22.3 ± 0.7 a", "4.14 ± 0.51 b", "2.14 ± 0.55a" ],
+	    ["22.2 ± 0.6 b", "16.8 ± 0.3 b", "1.75 ± 0.57 b", "1.67 ± 0.28 a" ],
+	    ["68.3 ± 0.1 a", "21.8 ± 0.1 a", "11.7 ± 0.6 a", "1.56 ± 0.17 a" ]
+	  ],
+	  "residual_corner": [ {"Treatment": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC11397705/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The MBP turnover rates and annual P fluxes through microbial biomass under different fertilization regimes from June 2021 to September 2022.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11397705/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Selected soil chemical properties of the long-term field trail used in present study. Values represent the means of four plots with SE (standard errors).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11397705/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"91f34385afc4af9a359a5b1d0b6037b85f6a5955ab669842f67bd9a4d6b7bae8"
+}

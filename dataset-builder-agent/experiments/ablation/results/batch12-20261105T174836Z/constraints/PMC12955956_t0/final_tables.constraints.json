@@ -1,0 +1,101 @@
+{
+  "pmc_id":"PMC12955956",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC12955956/t0/layout1",
+      "caption":"Main Characteristics of the Included Studies",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"TABLE 1.",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2, 10 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":13,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":2,"text":"Esmolol vs. SOC"},  {"row":10,"text":"Landiolol vs. SOC"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"n": []},
+	    {"(Sepsis Definition) a": []},
+	    {"Settings": []},
+	    {"Baseline Heart Rate, Beats/Min": [ {"Intervention": []},  {"Control": []} ]},
+	    {"No. of Deaths at 28 d, n": [ {"Intervention": []},  {"Control": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Morelli et al ( 13 ) (2013)": []},
+	    {"Gadallah et al ( 41 ) (2020)": []},
+	    {"Liu et al ( 45 ) (2015)": []},
+	    {"Wang et al ( 44 ) (2023)": []},
+	    {"Cocchi et al ( 42 ) (2022)": []},
+	    {"Liu et al ( 43 ) (2019)": []},
+	    {"Wang et al ( 46 ) (2017)": []},
+	    {"Rehberg et al ( 14 ) (2024)": []},
+	    {"Kakihana et al ( 15 ) (2020)": []},
+	    {"Whitehouse et al ( 16 ) (2023)": []}
+	  ],
+	  "data": [
+	    [
+	      "77/77",
+	      "Sepsis-2",
+	      "Single center",
+	      "113.8 (109.7–123.7) b",
+	      "112.9 (106.8–119.9) b",
+	      "38",
+	      "62"
+	    ],
+	    ["30/30", "Sepsis-2", "Single center", "113.4 ± 12.8", "115.8 ± 12.9", "14", "21" ],
+	    ["24/24", "Sepsis-2", "Single center", "112.9 ± 7.1", "113.8 ± 7.5", "6", "15" ],
+	    ["50/50", "Sepsis-3", "Single center", "118.1 ± 11.1", "117.2 ± 9.7", "16", "25" ],
+	    ["18/22", "Sepsis-2", "Multicenter", "107.0 ± 13.0", "105.0 ± 10.0", "NR", "NR" ],
+	    ["50/50", "Sepsis-2", "Single center", "114.1 ± 16.8", "120.0 ± 16.0", "31", "34" ],
+	    ["30/30", "Sepsis-2", "Single center", "117.7 ± 20.6", "111.9 ± 14.2", "9", "11" ],
+	    ["98/98", "Sepsis-3", "Multicenter", "116.2 ± 20.9", "114.1 ± 16.8", "43", "39" ],
+	    ["76/75", "Sepsis-3", "Multicenter", "117.1 ± 14.5", "117.6 ± 13.4", "9", "15" ],
+	    ["63/63", "Sepsis-3", "Multicenter", "110.6 ± 13.0", "114.1 ± 16.8", "23", "16" ]
+	  ],
+	  "residual_corner": [ {"Source (Author, Year)": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC12955956/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Grading of Recommendations Assessment, Development, and Evaluation Summary of Findings",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2.",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12955956/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"68a72f67462a83eabdee30ae5fce365d68dcf120e5d2d2659cf5ab7c82b73ae9"
+}

@@ -1,0 +1,55 @@
+{
+  "pmc_id":"PMC13308667",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Patient characteristics of the study cohort and validation cohorts.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 6 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":8,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":1,"text":"Age at biopsy (years)"},  {"row":6,"text":"Sex"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Study cohort total ( n = 73)": []},
+	    {"Psoriasis ( n = 28)": []},
+	    {"Eczema ( n = 45)": []},
+	    {"Validation cohort ( n = 72)": []}
+	  ],
+	  "vertical metadata": [ {"<35": []},  {"35–54": []},  {"55–74": []},  {">74": []},  {"Male": []},  {"Female": []} ],
+	  "data": [
+	    ["10 (13.7%)", "1 (3.6%)", "9 (20%)", "17 (23.6%)" ],
+	    ["13 (17.8%)", "7 (25.0%)", "6 (13.3%)", "30 (41.7%)" ],
+	    ["41 (56.2%)", "19 (67.9%)", "22 (48.9%)", "19 (26.3%)" ],
+	    ["9 (12.3%)", "1 (3.6%)", "8 (17.8%)", "6 (8.3%)" ],
+	    ["47 (64.4%)", "15 (53.6%)", "32 (71.1%)", "39 (54.2%)" ],
+	    ["26 (35.6%)", "13 (46.4%)", "13 (28.9%)", "33 (54.8%)" ]
+	  ],
+	  "residual_corner": [ {"Characteristic": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC13308667/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"216e785220b92005857a377ed05ef30285232d73b2c06f210019a6755f4c2248"
+}

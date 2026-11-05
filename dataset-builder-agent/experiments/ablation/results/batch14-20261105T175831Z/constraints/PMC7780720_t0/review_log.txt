@@ -1,0 +1,5 @@
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Segmenting tables (arm constraints)...
+PMC7780720: 2 table(s): 1 unreviewed, 1 valid -> papers/PMC7780720/review.constraints.jsonl
+
+Ablation review (arm constraints) complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in papers/PMC<id>/review.constraints.jsonl, structured tables in final_tables.constraints.json.

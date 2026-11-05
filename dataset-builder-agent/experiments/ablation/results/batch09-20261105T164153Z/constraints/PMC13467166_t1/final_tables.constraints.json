@@ -1,0 +1,121 @@
+{
+  "pmc_id":"PMC13467166",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Distribution of thyroid function test results in the reference sample population.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13467166/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Established reference intervals for thyroid parameters partitioned by the Harris–Boyd method.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":17,
+	    "row_header_columns":2
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13467166/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Unsupervised algorithm-derived age-based subgroups and reference intervals for TSH, fT4, and fT3.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC13467166/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Reference intervals for TSH, fT4, and fT3 derived by refineR, reflimR, Bhattacharya and non-parametric percentile method.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC13467166/t3"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of the patient and reference (healthy) groups in the independent external validation cohort (NHANES, N = 2297).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC13467166/t4"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Diagnostic performance of the reference interval estimation methods in the independent external TSH validation cohort.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC13467166/t5"
+    }
+  ],
+  "tables_jsonl_sha256":"71d26331263f5c7f71b2e8c8751dec1e3e1a9b0b7f311f731bde879f7a3d5cd4"
+}

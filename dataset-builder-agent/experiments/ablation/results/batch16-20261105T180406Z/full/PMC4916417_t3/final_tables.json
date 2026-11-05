@@ -1,0 +1,101 @@
+{
+  "pmc_id":"PMC4916417",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of mulching (M), urea types (U) and there interactions (M × U) on soil CO 2 emissions (g m −2 h −1 ) during the seedling, jointing, flare opening, blooming, filling, and milk stages of maize in 2013 and 2014.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC4916417/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Correlations between soil CO 2 emissions (F), soil temperature (T) and soil water content (W) at a 5-cm depth under NU, NC, TU, TC, BU and BC in 2013 and 2014.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4916417/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of mulching (M), urea types (U) and there interactions (M × U) on cumulative soil CO 2 emissions (t ha −1 ), grain yield (t ha −1 ), and cumulative soil CO 2 emissions per unit grain yield during the two growing seasons.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC4916417/t2"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC4916417/t3/layout2",
+      "caption":"Cumulative soil CO 2 emissions (t ha −1 ), grain yield (t ha −1 ), and cumulative soil CO 2 emission per unit grain yield in the mulching and urea treatments during the two growing seasons.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate3_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 4",
+      "repair":null,
+      "separators": [ {"row":1,"text":"2013"},  {"row":8,"text":"2014"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Soil CO 2": []},  {"Grain yield": []},  {"Soil CO 2 per yield": []} ],
+	  "vertical metadata": [
+	    {"NU": []},
+	    {"NC": []},
+	    {"TU": []},
+	    {"TC": []},
+	    {"BU": []},
+	    {"BC": []},
+	    {"NU": []},
+	    {"NC": []},
+	    {"TU": []},
+	    {"TC": []},
+	    {"BU": []},
+	    {"BC": []}
+	  ],
+	  "data": [
+	    ["19.24 ± 0.48 c", "9.18 ± 0.19 c", "2.10 ± 0.03 ab" ],
+	    ["17.94 ± 0.30 d", "9.04 ± 0.89 c", "1.99 ± 0.12 bc" ],
+	    ["23.65 ± 0.30 a", "10.41 ± 1.01 bc", "2.27 ± 0.13 a" ],
+	    ["22.31 ± 0.50 b", "12.35 ± 1.12 a", "1.81 ± 0.10 c" ],
+	    ["18.88 ± 0.34 c", "11.80 ± 1.06 ab", "1.60 ± 0.09 d" ],
+	    ["18.63 ± 0.25 c", "12.16 ± 1.23 a", "1.54 ± 0.14 d" ],
+	    ["29.72 ± 0.39 c", "13.18 ± 1.35 d", "2.26 ± 0.03 a" ],
+	    ["25.86 ± 0.60 d", "13.52 ± 1.39 cd", "1.91 ± 0.01 bc" ],
+	    ["34.55 ± 0.77 a", "14.85 ± 1.47 bc", "2.33 ± 0.07 a" ],
+	    ["31.63 ± 0.40 b", "16.02 ± 1.25 ab", "1.98 ± 0.11 b" ],
+	    ["29.32 ± 0.61 c", "15.94 ± 1.16 ab", "1.84 ± 0.06 c" ],
+	    ["26.38 ± 0.57 d", "16.64 ± 1.49 a", "1.59 ± 0.09 d" ]
+	  ],
+	  "residual_corner": [ {"Treatment": []} ]
+	}
+      ],
+      "table_index":3,
+      "table_uid":"PMC4916417/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"5522f8188642de10c266b6d5152ed21b3b2181e108fce789282a16b12eba841d"
+}

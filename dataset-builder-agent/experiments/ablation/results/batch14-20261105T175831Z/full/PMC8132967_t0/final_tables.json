@@ -1,0 +1,90 @@
+{
+  "pmc_id":"PMC8132967",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC8132967/t0/h2_v1",
+      "caption":"Effect of PSI-362 coated CAN + S fertilizer on phenotypic parameters in barley crop (cv. Gangway) 22 days after application.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"TABLE 1",
+      "repair":null,
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Field 1": [ {"Control 100% N": []},  {"PSI-362 coated 73% N": []} ]},
+	    {"Field 2": [ {"Control 100% N": []},  {"PSI-362 coated 88% N": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Shoot FW (g plant –1 )": []},
+	    {"Shoot DW (g plant –1 )": []},
+	    {"Root FW (g plant –1 )": []},
+	    {"Root DW (g plant –1 )": []},
+	    {"Number tillers per plant": []}
+	  ],
+	  "data": [
+	    ["5.26 ± 0.26", "5.62 ± 0.76", "5.74 ± 0.32", "6.55 ± 0.08" ],
+	    ["0.57 ± 0.03", "0.54 ± 0.07", "0.54 ± 0.02", "0.57 ± 0.01" ],
+	    ["0.64 ± 0.06", "0.71 ± 0.10", "0.41 ± 0.02", "0.43 ± 0.02" ],
+	    ["0.13 ± 0.01", "0.16 ± 0.02", "0.08 ± 0.01", "0.10 ± 0.01" ],
+	    ["4.23 ± 0.47", "4.63 ± 0.68", "4.83 ± 0.16", "4.84 ± 0.24" ]
+	  ],
+	  "residual_corner": [ {"Parameter 1": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC8132967/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of PSI-362 coated CAN + S fertilizer on N forms (nitrate and ammonia), free amino acids, soluble protein, and photosynthetic pigments in barley shoot tissue (cv. Gangway) at 22 days after application.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC8132967/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of PSI-362 coated CAN + S fertilizer on plant and grain derived parameters in barley crop (cv. Gangway) at harvest.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC8132967/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect of PSI-362 coated CAN + S fertilizer on NUE and environmentally derived parameters in barley crop (cv. Gangway) at harvest.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC8132967/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"eb19e68269605f6b3420dd96986092e441e13f5a7b44ebe08528565bc359318b"
+}

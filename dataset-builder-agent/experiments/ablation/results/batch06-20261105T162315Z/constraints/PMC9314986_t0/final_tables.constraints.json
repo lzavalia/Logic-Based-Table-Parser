@@ -1,0 +1,385 @@
+{
+  "pmc_id":"PMC9314986",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC9314986/t0/h1_v1",
+      "caption":"Characteristics of trials analyzed",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h1_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":33,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Country": []},
+	    {"Design": []},
+	    {"Interventions": []},
+	    {"No. randomized": []},
+	    {"Female %": []},
+	    {"Ethnic origin %": []},
+	    {"Duration of intervention": []}
+	  ],
+	  "vertical metadata": [
+	    {"Barley (2014)": []},
+	    {"Kangovi (2014)": []},
+	    {"": []},
+	    {"Park (2014)": []},
+	    {"Garvey (2015)": []},
+	    {"Blom (2016)": []},
+	    {"Kangovi (2017)": []},
+	    {"Ell (2017)": []},
+	    {"Kangovi (2018)": []},
+	    {"Verdoorn (2019)": []},
+	    {"Ford (2019)": []},
+	    {"Fortin (2021)": []},
+	    {"Tusa (2021)": []}
+	  ],
+	  "data": [
+	    [
+	      "UK",
+	      "Open‐label assessor‐ blind individual RCT",
+	      "E, Nurse‐led personalized care based on problem identification",
+	      "E, 41",
+	      "E, 34",
+	      "E, 81 White, 5 Asian, 2 Black, 12 other",
+	      "6 months"
+	    ],
+	    [
+	      "UK",
+	      "Open‐label assessor‐ blind individual RCT",
+	      "E, Nurse‐led personalized care based on problem identification",
+	      "C, 40",
+	      "C, 37",
+	      "C, 85 White, 8 Asian, 5 Asian, 3 other",
+	      "6 months"
+	    ],
+	    [
+	      "UK",
+	      "Open‐label assessor‐ blind individual RCT",
+	      "C, Usual GP and nurse care",
+	      "C, 40",
+	      "C, 37",
+	      "C, 85 White, 8 Asian, 5 Asian, 3 other",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "E, Chronic disease goal‐setting supported by community health worker",
+	      "E, 222",
+	      "E, 63",
+	      "E, 93 African American",
+	      "2 weeks"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "E, Chronic disease goal‐setting supported by community health worker",
+	      "C, 224",
+	      "C, 56",
+	      "E, 93 African American",
+	      "2 weeks"
+	    ],
+	    [
+	      "",
+	      "",
+	      "C, Routine hospital care and referral to GP",
+	      "",
+	      "",
+	      "C, 94 African American",
+	      ""
+	    ],
+	    [
+	      "South Korea",
+	      "Open‐label individual RCT",
+	      "E, Health coaching self‐management",
+	      "E, 25",
+	      "E, 86",
+	      "E and C, 100",
+	      "8 weeks"
+	    ],
+	    [
+	      "South Korea",
+	      "Open‐label individual RCT",
+	      "E, Health coaching self‐management",
+	      "C, 25",
+	      "C, 71 a , a",
+	      "Korean",
+	      "8 weeks"
+	    ],
+	    [
+	      "South Korea",
+	      "Open‐label individual RCT",
+	      "C, Standard nursing home care",
+	      "C, 25",
+	      "C, 71 a , a",
+	      "Korean",
+	      "8 weeks"
+	    ],
+	    [
+	      "Ireland",
+	      "Open‐label individual RCT",
+	      "E, Occupational therapy‐led self‐management support",
+	      "E, 26",
+	      "E, 65",
+	      "NR",
+	      "6 weeks"
+	    ],
+	    [
+	      "Ireland",
+	      "Open‐label individual RCT",
+	      "E, Occupational therapy‐led self‐management support",
+	      "C, 24",
+	      "C, 63",
+	      "NR",
+	      "6 weeks"
+	    ],
+	    [
+	      "Ireland",
+	      "Open‐label individual RCT",
+	      "C, Usual GP care and wait‐list",
+	      "C, 24",
+	      "C, 63",
+	      "NR",
+	      "6 weeks"
+	    ],
+	    [
+	      "Netherlands",
+	      "Open‐label assessor blind cluster RCT",
+	      "E, Integrated GP‐ geriatric care plan based on problem identification and goal definition",
+	      "E, 288",
+	      "E, 73",
+	      "NR",
+	      "2/3 weeks"
+	    ],
+	    [
+	      "Netherlands",
+	      "Open‐label assessor blind cluster RCT",
+	      "E, Integrated GP‐ geriatric care plan based on problem identification and goal definition",
+	      "C, 1091",
+	      "C, 72",
+	      "NR",
+	      "2/3 weeks"
+	    ],
+	    [
+	      "Netherlands",
+	      "Open‐label assessor blind cluster RCT",
+	      "C, Usual care",
+	      "C, 1091",
+	      "C, 72",
+	      "NR",
+	      "2/3 weeks"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "E, Chronic disease goal‐setting supported by community health worker",
+	      "E, 150",
+	      "E, 77",
+	      "E and C, 95 African American",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "C, Chronic disease goal‐setting with the primary care provider",
+	      "E, 150",
+	      "E, 77",
+	      "E and C, 95 African American",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "C, Chronic disease goal‐setting with the primary care provider",
+	      "C, 152",
+	      "C, 74",
+	      "E and C, 95 African American",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "E, Community based promotor‐led psycho‐education",
+	      "E, 178",
+	      "E, 85",
+	      "E and C, 99 Hispanic",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "C, County clinic usual care",
+	      "E, 178",
+	      "E, 85",
+	      "E and C, 99 Hispanic",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "C, County clinic usual care",
+	      "C, 170",
+	      "C, 85",
+	      "E and C, 99 Hispanic",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "E, Chronic disease goal‐setting supported by community health worker",
+	      "E, 304",
+	      "E, 64",
+	      "E, 93 African American C, 95 African American",
+	      "6 months"
+	    ],
+	    [
+	      "USA",
+	      "Open‐label individual RCT",
+	      "C, Chronic disease goal‐setting with primary care provider",
+	      "C, 288",
+	      "C, 61",
+	      "E, 93 African American C, 95 African American",
+	      "6 months"
+	    ],
+	    [
+	      "Nether‐lands",
+	      "Open‐label individual RCT",
+	      "E, Community medication review focused on personal goals by pharmacists",
+	      "E, 315",
+	      "E, 56",
+	      "E, 97 European",
+	      "3 months"
+	    ],
+	    [
+	      "Nether‐lands",
+	      "Open‐label individual RCT",
+	      "C, Usual care and waiting list for community medication review",
+	      "C, 314",
+	      "C, 52",
+	      "C, 98 European",
+	      "3 months"
+	    ],
+	    [
+	      "UK",
+	      "Open‐label cluster RCT",
+	      "E, Goal‐setting and goal achievement support by GP",
+	      "E, 24",
+	      "E, 54",
+	      "E and C, 100 White British",
+	      "6 months"
+	    ],
+	    [
+	      "UK",
+	      "Open‐label cluster RCT",
+	      "C, Care planning consultation as usual",
+	      "C, 28",
+	      "C, 39",
+	      "E and C, 100 White British",
+	      "6 months"
+	    ],
+	    [
+	      "Canada",
+	      "Open‐label individual RCT with a mixed‐methods design",
+	      "E, Community intervention based on the chronic care model and the patient‐ centred clinical method, provided by health professionals added to the family medicine group team",
+	      "E, 144",
+	      "E, 52",
+	      "E and C, 100",
+	      "4 months"
+	    ],
+	    [
+	      "Canada",
+	      "Open‐label individual RCT with a mixed‐methods design",
+	      "E, Community intervention based on the chronic care model and the patient‐ centred clinical method, provided by health professionals added to the family medicine group team",
+	      "E, 144",
+	      "E, 52",
+	      "White",
+	      "4 months"
+	    ],
+	    [
+	      "Canada",
+	      "Open‐label individual RCT with a mixed‐methods design",
+	      "C, Usual care provided by family doctors and family medicine group team",
+	      "C, 140",
+	      "C, 55",
+	      "Canadians",
+	      "4 months"
+	    ],
+	    [
+	      "Finland",
+	      "Open‐label individual RCT",
+	      "E, Community intervention based on participatory patient care planning including goal setting, action planning, documenting, coordinating, supporting and reviewing, provided by trained nurses and GP",
+	      "E, 304",
+	      "E, 54",
+	      "NR",
+	      "12 months"
+	    ],
+	    [
+	      "Finland",
+	      "Open‐label individual RCT",
+	      "E, Community intervention based on participatory patient care planning including goal setting, action planning, documenting, coordinating, supporting and reviewing, provided by trained nurses and GP",
+	      "C, 301",
+	      "C, 50",
+	      "NR",
+	      "12 months"
+	    ],
+	    [
+	      "Finland",
+	      "Open‐label individual RCT",
+	      "C, Usual care provided by GP",
+	      "C, 301",
+	      "C, 50",
+	      "NR",
+	      "12 months"
+	    ]
+	  ],
+	  "residual_corner": [ {"Study (year)": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC9314986/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"GRADE evaluation: Summary of findings",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC9314986/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"83a47165e330fda375ec2b6e8641c135342de272764871856a80044643d202d7"
+}

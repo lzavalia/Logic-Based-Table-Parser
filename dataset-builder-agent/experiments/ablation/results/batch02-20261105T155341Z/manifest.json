@@ -1,0 +1,13 @@
+{
+ "name": "batch02",
+ "model": "anthropic:claude-haiku-5-5",
+ "arms": [
+  "llm-only",
+  "constraints",
+  "full"
+ ],
+ "dataset": "src/ablation/batch02/dataset",
+ "started_unix": 1793894021.980748,
+ "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+ "git_dirty": true
+}

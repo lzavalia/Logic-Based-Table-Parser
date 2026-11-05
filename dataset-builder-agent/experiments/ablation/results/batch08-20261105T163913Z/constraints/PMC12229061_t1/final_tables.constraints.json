@@ -1,0 +1,53 @@
+{
+  "pmc_id":"PMC12229061",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of included systematic reviews",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12229061/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Relationships between cardiorespiratory fitness and health outcomes, expressed using statistical measures other than correlation coefficient or mean difference",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 5 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":8,
+	    "row_header_columns":2
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12229061/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f4c397a204f390cdb07d595864f8c10baf77cc1aa4aa4de4bd726f0db06ec871"
+}

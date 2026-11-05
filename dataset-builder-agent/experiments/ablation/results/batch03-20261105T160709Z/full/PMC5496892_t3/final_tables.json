@@ -1,0 +1,95 @@
+{
+  "pmc_id":"PMC5496892",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Participant characteristics by hepatitis virus infection at baseline in cross-sectional analysis ( n = 439,708).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5496892/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds ratios for prevalent diabetes by hepatitis virus infection at baseline ( n = 439,708).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC5496892/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline participant characteristics by incidence of diabetes in cohort analysis ( n = 219,448).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC5496892/t2"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC5496892/t3/layout2",
+      "caption":"Hazard ratios for incident diabetes by hepatitis virus infection status ( n = 219,448).",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate3_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 4",
+      "repair":null,
+      "separators": [ {"row":1,"text":"HBsAg"},  {"row":5,"text":"HCV Ab"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"No. of incident cases": []},
+	    {"Person-years": []},
+	    {"Model 1 HR (95% CI)": []},
+	    {"Model 2 HR (95% CI)": []},
+	    {"Model 3 HR (95% CI)": []}
+	  ],
+	  "vertical metadata": [
+	    {"Negative": []},
+	    {"Positive": []},
+	    {"P Value": []},
+	    {"Negative": []},
+	    {"Positive": []},
+	    {"P Value": []}
+	  ],
+	  "data": [
+	    ["7,188", "1,016,231.2", "1.00 (reference)", "1.00 (reference)", "1.00 (reference)" ],
+	    ["303", "43,435.1", "0.91 (0.81–1.02)", "1.07 (0.94–1.22)", "1.20 (1.05–1.37)" ],
+	    ["", "", "0.10", "0.31", "0.007" ],
+	    ["7,481", "1,058,402.5", "1.00 (reference)", "1.00 (reference)", "1.00 (reference)" ],
+	    ["10", "1,263.8", "0.77 (0.42–1.44)", "0.72 (0.30–1.73)", "0.75 (0.31–1.81)" ],
+	    ["", "", "0.42", "0.46", "0.52" ]
+	  ],
+	  "residual_corner": [ {"Hepatitis virus infection": []} ]
+	}
+      ],
+      "table_index":3,
+      "table_uid":"PMC5496892/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"4006a7e3b93403874b94c4e2d7cfb615aab9fbbf0b710daa89f05eb033d400c0"
+}

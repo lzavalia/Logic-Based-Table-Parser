@@ -1,0 +1,96 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":3,
+  "pmc_id":"PMC12511133",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC12511133/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC12511133.xml",
+    "input_file_sha256":"be18c227aa74470faf5315045165697e28c97e65eb7865b3f0762c43f0fc2d82",
+    "input_file_size_bytes":99430,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/ .",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC12511133",
+    "processing_timestamp_unix":1793042747.559413,
+    "retrieval_timestamp":"2026-10-26T19:23:20Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042600.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":3,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Physico-chemical properties of different effluent dilutions and hydroponic solution used",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Physico-chemical properties of different effluent dilutions and hydroponic solution used<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p><italic toggle=\"yes\">CF<\/italic>, chemical fertiliser/hydroponic solution;<italic toggle=\"yes\">ABR<\/italic>, undiluted ABR effluent; 3:1, 1:1, and 1:3 are ratios of effluent, tap water. South African thresholds = 3 mg ammonium-N L<sup>−1<\/sup>; 15 mg nitrate–N L<sup>−1<\/sup>and 10 mg orthophosphate-P L<sup>−1<\/sup>(Department of Water Affairs,<xref ref-type=\"bibr\" rid=\"CR12\">2013<\/xref>)<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"CF , chemical fertiliser/hydroponic solution; ABR , undiluted ABR effluent; 3:1, 1:1, and 1:3 are ratios of effluent, tap water. South African thresholds = 3 mg ammonium-N L −1 ; 15 mg nitrate–N L −1 and 10 mg orthophosphate-P L −1 (Department of Water Affairs, 2013 )"
+      ],
+      "source_path":"1/1/3/2/3/4/2/13/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\">Parameters<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">ABR<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">3:1<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">1:1<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">1:3<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">CF<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">pH<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.86<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.76<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.72<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.67<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.71<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Electrical conductivity (dS m<sup>−1<\/sup>)<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.33<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.01<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.77<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.54<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.41<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Ammonium N (mg L<sup>−1<\/sup>)<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">63.1<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">47.3<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">31.6<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">15.8<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">8.4<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Nitrate N (mg L<sup>−1<\/sup>)<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.30<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.225<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.15<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.075<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">3.60<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Orthophosphate P (mg L<sup>−1<\/sup>)<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">11.5<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">8.63<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">5.75<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.88<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">4.10<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC12511133/t0",
+      "wrap_id":"Tab1",
+      "wrap_path":"1/1/3/2/3/4/2/13"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Dry matter, growth rate, and tissue nitrogen and phosphorus of duckweed as affected by inoculation density and ABR dilutions after 14 days",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Dry matter, growth rate, and tissue nitrogen and phosphorus of duckweed as affected by inoculation density and ABR dilutions after 14 days<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Means within each factor in each column (parameter) with different letters are significantly different.<italic toggle=\"yes\">CF<\/italic>, hydroponic solution;<italic toggle=\"yes\">ABR<\/italic>, undiluted effluent; 3:1, 1:1, and 1:3 are ratios of effluent tap water<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [
+	"Means within each factor in each column (parameter) with different letters are significantly different. CF , hydroponic solution; ABR , undiluted effluent; 3:1, 1:1, and 1:3 are ratios of effluent tap water"
+      ],
+      "source_path":"1/1/3/3/3/2/16/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\">ABR dilutions<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Dry matter<break><\/break>(g m<sup>−2<\/sup>)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Average growth rate<break><\/break>(g m<sup>−2<\/sup> day<sup>−1<\/sup>)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Tissue N<break><\/break>(%)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Tissue P<break><\/break>(%)<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"5\" rowspan=\"1\">Inoculation density  <\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  400<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">21.1a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.50a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.71 a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.383a<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  600<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">29.5a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.37b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.86 b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.405ab<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  800<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">23.7a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.98ab<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.96 b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.425b<\/td><\/tr><tr><td align=\"left\" colspan=\"5\" rowspan=\"1\">ABR dilutions<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  CF<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">34.1b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.45b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.55a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.386b<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  ABR<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">5.14a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.66a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.77b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.461c<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  3:1<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">16.2a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">1.38a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.97c<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.457c<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  1:1<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">32.7b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.51b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">3.06c<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.411b<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">  1:3<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">35.7b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.76b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.88bc<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">0.307a<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC12511133/t1",
+      "wrap_id":"Tab2",
+      "wrap_path":"1/1/3/3/3/2/16"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Ryegrass dry matter, nitrogen, and phosphorus uptake and extractable soil P after harvest",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Ryegrass dry matter, nitrogen, and phosphorus uptake and extractable soil<italic toggle=\"yes\">P<\/italic>after harvest<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p><italic toggle=\"yes\">DWN<\/italic>, duckweed as<italic toggle=\"yes\">N<\/italic>source;<italic toggle=\"yes\">DWP<\/italic>, duckweed as<italic toggle=\"yes\">P<\/italic>source; DWN + P, duckweed as<italic toggle=\"yes\">N<\/italic>source + mineral<italic toggle=\"yes\">P<\/italic>;<italic toggle=\"yes\">NPK<\/italic>, positive control (mineral fertiliser);<italic toggle=\"yes\">PK<\/italic>, negative control (without N);<italic toggle=\"yes\">K<\/italic>, negative control (without<italic toggle=\"yes\">N<\/italic>and<italic toggle=\"yes\">P<\/italic>). ‘ means followed by different superscript letter(s) in each column, are significantly different<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"DWN , duckweed as N source; DWP , duckweed as P source; DWN + P, duckweed as N source + mineral P ; NPK , positive control (mineral fertiliser); PK , negative control (without N); K , negative control (without N and P ). ‘ means followed by different superscript letter(s) in each column, are significantly different"
+      ],
+      "source_path":"1/1/3/3/4/2/11/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\">Nutrient source<\/th><th align=\"left\" colspan=\"2\" rowspan=\"1\">Nutrient uptake<break><\/break>(mg pot<sup>−1<\/sup>)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Extractable soil<italic toggle=\"yes\">P<\/italic><break><\/break>(mg kg<sup>−1<\/sup>)<\/th><\/tr><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\"><\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">N<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">P<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\"><\/th><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">DWN<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">‘84.2ab<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">7.7bc<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">9.81ab<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">DWP<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">106.1b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">10.4bc<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">12.31b<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">DWN + P<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">87.6ab<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">12.3c<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">9.47ab<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">NPK<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">115.1b<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">21.4c<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">49.78d<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">PK<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">65.1ab<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">6.2ab<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">20.64c<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">K<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">39.1a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">2.1a<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">4.23a<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC12511133/t2",
+      "wrap_id":"Tab3",
+      "wrap_path":"1/1/3/3/4/2/11"
+    }
+  ],
+  "title":"Nitrogen and phosphorus removal from anaerobic baffled reactor effluent using Lemna minor and fertiliser value of the biomass for ryegrass production"
+}

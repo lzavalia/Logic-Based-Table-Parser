@@ -21,8 +21,8 @@ cell_accuracy is the share of the table's cells (each merged cell once) given
 the gold label: hmd, vmd, data, separator. Over "answered" tables it is
 measured on the accepted segmentation; "end to end" counts a table without
 one as 0. llm_correct says whether the model's own answer was right, also
-where the arm refused it. There are no significance tests: the smoke sample
-is far too small for them.
+where the arm refused it. There are no significance tests here; see the
+paired tests in README.md for the pooled study.
 """
 import argparse
 import json
@@ -111,7 +111,6 @@ def main():
     if not lines:
         raise SystemExit(f"error: {args.collected} has no lines")
     tables = []
-    by_arm = defaultdict(list)
     for line in lines:
         record = table_record(args.dataset, line["table_uid"])
         line["outcome"] = outcome(line)
@@ -120,9 +119,15 @@ def main():
         line["llm_cell_accuracy"] = cell_accuracy(record, line["llm_segmentation"],
                                                   line["gold_segmentation"])
         line["usage"] = usage(args.run_dir, line["arm"], line["table_uid"])
-        by_arm[line["arm"]].append(line)
         tables.append(line)
+    report(tables, Path(args.run_dir), args.input_price, args.output_price)
 
+
+def report(tables, out, input_price=None, output_price=None):
+    """Write OUT/scores.json and OUT/summary.md for scored lines, and print the summary."""
+    by_arm = defaultdict(list)
+    for line in tables:
+        by_arm[line["arm"]].append(line)
     arms = [a for a in ARM_ORDER if a in by_arm] + [a for a in by_arm if a not in ARM_ORDER]
     summary = {}
     for arm in arms:
@@ -142,12 +147,11 @@ def main():
         s["usage_files"] = len(used)
         for key in ["calls", "inputTokens", "outputTokens"]:
             s[key] = sum(u[key] for u in used)
-        if args.input_price is not None and args.output_price is not None:
-            s["cost_usd"] = (s["inputTokens"] * args.input_price
-                             + s["outputTokens"] * args.output_price) / 1e6
+        if input_price is not None and output_price is not None:
+            s["cost_usd"] = (s["inputTokens"] * input_price
+                             + s["outputTokens"] * output_price) / 1e6
         summary[arm] = s
 
-    out = Path(args.run_dir)
     (out / "scores.json").write_text(json.dumps({"summary": summary, "tables": tables}, indent=1))
 
     md = ["| | " + " | ".join(arms) + " |", "|---|" + "---|" * len(arms)]
@@ -170,7 +174,7 @@ def main():
     row("input tokens", lambda s: f"{s['inputTokens']:,}")
     row("output tokens", lambda s: f"{s['outputTokens']:,}")
     row("input tokens per table", lambda s: f"{s['inputTokens'] / s['tables']:,.0f}")
-    if args.input_price is not None and args.output_price is not None:
+    if input_price is not None and output_price is not None:
         row("cost (USD)", lambda s: f"{s['cost_usd']:.3f}")
 
     md += ["", "| table | set | " + " | ".join(arms) + " |", "|---|---|" + "---|" * len(arms)]

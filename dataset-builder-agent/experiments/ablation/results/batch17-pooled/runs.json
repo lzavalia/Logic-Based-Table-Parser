@@ -1,0 +1,44 @@
+[
+ {
+  "run": "batch17a-20261105T181418Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 13
+ },
+ {
+  "run": "batch17b-20261105T181718Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 1
+ },
+ {
+  "run": "batch17c-20261105T181745Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 1
+ },
+ {
+  "run": "batch17d-20261105T181809Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 1
+ },
+ {
+  "run": "batch17e-20261105T181832Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 1
+ },
+ {
+  "run": "batch17f-20261105T181855Z",
+  "model": "anthropic:claude-haiku-5-5",
+  "git_commit": "3b76b98da5b0d593b45fb870e688574c669e6525",
+  "git_dirty": true,
+  "tables": 1
+ }
+]

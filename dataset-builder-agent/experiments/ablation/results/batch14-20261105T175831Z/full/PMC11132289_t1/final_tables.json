@@ -1,0 +1,79 @@
+{
+  "pmc_id":"PMC11132289",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of Included Studies",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Appendix A",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11132289/t0"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":0},
+      "candidate_id":"PMC11132289/t1/layout0",
+      "caption":"GRADE Evidence Profile",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate1_layout0.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Appendix B",
+      "repair":null,
+      "separators": [ {"row":2,"text":"Pruritus scores"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Certainty assessment": [
+		{"No. of tance studies": []},
+		{"Study design": []},
+		{"Risk of bias": []},
+		{"Inconsistency": []},
+		{"Indirectness": []},
+		{"Imprecision": []},
+		{"Other considerations": []}
+	      ]
+	    },
+	    {"No. of patients": [ {"Intervention": []},  {"Comparison": []} ]},
+	    {"Effect": [ {"Relative (95% CI)": []},  {"Absolute (95% CI)": []} ]},
+	    {"Certainty": []},
+	    {"Importance": []}
+	  ],
+	  "vertical metadata": [],
+	  "data": [
+	    [
+	      "4",
+	      "randomized trials",
+	      "not serious",
+	      "not serious",
+	      "not serious",
+	      "serious a",
+	      "none",
+	      "83",
+	      "83",
+	      "—",
+	      "SMD 1.4 SD lower (1.74 lower to 1.05 lower)",
+	      "⊕⊕⊕⃝ MODERATE",
+	      "CRITICAL"
+	    ]
+	  ],
+	  "residual_corner": []
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11132289/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"01b84e77a7479138ef373b677f090c8f6ccb20c2817b524a2276f6b07fea4bf0"
+}

@@ -1,0 +1,2189 @@
+{
+ "summary": {
+  "llm-only": {
+   "tables": 10,
+   "correct": 7,
+   "wrong_accepted": 3,
+   "invalid_output": 0,
+   "rejected": 0,
+   "not_reviewed": 0,
+   "correct_complex": 7,
+   "tables_complex": 10,
+   "correct_simple": 0,
+   "tables_simple": 0,
+   "llm_correct": 7,
+   "cell_accuracy_answered": 0.9564212267716311,
+   "cell_accuracy_end_to_end": 0.9564212267716311,
+   "usage_files": 10,
+   "calls": 10,
+   "inputTokens": 58046,
+   "outputTokens": 6872
+  },
+  "constraints": {
+   "tables": 10,
+   "correct": 8,
+   "wrong_accepted": 1,
+   "invalid_output": 0,
+   "rejected": 1,
+   "not_reviewed": 0,
+   "correct_complex": 8,
+   "tables_complex": 10,
+   "correct_simple": 0,
+   "tables_simple": 0,
+   "llm_correct": 8,
+   "cell_accuracy_answered": 0.9931972789115646,
+   "cell_accuracy_end_to_end": 0.8938775510204081,
+   "usage_files": 10,
+   "calls": 10,
+   "inputTokens": 58046,
+   "outputTokens": 7184
+  },
+  "full": {
+   "tables": 10,
+   "correct": 7,
+   "wrong_accepted": 2,
+   "invalid_output": 0,
+   "rejected": 1,
+   "not_reviewed": 0,
+   "correct_complex": 7,
+   "tables_complex": 10,
+   "correct_simple": 0,
+   "tables_simple": 0,
+   "llm_correct": 7,
+   "cell_accuracy_answered": 0.9806186625593634,
+   "cell_accuracy_end_to_end": 0.8825567963034271,
+   "usage_files": 10,
+   "calls": 10,
+   "inputTokens": 55904,
+   "outputTokens": 7509
+  }
+ },
+ "tables": [
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 2
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC8094449/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 2
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC8094449/t0",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.8518518518518519,
+   "llm_cell_accuracy": 0.8518518518518519,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5777,
+    "outputTokens": 1255
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC8094449/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC8094449/t0/layout1",
+   "set": "complex",
+   "table_uid": "PMC8094449/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5777,
+    "outputTokens": 1061
+   }
+  },
+  {
+   "accepted_correct": null,
+   "accepted_segmentation": null,
+   "arm": "full",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "unparseable",
+   "gold_candidate": "PMC8094449/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     0,
+     1,
+     8,
+     9
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 2,
+      "last_column": 6,
+      "last_row": 7,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 4,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 6,
+      "last_row": 9,
+      "row_header_columns": 2
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC8094449/t0",
+   "outcome": "rejected",
+   "cell_accuracy": null,
+   "llm_cell_accuracy": 0.7037037037037037,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5591,
+    "outputTokens": 1768
+   }
+  },
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC9661877/t23/h3_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC9661877/t23",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.9387755102040817,
+   "llm_cell_accuracy": 0.9387755102040817,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 8231,
+    "outputTokens": 500
+   }
+  },
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC9661877/t23/h3_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC9661877/t23/h3_v1",
+   "set": "complex",
+   "table_uid": "PMC9661877/t23",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.9387755102040817,
+   "llm_cell_accuracy": 0.9387755102040817,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 8231,
+    "outputTokens": 463
+   }
+  },
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC9661877/t23/h3_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 12,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC9661877/t23/h3_v1",
+   "set": "complex",
+   "table_uid": "PMC9661877/t23",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.9387755102040817,
+   "llm_cell_accuracy": 0.9387755102040817,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 7963,
+    "outputTokens": 440
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC5829520/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC5829520/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5525,
+    "outputTokens": 642
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC5829520/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC5829520/t0/layout2",
+   "set": "complex",
+   "table_uid": "PMC5829520/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5525,
+    "outputTokens": 790
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC5829520/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 1,
+      "last_row": 42,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC5829520/t0/layout2",
+   "set": "complex",
+   "table_uid": "PMC5829520/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5335,
+    "outputTokens": 753
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC11704328/t5/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC11704328/t5",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4327,
+    "outputTokens": 476
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC11704328/t5/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC11704328/t5/h2_v1",
+   "set": "complex",
+   "table_uid": "PMC11704328/t5",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4327,
+    "outputTokens": 503
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC11704328/t5/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 10,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC11704328/t5/h2_v1",
+   "set": "complex",
+   "table_uid": "PMC11704328/t5",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4059,
+    "outputTokens": 423
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12973358/t1/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC12973358/t1",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5481,
+    "outputTokens": 714
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12973358/t1/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12973358/t1/layout2",
+   "set": "complex",
+   "table_uid": "PMC12973358/t1",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5481,
+    "outputTokens": 695
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12973358/t1/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     5,
+     8,
+     11,
+     14,
+     16,
+     18,
+     20,
+     22,
+     24
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 25,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12973358/t1/layout2",
+   "set": "complex",
+   "table_uid": "PMC12973358/t1",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5407,
+    "outputTokens": 949
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12495617/t4/h3_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC12495617/t4",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 9209,
+    "outputTokens": 701
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12495617/t4/h3_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12495617/t4/h3_v1",
+   "set": "complex",
+   "table_uid": "PMC12495617/t4",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 9209,
+    "outputTokens": 994
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12495617/t4/h3_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 3,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 18,
+      "last_row": 14,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12495617/t4/h3_v1",
+   "set": "complex",
+   "table_uid": "PMC12495617/t4",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 8941,
+    "outputTokens": 584
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12382306/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC12382306/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4775,
+    "outputTokens": 578
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12382306/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12382306/t0/layout1",
+   "set": "complex",
+   "table_uid": "PMC12382306/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4775,
+    "outputTokens": 605
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC12382306/t0/layout1",
+   "gold_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     12,
+     15
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 17,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC12382306/t0/layout1",
+   "set": "complex",
+   "table_uid": "PMC12382306/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4601,
+    "outputTokens": 585
+   }
+  },
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 13,
+      "row_header_columns": 1
+     },
+     {
+      "column_header_rows": 2,
+      "first_column": 4,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC6843367/t1/h2_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 13,
+      "row_header_columns": 1
+     },
+     {
+      "column_header_rows": 2,
+      "first_column": 4,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC6843367/t1",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.7735849056603774,
+   "llm_cell_accuracy": 0.7735849056603774,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5557,
+    "outputTokens": 921
+   }
+  },
+  {
+   "accepted_correct": null,
+   "accepted_segmentation": null,
+   "arm": "constraints",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "unparseable",
+   "gold_candidate": "PMC6843367/t1/h2_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 3,
+      "last_row": 13,
+      "row_header_columns": 1
+     },
+     {
+      "column_header_rows": 2,
+      "first_column": 4,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC6843367/t1",
+   "outcome": "rejected",
+   "cell_accuracy": null,
+   "llm_cell_accuracy": 0.7735849056603774,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5557,
+    "outputTokens": 957
+   }
+  },
+  {
+   "accepted_correct": false,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC6843367/t1/h2_v0",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 0
+     }
+    ]
+   },
+   "llm_correct": false,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 7,
+      "last_row": 13,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC6843367/t1/h2_v1",
+   "set": "complex",
+   "table_uid": "PMC6843367/t1",
+   "outcome": "wrong_accepted",
+   "cell_accuracy": 0.8867924528301887,
+   "llm_cell_accuracy": 0.8867924528301887,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 5289,
+    "outputTokens": 1013
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC13308667/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC13308667/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4177,
+    "outputTokens": 537
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC13308667/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC13308667/t0/layout2",
+   "set": "complex",
+   "table_uid": "PMC13308667/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4177,
+    "outputTokens": 558
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "separator_rows",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC13308667/t0/layout2",
+   "gold_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [
+     1,
+     6
+    ],
+    "subtables": [
+     {
+      "column_header_rows": 1,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 8,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC13308667/t0/layout2",
+   "set": "complex",
+   "table_uid": "PMC13308667/t0",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 3999,
+    "outputTokens": 558
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "llm-only",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC7154833/t2/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": null,
+   "set": "complex",
+   "table_uid": "PMC7154833/t2",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4987,
+    "outputTokens": 548
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "constraints",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC7154833/t2/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-segmentation-v1",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC7154833/t2/h2_v1",
+   "set": "complex",
+   "table_uid": "PMC7154833/t2",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4987,
+    "outputTokens": 558
+   }
+  },
+  {
+   "accepted_correct": true,
+   "accepted_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "arm": "full",
+   "complexity": "multi_level",
+   "decided_by": "llm",
+   "export_error": null,
+   "final_status": "valid",
+   "gold_candidate": "PMC7154833/t2/h2_v1",
+   "gold_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "llm_correct": true,
+   "llm_segmentation": {
+    "separator_rows": [],
+    "subtables": [
+     {
+      "column_header_rows": 2,
+      "first_column": 0,
+      "first_row": 0,
+      "last_column": 4,
+      "last_row": 11,
+      "row_header_columns": 1
+     }
+    ]
+   },
+   "model": "anthropic:claude-haiku-5-5",
+   "not_reviewed_reason": null,
+   "prompt_version": "table-review-selected-v4",
+   "review_status": "reviewed",
+   "selected_candidate_id": "PMC7154833/t2/h2_v1",
+   "set": "complex",
+   "table_uid": "PMC7154833/t2",
+   "outcome": "correct",
+   "cell_accuracy": 1.0,
+   "llm_cell_accuracy": 1.0,
+   "usage": {
+    "calls": 1,
+    "inputTokens": 4719,
+    "outputTokens": 436
+   }
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"table_uid": "PMC9661877/t25", "pmc_id": "PMC9661877", "table_index": 25, "set": "complex", "complexity": "multi_level", "slots": 91, "source": "data/complex/ds", "gold_candidate": "PMC9661877/t25/h3_v0", "gold_file": "gold_complex_test.reviewed.jsonl", "gold_labeler": "human review"}

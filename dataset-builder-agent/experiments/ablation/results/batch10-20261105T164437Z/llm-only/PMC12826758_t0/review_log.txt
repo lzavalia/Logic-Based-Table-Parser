@@ -1,0 +1,5 @@
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Segmenting tables (arm llm-only)...
+PMC12826758: 1 table(s): 1 valid -> papers/PMC12826758/review.llm-only.jsonl
+
+Ablation review (arm llm-only) complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in papers/PMC<id>/review.llm-only.jsonl, structured tables in final_tables.llm-only.json.

@@ -1,0 +1,110 @@
+{
+  "pmc_id":"PMC12688946",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of the NHANES 2021–2023 study population",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12688946/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Demographical characteristics of the NHANES 2021–2023 study population",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12688946/t1"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12688946/t2/layout2",
+      "caption":"Weighted multi-variate logistic regression of the association between vitamin D and MASLD",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [ {"row":2,"text":"Quartile variable"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Model 1 OR (95% CI)": []},
+	    {"P": []},
+	    {"Model 2 OR (95% CI)": []},
+	    {"P": []},
+	    {"Model 3 OR (95% CI)": []},
+	    {"P": []}
+	  ],
+	  "vertical metadata": [
+	    {"Continuous variable": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"P for trend": []}
+	  ],
+	  "data": [
+	    [
+	      "0.962 (0.945, 0.980)",
+	      "<0.001",
+	      "0.933 (0.912, 0.953)",
+	      "<0.001",
+	      "0.965 (0.941, 0.989)",
+	      "0.005"
+	    ],
+	    ["Reference", "", "Reference", "", "Reference", "" ],
+	    [
+	      "0.858 (0.704, 1.046)",
+	      "0.130",
+	      "0.784 (0.635, 0.967)",
+	      "0.023",
+	      "0.875 (0.683, 1.121)",
+	      "0.291"
+	    ],
+	    [
+	      "0.784 (0.643, 0.956)",
+	      "0.016",
+	      "0.664 (0.534, 0.827)",
+	      "<0.001",
+	      "0.612 (0.725, 1.211)",
+	      "0.618"
+	    ],
+	    [
+	      "0.662 (0.544, 0.805)",
+	      "<0.001",
+	      "0.476 (0.379, 0.598)",
+	      "<0.001",
+	      "0.705 (0.540, 0.921)",
+	      "0.010"
+	    ],
+	    ["", "<0.001", "", "0.044", "", "<0.001" ]
+	  ],
+	  "residual_corner": [ {"Vitamin D (10 nmol/L)": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12688946/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"8b29cf2e65111470357831d30069bba9b5a38ba7f89d50ce42939e84d9484f6e"
+}

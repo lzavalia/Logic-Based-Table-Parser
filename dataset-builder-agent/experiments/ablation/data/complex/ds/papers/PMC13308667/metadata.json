@@ -1,0 +1,56 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":1,
+  "pmc_id":"PMC13308667",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC13308667/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC13308667.xml",
+    "input_file_sha256":"d3f1bd4736b33ab4adb9c1fe53c5f497ae7fa15ce1ecaeb8d8e074b6f4fc5f39",
+    "input_file_size_bytes":110261,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ This is an open access article under the terms of the http://creativecommons.org/licenses/by/4.0/ License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC13308667",
+    "processing_timestamp_unix":1793042753.492713,
+    "retrieval_timestamp":"2026-10-26T19:25:12Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042712.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":1,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Patient characteristics of the study cohort and validation cohorts.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Patient characteristics of the study cohort and validation cohorts.<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot id=\"jdv70388-ntgp-0002\"><fn id=\"jdv70388-note-0002\"><p><italic toggle=\"yes\">Note<\/italic>: Age and sex distributions are shown for the study cohort and for the validation cohort. Percentages are calculated relative to the respective cohort sizes and are given in parentheses. The study cohort was further stratified according to the reference diagnosis (psoriasis and eczema), whereas for the validation cohort, psoriasis and eczema cases are presented as a combined group, as a final reference diagnosis could not be established due to limited clinical information.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"TABLE 1",
+      "label_markup":"<label>TABLE 1<\/label>",
+      "notes": [
+	"Note : Age and sex distributions are shown for the study cohort and for the validation cohort. Percentages are calculated relative to the respective cohort sizes and are given in parentheses. The study cohort was further stratified according to the reference diagnosis (psoriasis and eczema), whereas for the validation cohort, psoriasis and eczema cases are presented as a combined group, as a final reference diagnosis could not be established due to limited clinical information."
+      ],
+      "source_path":"1/1/3/3/2/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><col align=\"left\" span=\"1\"><col align=\"left\" span=\"1\"><col align=\"left\" span=\"1\"><col align=\"left\" span=\"1\"><col align=\"left\" span=\"1\"><thead valign=\"bottom\"><tr style=\"border-bottom:solid 1px #000000\"><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Characteristic<\/th><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Study cohort total (<italic toggle=\"yes\">n<\/italic>= 73)<\/th><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Psoriasis (<italic toggle=\"yes\">n<\/italic>= 28)<\/th><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Eczema (<italic toggle=\"yes\">n<\/italic>= 45)<\/th><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Validation cohort (<italic toggle=\"yes\">n<\/italic>= 72)<\/th><\/tr><\/thead><tbody valign=\"top\"><tr><td align=\"left\" colspan=\"5\" valign=\"top\" rowspan=\"1\">Age at biopsy (years)<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">&lt;35<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">10 (13.7%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">1 (3.6%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">9 (20%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">17 (23.6%)<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">35–54<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">13 (17.8%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">7 (25.0%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">6 (13.3%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">30 (41.7%)<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">55–74<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">41 (56.2%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">19 (67.9%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">22 (48.9%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">19 (26.3%)<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">&gt;74<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">9 (12.3%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">1 (3.6%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">8 (17.8%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">6 (8.3%)<\/td><\/tr><tr><td align=\"left\" colspan=\"5\" valign=\"top\" rowspan=\"1\">Sex<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Male<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">47 (64.4%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">15 (53.6%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">32 (71.1%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">39 (54.2%)<\/td><\/tr><tr><td align=\"left\" style=\"padding-left:10%\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Female<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">26 (35.6%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">13 (46.4%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">13 (28.9%)<\/td><td align=\"char\" char=\"(\" valign=\"top\" rowspan=\"1\" colspan=\"1\">33 (54.8%)<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC13308667/t0",
+      "wrap_id":"jdv70388-tbl-0001",
+      "wrap_path":"1/1/3/3/2/3"
+    }
+  ],
+  "title":"Diagnostic concordance of dermatopathology and PCR in differentiating eczema from psoriasis"
+}

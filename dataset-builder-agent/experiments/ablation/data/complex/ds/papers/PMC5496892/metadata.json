@@ -1,0 +1,116 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":4,
+  "pmc_id":"PMC5496892",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC5496892/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC5496892.xml",
+    "input_file_sha256":"b7251c6a08e71d10ce21e7bb1d52540f6e552815dd66ff01f24c48b1ce5b06c8",
+    "input_file_size_bytes":86622,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ .",
+      "license_type":"OpenAccess",
+      "license_url":"http://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC5496892",
+    "processing_timestamp_unix":1793042761.666181,
+    "retrieval_timestamp":"2026-10-26T19:21:52Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042512.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":4,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Participant characteristics by hepatitis virus infection at baseline in cross-sectional analysis ( n = 439,708).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Participant characteristics by hepatitis virus infection at baseline in cross-sectional analysis (<italic toggle=\"yes\">n<\/italic>= 439,708).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Values are *means (standard deviation),<sup>†<\/sup>medians (interquartile range), or percentages.<sup>‡<\/sup>≥3 times per week. Abbreviations: ALT, alanine aminotransferase; AST, aspartate aminotransferase; BMI, body mass index; DM, diabetes mellitus; GGT, gamma-glutamyl transferase; USG, ultrasonography.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"Values are *means (standard deviation), † medians (interquartile range), or percentages. ‡ ≥3 times per week. Abbreviations: ALT, alanine aminotransferase; AST, aspartate aminotransferase; BMI, body mass index; DM, diabetes mellitus; GGT, gamma-glutamyl transferase; USG, ultrasonography."
+      ],
+      "source_path":"1/1/2/3/2/2/2/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Characteristics<\/th><th rowspan=\"2\" colspan=\"1\">Overall<\/th><th colspan=\"2\" rowspan=\"1\">Hepatitis B virus infection<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>value<\/th><th colspan=\"2\" rowspan=\"1\">Hepatitis C virus infection<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>value<\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">HBsAg (−)<\/th><th colspan=\"1\" rowspan=\"1\">HBsAg (+)<\/th><th colspan=\"1\" rowspan=\"1\">HCV Ab (−)<\/th><th colspan=\"1\" rowspan=\"1\">HCV Ab (+)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\">Number (%)<\/td><td colspan=\"1\" rowspan=\"1\">439,708<\/td><td colspan=\"1\" rowspan=\"1\">423,001 (96.2)<\/td><td colspan=\"1\" rowspan=\"1\">16,707 (3.8)<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\">438,924 (99.8)<\/td><td colspan=\"1\" rowspan=\"1\">784 (0.2)<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Age, years<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">39.4 (9.8)<\/td><td colspan=\"1\" rowspan=\"1\">39.4 (9.9)<\/td><td colspan=\"1\" rowspan=\"1\">40.1 (9.2)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">39.4 (9.8)<\/td><td colspan=\"1\" rowspan=\"1\">48.7 (11.6)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Men, %<\/td><td colspan=\"1\" rowspan=\"1\">54.1<\/td><td colspan=\"1\" rowspan=\"1\">53.8<\/td><td colspan=\"1\" rowspan=\"1\">61.2<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">54.1<\/td><td colspan=\"1\" rowspan=\"1\">48.7<\/td><td colspan=\"1\" rowspan=\"1\">0.003<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Current smoker, %<\/td><td colspan=\"1\" rowspan=\"1\">25.2<\/td><td colspan=\"1\" rowspan=\"1\">25.2<\/td><td colspan=\"1\" rowspan=\"1\">27.1<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">25.2<\/td><td colspan=\"1\" rowspan=\"1\">24.4<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Alcohol intake, g/day<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">5 (0–15)<\/td><td colspan=\"1\" rowspan=\"1\">5 (0–15)<\/td><td colspan=\"1\" rowspan=\"1\">3 (0–13)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">5 (0–15)<\/td><td colspan=\"1\" rowspan=\"1\">3 (0–14)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Vigorous exercise, %<sup>‡<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">15.1<\/td><td colspan=\"1\" rowspan=\"1\">15.1<\/td><td colspan=\"1\" rowspan=\"1\">16.2<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">15.1<\/td><td colspan=\"1\" rowspan=\"1\">20.2<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">12+ years of education, %<sup>§<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">49.4<\/td><td colspan=\"1\" rowspan=\"1\">49.4<\/td><td colspan=\"1\" rowspan=\"1\">49.2<\/td><td colspan=\"1\" rowspan=\"1\">0.63<\/td><td colspan=\"1\" rowspan=\"1\">49.4<\/td><td colspan=\"1\" rowspan=\"1\">33.2<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">BMI, kg/m<sup>2*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">23.4 (3.2)<\/td><td colspan=\"1\" rowspan=\"1\">23.3 (3.2)<\/td><td colspan=\"1\" rowspan=\"1\">23.6 (3.2)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">23.4 (3.2)<\/td><td colspan=\"1\" rowspan=\"1\">23.9 (3.1)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">ALT, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">20 (14–29)<\/td><td colspan=\"1\" rowspan=\"1\">20 (14–29)<\/td><td colspan=\"1\" rowspan=\"1\">26 (19–39)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">20 (14–29)<\/td><td colspan=\"1\" rowspan=\"1\">30 (18–50)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">AST, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">21 (18–26)<\/td><td colspan=\"1\" rowspan=\"1\">21 (18–26)<\/td><td colspan=\"1\" rowspan=\"1\">25 (21–32)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">21 (18–26)<\/td><td colspan=\"1\" rowspan=\"1\">29 (22–41)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">GGT, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">19 (12–34)<\/td><td colspan=\"1\" rowspan=\"1\">19 (12–34)<\/td><td colspan=\"1\" rowspan=\"1\">20 (13–35)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">19 (12–34)<\/td><td colspan=\"1\" rowspan=\"1\">23 (15–42)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Glucose, mg/dl<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">94.6 (16.4)<\/td><td colspan=\"1\" rowspan=\"1\">94.7 (16.3)<\/td><td colspan=\"1\" rowspan=\"1\">94.2 (17.0)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">94.6 (16.3)<\/td><td colspan=\"1\" rowspan=\"1\">99.6 (26.0)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Prevalent diabetes, %<\/td><td colspan=\"1\" rowspan=\"1\">3.8<\/td><td colspan=\"1\" rowspan=\"1\">3.8<\/td><td colspan=\"1\" rowspan=\"1\">3.8<\/td><td colspan=\"1\" rowspan=\"1\">0.60<\/td><td colspan=\"1\" rowspan=\"1\">3.7<\/td><td colspan=\"1\" rowspan=\"1\">8.7<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Family history of DM, %<\/td><td colspan=\"1\" rowspan=\"1\">14.7<\/td><td colspan=\"1\" rowspan=\"1\">14.8<\/td><td colspan=\"1\" rowspan=\"1\">13.0<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">14.7<\/td><td colspan=\"1\" rowspan=\"1\">13.7<\/td><td colspan=\"1\" rowspan=\"1\">0.39<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">USG Fatty liver disease, %<\/td><td colspan=\"1\" rowspan=\"1\">26.5<\/td><td colspan=\"1\" rowspan=\"1\">26.7<\/td><td colspan=\"1\" rowspan=\"1\">23.0<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><td colspan=\"1\" rowspan=\"1\">26.6<\/td><td colspan=\"1\" rowspan=\"1\">21.3<\/td><td colspan=\"1\" rowspan=\"1\">0.001<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC5496892/t0",
+      "wrap_id":"Tab1",
+      "wrap_path":"1/1/2/3/2/2/2"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Odds ratios for prevalent diabetes by hepatitis virus infection at baseline ( n = 439,708).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Odds ratios for prevalent diabetes by hepatitis virus infection at baseline (<italic toggle=\"yes\">n<\/italic>= 439,708).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Model 1: adjusted for age, sex, and center; Model 2: further adjusted for smoking (never, former and current), alcohol (none, moderate and high), education (≤12 years or &gt;12 years of education), physical activity (&lt;3 times/week and ≥3 times/week), and BMI (continuous); Model 3: further adjusted for presence of fatty liver disease.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [
+	"Model 1: adjusted for age, sex, and center; Model 2: further adjusted for smoking (never, former and current), alcohol (none, moderate and high), education (≤12 years or >12 years of education), physical activity (<3 times/week and ≥3 times/week), and BMI (continuous); Model 3: further adjusted for presence of fatty liver disease."
+      ],
+      "source_path":"1/1/2/3/2/4/5/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th colspan=\"1\" rowspan=\"1\">Hepatitis virus infection<\/th><th colspan=\"1\" rowspan=\"1\">Prevalent diabetes N (%)<\/th><th colspan=\"1\" rowspan=\"1\">Model 1 OR (95% CI)<\/th><th colspan=\"1\" rowspan=\"1\">Model 2 OR (95% CI)<\/th><th colspan=\"1\" rowspan=\"1\">Model 3 OR (95% CI)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"5\" rowspan=\"1\"><bold>HBsAg<\/bold><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Negative<\/td><td colspan=\"1\" rowspan=\"1\">15,846 (3.8)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Positive<\/td><td colspan=\"1\" rowspan=\"1\">639 (3.8)<\/td><td colspan=\"1\" rowspan=\"1\">0.98 (0.90–1.07)<\/td><td colspan=\"1\" rowspan=\"1\">1.03 (0.93–1.15)<\/td><td colspan=\"1\" rowspan=\"1\">1.17 (1.06–1.31)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P<\/italic><\/bold><bold>Value<\/bold><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\">0.68<\/td><td colspan=\"1\" rowspan=\"1\">0.52<\/td><td colspan=\"1\" rowspan=\"1\">0.003<\/td><\/tr><tr><td colspan=\"5\" rowspan=\"1\"><bold>HCV Ab<\/bold><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Negative<\/td><td colspan=\"1\" rowspan=\"1\">16,417 (3.7)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Positive<\/td><td colspan=\"1\" rowspan=\"1\">68 (8.7)<\/td><td colspan=\"1\" rowspan=\"1\">1.07 (0.82–1.39)<\/td><td colspan=\"1\" rowspan=\"1\">1.14 (0.81–1.60)<\/td><td colspan=\"1\" rowspan=\"1\">1.43 (1.01–2.02)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P<\/italic><\/bold><bold>Value<\/bold><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\">0.62<\/td><td colspan=\"1\" rowspan=\"1\">0.47<\/td><td colspan=\"1\" rowspan=\"1\">0.043<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC5496892/t1",
+      "wrap_id":"Tab2",
+      "wrap_path":"1/1/2/3/2/4/5"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Baseline participant characteristics by incidence of diabetes in cohort analysis ( n = 219,448).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Baseline participant characteristics by incidence of diabetes in cohort analysis (<italic toggle=\"yes\">n<\/italic>= 219,448).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Values are *means (standard deviation),<sup>†<\/sup>medians (interquartile range), or percentages.<sup>‡<\/sup>≥3 times per week. Abbreviations: ALT, alanine aminotransferase; AST, aspartate aminotransferase; BMI, body mass index; DM, diabetes mellitus; GGT, gamma-glutamyl transferase; USG, ultrasonography.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"Values are *means (standard deviation), † medians (interquartile range), or percentages. ‡ ≥3 times per week. Abbreviations: ALT, alanine aminotransferase; AST, aspartate aminotransferase; BMI, body mass index; DM, diabetes mellitus; GGT, gamma-glutamyl transferase; USG, ultrasonography."
+      ],
+      "source_path":"1/1/2/3/3/2/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Characteristics<\/th><th colspan=\"2\" rowspan=\"1\">Incident diabetes<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>value<\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">No<\/th><th colspan=\"1\" rowspan=\"1\">Yes<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\">Number<\/td><td colspan=\"1\" rowspan=\"1\">211,957<\/td><td colspan=\"1\" rowspan=\"1\">7,491<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Age, years<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">37.4 (7.6)<\/td><td colspan=\"1\" rowspan=\"1\">41.5 (8.5)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Men, %<\/td><td colspan=\"1\" rowspan=\"1\">57.6<\/td><td colspan=\"1\" rowspan=\"1\">78.7<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Current smoker, %<\/td><td colspan=\"1\" rowspan=\"1\">26.9<\/td><td colspan=\"1\" rowspan=\"1\">39.1<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Alcohol intake, g/day<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">5 (0–14)<\/td><td colspan=\"1\" rowspan=\"1\">8 (0–19)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Vigorous exercise, %<sup>‡<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">14.8<\/td><td colspan=\"1\" rowspan=\"1\">17.2<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">12+ years of education, %<sup>§<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">78.1<\/td><td colspan=\"1\" rowspan=\"1\">69.7<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">BMI, kg/m<sup>2*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">23.2 (3.1)<\/td><td colspan=\"1\" rowspan=\"1\">25.7 (3.2)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">ALT, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">20 (14–29)<\/td><td colspan=\"1\" rowspan=\"1\">31 (21–48)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">AST, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">21 (18–26)<\/td><td colspan=\"1\" rowspan=\"1\">26 (21–33)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">GGT, U/l<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">19 (12–32)<\/td><td colspan=\"1\" rowspan=\"1\">37 (22–63)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Glucose, mg/dl<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">92.0 (8.3)<\/td><td colspan=\"1\" rowspan=\"1\">104.4 (10.9)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Family history of DM, %<\/td><td colspan=\"1\" rowspan=\"1\">14.0<\/td><td colspan=\"1\" rowspan=\"1\">22.9<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">USG Fatty liver disease, %<\/td><td colspan=\"1\" rowspan=\"1\">23.8<\/td><td colspan=\"1\" rowspan=\"1\">58.5<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">HBsAg (+), %<\/td><td colspan=\"1\" rowspan=\"1\">4.0<\/td><td colspan=\"1\" rowspan=\"1\">4.0<\/td><td colspan=\"1\" rowspan=\"1\">0.71<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">HCV Ab (+), %<\/td><td colspan=\"1\" rowspan=\"1\">0.1<\/td><td colspan=\"1\" rowspan=\"1\">0.1<\/td><td colspan=\"1\" rowspan=\"1\">0.91<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC5496892/t2",
+      "wrap_id":"Tab3",
+      "wrap_path":"1/1/2/3/3/2/3"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Hazard ratios for incident diabetes by hepatitis virus infection status ( n = 219,448).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Hazard ratios for incident diabetes by hepatitis virus infection status (<italic toggle=\"yes\">n<\/italic>= 219,448).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Model 1: adjusted for age, sex, and center; Model 2: further adjusted for smoking (never, former and current), alcohol (none, moderate and high), education (≤12 years or &gt;12 years of education), physical activity (&lt;3 times/week and ≥3 times/week), BMI (continuous), and presence of fatty liver disease; Model 3: further adjusted for initial fasting glucose level.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 4",
+      "label_markup":"<label>Table 4<\/label>",
+      "notes": [
+	"Model 1: adjusted for age, sex, and center; Model 2: further adjusted for smoking (never, former and current), alcohol (none, moderate and high), education (≤12 years or >12 years of education), physical activity (<3 times/week and ≥3 times/week), BMI (continuous), and presence of fatty liver disease; Model 3: further adjusted for initial fasting glucose level."
+      ],
+      "source_path":"1/1/2/3/3/3/5/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th colspan=\"1\" rowspan=\"1\">Hepatitis virus infection<\/th><th colspan=\"1\" rowspan=\"1\">No. of incident cases<\/th><th colspan=\"1\" rowspan=\"1\">Person-years<\/th><th colspan=\"1\" rowspan=\"1\">Model 1 HR (95% CI)<\/th><th colspan=\"1\" rowspan=\"1\">Model 2 HR (95% CI)<\/th><th colspan=\"1\" rowspan=\"1\">Model 3 HR (95% CI)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"6\" rowspan=\"1\"><bold>HBsAg<\/bold><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Negative<\/td><td colspan=\"1\" rowspan=\"1\">7,188<\/td><td colspan=\"1\" rowspan=\"1\">1,016,231.2<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Positive<\/td><td colspan=\"1\" rowspan=\"1\">303<\/td><td colspan=\"1\" rowspan=\"1\">43,435.1<\/td><td colspan=\"1\" rowspan=\"1\">0.91 (0.81–1.02)<\/td><td colspan=\"1\" rowspan=\"1\">1.07 (0.94–1.22)<\/td><td colspan=\"1\" rowspan=\"1\">1.20 (1.05–1.37)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P<\/italic><\/bold><bold>Value<\/bold><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\">0.10<\/td><td colspan=\"1\" rowspan=\"1\">0.31<\/td><td colspan=\"1\" rowspan=\"1\">0.007<\/td><\/tr><tr><td colspan=\"6\" rowspan=\"1\"><bold>HCV Ab<\/bold><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Negative<\/td><td colspan=\"1\" rowspan=\"1\">7,481<\/td><td colspan=\"1\" rowspan=\"1\">1,058,402.5<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><td colspan=\"1\" rowspan=\"1\">1.00 (reference)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Positive<\/td><td colspan=\"1\" rowspan=\"1\">10<\/td><td colspan=\"1\" rowspan=\"1\">1,263.8<\/td><td colspan=\"1\" rowspan=\"1\">0.77 (0.42–1.44)<\/td><td colspan=\"1\" rowspan=\"1\">0.72 (0.30–1.73)<\/td><td colspan=\"1\" rowspan=\"1\">0.75 (0.31–1.81)<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\"><bold><italic toggle=\"yes\">P<\/italic><\/bold><bold>Value<\/bold><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\"><\/td><td colspan=\"1\" rowspan=\"1\">0.42<\/td><td colspan=\"1\" rowspan=\"1\">0.46<\/td><td colspan=\"1\" rowspan=\"1\">0.52<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC5496892/t3",
+      "wrap_id":"Tab4",
+      "wrap_path":"1/1/2/3/3/3/5"
+    }
+  ],
+  "title":"Hepatitis B and C virus infection and diabetes mellitus: A cohort study"
+}

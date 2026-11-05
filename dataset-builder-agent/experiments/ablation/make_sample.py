@@ -6,6 +6,9 @@
   python3 make_sample.py OUT.jsonl --extend SAMPLE.jsonl
                          --quota multi_level=3,subtables=1,separator_rows=1
                          [--seed S] [--max-slots K]
+  python3 make_sample.py OUT.jsonl --batch N --gold-out GOLD.jsonl
+                         --exclude SAMPLE.jsonl[,SAMPLE.jsonl...] [--seed S]
+                         [--max-slots K]
 
 Half the sample comes from the complex-table dataset, the other half from the
 first (mostly simple) dataset of the type-abstraction experiment:
@@ -31,6 +34,14 @@ With --extend, OUT is SAMPLE followed by further complex tables, so many of
 each class as --quota says, from papers not yet in SAMPLE. No reviewed dev
 table has a gold answer with several subtables, so a "subtables" table is
 one where the parser offers a split, not one that needs it.
+
+With --batch, OUT is N further tables for growing the study batch by batch,
+and GOLD their labels. Only human-reviewed labels are drawn: the complex dev
+and test samples together (the ablation tunes nothing, so the split does not
+matter), round-robin over the complexity classes. A table in any --exclude
+sample is never drawn again, so no table is paid for twice. Tables of one
+paper may land in different batches, but each batch has at most one table
+per paper, since every run rebuilds its dataset.
 """
 import argparse
 import json
@@ -51,9 +62,11 @@ def table_record(source, pmc_id, index):
     return next(r for r in read_jsonl(path) if r["table_index"] == index)
 
 
-def pool(set_name, gold_file, classes):
+def pool(set_name, gold_file, classes, golds=None):
     rows = []
     for g in read_jsonl(TA / gold_file):
+        if golds is not None:
+            golds[g["table_uid"]] = g
         if not g["gold_candidate"]:
             continue
         record = table_record(SOURCES[set_name], g["pmc_id"], g["table_index"])
@@ -116,11 +129,43 @@ def main():
     ap.add_argument("--max-slots", type=int, default=400)
     ap.add_argument("--extend", help="an existing sample to add complex tables to")
     ap.add_argument("--quota", help="with --extend: class=N,... (classes: " + ", ".join(CLASSES) + ")")
+    ap.add_argument("--batch", type=int, help="draw this many further human-labelled tables")
+    ap.add_argument("--exclude", help="with --batch: comma-separated samples already run")
+    ap.add_argument("--gold-out", help="with --batch: where to write the batch's gold labels")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
     classes = {r["table_uid"]: r["complexity"]
                for r in read_jsonl(TA / "complex_dev_sample.jsonl")}
+    if args.batch:
+        if not args.exclude or not args.gold_out:
+            raise SystemExit("--batch needs --exclude and --gold-out")
+        done = {row["table_uid"] for f in args.exclude.split(",") for row in read_jsonl(f)}
+        classes.update((r["table_uid"], r["complexity"])
+                       for r in read_jsonl(TA / "complex_test_sample.jsonl"))
+        golds = {}
+        candidates = [c for f in ("gold_complex_dev.reviewed.jsonl", "gold_complex_test.reviewed.jsonl")
+                      for c in pool("complex", f, classes, golds) if c["table_uid"] not in done]
+        n = min(args.batch, len({c["pmc_id"] for c in candidates if c["slots"] <= args.max_slots}))
+        if n == 0:
+            raise SystemExit("no human-labelled table is left to draw")
+        sample = draw(candidates, n, rng, set(), args.max_slots, CLASSES)
+        with open(args.out, "w") as out:
+            for row in sample:
+                out.write(json.dumps(row) + "\n")
+        with open(args.gold_out, "w") as out:
+            for row in sample:
+                g = golds[row["table_uid"]]
+                out.write(json.dumps({
+                    "table_uid": row["table_uid"], "pmc_id": row["pmc_id"],
+                    "table_index": row["table_index"], "gold_candidate": g["gold_candidate"],
+                    "confidence": g.get("confidence"), "note": g.get("note", ""),
+                    "labeler": g.get("labeler"), "source": row["gold_file"]}) + "\n")
+        left = len([c for c in candidates if c["slots"] <= args.max_slots]) - len(sample)
+        for row in sample:
+            print(f"{row['complexity']:15} {row['slots']:4} slots  {row['table_uid']}  ({row['gold_file']})")
+        print(f"{len(sample)} drawn, {left} human-labelled table(s) left")
+        return
     if args.extend:
         if not args.quota:
             raise SystemExit("--extend needs --quota")

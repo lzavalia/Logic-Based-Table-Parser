@@ -1,0 +1,113 @@
+{
+  "pmc_id":"PMC5891175",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Clinicopathologic information of 106 medulloblastomas (MB)",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5891175/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Significance of molecular changes in medulloblastomas",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [4, 7 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":25,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":4,"text":"Age"},  {"row":7,"text":"Histologic subtype"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Case no.": []},
+	    {"Percentage": []},
+	    {"SNCA mRNA by NanoString": []},
+	    {"α‐Syn protein by IHC": []}
+	  ],
+	  "vertical metadata": [
+	    {"Gender": []},
+	    {"Male": []},
+	    {"Female": []},
+	    {"Child": []},
+	    {"Adult": []},
+	    {"Classic": []},
+	    {"Nodular/desmoplastic": []},
+	    {"Extensive nodular": []},
+	    {"Large/anaplastic": []},
+	    {"Molecular subgroup by NanoString": []},
+	    {"WNT": []},
+	    {"SHH": []},
+	    {"Group 3": []},
+	    {"Group 4": []},
+	    {"Methylation status of SNCA by MSP": []},
+	    {"Methylated": []},
+	    {"Unmethylated": []},
+	    {"Immunostaining of α‐syn": []},
+	    {">50% +": []},
+	    {">20% and ≥50% +": []},
+	    {">5% and ≤20% +": []},
+	    {"≤5% +": []},
+	    {"–": []}
+	  ],
+	  "data": [
+	    ["106", "", "", "" ],
+	    ["58", "58.67", "P = .4749", "P = .2207" ],
+	    ["48", "41.33", "P = .4749", "P = .2207" ],
+	    ["90", "84", "P = .5004", "P = .1987" ],
+	    ["16", "16", "P = .5004", "P = .1987" ],
+	    ["56", "52.83", "P = .7065", "P = .7510" ],
+	    ["30", "28.3", "P = .7065", "P = .7510" ],
+	    ["10", "9.43", "P = .7065", "P = .7510" ],
+	    ["10", "9.43", "P = .7065", "P = .7510" ],
+	    ["72", "", "", "" ],
+	    ["8", "11.11", "P < .0001 a", "P = .0820" ],
+	    ["15", "20.83", "P < .0001 a", "P = .0820" ],
+	    ["18", "30.56", "P < .0001 b", "P = .0268 c" ],
+	    ["31", "37.5", "P < .0001 b", "P = .0268 c" ],
+	    ["51", "", "", "" ],
+	    ["11", "21.57", "P = .4092", "P = .1144" ],
+	    ["40", "78.43", "P = .4092", "P = .1144" ],
+	    ["93", "", "", "" ],
+	    ["15", "16.13", "P < .0001 d", "" ],
+	    ["13", "13.98", "P < .0001 d", "" ],
+	    ["14", "15.05", "P < .0001 d", "" ],
+	    ["10", "10.75", "P < .0001 d", "" ],
+	    ["41", "44.09", "P < .0001 d", "" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC5891175/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"dae897cc295089c9da24120336f708ea9583796f900ddc83c5f71b62c19347b0"
+}

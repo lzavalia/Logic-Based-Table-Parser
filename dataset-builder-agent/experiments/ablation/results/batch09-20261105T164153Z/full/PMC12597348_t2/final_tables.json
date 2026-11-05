@@ -1,0 +1,168 @@
+{
+  "pmc_id":"PMC12597348",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Overview of inclusion and exclusion criteria.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12597348/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of anchoring reviews and further analyses undertaken in this overview. ARDS, acute respiratory distress syndrome; COT, conventional oxygen therapy; CPAP, continuous positive airway pressure; F io 2 , fraction of inspired oxygen; HFNO, high-flow nasal oxygen; LOS, length of stay; NIV, noninvasive ventilation; PPCs, postoperative pulmonary complications.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12597348/t1"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12597348/t2/layout5",
+      "caption":"Subgroup analyses for surgical site infection (SSI). CI, confidence interval; N 2 O, nitrous oxide.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout5.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"Overall"},
+	{"row":3,"text":"Delivery of oxygen"},
+	{"row":6,"text":"Type of surgery"},
+	{"row":10,"text":"Urgency of surgery"},
+	{"row":14,"text":"By risk of bias"},
+	{"row":17,"text":"Gas mixture"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"No. of RCTs": []},
+	    {"No. of SSI in the intervention group (%)": []},
+	    {"No. of SSI in the control group (%)": []},
+	    {"Relative risk (95% CI), I 2": []},
+	    {"Test of subgroup differences ( P -value)": []},
+	    {"Univariable meta-regression ( P -value)": []},
+	    {"Percent variance explained – R-squared (%) from meta-regression": []}
+	  ],
+	  "vertical metadata": [
+	    {"All": []},
+	    {"Intubation": []},
+	    {"No intubation": []},
+	    {"Intra-abdominal including colorectal": []},
+	    {"C-section": []},
+	    {"Other types of surgery": []},
+	    {"Elective surgery": []},
+	    {"Emergency surgery": []},
+	    {"Mixed": []},
+	    {"Low risk": []},
+	    {"High/unclear risk": []},
+	    {"With N 2 O": []},
+	    {"Without N 2 O": []}
+	  ],
+	  "data": [
+	    ["27", "678/6163 (11)", "783/6172 (12.7)", "0.87 (0.76–1.01) I 2 =42%", "NA", "", "NA" ],
+	    [
+	      "22",
+	      "582/5252 (11)",
+	      "702/5242 (13)",
+	      "0.82 (0.71–0.96) I 2 =42%",
+	      "0.01",
+	      "0.03",
+	      "23"
+	    ],
+	    ["5", "96/911 (11)", "81/930 (9)", "1.23 (0.93–1.62) I 2 =0%", "0.01", "0.03", "23" ],
+	    [
+	      "16",
+	      "403/2831 (14)",
+	      "465/2839 (16)",
+	      "0.84 (0.69–1.03) I 2 =49%",
+	      "0.02",
+	      "0.09",
+	      "22"
+	    ],
+	    ["5", "96/911 (11)", "81/930 (9)", "1.23 (0.93–1.62) I 2 =0%", "0.02", "0.09", "22" ],
+	    ["6", "179/2421 (7)", "237/2403 (10)", "0.76 (0.63–0.91) I 2 =0%", "0.02", "0.09", "22" ],
+	    [
+	      "16",
+	      "303/2971 (10)",
+	      "365/2963 (12)",
+	      "0.85 (0.70–1.04) I 2 =40%",
+	      "0.06",
+	      "0.10",
+	      "9"
+	    ],
+	    ["4", "39/351 (11)", "62/336 (18)", "0.60 (0.42–0.86) I 2 =0%", "0.06", "0.10", "9" ],
+	    [
+	      "7",
+	      "336/2841 (12)",
+	      "356/2873 (12)",
+	      "1.01 (0.80–1.28) I 2 =52%",
+	      "0.06",
+	      "0.10",
+	      "9"
+	    ],
+	    [
+	      "14",
+	      "426/4106 (10)",
+	      "551/4146 (13)",
+	      "0.77 (0.66–0.91) I 2 =29%",
+	      "0.02",
+	      "0.01",
+	      "35"
+	    ],
+	    [
+	      "13",
+	      "252/2057 (12)",
+	      "232/2026 (11)",
+	      "1.06 (0.85–1.31) I 2 =33%",
+	      "0.02",
+	      "0.01",
+	      "35"
+	    ],
+	    [
+	      "6",
+	      "132/1213 (11)",
+	      "162/1262 (13)",
+	      "0.94 (0.58–1.51) I 2 =66%",
+	      "0.73",
+	      "0.53",
+	      "0"
+	    ],
+	    [
+	      "21",
+	      "546/4950 (11)",
+	      "621/4910 (13)",
+	      "0.86 (0.74–0.99) I 2 =33%",
+	      "0.73",
+	      "0.53",
+	      "0"
+	    ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12597348/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"69368d3514347e76f1e3adca7023833819cf9cd92ca607eabd7c40f41385dbf0"
+}

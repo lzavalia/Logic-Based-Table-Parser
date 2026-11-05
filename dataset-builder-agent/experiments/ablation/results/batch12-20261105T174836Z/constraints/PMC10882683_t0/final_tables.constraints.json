@@ -1,0 +1,116 @@
+{
+  "pmc_id":"PMC10882683",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC10882683/t0/h2_v1",
+      "caption":"Discharge Capacities (at Current Densities of 10, 20, 60, 100, and 200 mA·g –1 ), Coulombic Efficiencies (at 10 mA·g –1 ), and Capacity Retentions of Undoped and Doped NCM Cathodes",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":11,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "discharge capacity (mA h·g –1 )": [
+		{"10 mA·g –1 (1st cycle)": []},
+		{"20 mA·g –1 (4th cycle)": []},
+		{"60 mA·g –1 (7th cycle)": []},
+		{"100 mA·g –1 (12th cycle)": []},
+		{"200 mA·g –1 (17th cycle)": []}
+	      ]
+	    },
+	    {"": [ {"CE, η (%)": []} ]},
+	    {"": [ {"capacity retention (%)": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"U-NCM92": []},
+	    {"Nb 0.5 at.% NCM92": []},
+	    {"Nb 0.7 at.% NCM92": []},
+	    {"Nb 1.0 at.% NCM92": []},
+	    {"Ta 0.1 at.% NCM92": []},
+	    {"Ta 0.3 at.% NCM92": []},
+	    {"Ta 0.5 at.% NCM92": []},
+	    {"La 0.3 at.% NCM92": []},
+	    {"La 0.5 at.% NCM92": []},
+	    {"La 0.7 at.% NCM92": []}
+	  ],
+	  "data": [
+	    ["199.6", "166.3", "126.6", "109.0", "80.7", "71.93", "40.43" ],
+	    ["209.5", "179.4", "150.5", "132.3", "112.4", "79.97", "53.65" ],
+	    ["221.0", "201.6", "169.8", "150.7", "128.7", "80.46", "58.24" ],
+	    ["203.5", "173.5", "139.9", "122.0", "99.8", "74.01", "49.04" ],
+	    ["207.7", "174.4", "138.2", "121.2", "91.5", "82.59", "44.05" ],
+	    ["222.6", "195.1", "160.0", "143.0", "118.5", "84.05", "53.23" ],
+	    ["208.0", "181.4", "145.8", "131.1", "106.1", "82.80", "51.01" ],
+	    ["195.8", "167.3", "137.4", "121.4", "102.5", "61.63", "52.35" ],
+	    ["219.0", "198.1", "159.6", "143.3", "124.2", "80.22", "56.71" ],
+	    ["205.9", "186.5", "159.2", "142.1", "124.1", "78.06", "60.27" ]
+	  ],
+	  "residual_corner": [ {"": [ {"samples": []} ]} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC10882683/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Crystal-Structure Parameters and I (003) / I (104) Values of U-NCM, Nb-NCM, Ta-NCM, and La-NCM Estimated by Rietveld Refinement",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10882683/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Impedance Values Were Calculated from the Nyquist Plots for U-NCM, Nb-NCM, Ta-NCM, and La-NCM",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10882683/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"4d7e9f72e427113efd9f9fa22ce5b71fda1a8c3309415c688f3aab87f8b5b4e4"
+}

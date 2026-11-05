@@ -1,0 +1,112 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":4,
+  "pmc_id":"PMC4476672",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC4476672/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC4476672.xml",
+    "input_file_sha256":"60aa225af9bc759dde92259bb28c53c6dbc148046f87e2d0d10ffa4ca63f3b1f",
+    "input_file_size_bytes":122720,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are properly credited.",
+      "license_type":"unknown",
+      "license_url":null,
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC4476672",
+    "processing_timestamp_unix":1793042758.853882,
+    "retrieval_timestamp":"2026-10-26T19:23:40Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042620.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":4,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Initial soil properties along the root zone profile before tillage treatments in 2011.",
+      "caption_external":true,
+      "caption_markup":"<caption><title>Initial soil properties along the root zone profile before tillage treatments in 2011.<\/title><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"t001fn001\"><p>SS, subsoiling; RT, rotary-tillage; NT, no-tillage.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": ["SS, subsoiling; RT, rotary-tillage; NT, no-tillage." ],
+      "source_path":"1/1/2/2/3/3/4/2",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th rowspan=\"2\" align=\"left\" colspan=\"1\">Soil properties<\/th><th colspan=\"5\" align=\"center\" rowspan=\"1\">Soil depth (cm)<\/th><\/tr><tr><th align=\"left\" rowspan=\"1\" colspan=\"1\">0–10<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">10–20<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">20–30<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">30–40<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">40–50<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Bulk density (t/m<sup>3<\/sup>)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.36<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.35<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.55<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.45<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.42<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Soil moisture (g/g)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.13<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.15<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Organic C (g/kg)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">13.37<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">11.73<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.95<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">6.53<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">6.21<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Total N (g/kg)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.19<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.07<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.83<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.75<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.69<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Available P (mg/kg)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">16.06<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">16.24<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">7.22<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.71<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.03<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Available K (mg/kg)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">119.78<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">100.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">93.65<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">107.26<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">98.37<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC4476672/t0",
+      "wrap_id":"pone.0129231.t001",
+      "wrap_path":"1/1/2/2/3/3"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Soil conditions (soil bulk density and soil moisture)before the tillage treatment in 2012.",
+      "caption_external":true,
+      "caption_markup":"<caption><title>Soil conditions (soil bulk density and soil moisture)before the tillage treatment in 2012.<\/title><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"t002fn001\"><p>SS, subsoiling; RT, rotary-tillage; NT, no-tillage.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": ["SS, subsoiling; RT, rotary-tillage; NT, no-tillage." ],
+      "source_path":"1/1/2/2/3/4/4/2",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th rowspan=\"2\" align=\"left\" colspan=\"1\">Treatment<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Soil properties<\/th><th colspan=\"5\" align=\"center\" rowspan=\"1\">Soil depth (cm)<\/th><\/tr><tr><th align=\"left\" rowspan=\"1\" colspan=\"1\"><\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">0–10<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">10–20<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">20–30<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">30–40<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">40–50<\/th><\/tr><\/thead><tbody><tr><td rowspan=\"2\" align=\"left\" colspan=\"1\">SS<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">Bulk density (t/m<sup>3<\/sup>)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.36<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.34<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.45<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.46<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.42<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Soil moisture (g/g)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.16<\/td><\/tr><tr><td rowspan=\"2\" align=\"left\" colspan=\"1\">RT<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">Bulk density (t/m<sup>3<\/sup>)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.35<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.34<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.56<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.46<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.43<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Soil moisture (g/g)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.09<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.16<\/td><\/tr><tr><td rowspan=\"2\" align=\"left\" colspan=\"1\">NT<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">Bulk density (t/m<sup>3<\/sup>)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.36<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.36<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.56<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.45<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">1.42<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Soil moisture (g/g)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.11<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.12<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">0.16<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC4476672/t1",
+      "wrap_id":"pone.0129231.t002",
+      "wrap_path":"1/1/2/2/3/4"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Effects of tillage managements on maize yield in two years.",
+      "caption_external":true,
+      "caption_markup":"<caption><title>Effects of tillage managements on maize yield in two years.<\/title><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"t003fn001\"><p>Different letters in the same column indicate significant differences at the 0.05 level (ANOVA and Duncan’s multiple range test), n = 3. SS, subsoiling; RT, rotary-tillage; NT, no-tillage.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"Different letters in the same column indicate significant differences at the 0.05 level (ANOVA and Duncan’s multiple range test), n = 3. SS, subsoiling; RT, rotary-tillage; NT, no-tillage."
+      ],
+      "source_path":"1/1/2/3/3/3/4/2",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th align=\"left\" rowspan=\"1\" colspan=\"1\">Year<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Tillage<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Ear number(10<sup>4<\/sup>hm<sup>-2<\/sup>)<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Grain number per ear<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">1000-kernel weight (g)<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Yield (t hm<sup>-2<\/sup>)<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Nitrogen uptake (kg hm<sup>-2<\/sup>)<\/th><\/tr><\/thead><tbody><tr><td rowspan=\"3\" align=\"left\" colspan=\"1\">2011<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">SS<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.68a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">579a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">308.14a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">9.77a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">135.80a<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">RT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.53a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">549b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">302.60b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">9.14b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">123.39b<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">NT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.37a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">553b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">303.56b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">9.00b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">122.40b<\/td><\/tr><tr><td rowspan=\"3\" align=\"left\" colspan=\"1\">2012<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">SS<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.30a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">597a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">362.22a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">11.46a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">155.87a<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">RT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.43a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">556b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">342.88b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">10.34b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">136.49b<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">NT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.22a<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">565b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">345.71b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">10.19b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">136.04b<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC4476672/t2",
+      "wrap_id":"pone.0129231.t003",
+      "wrap_path":"1/1/2/3/3/3"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Effects of tillage managements on maize dry matter in two years.",
+      "caption_external":true,
+      "caption_markup":"<caption><title>Effects of tillage managements on maize dry matter in two years.<\/title><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn id=\"t004fn001\"><p>Different letters in the same column indicate significant differences at the 0.05 level (ANOVA and Duncan’s multiple range test), n = 3. SS, subsoiling; RT, rotary-tillage; NT, no-tillage. V6, Jointing stage; VT, Tasseling stage; R3, Filling stage.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 4",
+      "label_markup":"<label>Table 4<\/label>",
+      "notes": [
+	"Different letters in the same column indicate significant differences at the 0.05 level (ANOVA and Duncan’s multiple range test), n = 3. SS, subsoiling; RT, rotary-tillage; NT, no-tillage. V6, Jointing stage; VT, Tasseling stage; R3, Filling stage."
+      ],
+      "source_path":"1/1/2/3/3/5/4/2",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th rowspan=\"2\" align=\"left\" colspan=\"1\">Year<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">Tillage<\/th><th colspan=\"3\" align=\"center\" rowspan=\"1\">Shoot dry matter (g)<\/th><th colspan=\"3\" align=\"center\" rowspan=\"1\">Root dry matter (g)<\/th><\/tr><tr><th align=\"left\" rowspan=\"1\" colspan=\"1\"><\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">V6<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">VT<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">R3<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">V6<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">VT<\/th><th align=\"left\" rowspan=\"1\" colspan=\"1\">R3<\/th><\/tr><\/thead><tbody><tr><td rowspan=\"3\" align=\"left\" colspan=\"1\">2011<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">SS<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">73.42a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">130.57a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">337.95a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">4.28a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">16.82a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">14.61a<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">RT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">64.27b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">110.82b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">308.85b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">3.57b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">14.34b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">13.52b<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">NT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">63.53b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">109.37b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">305.43b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">3.32b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">14.41b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">13.13b<\/td><\/tr><tr><td rowspan=\"3\" align=\"left\" colspan=\"1\">2012<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">SS<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">83.78a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">138.89a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">326.67a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">5.78a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">17.19a<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">12.97a<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">RT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">75.99b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">117.50b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">286.75b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">4.61b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">15.68b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">11.24b<\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">NT<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">73.11b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">114.89b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">279.56b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">4.75b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">14.75b<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">11.64b<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC4476672/t3",
+      "wrap_id":"pone.0129231.t004",
+      "wrap_path":"1/1/2/3/3/5"
+    }
+  ],
+  "title":"Soil Tillage Management Affects Maize Grain Yield by Regulating Spatial Distribution Coordination of Roots, Soil Moisture and Nitrogen Status"
+}

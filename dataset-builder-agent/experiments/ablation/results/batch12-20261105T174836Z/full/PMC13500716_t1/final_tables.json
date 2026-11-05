@@ -1,0 +1,107 @@
+{
+  "pmc_id":"PMC13500716",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Basic characteristics of study participants across categories of LLDS.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13500716/t0"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC13500716/t1/h2_v1",
+      "caption":"Dietary intakes of study participants across categories of LLDS*.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate1_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Tertiles of LLDS": [ {"T1": []},  {"T2": []},  {"T3": []},  {"P -value †": []} ]} ],
+	  "vertical metadata": [
+	    {"LLDS ranges": []},
+	    {"Number of participants": []},
+	    {"Energy (kcal/d)": []},
+	    {"Protein (g/d)": []},
+	    {"Carbohydrate (g/d)": []},
+	    {"Fat (g/d)": []},
+	    {"Fiber (g/d)": []},
+	    {"PUFA (g/d)": []},
+	    {"TFA (g/d)": []},
+	    {"SFA (g/d)": []},
+	    {"MUFA (g/d)": []},
+	    {"LLDS components": []},
+	    {"Fruits (g/d)": []},
+	    {"Vegetables (g/d)": []},
+	    {"Whole grains (g/d)": []},
+	    {"Legumes and nuts (g/d)": []},
+	    {"Fish (g/d)": []},
+	    {"Coffee and tea (g/d)": []},
+	    {"Unsweetened dairy (g/d)": []},
+	    {"Red and processed meats (g/d)": []},
+	    {"Butter, hard margarines (g/d)": []},
+	    {"SSB ((ml/d)": []}
+	  ],
+	  "data": [
+	    ["(14–27)", "(28–32)", "(33–45)", "" ],
+	    ["1514", "1860", "1499", "" ],
+	    ["2022.22 ± 673.69", "1882.94 ± 663.69", "1739.55 ± 608.14", "< 0.001" ],
+	    ["76.65 ± 35.15", "71.24 ± 32.70", "68.48 ± 30.42", "< 0.001" ],
+	    ["265.01 ± 102.42", "248.96 ± 95.95", "228.62 ± 90.08", "< 0.001" ],
+	    ["79.68 ± 35.56", "73.45 ± 35.92", "67.28 ± 32.89", "< 0.001" ],
+	    ["16.88 ± 9.67", "17.86 ± 10.52", "18.70 ± 11.85", "< 0.001" ],
+	    ["23.70 ± 15.44", "25.51 ± 16.35", "27.91 ± 16.12", "< 0.001" ],
+	    ["1.06 ± 0.78", "0.99 ± 0.79", "0.85 ± 0.65", "< 0.001" ],
+	    ["20.55 ± 10.20", "19.38 ± 9.87", "17.90 ± 9.02", "< 0.001" ],
+	    ["17.91 ± 9.38", "19.84 ± 10.39", "21.58 ± 10.53", "< 0.001" ],
+	    ["", "", "", "" ],
+	    ["139.78 ± 167.63", "233.20 ± 203.73", "313.78 ± 223.21", "< 0.001" ],
+	    ["116.93 ± 118.07", "170.50 ± 150.34", "240.72 ± 164.33", "< 0.001" ],
+	    ["99.61 ± 113.76", "152.95 ± 130.60", "177.67 ± 124.20", "< 0.001" ],
+	    ["53.40 ± 23.41", "55.82 ± 26.48", "60.29 ± 29.61", "< 0.001" ],
+	    ["4.41 ± 6.24", "6.48 ± 9.97", "11.03 ± 13.25", "< 0.001" ],
+	    ["13.82 ± 86.17", "22.16 ± 137.07", "17.81 ± 66.39", "0.068" ],
+	    ["187.17 ± 125.22", "256.50 ± 154.48", "341.67 ± 187.86", "< 0.001" ],
+	    ["52.83 ± 37.94", "48.81 ± 37.79", "44.25 ± 38.50", "< 0.001" ],
+	    ["7.20 ± 8.57", "5.84 ± 8.60", "3.34 ± 8.44", "< 0.001" ],
+	    ["109.10 ± 125.25", "103.10 ± 146.74", "82.46 ± 115.77", "< 0.001" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC13500716/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable-adjusted odds ratios (95% CIs) for diabetes and prediabetes across LLDS tertiles.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC13500716/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"7541bdc7a01601e1f4b0c127762406531fd244396cf209fecebaa118bc0290bf"
+}

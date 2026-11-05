@@ -1,0 +1,56 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":1,
+  "pmc_id":"PMC7559631",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC7559631/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC7559631.xml",
+    "input_file_sha256":"3d2203f09192cf3e5faefe5efd6a0e12ad90468e75df5e1926e7f57d1ee5eb36",
+    "input_file_size_bytes":111408,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ This is an open access article under the terms of the http://creativecommons.org/licenses/by/4.0/ License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.",
+      "license_type":"creativeCommonsBy",
+      "license_url":"http://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC7559631",
+    "processing_timestamp_unix":1793042767.195897,
+    "retrieval_timestamp":"2026-10-26T19:24:48Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042688.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":1,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Summary of findings",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Summary of findings<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot id=\"brb31787-ntgp-0002\"><fn id=\"brb31787-note-0002\"><p>Abbreviations: GRADE, Grading of Recommendations Assessment, Development, and Evaluation; IVT, intravenous thrombolysis; MD, mean difference; OR, odds ratio; OTT, onset‐to‐treatment time; sICH, symptomatic intracranial hemorrhage.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"TABLE 1",
+      "label_markup":"<label>TABLE 1<\/label>",
+      "notes": [
+	"Abbreviations: GRADE, Grading of Recommendations Assessment, Development, and Evaluation; IVT, intravenous thrombolysis; MD, mean difference; OR, odds ratio; OTT, onset‐to‐treatment time; sICH, symptomatic intracranial hemorrhage."
+      ],
+      "source_path":"1/1/2/3/5/4/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><col style=\"border-right:solid 1px #000000\" span=\"1\"><thead valign=\"bottom\"><tr style=\"border-bottom:solid 1px #000000\"><th align=\"left\" rowspan=\"2\" valign=\"bottom\" colspan=\"1\">Outcomes<\/th><th align=\"left\" rowspan=\"2\" valign=\"bottom\" colspan=\"1\">No of participants (studies)<\/th><th align=\"left\" rowspan=\"2\" valign=\"bottom\" colspan=\"1\">Relative effect OR (95% CI)<\/th><th align=\"left\" colspan=\"2\" style=\"border-bottom:solid 1px #000000\" valign=\"bottom\" rowspan=\"1\">Absolute effects per 1,000 (95% CI)<\/th><th align=\"left\" rowspan=\"2\" valign=\"bottom\" colspan=\"1\">Certainty of the evidence (GRADE)<\/th><\/tr><tr style=\"border-bottom:solid 1px #000000\"><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Risk with control<\/th><th align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Risk with telestroke<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">IVT rate<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">7,665 (4)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">2.60 (0.89 to 7.57)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">49<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">118 (44 to 280)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁<\/p><p>Very low<\/p><\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">OTT<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">8,112 (6)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">–<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">–<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">MD −27.97 (−35.51 to −20.42)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁⨁<\/p><p>Low<\/p><\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">Patients treated<math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"nlm-math-1\"><mo>≤<\/mo><\/math>3 hr<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">629 (3)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">2.15 (1.37 to 3.40)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">593<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">758 (666 to 832)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁⨁⨁<\/p><p>Moderate<\/p><\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">In‐hospital mortality<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">6,919 (4)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">0.67 (0.52 to 0.87)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">53<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">36 (29 to 47)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁<\/p><p>Very low<\/p><\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">3‐month functional outcome rate<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">3,854 (3)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">1.29 1.01 to 1.63)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">446<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">509 (448 to 567)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁<\/p><p>Very low<\/p><\/td><\/tr><tr><td align=\"left\" rowspan=\"1\" colspan=\"1\">sICH<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">1,437 (6)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">1.27 (0.65 to 2.49)<\/td><td align=\"char\" char=\".\" rowspan=\"1\" colspan=\"1\">25<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\">32 (17 to 61)<\/td><td align=\"left\" rowspan=\"1\" colspan=\"1\"><p>⨁⨁<\/p><p>Low<\/p><\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC7559631/t0",
+      "wrap_id":"brb31787-tbl-0001",
+      "wrap_path":"1/1/2/3/5/4"
+    }
+  ],
+  "title":"Telestroke strategies to enhance acute stroke management in rural settings: A systematic review and meta‐analysis"
+}

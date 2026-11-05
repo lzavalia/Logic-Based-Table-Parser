@@ -1,0 +1,64 @@
+{
+  "pmc_id":"PMC11288899",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of participants from nine continuous NHANES datasets.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11288899/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"Associations between taking oral contraceptive and cervical cancer.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":3,
+	    "last_row":4,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Taking oral contraceptive": [ {"Yes": []},  {"No": []} ]},  {"p -value": []} ],
+	  "vertical metadata": [ {"Model 1": []},  {"Model 2": []},  {"Model 3": []} ],
+	  "data": [
+	    ["2.27 (1.39, 3.98)", "Reference", "0.002" ],
+	    ["1.74 (1.05, 3.08)", "Reference", "0.041" ],
+	    ["1.93 (1.16, 3.44)", "Reference", "0.017" ]
+	  ],
+	  "residual_corner": [ {"Model": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11288899/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f50d1d5f25c7d1464b61207562059f921a43858f8d72d696577e81b0c51980cf"
+}

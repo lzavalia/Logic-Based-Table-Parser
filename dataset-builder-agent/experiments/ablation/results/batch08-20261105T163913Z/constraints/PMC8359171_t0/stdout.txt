@@ -1,0 +1,20 @@
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Segmenting tables (arm constraints)...
+PMC8359171: 6 table(s): 1 unparseable, 5 unreviewed -> papers/PMC8359171/review.constraints.jsonl
+
+Ablation review (arm constraints) complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in papers/PMC<id>/review.constraints.jsonl, structured tables in final_tables.constraints.json.
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 5433,
+    "outputTokens": 688,
+    "totalTokens": 6121,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/batch08-20261105T163913Z/constraints/PMC8359171_t0

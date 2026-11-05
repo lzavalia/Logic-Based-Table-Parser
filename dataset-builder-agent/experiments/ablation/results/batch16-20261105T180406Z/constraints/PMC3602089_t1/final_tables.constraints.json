@@ -1,0 +1,133 @@
+{
+  "pmc_id":"PMC3602089",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The risk of incident dementia during follow-up in 888 participants aged 75 years and older without dementia at baseline.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC3602089/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC3602089/t1/h2_v1",
+      "caption":"Characteristics of individuals with and without depressive symptoms and with and without major depression at baseline according to incident dementia diagnosis (n = 888).",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate1_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":12,
+	    "last_row":4,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "No incident dementia (n = 705)": [
+		{"With depressive symptoms (n = 98)": []},
+		{"Without depressive symptoms (n = 607)": []},
+		{"p value": []},
+		{"With major depression (n = 7)": []},
+		{"Without major depression (n = 698)": []},
+		{"p value": []}
+	      ]
+	    },
+	    {
+	      "Incident dementia ( = 183)": [
+		{"With depressive symptoms (n = 30)": []},
+		{"Without depressive symptoms (n = 153)": []},
+		{"p value": []},
+		{"With major depression (n = 4)": []},
+		{"Without major depression (n = 179)": []},
+		{"p value": []}
+	      ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"Age, mean (s.d.)": []},
+	    {"Female gender, n (%)": []},
+	    {"Cognitive state: MMSE, mean (s.d.)": []}
+	  ],
+	  "data": [
+	    [
+	      "81.4 (5.0)",
+	      "80.5 (4.4)",
+	      "0.069",
+	      "81.5 (5.3)",
+	      "80.6 (4.5)",
+	      "0.592",
+	      "83.9 (4.5)",
+	      "83.8 (4.7)",
+	      "0.982",
+	      "82.0 (2.8)",
+	      "83.9 (4.7)",
+	      "0.271"
+	    ],
+	    [
+	      "88 (89.8)",
+	      "411 (67.7)",
+	      "<0.001",
+	      "7 (100.0)",
+	      "492 (70.5)",
+	      "0.088",
+	      "27 (90.0)",
+	      "126 (82.4)",
+	      "0.301",
+	      "3 (75.0)",
+	      "150 (83.8)",
+	      "0.638"
+	    ],
+	    [
+	      "27.0 (2.1)",
+	      "27.5 (1.9)",
+	      "<0.05",
+	      "27.1 (1.3)",
+	      "27.4 (1.9)",
+	      "0.714",
+	      "25.8 (2.1)",
+	      "25.9 (2.1)",
+	      "0.827",
+	      "25.8 (0.5)",
+	      "25.9 (2.1)",
+	      "0.870"
+	    ]
+	  ],
+	  "residual_corner": [ {"Characteristic": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC3602089/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"c4421d69fa88f8db2ddae18fca16403127dbba6a04650cae75e8984330a33338"
+}

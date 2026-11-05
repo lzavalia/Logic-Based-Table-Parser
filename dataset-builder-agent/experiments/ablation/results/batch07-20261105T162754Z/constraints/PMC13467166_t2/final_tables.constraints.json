@@ -1,0 +1,210 @@
+{
+  "pmc_id":"PMC13467166",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Distribution of thyroid function test results in the reference sample population.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13467166/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Established reference intervals for thyroid parameters partitioned by the Harris–Boyd method.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13467166/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC13467166/t2/h2_v1",
+      "caption":"Unsupervised algorithm-derived age-based subgroups and reference intervals for TSH, fT4, and fT3.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":13,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"TSH": [ {"Age": []},  {"Lower Limit (90% CI)": []},  {"Upper Limit (90% CI)": []} ]},
+	    {"fT4": [ {"Age": []},  {"Lower Limit (90% CI)": []},  {"Upper Limit (90% CI)": []} ]},
+	    {"fT3": [ {"Age": []},  {"Lower Limit (90% CI)": []},  {"Upper Limit (90% CI)": []} ]}
+	  ],
+	  "vertical metadata": [ {"1": []},  {"2": []},  {"3": []},  {"4": []},  {"5": []},  {"6": []} ],
+	  "data": [
+	    ["18–28", "0.68", "5.15", "18–29", "11.71", "19.43", "18–25", "4.24", "6.96" ],
+	    [
+	      "18–28",
+	      "(0.63–0.73)",
+	      "(4.94–5.3)",
+	      "18–29",
+	      "(11.58–11.84)",
+	      "(18.79–20.21)",
+	      "18–25",
+	      "(4.16–4.33)",
+	      "(6.88–7.05)"
+	    ],
+	    ["29–36", "0.55", "5.09", "30–37", "11.71", "19.56", "26–38", "4.09", "6.48" ],
+	    [
+	      "29–36",
+	      "(0.49–0.66)",
+	      "(4.73–5.36)",
+	      "30–37",
+	      "(11.58–11.84)",
+	      "(18.92–19.82)",
+	      "26–38",
+	      "(3.96–4.19)",
+	      "(6.42–6.64)"
+	    ],
+	    ["37–45", "0.53", "4.76", "38–44", "11.45", "19.18", "39–64", "4.01", "6.42" ],
+	    [
+	      "37–45",
+	      "(0.46–0.60)",
+	      "(4.59–5.04)",
+	      "38–44",
+	      "(11.33–11.71)",
+	      "(18.79–19.95)",
+	      "39–64",
+	      "(3.86–4.11)",
+	      "(6.25–6.51)"
+	    ],
+	    ["46–52", "0.45", "4.96", "45–55", "11.45", "19.05", "65–98", "3.36", "5.70" ],
+	    [
+	      "46–52",
+	      "(0.40–0.48)",
+	      "(4.64–5.78)",
+	      "45–55",
+	      "(11.07–11.58)",
+	      "(18.40–19.43)",
+	      "65–98",
+	      "(3.26–3.55)",
+	      "(5.64–5.98)"
+	    ],
+	    ["53–65", "0.36", "5.14", "56–74", "11.33", "19.43", "", "", "" ],
+	    [
+	      "53–65",
+	      "(0.34–0.39)",
+	      "(4.81–5.57)",
+	      "56–74",
+	      "(10.94–11.71)",
+	      "(18.79–20.21)",
+	      "",
+	      "",
+	      ""
+	    ],
+	    ["66–104", "0.41", "5.67", "75–104", "11.33", "19.43", "", "", "" ],
+	    [
+	      "66–104",
+	      "(0.32–0.44)",
+	      "(5.19–6.02)",
+	      "75–104",
+	      "(10.94–11.71)",
+	      "(18.79–19.43)",
+	      "",
+	      "",
+	      ""
+	    ]
+	  ],
+	  "residual_corner": [ {"": [ {"Group": []} ]} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC13467166/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Reference intervals for TSH, fT4, and fT3 derived by refineR, reflimR, Bhattacharya and non-parametric percentile method.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC13467166/t3"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of the patient and reference (healthy) groups in the independent external validation cohort (NHANES, N = 2297).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC13467166/t4"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Diagnostic performance of the reference interval estimation methods in the independent external TSH validation cohort.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC13467166/t5"
+    }
+  ],
+  "tables_jsonl_sha256":"71d26331263f5c7f71b2e8c8751dec1e3e1a9b0b7f311f731bde879f7a3d5cd4"
+}

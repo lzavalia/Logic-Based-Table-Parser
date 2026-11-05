@@ -1,0 +1,85 @@
+{
+  "pmc_id":"PMC8915277",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Inclusion and exclusion criteria",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8915277/t0"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC8915277/t1/layout1",
+      "caption":"Schedule of baseline questionnaires, study outcomes and data sources",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate1_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "separators": [
+	{"row":2,"text":"Enrolment"},
+	{"row":10,"text":"Interventions"},
+	{"row":13,"text":"Assessments and outcomes"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Baseline": []},
+	    {"Post allocation/follow-up": [ {"30D": []},  {"60D": []},  {"90D": []} ]},
+	    {"Data sources": []}
+	  ],
+	  "vertical metadata": [
+	    {"Eligibility screen": []},
+	    {"Informed consent": []},
+	    {"Past medical history": []},
+	    {"Medications": []},
+	    {"Index HF admission data": []},
+	    {"Sociodemographic data": []},
+	    {"Allocation": []},
+	    {"MIH": []},
+	    {"TOCC": []},
+	    {"Healthcare utilisation": []},
+	    {"Healthcare quality": []},
+	    {"KCCQ": []},
+	    {"PROMIS-29": []},
+	    {"SCHFI": []}
+	  ],
+	  "data": [
+	    ["", "", "", "", "" ],
+	    ["", "", "", "", "" ],
+	    ["", "", "", "", "INSIGHT" ],
+	    ["", "", "", "", "INSIGHT" ],
+	    ["", "", "", "", "Medicare claims/INSIGHT" ],
+	    ["", "", "", "", "REDCap survey" ],
+	    ["", "", "", "", "" ],
+	    ["", "", "", "", "" ],
+	    ["", "", "", "", "" ],
+	    ["", "", "", "", "Medicare claims/INSIGHT" ],
+	    ["", "", "", "", "Medicare claims/INSIGHT" ],
+	    ["", "", "", "", "REDCap survey" ],
+	    ["", "", "", "", "REDCap survey" ],
+	    ["", "", "", "", "REDCap survey" ]
+	  ],
+	  "residual_corner": [ {"Timepoint": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC8915277/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"397fea35520ec5c3529858345896fefc5a4cfbd848b4c4e5b818ba84c1bb121e"
+}

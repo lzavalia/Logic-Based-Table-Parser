@@ -1,0 +1,72 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":2,
+  "pmc_id":"PMC13015447",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC13015447/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC13015447.xml",
+    "input_file_sha256":"ed972f4af1553dc1b02b55a10e739b849b9615a2bcbbadc9be1636ccaebec803",
+    "input_file_size_bytes":102541,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by-nc/4.0/ This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License , which allows reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator.",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by-nc/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC13015447",
+    "processing_timestamp_unix":1793042751.178646,
+    "retrieval_timestamp":"2026-10-26T19:21:41Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042501.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":2,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Tentative band assignments of the significant peaks",
+      "caption_external":true,
+      "caption_markup":"<caption><p id=\"P60\">Tentative band assignments of the significant peaks<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1:",
+      "label_markup":"<label>Table 1:<\/label>",
+      "notes": [],
+      "source_path":"1/1/5/5/3",
+      "source_table_html":"<table frame=\"void\" rules=\"none\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Raman shift (cm<sup>−1<\/sup>)<\/th><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Assignment<\/th><\/tr><tr><th colspan=\"2\" align=\"left\" valign=\"top\" rowspan=\"1\"><hr><\/th><\/tr><\/thead><tbody><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>830<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Tyrosine ring breathing (protein)<sup><xref rid=\"R32\" ref-type=\"bibr\">32<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>946<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">CCH skeletal stretch or rocking mode (proline, collagen-like)<sup><xref rid=\"R33\" ref-type=\"bibr\">33<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>1001<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Phenylalanine ring breathing (protein)<sup><xref rid=\"R34\" ref-type=\"bibr\">34<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>1146, 1299<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">CH<sub>2<\/sub>twisting/rocking (lipids, membrane components)<sup><xref rid=\"R35\" ref-type=\"bibr\">35<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>1440<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">CH<sub>2<\/sub>bending (lipids, fatty acyl chains)<sup><xref rid=\"R35\" ref-type=\"bibr\">35<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>1498, 1536<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">C=C stretching (Amide II, some protein modes)<sup><xref rid=\"R36\" ref-type=\"bibr\">36<\/xref>,<xref rid=\"R37\" ref-type=\"bibr\">37<\/xref><\/sup><\/td><\/tr><tr><td align=\"center\" valign=\"top\" rowspan=\"1\" colspan=\"1\"><bold>1570, 1601<\/bold><\/td><td align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Aromatic C=C stretches (tyrosine, tryptophan)<sup><xref rid=\"R38\" ref-type=\"bibr\">38<\/xref>,<xref rid=\"R39\" ref-type=\"bibr\">39<\/xref><\/sup><\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC13015447/t0",
+      "wrap_id":"T1",
+      "wrap_path":"1/1/5/5"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Functional Characterization of Differentially Expressed miRNAs in Asian T2DM Subtypes",
+      "caption_external":true,
+      "caption_markup":"<caption><p id=\"P61\">Functional Characterization of Differentially Expressed miRNAs in Asian T2DM Subtypes<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2:",
+      "label_markup":"<label>Table 2:<\/label>",
+      "notes": [],
+      "source_path":"1/1/5/6/3",
+      "source_table_html":"<table frame=\"box\" rules=\"all\"><colgroup span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><col align=\"left\" valign=\"middle\" span=\"1\"><\/colgroup><thead><tr><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">miRNA<\/th><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Expression Pattern<\/th><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Primary Targets<\/th><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Biological Process<\/th><th align=\"left\" valign=\"top\" rowspan=\"1\" colspan=\"1\">Pathway Involvement<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">miR-208a<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">□ in Asian OWD<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">MED13<sup><xref rid=\"R44\" ref-type=\"bibr\">44<\/xref><\/sup>, SOX6<sup><xref rid=\"R42\" ref-type=\"bibr\">42<\/xref><\/sup>, CDKN1A<sup><xref rid=\"R43\" ref-type=\"bibr\">43<\/xref><\/sup><\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Systemic energy homeostasis, insulin resistance<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Cardiac metabolism, β-cell compensation<\/td><\/tr><tr><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">miR-132<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">□ in Asian OWD<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">SOX6<sup><xref rid=\"R41\" ref-type=\"bibr\">41<\/xref><\/sup>, CDKN1A<sup><xref rid=\"R43\" ref-type=\"bibr\">43<\/xref><\/sup><\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Glucose-stimulated insulin secretion, β-cell proliferation<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Insulin signaling, β-cell adaptation<\/td><\/tr><tr><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">miR-484<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">□ in Asian NWD<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Fisl<sup><xref rid=\"R47\" ref-type=\"bibr\">47<\/xref><\/sup><\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Mitochondrial fission regulation, ATP production<\/td><td align=\"left\" valign=\"bottom\" rowspan=\"1\" colspan=\"1\">Mitochondrial dynamics, GSIS<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC13015447/t1",
+      "wrap_id":"T2",
+      "wrap_path":"1/1/5/6"
+    }
+  ],
+  "title":"Analysis of Plasma Extracellular Vesicles in Normal-Weight and Overweight Type 2 Diabetes Mellitus Using Multimodal SERS and RNA-Seq"
+}

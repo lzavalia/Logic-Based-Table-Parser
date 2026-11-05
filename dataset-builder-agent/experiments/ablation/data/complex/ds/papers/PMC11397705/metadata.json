@@ -1,0 +1,94 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":3,
+  "pmc_id":"PMC11397705",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC11397705/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC11397705.xml",
+    "input_file_sha256":"0650ab799b650129138e7fd148f37a09c6c6e9025042ec781e6f546fffa30842",
+    "input_file_size_bytes":111311,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license ( https://creativecommons.org/licenses/by/4.0/ ).",
+      "license_type":"unknown",
+      "license_url":"https://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC11397705",
+    "processing_timestamp_unix":1793042741.306012,
+    "retrieval_timestamp":"2026-10-26T19:23:16Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042596.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":3,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Phosphorus activation coefficient in different fertilization treatments. Values represent the means of four plots ± SE (standard errors).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Phosphorus activation coefficient in different fertilization treatments. Values represent the means of four plots ± SE (standard errors).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn><p><sup>1<\/sup>In each column, the phosphorus activation coefficient (PAC) was calculated by the ratio of soil available P (AP) to soil total P content (TP). For a given soil depth, different letters indicate a significant difference between different fertilization treatments using Fisher’s LSD test (<italic toggle=\"yes\">p<\/italic>&lt; 0.05).<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"1 In each column, the phosphorus activation coefficient (PAC) was calculated by the ratio of soil available P (AP) to soil total P content (TP). For a given soil depth, different letters indicate a significant difference between different fertilization treatments using Fisher’s LSD test ( p < 0.05)."
+      ],
+      "source_path":"1/1/5/6/4",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" align=\"left\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" colspan=\"1\">Treatment<\/th><th colspan=\"4\" align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\">Phosphorus Activation Coefficient (PAC<sup>1<\/sup>, %)<\/th><\/tr><tr><th align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">0–10 cm<\/th><th align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">10–20 cm<\/th><th align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">20–30 cm<\/th><th align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">30–40 cm<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">CK<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">20.4 ± 0.5 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">19.3 ± 0.2 ab<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">5.16 ± 0.64 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">2.16 ± 0.32 a<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">NPK<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">22.6 ± 0.4 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">22.3 ± 0.7 a<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">4.14 ± 0.51 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">2.14 ± 0.55a<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.75NPK<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">22.2 ± 0.6 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">16.8 ± 0.3 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.75 ± 0.57 b<\/td><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.67 ± 0.28 a<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">SNPK<\/td><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">68.3 ± 0.1 a<\/td><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">21.8 ± 0.1 a<\/td><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">11.7 ± 0.6 a<\/td><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">1.56 ± 0.17 a<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC11397705/t0",
+      "wrap_id":"plants-13-02389-t001",
+      "wrap_path":"1/1/5/6"
+    },
+    {
+      "annotation_status":"unique",
+      "candidate_count":1,
+      "caption":"The MBP turnover rates and annual P fluxes through microbial biomass under different fertilization regimes from June 2021 to September 2022.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>The MBP turnover rates and annual P fluxes through microbial biomass under different fertilization regimes from June 2021 to September 2022.<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [],
+      "source_path":"1/1/5/7/4",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Treatment<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Average MBP<break><\/break>(mg kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Total Released P<break><\/break>(mg kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Turnover Rate<break><\/break>(Year<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Annual MBP Flux<break><\/break>(kg P ha<sup>−1<\/sup>year<sup>−1<\/sup>)<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">CK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">10.3 ± 0.5<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">4.8 ± 2.6<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.58 ± 0.23<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">12.0 ± 3.4<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">NPK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">11.3 ± 0.6<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">5.9 ± 1.0<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.52 ± 0.14<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">14.7 ± 1.8<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.75NPK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">12.5 ± 1.0<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">6.3 ± 1.1<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.53 ± 0.09<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">16.3 ± 3.8<\/td><\/tr><tr><td align=\"left\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">SNPK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">17.6 ± 0.6<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">8.9 ± 1.5<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.60 ± 0.1<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">21.3 ± 4.5<\/td><\/tr><tr><td colspan=\"2\" align=\"left\" valign=\"middle\" rowspan=\"1\">Significance level (<italic toggle=\"yes\">p<\/italic>)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\"><\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\"><\/td><\/tr><tr><td align=\"left\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Fertilizer<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">0.002<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">0.015<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">0.578<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">0.013<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC11397705/t1",
+      "wrap_id":"plants-13-02389-t002",
+      "wrap_path":"1/1/5/7"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Selected soil chemical properties of the long-term field trail used in present study. Values represent the means of four plots with SE (standard errors).",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Selected soil chemical properties of the long-term field trail used in present study. Values represent the means of four plots with SE (standard errors).<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><fn><p>SOC: soil organic matter; TN: total nitrogen; AN: available nitrogen; AP: available phosphorus; AK: available potassium.<\/p><\/fn><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"SOC: soil organic matter; TN: total nitrogen; AN: available nitrogen; AP: available phosphorus; AK: available potassium."
+      ],
+      "source_path":"1/1/5/8/4",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">Treatments<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">pH<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">SOC<break><\/break>(g kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">TN<break><\/break>(g kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">AN<break><\/break>(mg kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">AP<break><\/break>(mg kg<sup>−1<\/sup>)<\/th><th align=\"center\" valign=\"middle\" style=\"border-top:solid thin;border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">AK<break><\/break>(mg kg<sup>−1<\/sup>)<\/th><\/tr><\/thead><tbody><tr><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">CK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">5.53 (0.18)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.30 (0.04)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.0 (0.11)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">99.5 (9.2)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">10.5 (1.3)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">71.5 (10.2)<\/td><\/tr><tr><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">NPK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">5.54 (0.20)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.32 (0.02)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.5 (0.21)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">119.8 (13.2)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">12.6 (1.5)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">73.9 (11.5)<\/td><\/tr><tr><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">0.75NPK<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">5.62 (0.04)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.33 (0.04)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">1.3 (0.13)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">102.3 (11.2)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">13.2 (2.2)<\/td><td align=\"center\" valign=\"middle\" rowspan=\"1\" colspan=\"1\">75.1 (8.9)<\/td><\/tr><tr><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">SNPK<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">6.02 (0.05)<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">1.52 (0.02)<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">1.2 (0.21)<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">125.2 (33.2)<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">15.6 (2.1)<\/td><td align=\"center\" valign=\"middle\" style=\"border-bottom:solid thin\" rowspan=\"1\" colspan=\"1\">79.3 (6.5)<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC11397705/t2",
+      "wrap_id":"plants-13-02389-t003",
+      "wrap_path":"1/1/5/8"
+    }
+  ],
+  "title":"Long-Term Straw Returning Enhances Phosphorus Uptake by Zea mays L. through Mediating Microbial Biomass Phosphorus Turnover and Root Functional Traits"
+}

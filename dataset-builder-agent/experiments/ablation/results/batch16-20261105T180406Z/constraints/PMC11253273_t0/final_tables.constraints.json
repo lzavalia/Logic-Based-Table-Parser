@@ -1,0 +1,236 @@
+{
+  "pmc_id":"PMC11253273",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC11253273/t0/layout2",
+      "caption":"Summary of randomised controlled trials reporting the effect of azithromycin on pregnancy outcomes (N = 20).",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 12 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":5,
+	    "last_row":22,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":1,"text":"Single-dose intrapartum azithromycin administration"},
+	{"row":12,"text":"Antenatal azithromycin administration"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Eligibility criteria": []},
+	    {"Participant characteristics": []},
+	    {"Intervention": []},
+	    {"Comparator": []},
+	    {"Funding/Sponsors": []}
+	  ],
+	  "vertical metadata": [
+	    {"Tita et al. (2023); Multicentric": []},
+	    {"Roca et al. (2023); Gambia and Burkina Faso": []},
+	    {"Huang et al. (2022); China": []},
+	    {"Subramaniam et al. (2021); Cameroon": []},
+	    {"Mohamed et al. (2020); Egypt": []},
+	    {"Jyothi et al. (2019); India": []},
+	    {"Oluwalana et al. (2017); Gambia": []},
+	    {"Tita et al. (2016); United States of America": []},
+	    {"Mohan et al. (2013); India": []},
+	    {"Ogasawara et al. (1999); United States of America": []},
+	    {"Lingani et al. (2023); Burkina Faso": []},
+	    {"Hallamaa et al. (2023); Malawi": []},
+	    {"Madanitsa et al. (2023); Malawi, Tanzania, and Kenya": []},
+	    {"Ahmed et al. (2023); Egypt": []},
+	    {"Akinyotu et al. (2019); Nigeria": []},
+	    {"van den Broek et al. (2009); Malawi": []},
+	    {"Abdus-salam et al. (2016); Iran": []},
+	    {"Sivasankari et al. (2016); India": []},
+	    {"Unger et al. (2015); Papua New Guinea": []},
+	    {"Kalilani et al. (2007); Malawi": []}
+	  ],
+	  "data": [
+	    [
+	      "Inclusion criteria : Pregnant women in labour with gestational age ≥28 weeks with a plan for vaginal delivery Exclusion criteria : Preterm labour undergoing management with no immediate plan to proceed to delivery, advanced stage of labour",
+	      "Intervention : 14,590 women with a median (IQR) age of 24 years (21–28) Comparator : 14,688 women with a median (IQR) age of 24 years (21–28)",
+	      "Intervention : Azithromycin Dose : Single 2-g oral dose Timing : Intrapartum",
+	      "Intervention: Placebo Dose : Single 2-g oral dose Timing : Intrapartum",
+	      "Eunice Kennedy Shriver National Institute of Child Health and Human Development; Bill and Melinda Gates Foundation."
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women in active labour planning for vaginal delivery Exclusion criteria: Known HIV infection",
+	      "Intervention : 5802 women with a median (IQR) age of 27 years (22–31) Comparator : 5823 women with a median (IQR) age of 26 years (22–31)",
+	      "Intervention: Azithromycin Dose: Single 2-g oral dose Timing: Intrapartum",
+	      "Intervention: Placebo Dose: Single 2-g oral dose Timing: Intrapartum",
+	      "UK Research and Innovation; London School of Hygiene and Tropical Medicine; Bill & Melinda Gates Foundation"
+	    ],
+	    [
+	      "Inclusion criteria : Pregnant women (≥37 weeks) who had rupture of membranes (spontaneous or iatrogenic) or were in labour and underwent nonelective CS (i.e., Unscheduled CS during labour, after membrane rupture). Exclusion criteria: Colonised/infected with GBS at 36 weeks of gestation, Maternal infection requiring additional antibiotics",
+	      "Intervention : 121 women with a mean ± SD age of 30 ± 3.1 years Comparator : 121 women with a mean ± SD age of 30.4 ± 3.5 years",
+	      "Intervention: Azithromycin + Cefuroxime Dose: Azithromycin (500 mg) + Cefuroxime (1500 mg) single dose Timing: Within 30 min before skin incision (intravenous)",
+	      "Intervention: Placebo + Cefuroxime Dose: Placebo (500 mg) + Cefuroxime (1500 mg) single dose Timing: Within 30 min before skin incision (intravenous)",
+	      "Shanghai Shenkang Hospital Development Center Clinical Science and Technology Innovation; Shanghai Municipal Health Commission"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with prolonged duration of labour or PROM Exclusion criteria : Clinical chorioamnionitis or any other active infection at the time of randomisation; plan for elective CS before enrolment",
+	      "Intervention : 253 women with a mean ± SD age of 27.2 ± 5.3 years Comparator : 250 women with a mean ± SD age of 26.0 ± 5.3 years",
+	      "Intervention: Azithromycin Dose: 1-g single dose Timing: Intrapartum (oral)",
+	      "Intervention: Placebo Dose: 1-g single dose Timing: Intrapartum (oral)",
+	      "Merck"
+	    ],
+	    [
+	      "Inclusion criteria: Women undergoing elective CS",
+	      "Intervention : 200 women with a mean age of 25.5 years Comparator : 200 women with a mean age of 24.7 years",
+	      "Intervention: Azithromycin + Cefazolin Dose: Azithromycin (1-g) + Cefazolin (1-g) single dose Timing: Two hours preoperatively",
+	      "Intervention: Cefazolin Dose : Single 1-g dose Timing : Two hours preoperatively",
+	      "Not reported"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women planned for a CS Exclusion criteria: Chorioamnionitis, Infection warranting antimicrobial use, Prolonged or obstructed labour, PROM.",
+	      "Intervention : 100 women with a mean ± SD age of 26.42 ± 2.7 years Comparator : 100 women with a mean ± SD age of 27.39 ± 3.0 years",
+	      "Intervention: Azithromycin + Cefazolin Dose: Azithromycin (500 mg) + Cefazolin (2-g) single dose Timing: 15–20 min before the skin incision (intravenous)",
+	      "Intervention: Placebo + Cefazolin Dose: Placebo (500 mg) + cefazolin (2-g) single dose Timing: 15–20 min before the skin incision (intravenous)",
+	      "None"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women in labour or undergoing emergency CS (98% underwent vaginal delivery). Exclusion criteria: Known HIV infection or antibiotic intake in the previous week.",
+	      "Intervention : 414 women with a median (IQR) age of 26 years (22–30) Comparator : 415 women with a median (IQR) age of 25 years (22–30)",
+	      "Intervention: Azithromycin Dose: Azithromycin (2-g) Timing: In labour",
+	      "Intervention: Placebo Dose: Placebo (2-g) Timing: In labour",
+	      "Medical Research Council UK"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with a gestational age ≥24 weeks who were undergoing nonelective CS during labour or after membrane rupture Exclusion criteria : Chorioamnionitis or other infection requiring postpartum antibiotic therapy (patients receiving antibiotics for GBS were eligible)",
+	      "Intervention : 1019 women with mean ± SD age of 28.2 ± 6.1 years Comparator : 994 women with mean ± SD age of 28.4 ± 6.5 years",
+	      "Intervention: Azithromycin + Cefazolin Dose: Azithromycin (500 mg) single dose + cefazolin (as per protocol) Timing: Up to 1 h before incision (intravenous)",
+	      "Intervention: Placebo + Cefazolin Dose: 500 mg single dose + Cefazolin (as per protocol) Timing: Up to 1 h before incision (intravenous)",
+	      "Eunice Kennedy Shriver National Institute of Child Health and Human Development; Drug provided by Pfizer Inc (New York, NY)"
+	    ],
+	    [
+	      "Inclusion criteria : Pregnant women planned for CS Exclusion criteria: Signs of obvious infection; recently received antibiotics",
+	      "Intervention : 35 women, age range of 16–30 years Comparator : 35 women, age range of 16–30 years",
+	      "Intervention: Azithromycin Dose : 500 mg Timing : Single-dose half an hour before CS",
+	      "Intervention: Cefazolin Dose : (1 g; single dose) Timing : Single-dose half an hour before CS",
+	      "Not reported"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with gestational age between 22 and 34 weeks with either preterm labour or preterm PROM Exclusion criteria: Maternal or fetal condition requiring immediate delivery",
+	      "Intervention : 32 women with a mean ± SE age of 23.6 ± 1.1 years Comparator : 27 women with a mean ± SE age of 27.3 ± 1.1 years",
+	      "Intervention : Azithromycin + Ampicillin Dose : Azithromycin (1-g) + Ampicillin (2 g) Timing : Azithromycin: single dose at enrolment Ampicillin: 2-g 6 hourly till the group B streptococcus culture results were available, followed by a 7-day course and intravenous ampicillin during labour",
+	      "Intervention : Placebo + Ampicillin Dose : Placebo (1-g) + Ampicillin (2 g) Timing : Placebo: single dose at enrolment Ampicillin: 2-g 6 hourly till the group B streptococcus culture results were available, followed by a 7-day course and intravenous ampicillin during labour",
+	      "Drug provided by Pfizer Inc (New York, NY)"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women in the antenatal period between 12 and 24 weeks of gestation Exclusion criteria : Cotrimoxazole prophylaxis for HIV",
+	      "Intervention : 496 women with mean ± SD age of 26 ± 6 years Comparator : 496 women with mean ± SD age of 25 ± 6 years",
+	      "Intervention: Azithromycin + Sulfadoxine-Pyrimethamine (SP) Dose : Azithromycin (1-g daily x 2 days) + SP (1500/75 mg monthly) Timing : Second and third trimesters of pregnancy",
+	      "Intervention: Sulfadoxine-Pyrimethamine Dose: SP (1500/75 mg monthly) Timing: Second and third trimesters of pregnancy",
+	      "Clinical Research Unit of Nanoro, Burkina Faso; Belgian Universities Cooperation for the Development"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with ultrasound-confirmed gestational age of 14–26 weeks",
+	      "Intervention : 443 women with mean ± SD age of 25 ± 6 years Comparator : 441 women with mean ± SD age of 25 ± 7 years",
+	      "Intervention : Azithromycin + Sulfadoxine-pyrimethamine (SP) Dose : Azithromycin (1-g) + SP (1500/75 mg) Timing : Azithromycin: at enrolment and a visit between 28 and 34 weeks of gestation SP: At enrolment and monthly after that until 37 weeks",
+	      "Intervention: Placebo + Sulfadoxine-pyrimethamine Dose : SP (1500/75 mg) Timing : Placebo: At enrolment and a visit between the 28th–34th weeks SP: At enrolment and monthly after that until 37 weeks",
+	      "Academy of Finland; Foundation for Pediatric Research in Finland; Tampere University Hospital. Drug provided by Pfizer Inc (New York, NY)"
+	    ],
+	    [
+	      "Inclusion criteria : Pregnant women with viable singleton pregnancy between 16 and 28 weeks Exclusion criteria: Known HIV infection",
+	      "Intervention : 1558 women with a mean ± SD age of 24.9 ± 6 years Comparator : 1561 women with mean ± SD age of 25.1 ± 6.1 years",
+	      "Intervention: Dihydroartemisinin–piperaquine (DHP) + Azithromycin Dose: Azithromycin (1-g) + DHP (120/960 mg–200/1600 mg as per body weight) Timing: Azithromycin: at enrolment and next day (total two doses) DHP: at enrolment and next two days (total three doses)",
+	      "Intervention: Dihydroartemisinin–piperaquine (DHP) + Placebo Dose: DHP (120/960 mg–200/1600 mg according to body weight) + Placebo (1-g) Timing: DHP: at enrolment and next two days (total three doses)",
+	      "Medical Research Council; Wellcome; Bill & Melinda Gates Foundation"
+	    ],
+	    [
+	      "Inclusion criteria : Pregnant women who had vaginal cerclage Exclusion criteria: Bacterial vaginal infection detected on high vaginal swab before cerclage",
+	      "Intervention : 25 women with a mean ± SD age of 30.0 ± 4.8 years Comparator : 25 women with a mean ± SD age of 29.7 ± 3.9 years",
+	      "Intervention: Azithromycin Dose: 1-g Timing: Three days in 14th, 24th and 32nd weeks each (total nine days)",
+	      "Routine antenatal care",
+	      "None"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant HIV-positive women with gestational age ≥16 weeks",
+	      "Intervention : 60 women with a mean ± SD age of 33.20 ± 4.9 years Comparator : 63 women with a mean ± SD age of 32.17 ± 5.6 years",
+	      "Intervention : Azithromycin + Sulfadoxine-pyrimethamine (SP) Dose : Azithromycin (500 mg) + SP (1500/75 mg) Timing : Azithromycin: at enrolment and next two days (total three doses) SP: at enrolment and next two months (total three doses)",
+	      "Intervention : Sulfadoxine-pyrimethamine (SP) Dose : SP (1500/75 mg) Timing : SP: at enrolment and next two months (total three doses)",
+	      "None"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with gestational age <24 weeks",
+	      "Intervention : 1149 women with a mean ± SD age of 22.8 ± 5.1 years Comparator : 1148 women with mean ± SD age of 23.0 ± 5.2 years",
+	      "Intervention: Azithromycin Dose: Azithromycin (1-g) Timing: One each at both 16–24 and 28–32 weeks of gestation",
+	      "Intervention: Placebo Dose: Single 1-g dose Timing: One each at both 16–24 and 28–32 weeks of gestation",
+	      "Wellcome Trust; Drug provided by Pfizer Inc (New York, NY)"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women in the second trimester Exclusion criteria : History of previous intermittent preventive treatment for malaria in index pregnancy",
+	      "Intervention : 115 women with mean ± SD age of 31.24 ± 4.7 years Comparator : 115 women with a mean ± SD age of 31.07 ± 4.2 years",
+	      "Intervention: Azithromycin Dose: Azithromycin (500 mg) Timing: At enrolment and next two days (total three doses)",
+	      "Intervention: Sulphadoxime + Pyrimethamine (SP) Dose: SP (1500/75 mg) Timing : At enrolment, followed by repeat dose 4 weeks later",
+	      "None"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women with ≥37 weeks of gestation and planned for CS Exclusion criteria: Administration of antibiotics within a week before the delivery",
+	      "Intervention : 302 women with mean ± SD age of 27.59 ± 4.4 years Comparator : 296 women with a mean ± SD age of 27.28 ± 4.7 years",
+	      "Intervention: Azithromycin + Cefazolin Dose: Azithromycin (500 mg) + Cefazolin (1–2 g) single dose Timing: 1 h before the skin incision (intravenous)",
+	      "Intervention: Placebo + Cefazolin Dose: Placebo (500 mg) + cefazolin (1–2 g) single-dose Timing: 1 h before the skin incision (intravenous)",
+	      "Christian Medical College, Vellore, India"
+	    ],
+	    [
+	      "Inclusion criteria: Pregnant women presenting for their first antenatal visit at ≤26 weeks gestational age",
+	      "Intervention : 1393 women with mean ± SD age of 24.4 ± 5.5 years Comparator : 1382 women with mean ± SD age of 24.5 ± 5.4 years",
+	      "Intervention : Azithromycin + Sulfadoxine-pyrimethamine (SP) Dose : Azithromycin (1-g) + SP (1500/75 mg) Timing : Three courses (one at enrolment, the second minimum four weeks later, the third minimum four weeks after that)",
+	      "Intervention : Chloroquine (CQ) + Sulfadoxine-pyrimethamine (SP) Dose : CQ (450–600 mg) + SP (1500/75 mg) Timing : One course of SP and three days of CQ, followed by placebo equivalent for the next courses",
+	      "Bill & Melinda Gates Foundation; Pregvax Consortium (EU & Spanish Government); Drug provided by Pfizer Inc (New York, NY)"
+	    ],
+	    [
+	      "Inclusion criteria : Pregnant women (14–26 weeks) with peripheral parasitaemia (Plasmodium falciparum) Exclusion criteria: Antimalarial drugs within 28 days before enrolment",
+	      "Intervention : 47 women with a median (IQR) age of 20 years (18–23) Comparator : 47 women with a median (IQR) age of 20 years (18–24)",
+	      "Intervention : Azithromycin + Sulfadoxine-pyrimethamine (SP) Dose : Azithromycin (1-g) + SP (1500/75 mg) Timing : First course at enrolment with SP on day 1 and azithromycin (1 g/day) on days 1 and 2 The second course at least four weeks later",
+	      "Intervention : Sulfadoxine-pyrimethamine (SP) Dose : SP (1500/75 mg) Timing : First course at enrolment with SP on day 1 The second course at least four weeks later",
+	      "Centers for Disease Control and Prevention"
+	    ]
+	  ],
+	  "residual_corner": [ {"Author (year); study site": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC11253273/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings table for azithromycin prophylaxis (antenatal or intrapartum) in pregnancy for neonatal, perinatal, and maternal outcomes.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11253273/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"6a3df3dec1f47e3fdda359b77e966fa7d483070d247f89c914ab1a9555afc44d"
+}

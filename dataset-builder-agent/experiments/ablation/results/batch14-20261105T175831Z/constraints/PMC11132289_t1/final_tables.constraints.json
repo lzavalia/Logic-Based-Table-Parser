@@ -1,0 +1,95 @@
+{
+  "pmc_id":"PMC11132289",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of Included Studies",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Appendix A",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11132289/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC11132289/t1/layout1",
+      "caption":"GRADE Evidence Profile",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate1_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Appendix B",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":12,
+	    "last_row":3,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":2,"text":"Pruritus scores"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Certainty assessment": [
+		{"Study design": []},
+		{"Risk of bias": []},
+		{"Inconsistency": []},
+		{"Indirectness": []},
+		{"Imprecision": []},
+		{"Other considerations": []}
+	      ]
+	    },
+	    {"No. of patients": [ {"Intervention": []},  {"Comparison": []} ]},
+	    {"Effect": [ {"Relative (95% CI)": []},  {"Absolute (95% CI)": []} ]},
+	    {"Certainty": []},
+	    {"Importance": []}
+	  ],
+	  "vertical metadata": [ {"4": []} ],
+	  "data": [
+	    [
+	      "randomized trials",
+	      "not serious",
+	      "not serious",
+	      "not serious",
+	      "serious a",
+	      "none",
+	      "83",
+	      "83",
+	      "—",
+	      "SMD 1.4 SD lower (1.74 lower to 1.05 lower)",
+	      "⊕⊕⊕⃝ MODERATE",
+	      "CRITICAL"
+	    ]
+	  ],
+	  "residual_corner": [ {"Certainty assessment": [ {"No. of tance studies": []} ]} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11132289/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"01b84e77a7479138ef373b677f090c8f6ccb20c2817b524a2276f6b07fea4bf0"
+}

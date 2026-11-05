@@ -1,0 +1,427 @@
+{
+  "pmc_id":"PMC12688826",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable model covariates selected by generalized variance inflation factors criteria.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12688826/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Weighted baseline characteristics of stroke patients according to diabetes mellitus status.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12688826/t1"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12688826/t2/layout3",
+      "caption":"Weighted baseline characteristics according to uric acid-to-high-density lipoprotein cholesterol ratio quartile in stroke patients.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout3.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [
+	{"row":6,"text":"Sex, n (%)"},
+	{"row":9,"text":"Ethnicity, n (%)"},
+	{"row":14,"text":"Marital status, n (%)"},
+	{"row":17,"text":"PIR, n (%)"},
+	{"row":21,"text":"Smoking, n (%)"},
+	{"row":24,"text":"Education level, n (%)"},
+	{"row":28,"text":"Drinking, n (%)"},
+	{"row":31,"text":"Physical activity, n (%)"},
+	{"row":34,"text":"Hypertension, n (%)"},
+	{"row":37,"text":"DM, n (%)"},
+	{"row":40,"text":"Hyperlipidemia, n (%)"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Total (n = 964)": []},
+	    {"Q1 (n = 217)": []},
+	    {"Q2 (n = 244)": []},
+	    {"Q3 (n = 240)": []},
+	    {"Q4 (n = 263)": []},
+	    {"Statistic": []},
+	    {"P": []}
+	  ],
+	  "vertical metadata": [
+	    {"UA, mean (SD)": []},
+	    {"Weight, mean (SD)": []},
+	    {"Height, mean (SD)": []},
+	    {"BMI, mean (SD)": []},
+	    {"Age, mean (SD)": []},
+	    {"Male": []},
+	    {"Female": []},
+	    {"Mexican American": []},
+	    {"Non-Hispanic White": []},
+	    {"Non-Hispanic Black": []},
+	    {"Other": []},
+	    {"Married": []},
+	    {"Other": []},
+	    {"Low income": []},
+	    {"Middle income": []},
+	    {"High income": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"Less than high school": []},
+	    {"High school or equivalent": []},
+	    {"College or above": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"Low physical activity": []},
+	    {"High physical activity": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []}
+	  ],
+	  "data": [
+	    [
+	      "342.90 (3.76)",
+	      "254.87 (6.09)",
+	      "322.11 (5.85)",
+	      "363.82 (5.00)",
+	      "429.85 (6.13)",
+	      "F = 133.98",
+	      "<.001"
+	    ],
+	    [
+	      "82.30 (1.04)",
+	      "71.90 (1.36)",
+	      "77.23 (1.73)",
+	      "84.16 (1.39)",
+	      "95.78 (2.16)",
+	      "F = 35.82",
+	      "<.001"
+	    ],
+	    [
+	      "166.13 (0.43)",
+	      "163.45 (0.73)",
+	      "163.04 (0.79)",
+	      "167.95 (0.79)",
+	      "170.03 (0.93)",
+	      "F = 17.84",
+	      "<.001"
+	    ],
+	    [
+	      "29.69 (0.31)",
+	      "26.95 (0.57)",
+	      "29.02 (0.58)",
+	      "29.74 (0.38)",
+	      "33.00 (0.56)",
+	      "F = 17.05",
+	      "<.001"
+	    ],
+	    [
+	      "63.14 (0.70)",
+	      "61.58 (1.32)",
+	      "63.45 (1.41)",
+	      "64.29 (1.17)",
+	      "63.23 (1.18)",
+	      "F = 0.93",
+	      ".427"
+	    ],
+	    [
+	      "485 (44.18)",
+	      "55 (19.17)",
+	      "97 (25.67)",
+	      "150 (62.99)",
+	      "183 (68.45)",
+	      "χ 2 = 186.75",
+	      "<.001"
+	    ],
+	    [
+	      "479 (55.82)",
+	      "162 (80.83)",
+	      "147 (74.33)",
+	      "90 (37.01)",
+	      "80 (31.55)",
+	      "χ 2 = 186.75",
+	      "<.001"
+	    ],
+	    ["99 (4.26)", "24 (4.17)", "22 (3.84)", "29 (4.84)", "24 (4.20)", "χ 2 = 2.94", ".969" ],
+	    [
+	      "524 (73.49)",
+	      "111 (74.78)",
+	      "122 (71.31)",
+	      "136 (73.60)",
+	      "155 (74.25)",
+	      "χ 2 = 2.94",
+	      ".969"
+	    ],
+	    [
+	      "236 (12.97)",
+	      "56 (13.62)",
+	      "65 (14.19)",
+	      "53 (11.44)",
+	      "62 (12.65)",
+	      "χ 2 = 2.94",
+	      ".969"
+	    ],
+	    [
+	      "105 (9.28)",
+	      "26 (7.43)",
+	      "35 (10.66)",
+	      "22 (10.12)",
+	      "22 (8.89)",
+	      "χ 2 = 2.94",
+	      ".969"
+	    ],
+	    [
+	      "513 (59.20)",
+	      "96 (49.60)",
+	      "125 (61.28)",
+	      "141 (64.91)",
+	      "151 (60.96)",
+	      "χ 2 = 13.18",
+	      ".049"
+	    ],
+	    [
+	      "451 (40.80)",
+	      "121 (50.40)",
+	      "119 (38.72)",
+	      "99 (35.09)",
+	      "112 (39.04)",
+	      "χ 2 = 13.18",
+	      ".049"
+	    ],
+	    [
+	      "378 (30.24)",
+	      "86 (31.06)",
+	      "93 (29.70)",
+	      "88 (28.98)",
+	      "111 (31.24)",
+	      "χ 2 = 1.43",
+	      ".993"
+	    ],
+	    [
+	      "406 (44.30)",
+	      "86 (41.70)",
+	      "106 (44.46)",
+	      "103 (46.26)",
+	      "111 (44.75)",
+	      "χ 2 = 1.43",
+	      ".993"
+	    ],
+	    [
+	      "180 (25.46)",
+	      "45 (27.24)",
+	      "45 (25.84)",
+	      "49 (24.76)",
+	      "41 (24.01)",
+	      "χ 2 = 1.43",
+	      ".993"
+	    ],
+	    [
+	      "371 (38.89)",
+	      "86 (36.26)",
+	      "102 (45.30)",
+	      "100 (43.32)",
+	      "83 (30.70)",
+	      "χ 2 = 13.67",
+	      ".032"
+	    ],
+	    [
+	      "593 (61.11)",
+	      "131 (63.74)",
+	      "142 (54.70)",
+	      "140 (56.68)",
+	      "180 (69.30)",
+	      "χ 2 = 13.67",
+	      ".032"
+	    ],
+	    [
+	      "326 (25.34)",
+	      "70 (19.74)",
+	      "86 (27.67)",
+	      "71 (27.40)",
+	      "99 (26.51)",
+	      "χ 2 = 17.37",
+	      ".118"
+	    ],
+	    [
+	      "252 (27.22)",
+	      "46 (23.02)",
+	      "63 (27.05)",
+	      "74 (25.30)",
+	      "69 (33.51)",
+	      "χ 2 = 17.37",
+	      ".118"
+	    ],
+	    [
+	      "386 (47.44)",
+	      "101 (57.24)",
+	      "95 (45.28)",
+	      "95 (47.30)",
+	      "95 (39.98)",
+	      "χ 2 = 17.37",
+	      ".118"
+	    ],
+	    [
+	      "330 (32.05)",
+	      "77 (33.08)",
+	      "82 (32.32)",
+	      "93 (35.64)",
+	      "78 (27.14)",
+	      "χ 2 = 4.24",
+	      ".439"
+	    ],
+	    [
+	      "634 (67.95)",
+	      "140 (66.92)",
+	      "162 (67.68)",
+	      "147 (64.36)",
+	      "185 (72.86)",
+	      "χ 2 = 4.24",
+	      ".439"
+	    ],
+	    [
+	      "559 (55.33)",
+	      "118 (52.39)",
+	      "148 (57.73)",
+	      "140 (54.62)",
+	      "153 (56.61)",
+	      "χ 2 = 1.61",
+	      ".830"
+	    ],
+	    [
+	      "405 (44.67)",
+	      "99 (47.61)",
+	      "96 (42.27)",
+	      "100 (45.38)",
+	      "110 (43.39)",
+	      "χ 2 = 1.61",
+	      ".830"
+	    ],
+	    [
+	      "185 (22.90)",
+	      "53 (27.97)",
+	      "38 (19.12)",
+	      "46 (23.45)",
+	      "48 (21.05)",
+	      "χ 2 = 5.94",
+	      ".442"
+	    ],
+	    [
+	      "779 (77.10)",
+	      "164 (72.03)",
+	      "206 (80.88)",
+	      "194 (76.55)",
+	      "215 (78.95)",
+	      "χ 2 = 5.94",
+	      ".442"
+	    ],
+	    [
+	      "576 (64.90)",
+	      "160 (80.10)",
+	      "147 (67.29)",
+	      "140 (62.30)",
+	      "129 (50.07)",
+	      "χ 2 = 49.04",
+	      "<.001"
+	    ],
+	    [
+	      "388 (35.10)",
+	      "57 (19.90)",
+	      "97 (32.71)",
+	      "100 (37.70)",
+	      "134 (49.93)",
+	      "χ 2 = 49.04",
+	      "<.001"
+	    ],
+	    [
+	      "136 (13.49)",
+	      "54 (23.06)",
+	      "38 (15.48)",
+	      "30 (11.78)",
+	      "14 (3.74)",
+	      "χ 2 = 39.98",
+	      "<.001"
+	    ],
+	    [
+	      "828 (86.51)",
+	      "163 (76.94)",
+	      "206 (84.52)",
+	      "210 (88.22)",
+	      "249 (96.26)",
+	      "χ 2 = 39.98",
+	      "<.001"
+	    ]
+	  ],
+	  "residual_corner": [ {"Variable": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12688826/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds ratios for the association between uric acid-to-high-density lipoprotein cholesterol ratio z -scores and diabetes mellitus among individuals with stroke (weighted).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12688826/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Association between uric acid-to-high-density lipoprotein cholesterol ratio z -scores and diabetes mellitus in stroke patients using two-piecewise regression models.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC12688826/t4"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Mediating role of body mass index in the pathway from uric acid-to-high-density lipoprotein cholesterol ratio z -scores to diabetes mellitus in patients with stroke.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC12688826/t5"
+    }
+  ],
+  "tables_jsonl_sha256":"29e04c32e8293e667dc92bb3c5c593c172aebbb2270dff666e3736e592c84036"
+}

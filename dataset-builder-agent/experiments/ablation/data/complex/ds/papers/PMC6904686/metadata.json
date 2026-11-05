@@ -1,0 +1,120 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":3,
+  "pmc_id":"PMC6904686",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6904686/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC6904686.xml",
+    "input_file_sha256":"225f703fe5a76f739ee8f30b878aae0e20e96826b509b54b7d1126aa9713abef",
+    "input_file_size_bytes":75368,
+    "license": {
+      "license_text_excerpt":"https://creativecommons.org/licenses/by/4.0/ Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ .",
+      "license_type":"OpenAccess",
+      "license_url":"http://creativecommons.org/licenses/by/4.0/",
+      "redistribution_status":"requires_manual_review",
+      "status":"evidence_found_unverified"
+    },
+    "pmc_id":"PMC6904686",
+    "processing_timestamp_unix":1793042765.984213,
+    "retrieval_timestamp":"2026-10-26T19:22:09Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042529.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":4,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Characteristics of participants across tertiles of DASH diet score in 3218 participants of the Tehran Lipid and Glucose Study.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Characteristics of participants across tertiles of DASH diet score in 3218 participants of the Tehran Lipid and Glucose Study.<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Data are presented as mean ± standard deviation or median (interquartile range) and as percentage.<\/p><p>*Significant differences (p &lt; 0.05) was obtained using chi square for categorical variables and linear regression for continuous variables.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"Data are presented as mean ± standard deviation or median (interquartile range) and as percentage.",
+	"*Significant differences (p < 0.05) was obtained using chi square for categorical variables and linear regression for continuous variables."
+      ],
+      "source_path":"1/1/2/3/3/2/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Characteristics<\/th><th colspan=\"3\" rowspan=\"1\">Tertiles of DASH score<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>value<sup>*<\/sup><\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">Tertile 1 (n = 1220)<\/th><th colspan=\"1\" rowspan=\"1\">Tertile 2 (n = 1070)<\/th><th colspan=\"1\" rowspan=\"1\">Tertile 3 (n = 928)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\">Age (years)<\/td><td colspan=\"1\" rowspan=\"1\">37.3 ± 9.0<\/td><td colspan=\"1\" rowspan=\"1\">39.6 ± 8.8<\/td><td colspan=\"1\" rowspan=\"1\">41.2 ± 8.9<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Men (%)<\/td><td colspan=\"1\" rowspan=\"1\">50.7<\/td><td colspan=\"1\" rowspan=\"1\">44.1<\/td><td colspan=\"1\" rowspan=\"1\">33.4<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Body mass index (kg/m<sup>2<\/sup>)<\/td><td colspan=\"1\" rowspan=\"1\">29.5 ± 3.7<\/td><td colspan=\"1\" rowspan=\"1\">29.5 ± 3.9<\/td><td colspan=\"1\" rowspan=\"1\">29.7 ± 3.7<\/td><td colspan=\"1\" rowspan=\"1\">0.139<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Smoking (%)<\/td><td colspan=\"1\" rowspan=\"1\">15.4<\/td><td colspan=\"1\" rowspan=\"1\">10.5<\/td><td colspan=\"1\" rowspan=\"1\">8.8<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Physical activity (Met-h/day)<\/td><td colspan=\"1\" rowspan=\"1\">74.8 (41.6–107.0)<\/td><td colspan=\"1\" rowspan=\"1\">70.7 (38.7–99.8)<\/td><td colspan=\"1\" rowspan=\"1\">62.7 (33.7–98.1)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Waist circumference (cm)<\/td><td colspan=\"1\" rowspan=\"1\">97.4 ± 10.1<\/td><td colspan=\"1\" rowspan=\"1\">96.8 ± 9.9<\/td><td colspan=\"1\" rowspan=\"1\">96.7 ± 9.7<\/td><td colspan=\"1\" rowspan=\"1\">0.074<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Fasting blood glucose (mg/dl)<\/td><td colspan=\"1\" rowspan=\"1\">96.2 ± 19.0<\/td><td colspan=\"1\" rowspan=\"1\">98.0 ± 22.5<\/td><td colspan=\"1\" rowspan=\"1\">98.0 ± 26.1<\/td><td colspan=\"1\" rowspan=\"1\">0.072<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Triglycerides (mg/dl)<\/td><td colspan=\"1\" rowspan=\"1\">151.8 ± 87.9<\/td><td colspan=\"1\" rowspan=\"1\">161.0 ± 164.4<\/td><td colspan=\"1\" rowspan=\"1\">148.8 ± 87.9<\/td><td colspan=\"1\" rowspan=\"1\">0.573<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">HDL- cholesterol (mg/dl)<\/td><td colspan=\"1\" rowspan=\"1\">44.9 ± 10.6<\/td><td colspan=\"1\" rowspan=\"1\">45.8 ± 10.9<\/td><td colspan=\"1\" rowspan=\"1\">47.1 ± 11.4<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Systolic blood pressure (mmHg)<\/td><td colspan=\"1\" rowspan=\"1\">113.7 ± 14.0<\/td><td colspan=\"1\" rowspan=\"1\">114.4 ± 14.1<\/td><td colspan=\"1\" rowspan=\"1\">113.4 ± 14.3<\/td><td colspan=\"1\" rowspan=\"1\">0.674<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Diastolic blood pressure (mmHg)<\/td><td colspan=\"1\" rowspan=\"1\">77.4 ± 10.1<\/td><td colspan=\"1\" rowspan=\"1\">78.2 ± 10.9<\/td><td colspan=\"1\" rowspan=\"1\">77.1 ± 10.8<\/td><td colspan=\"1\" rowspan=\"1\">0.529<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Education level (&gt;12 years) (%)<\/td><td colspan=\"1\" rowspan=\"1\">27.7<\/td><td colspan=\"1\" rowspan=\"1\">29.3<\/td><td colspan=\"1\" rowspan=\"1\">28.7<\/td><td colspan=\"1\" rowspan=\"1\">0.351<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC6904686/t0",
+      "wrap_id":"Tab1",
+      "wrap_path":"1/1/2/3/3/2"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Dietary nutrients and food group intake across tertiles of DASH diet score in 3218 participants of the Tehran Lipid and Glucose Study.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Dietary nutrients and food group intake across tertiles of DASH diet score in 3218 participants of the Tehran Lipid and Glucose Study.<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p>Data values are mean ± SD or median (interquartile range).<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": ["Data values are mean ± SD or median (interquartile range)." ],
+      "source_path":"1/1/2/3/4/2/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Nutrient and food groups<\/th><th colspan=\"3\" rowspan=\"1\">Tertiles of DASH score<\/th><th rowspan=\"2\" colspan=\"1\">P for trend<\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">Tertile 1 (n = 1220)<\/th><th colspan=\"1\" rowspan=\"1\">Tertile 2 (n = 1070)<\/th><th colspan=\"1\" rowspan=\"1\">Tertile 3 (n = 928)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\"><bold>DASH score (median)<\/bold><\/td><td colspan=\"1\" rowspan=\"1\">20.0<\/td><td colspan=\"1\" rowspan=\"1\">24.0<\/td><td colspan=\"1\" rowspan=\"1\">29.0<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Vegetables (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">112.2 ± 60.0<\/td><td colspan=\"1\" rowspan=\"1\">147.1 ± 80.4<\/td><td colspan=\"1\" rowspan=\"1\">192.8 ± 108.9<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Fruits (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">117.5 ± 101.1<\/td><td colspan=\"1\" rowspan=\"1\">162.6 ± 114.7<\/td><td colspan=\"1\" rowspan=\"1\">229.3 ± 151.6<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Whole grains (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">52.3 ± 41.6<\/td><td colspan=\"1\" rowspan=\"1\">60.9 ± 41.4<\/td><td colspan=\"1\" rowspan=\"1\">62.7 ± 38.8<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Nuts and legumes (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">17.8 ± 13.2<\/td><td colspan=\"1\" rowspan=\"1\">21.7 ± 14.4<\/td><td colspan=\"1\" rowspan=\"1\">27.6 ± 18.6<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Low-fat dairy (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">83.7 ± 68.7<\/td><td colspan=\"1\" rowspan=\"1\">112.4 ± 81.1<\/td><td colspan=\"1\" rowspan=\"1\">132.6 ± 86.1<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">sweetened beverages (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">19.3 (8.1–83.0)<\/td><td colspan=\"1\" rowspan=\"1\">9.5 (3.5–19.8)<\/td><td colspan=\"1\" rowspan=\"1\">4.1 (0.77–11.3)<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Red and processed meat (g/1000 Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">12.2 ± 8.6<\/td><td colspan=\"1\" rowspan=\"1\">8.9 ± 6.3<\/td><td colspan=\"1\" rowspan=\"1\">6.8 ± 6.0<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Total energy (kcal/day)<\/td><td colspan=\"1\" rowspan=\"1\">2292 ± 697<\/td><td colspan=\"1\" rowspan=\"1\">2430 ± 728<\/td><td colspan=\"1\" rowspan=\"1\">2585 ± 701<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Carbohydrates (% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">57.5 ± 6.6<\/td><td colspan=\"1\" rowspan=\"1\">58.3 ± 6.4<\/td><td colspan=\"1\" rowspan=\"1\">60.3 ± 12.8<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Proteins (% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">14.4 ± 3.1<\/td><td colspan=\"1\" rowspan=\"1\">15.0 ± 3.3<\/td><td colspan=\"1\" rowspan=\"1\">15.7 ± 12.9<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Fat (% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">30.8 ± 6.5<\/td><td colspan=\"1\" rowspan=\"1\">30.3 ± 5.9<\/td><td colspan=\"1\" rowspan=\"1\">29.0 ± 5.7<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Saturated fat (% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">10.0 ± 2.8<\/td><td colspan=\"1\" rowspan=\"1\">9.9 ± 2.5<\/td><td colspan=\"1\" rowspan=\"1\">9.4 ± 2.7<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Monounsaturated fat (% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">10.4 ± 3.0<\/td><td colspan=\"1\" rowspan=\"1\">10.1 ± 2.5<\/td><td colspan=\"1\" rowspan=\"1\">9.6 ± 3.1<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Polyunsaturated fat(% of energy)<\/td><td colspan=\"1\" rowspan=\"1\">6.2 ± 2.0<\/td><td colspan=\"1\" rowspan=\"1\">6.0 ± 1.9<\/td><td colspan=\"1\" rowspan=\"1\">5.8 ± 2.4<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Dietary fiber (g/1000Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">18.1 ± 7.0<\/td><td colspan=\"1\" rowspan=\"1\">19.5 ± 6.3<\/td><td colspan=\"1\" rowspan=\"1\">21.4 ± 6.1<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Folate (µg/1000Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">245 ± 43<\/td><td colspan=\"1\" rowspan=\"1\">251 ± 40<\/td><td colspan=\"1\" rowspan=\"1\">259 ± 42<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Sodium (mg/1000Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">1559 ± 459<\/td><td colspan=\"1\" rowspan=\"1\">1525 ± 393<\/td><td colspan=\"1\" rowspan=\"1\">1430 ± 362<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Potassium (mg/1000 kcal)<\/td><td colspan=\"1\" rowspan=\"1\">1677 ± 415<\/td><td colspan=\"1\" rowspan=\"1\">1977 ± 488<\/td><td colspan=\"1\" rowspan=\"1\">2265 ± 532<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Calcium (mg/1000Kcal)<\/td><td colspan=\"1\" rowspan=\"1\">547 ± 167<\/td><td colspan=\"1\" rowspan=\"1\">637 ± 196<\/td><td colspan=\"1\" rowspan=\"1\">689 ± 204<\/td><td colspan=\"1\" rowspan=\"1\">&lt;0.001<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC6904686/t1",
+      "wrap_id":"Tab2",
+      "wrap_path":"1/1/2/3/4/2"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"Multivariable-adjusted odds ratios (and 95% CIs) for obesity phenotype (MHO in comparison to MUHO) across tertiles of DASH score in 3218 participants of the Tehran Lipid and Glucose Study.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Multivariable-adjusted odds ratios (and 95% CIs) for obesity phenotype (MHO in comparison to MUHO) across tertiles of DASH score in 3218 participants of the Tehran Lipid and Glucose Study.<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p><sup>*<\/sup>Crude model.<\/p><p><sup>†<\/sup>Adjusted for age and sex.<\/p><p><sup>‡<\/sup>Additionally adjusted for dietary energy intake, physical activity, smoking, body mass index, and education level.<\/p><p>MHO: Metabolically healthy obese; MUHO: Metabolically unhealthy obese<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 3",
+      "label_markup":"<label>Table 3<\/label>",
+      "notes": [
+	"* Crude model.",
+	"† Adjusted for age and sex.",
+	"‡ Additionally adjusted for dietary energy intake, physical activity, smoking, body mass index, and education level.",
+	"MHO: Metabolically healthy obese; MUHO: Metabolically unhealthy obese"
+      ],
+      "source_path":"1/1/2/3/5/3/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Characteristics<\/th><th colspan=\"3\" rowspan=\"1\">Tertiles of DASH score<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>trend<\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">T1(lowest)<\/th><th colspan=\"1\" rowspan=\"1\">T2<\/th><th colspan=\"1\" rowspan=\"1\">T3(highest)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\">MUHO/Total population<\/td><td colspan=\"1\" rowspan=\"1\">815/1220<\/td><td colspan=\"1\" rowspan=\"1\">728/1070<\/td><td colspan=\"1\" rowspan=\"1\">599/928<\/td><td colspan=\"1\" rowspan=\"1\"><\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Model 1<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">1.00 (Ref)<\/td><td colspan=\"1\" rowspan=\"1\">0.86 (0.72–1.03)<\/td><td colspan=\"1\" rowspan=\"1\">0.86 (0.72–1.03)<\/td><td colspan=\"1\" rowspan=\"1\">0.119<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Model 2<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">1.00 (Ref)<\/td><td colspan=\"1\" rowspan=\"1\">0.86 (0.70–1.04)<\/td><td colspan=\"1\" rowspan=\"1\">0.85 (0.69–1.04)<\/td><td colspan=\"1\" rowspan=\"1\">0.128<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Model 3<sup>‡<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">1.00 (Ref)<\/td><td colspan=\"1\" rowspan=\"1\">0.86 (0.70–1.06)<\/td><td colspan=\"1\" rowspan=\"1\">0.79 (0.64–0.98)<\/td><td colspan=\"1\" rowspan=\"1\">0.040<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC6904686/t2",
+      "wrap_id":"Tab3",
+      "wrap_path":"1/1/2/3/5/3"
+    },
+    {
+      "annotation_status":"abstained",
+      "candidate_count":0,
+      "caption":"Multivariable-adjusted odds ratios (and 95% CIs) for obesity phenotype per each score increase in the DASH score in 3218 participants of the Tehran Lipid and Glucose Study.",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Multivariable-adjusted odds ratios (and 95% CIs) for obesity phenotype per each score increase in the DASH score in 3218 participants of the Tehran Lipid and Glucose Study.<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p><sup>*<\/sup>Crude model.<\/p><p><sup>†<\/sup>Adjusted for age and sex.<\/p><p><sup>‡<\/sup>Additionally adjusted for dietary energy intake, physical activity, smoking, body mass index, and educational level.<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 4",
+      "label_markup":"<label>Table 4<\/label>",
+      "notes": [
+	"* Crude model.",
+	"† Adjusted for age and sex.",
+	"‡ Additionally adjusted for dietary energy intake, physical activity, smoking, body mass index, and educational level."
+      ],
+      "source_path":"1/1/2/3/5/4/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th rowspan=\"2\" colspan=\"1\">Characteristics<\/th><th colspan=\"1\" rowspan=\"1\">per each score increase in the DASH score<\/th><th rowspan=\"2\" colspan=\"1\"><italic toggle=\"yes\">P<\/italic>value<\/th><\/tr><tr><th colspan=\"1\" rowspan=\"1\">OR (95% CI)<\/th><\/tr><\/thead><tbody><tr><td colspan=\"1\" rowspan=\"1\">Model 1<sup>*<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">0.97 (0.90–1.07)<\/td><td colspan=\"1\" rowspan=\"1\">0.503<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Model 2<sup>†<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">0.96 (0.88–1.04)<\/td><td colspan=\"1\" rowspan=\"1\">0.347<\/td><\/tr><tr><td colspan=\"1\" rowspan=\"1\">Model 3<sup>‡<\/sup><\/td><td colspan=\"1\" rowspan=\"1\">0.91 (0.85–1.01)<\/td><td colspan=\"1\" rowspan=\"1\">0.100<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC6904686/t3",
+      "wrap_id":"Tab4",
+      "wrap_path":"1/1/2/3/5/4"
+    }
+  ],
+  "title":"The association of Dietary Approach to Stop Hypertension (DASH) diet with metabolic healthy and metabolic unhealthy obesity phenotypes"
+}

@@ -1,0 +1,75 @@
+{
+  "annotation_kind":"structural_boundary_hypotheses",
+  "jsonl_file":"tables.jsonl",
+  "parsed_table_count":2,
+  "pmc_id":"PMC3605494",
+  "quarantined_table_count":0,
+  "schema_version":"3.0",
+  "semantic_validation":"unverified",
+  "source_provenance": {
+    "article_reference_url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC3605494/",
+    "hash_scope":"raw_file_bytes",
+    "input_file_name":"PMC3605494.xml",
+    "input_file_sha256":"5db952c1224f3ff2ff4486890baf8c78e82bcb76167ba206883071452cc35329",
+    "input_file_size_bytes":94283,
+    "license": {
+      "license_text_excerpt":"",
+      "license_type":null,
+      "license_url":null,
+      "redistribution_status":"requires_manual_review",
+      "status":"missing"
+    },
+    "pmc_id":"PMC3605494",
+    "processing_timestamp_unix":1793042756.040058,
+    "retrieval_timestamp":"2026-10-26T19:25:20Z",
+    "retrieval_timestamp_basis":"raw_file_mtime",
+    "retrieval_timestamp_unix":1793042720.0,
+    "schema_version":"1.0",
+    "segmentation_semantics":"structural_hypotheses_not_verified_semantic_labels",
+    "software":"logic_based_table_parser"
+  },
+  "status":"complete",
+  "table_count":2,
+  "tables": [
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":2,
+      "caption":"CSF Aβ peptide patterns",
+      "caption_external":true,
+      "caption_markup":"<caption><p>CSF Aβ peptide patterns<\/p><\/caption>",
+      "foot_markup":"<table-wrap-foot><p><sup>a<\/sup>Total Aβ peptide concentration (ng/ml)<\/p><p><sup>b<\/sup>Aβ peptide ratios<\/p><\/table-wrap-foot>",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 1",
+      "label_markup":"<label>Table 1<\/label>",
+      "notes": [
+	"a Total Aβ peptide concentration (ng/ml)",
+	"b Aβ peptide ratios"
+      ],
+      "source_path":"1/1/2/3/2/11/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" rowspan=\"2\" colspan=\"1\">Diagnosis<\/th><th align=\"left\" colspan=\"2\" rowspan=\"1\">NDC (<italic toggle=\"yes\">n<\/italic> = 20)<\/th><th align=\"left\" colspan=\"2\" rowspan=\"1\">AD (<italic toggle=\"yes\">n<\/italic> = 22)<\/th><th align=\"left\" colspan=\"2\" rowspan=\"1\">FTD (<italic toggle=\"yes\">n<\/italic> = 17)<\/th><\/tr><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\">Mean<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">±SD<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Mean<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">±SD<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Mean<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">±SD<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Age<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">59.1<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">11.7<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">70.8<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">8.6<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">62.8<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">5.7<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">MMSE<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">28.6<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.5<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">22.5<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">4.4<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">20.9<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">9.9<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-37<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.926<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.336<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.849<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.255<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.799<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.532<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-38<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.261<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.787<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.257<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.554<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.433<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.554<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-38<sup>ox<\/sup><sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.149<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.045<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.146<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.039<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.124<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.040<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-39<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.959<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.343<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.944<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.312<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.798<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.487<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-40<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">7.142<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.868<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">6.246<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.287<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">5.108<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">2.967<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-40<sup>ox<\/sup><sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.229<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.108<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.209<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.071<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.212<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.103<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.521<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.604<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.702<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.302<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.056<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.631<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-40<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.156<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.026<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.143<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.042<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.124<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.052<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42<sup>a<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.242<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.162<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.091<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.054<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.188<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.097<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42/Aβ1-40<sup>b<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.228<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.088<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.122<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.050<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.220<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.103<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42/Aβ1-38<sup>b<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.693<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.222<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.327<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.168<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.727<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.317<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42/Aβ1-40<sup>b<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.040<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.026<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.014<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.009<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.040<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.015<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42/Aβ1-38<sup>b<\/sup><\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.108<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.047<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.040<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.017<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.118<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.050<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC3605494/t0",
+      "wrap_id":"Tab1",
+      "wrap_path":"1/1/2/3/2/11"
+    },
+    {
+      "annotation_status":"ambiguous",
+      "candidate_count":3,
+      "caption":"Cut off points, sensitivities and specificities",
+      "caption_external":true,
+      "caption_markup":"<caption><p>Cut off points, sensitivities and specificities<\/p><\/caption>",
+      "foot_markup":"",
+      "jsonl_file":"tables.jsonl",
+      "label":"Table 2",
+      "label_markup":"<label>Table 2<\/label>",
+      "notes": [],
+      "source_path":"1/1/2/3/8/4/2/3",
+      "source_table_html":"<table frame=\"hsides\" rules=\"groups\"><thead><tr><th align=\"left\" colspan=\"1\" rowspan=\"1\">Differential diagnosis<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Parameter<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Cut off<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Sensitivity (%)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Specificity (%)<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">Youden index<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">AUC<\/th><th align=\"left\" colspan=\"1\" rowspan=\"1\">95 % CI<\/th><\/tr><\/thead><tbody><tr><td align=\"left\" rowspan=\"6\" colspan=\"1\">AD versus FTD<\/td><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.02<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">95<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">53<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.48<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.674<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.489–0.858<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42/1-40<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.19<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">91<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">65<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.56<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.797<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.653–0.941<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ1-42/1-38<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.45<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">82<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">82<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.64<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.917<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.835–0.999<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.11<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">91<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">89<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.80<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.859<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.671–1.00<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42/1-40<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.03<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">91<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">89<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.80<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.929<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.805–1.00<\/td><\/tr><tr><td align=\"left\" colspan=\"1\" rowspan=\"1\">Aβ2-42/1-38<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.08<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">100<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">89<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.89<\/td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.929<\/td><td char=\"–\" align=\"char\" colspan=\"1\" rowspan=\"1\">0.792–1.00<\/td><\/tr><\/tbody><\/table>",
+      "table_id":"",
+      "table_uid":"PMC3605494/t1",
+      "wrap_id":"Tab2",
+      "wrap_path":"1/1/2/3/8/4/2"
+    }
+  ],
+  "title":"Cerebrospinal fluid amyloid-β 2-42 is decreased in Alzheimer’s, but not in frontotemporal dementia"
+}

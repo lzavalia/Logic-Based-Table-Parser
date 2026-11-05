@@ -1,0 +1,20 @@
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Segmenting tables (arm llm-only)...
+PMC12511133: 3 table(s): 2 unreviewed, 1 valid -> papers/PMC12511133/review.llm-only.jsonl
+
+Ablation review (arm llm-only) complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in papers/PMC<id>/review.llm-only.jsonl, structured tables in final_tables.llm-only.json.
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4123,
+    "outputTokens": 986,
+    "totalTokens": 5109,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/batch17a-20261105T181418Z/llm-only/PMC12511133_t1

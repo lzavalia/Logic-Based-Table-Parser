@@ -1,0 +1,116 @@
+{
+  "pmc_id":"PMC12826758",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12826758/t0/layout2",
+      "caption":"Basic information of the included reviews and outcomes",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1.",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2, 6, 10, 16, 20, 25, 32 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":1,
+	    "last_row":36,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":2,"text":"Published in"},
+	{"row":6,"text":"Patients"},
+	{"row":10,"text":"Topic"},
+	{"row":16,"text":"Patients"},
+	{"row":20,"text":"Topic"},
+	{"row":25,"text":"Effect measure"},
+	{"row":32,"text":"GRADE"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"n (%)": []} ],
+	  "vertical metadata": [
+	    {"Reviews": []},
+	    {"2022": []},
+	    {"2023": []},
+	    {"2024": []},
+	    {"Preterm": []},
+	    {"Term": []},
+	    {"Both": []},
+	    {"Ventilation": []},
+	    {"Feeding": []},
+	    {"Medication": []},
+	    {"Other": []},
+	    {"Outcomes": []},
+	    {"Preterm": []},
+	    {"Term": []},
+	    {"Both": []},
+	    {"Ventilation": []},
+	    {"Feeding": []},
+	    {"Medication": []},
+	    {"Other": []},
+	    {"Continuous": []},
+	    {"MD": []},
+	    {"SMD": []},
+	    {"Dichotomous": []},
+	    {"RR": []},
+	    {"OR": []},
+	    {"Very low": []},
+	    {"Low": []},
+	    {"Moderate": []},
+	    {"High": []}
+	  ],
+	  "data": [
+	    ["54 (100)" ],
+	    ["9 (17)" ],
+	    ["32 (59)" ],
+	    ["13 (24)" ],
+	    ["35 (65)" ],
+	    ["17 (31)" ],
+	    ["2 (4)" ],
+	    ["9 (17)" ],
+	    ["15 28)" ],
+	    ["17 (31)" ],
+	    ["13 (24)" ],
+	    ["467 (100)" ],
+	    ["280 (60)" ],
+	    ["21 (5)" ],
+	    ["166 (35)" ],
+	    ["78 (17)" ],
+	    ["118 (25)" ],
+	    ["180 (39)" ],
+	    ["91 (19)" ],
+	    ["134 (29)" ],
+	    ["128 (96)" ],
+	    ["6 (4)" ],
+	    ["333 (71)" ],
+	    ["331 (99)" ],
+	    ["2 (<1)" ],
+	    ["166 (35)" ],
+	    ["199 (43)" ],
+	    ["93 (20)" ],
+	    ["9 (2)" ]
+	  ],
+	  "residual_corner": [ {"​": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC12826758/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"3dbf5e732fe474b0d8f48a569b63cb8c456c420f79b836e029bc40dc654117f8"
+}

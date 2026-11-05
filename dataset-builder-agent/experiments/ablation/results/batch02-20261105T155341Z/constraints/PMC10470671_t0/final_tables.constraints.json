@@ -1,0 +1,210 @@
+{
+  "pmc_id":"PMC10470671",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":3,"vmd":1},
+      "candidate_id":"PMC10470671/t0/layout5",
+      "caption":"Baseline demographic characteristics among patients with and without vesicoureteral reflux.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout5.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [3, 8, 11 ],
+	"subtables": [
+	  {
+	    "column_header_rows":3,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":10,
+	    "last_row":20,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":3,"text":"Age, yr †"},
+	{"row":8,"text":"Gender †"},
+	{"row":11,"text":"Comorbidity †"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Before PS match": [
+		{"Non-vesicoureteral reflux (n = 5,342,022)": [ {"n": []},  {"%": []} ]},
+		{"Vesicoureteral reflux (n = 10,326)": [ {"n": []},  {"%": []} ]},
+		{"P value": []}
+	      ]
+	    },
+	    {
+	      "After PS match": [
+		{"Non-vesicoureteral reflux (n = 8648)": [ {"n": []},  {"%": []} ]},
+		{"Vesicoureteral reflux (n = 8648)": [ {"n": []},  {"%": []} ]},
+		{"P value": []}
+	      ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"<1": []},
+	    {"1–5": []},
+	    {">5": []},
+	    {"Mean ± SD *": []},
+	    {"Male": []},
+	    {"Female": []},
+	    {"Diabetes mellitus": []},
+	    {"Hypertension": []},
+	    {"Kidneys infection": []},
+	    {"Hydronephrosis": []},
+	    {"Cystitis": []},
+	    {"Urinary tract infection": []},
+	    {"Bladder cancer": []},
+	    {"Kidney cancer": []},
+	    {"Follow-up duration, year *": []}
+	  ],
+	  "data": [
+	    [
+	      "22,3686",
+	      "4.19",
+	      "5929",
+	      "57.42",
+	      "<.0001",
+	      "3497",
+	      "40.44",
+	      "4252",
+	      "49.17",
+	      "<.0001"
+	    ],
+	    [
+	      "958,750",
+	      "17.95",
+	      "2733",
+	      "26.47",
+	      "<.0001",
+	      "3422",
+	      "39.57",
+	      "2732",
+	      "31.59",
+	      "<.0001"
+	    ],
+	    [
+	      "4,159,586",
+	      "77.87",
+	      "1664",
+	      "16.11",
+	      "<.0001",
+	      "1729",
+	      "19.99",
+	      "1664",
+	      "19.24",
+	      "<.0001"
+	    ],
+	    [
+	      "9.83 ± 5.13",
+	      "9.83 ± 5.13",
+	      "2.26 ± 3.15",
+	      "2.26 ± 3.15",
+	      "<.0001",
+	      "2.85 ± 3.45",
+	      "2.85 ± 3.45",
+	      "2.66 ± 3.29",
+	      "2.66 ± 3.29",
+	      ".004"
+	    ],
+	    [
+	      "2,574,437",
+	      "48.19",
+	      "4510",
+	      "43.68",
+	      "<.0001",
+	      "4070",
+	      "47.06",
+	      "4158",
+	      "48.08",
+	      ".19"
+	    ],
+	    [
+	      "2,767,539",
+	      "51.81",
+	      "5816",
+	      "56.32",
+	      "<.0001",
+	      "4578",
+	      "52.94",
+	      "4490",
+	      "51.92",
+	      ".19"
+	    ],
+	    ["88,714", "1.66", "4207", "40.74", "<.0001", "3580", "41.40", "3428", "39.64", ".05" ],
+	    ["109,140", "2.04", "5154", "49.91", "<.0001", "4358", "50.39", "4181", "48.35", ".02" ],
+	    ["20,338", "0.38", "928", "8.99", "<.0001", "638", "7.38", "842", "9.74", "<.0001" ],
+	    ["20,958", "0.39", "970", "9.39", "<.0001", "694", "8.02", "832", "9.62", ".01" ],
+	    ["1746", "0.03", "70", "0.68", "<.0001", "41", "0.47", "64", "0.74", ".04" ],
+	    ["134,360", "2.52", "9041", "87.56", "<.0001", "7451", "86.16", "7363", "85.15", ".12" ],
+	    ["122", "0.00", "3", "0.03", ".0005", "1", "0.01", "2", "0.02", ".56" ],
+	    ["164", "0.00", "3", "0.03", ".006", "0", "0.00", "2", "0.02", ".16" ],
+	    [
+	      "7.43 ± 4.00",
+	      "7.43 ± 4.00",
+	      "7.32 ± 3.89",
+	      "7.32 ± 3.89",
+	      ".0005",
+	      "7.04 ± 4.02",
+	      "7.04 ± 4.02",
+	      "7.32 ± 3.89",
+	      "7.32 ± 3.89",
+	      ".002"
+	    ]
+	  ],
+	  "residual_corner": [ {"Characteristics": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC10470671/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Hazard ratios and 95% CIs of chronic kidney disease associated with vesicoureteral reflux patients.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10470671/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"HRs and 95% CIs of chronic kidney disease associated with vesicoureteral reflux stratified by age, gender and comorbidities.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10470671/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"b3465cb110905b1210afbaf6f7ad2103c424f7b30b3b961cdc134349a699e715"
+}

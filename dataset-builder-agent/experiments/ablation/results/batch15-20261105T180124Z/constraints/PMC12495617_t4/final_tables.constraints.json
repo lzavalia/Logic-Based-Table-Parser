@@ -1,0 +1,401 @@
+{
+  "pmc_id":"PMC12495617",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of clinical, pathological and imaging baseline characteristics between different sets",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12495617/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The diagnostic performance of clinical, radiomics, and combined models in training, testing and validation sets",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12495617/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of patients according to the risk groups stratified by radiomics signature",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC12495617/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariable and multivariable analysis of clinical and radiological features",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12495617/t3"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":3,"vmd":1},
+      "candidate_id":"PMC12495617/t4/h3_v1",
+      "caption":"The subdivided analyses by radiomics signature in clinical-based groups: clinical high-risk and clinical low-risk",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate4_h3_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 5",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":3,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":18,
+	    "last_row":14,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Training set( n = 192)": [
+		{
+		  "Clinical high-risk ( n = 133)": [ {"Rs≥82.451 ( n = 67)": []},  {"Rs<82.451 ( n = 66)": []},  {"p": []} ]
+		},
+		{
+		  "Clinical low-risk ( n = 59)": [ {"Rs≥82.451 ( n = 30)": []},  {"Rs<82.451 ( n = 29)": []},  {"p": []} ]
+		}
+	      ]
+	    },
+	    {
+	      "Testing set ( n = 81)": [
+		{
+		  "Clinical high-risk ( n = 56)": [ {"Rs≥82.451 ( n = 20)": []},  {"Rs<82.451 ( n = 36)": []},  {"p": []} ]
+		},
+		{
+		  "Clinical low-risk ( n = 25)": [ {"Rs≥82.451 ( n = 18)": []},  {"Rs<82.451 ( n = 7)": []},  {"p": []} ]
+		}
+	      ]
+	    },
+	    {
+	      "Validation set ( n = 96)": [
+		{
+		  "Clinical high-risk ( n = 76)": [ {"Rs≥82.451 ( n = 39)": []},  {"Rs<82.451 ( n = 37)": []},  {"p": []} ]
+		},
+		{
+		  "Clinical low-risk ( n = 20)": [ {"Rs≥82.451 ( n = 13)": []},  {"Rs<82.451 ( n = 7)": []},  {"p": []} ]
+		}
+	      ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"OS (months)*": []},
+	    {"6 m (%)": []},
+	    {"12 m (%)": []},
+	    {"18 m (%)": []},
+	    {"24 m (%)": []},
+	    {"Molecular type (%)": []},
+	    {"Hist-GBM": []},
+	    {"Mol-GBM": []},
+	    {"Treatment (%)": []},
+	    {"Nonstandard": []},
+	    {"Standard": []},
+	    {"Age": []}
+	  ],
+	  "data": [
+	    [
+	      "6.78 (3.92,13.15)",
+	      "15.87 (6.22,28.12)",
+	      "< 0.001",
+	      "11.58 (7.04,15.59)",
+	      "24.20 (12.80,44.33)",
+	      "< 0.001",
+	      "5.70 (0.73,13.17)",
+	      "13.02 (9.10,26.97)",
+	      "0.053",
+	      "13.03 (3.52,16.12)",
+	      "28.13 (14.70,66.47)",
+	      "< 0.001",
+	      "7.27 (3.50,14.30)",
+	      "16.08 (11.43,19.22)",
+	      "0.006",
+	      "11.40 (6.83,16.80)",
+	      "20.68 (17.80,28.68)",
+	      "< 0.001"
+	    ],
+	    [
+	      "43 (69.35)",
+	      "12 (34.29)",
+	      "",
+	      "17 (50.00)",
+	      "12 (19.67)",
+	      "",
+	      "18 (72.00)",
+	      "7 (38.89)",
+	      "",
+	      "7 (46.67)",
+	      "5 (21.74)",
+	      "",
+	      "25 (64.10)",
+	      "5 (27.78)",
+	      "",
+	      "10 (58.82)",
+	      "3 (13.64)",
+	      ""
+	    ],
+	    [
+	      "14 (22.58)",
+	      "7 (20.00)",
+	      "",
+	      "11 (32.35)",
+	      "11 (18.03)",
+	      "",
+	      "3 (12.00)",
+	      "4 (22.22)",
+	      "",
+	      "5 (33.33)",
+	      "3 (13.04)",
+	      "",
+	      "10 (25.64)",
+	      "6 (33.33)",
+	      "",
+	      "4 (23.53)",
+	      "3 (13.64)",
+	      ""
+	    ],
+	    [
+	      "3 (4.84)",
+	      "4 (11.43)",
+	      "",
+	      "4 (11.76)",
+	      "7 (11.48)",
+	      "",
+	      "2 (8.00)",
+	      "1 (5.56)",
+	      "",
+	      "1 (6.67)",
+	      "3 (13.04)",
+	      "",
+	      "3 (7.69)",
+	      "3 (16.67)",
+	      "",
+	      "1 (5.88)",
+	      "7 (31.82)",
+	      ""
+	    ],
+	    [
+	      "2 (3.23)",
+	      "12 (34.29)",
+	      "",
+	      "2 (5.88)",
+	      "31 (50.82)",
+	      "",
+	      "2 (8.00)",
+	      "6 (33.33)",
+	      "",
+	      "2 (13.33)",
+	      "12 (52.17)",
+	      "",
+	      "1 (2.56)",
+	      "4 (22.22)",
+	      "",
+	      "2 (11.76)",
+	      "9 (40.91)",
+	      ""
+	    ],
+	    [
+	      "",
+	      "",
+	      "0.222",
+	      "",
+	      "",
+	      "0.452",
+	      "",
+	      "",
+	      "0.085",
+	      "",
+	      "",
+	      "0.583",
+	      "",
+	      "",
+	      "0.136",
+	      "",
+	      "",
+	      "0.685"
+	    ],
+	    [
+	      "55 (88.71)",
+	      "27 (77.14)",
+	      "",
+	      "16 (47.06)",
+	      "35 (57.38)",
+	      "",
+	      "17 (68.00)",
+	      "17 (94.44)",
+	      "",
+	      "10 (66.67)",
+	      "12 (52.17)",
+	      "",
+	      "37 (94.87)",
+	      "14 (77.78)",
+	      "",
+	      "12 (70.59)",
+	      "13 (59.09)",
+	      ""
+	    ],
+	    [
+	      "7 (11.29)",
+	      "8 (22.86)",
+	      "",
+	      "18 (52.94)",
+	      "26 (42.62)",
+	      "",
+	      "8 (32.00)",
+	      "1 (5.56)",
+	      "",
+	      "5 (33.33)",
+	      "11 (47.83)",
+	      "",
+	      "2 (5.13)",
+	      "4 (22.22)",
+	      "",
+	      "5 (29.41)",
+	      "9 (40.91)",
+	      ""
+	    ],
+	    [
+	      "",
+	      "",
+	      "1.000",
+	      "",
+	      "",
+	      "0.149",
+	      "",
+	      "",
+	      "0.001",
+	      "",
+	      "",
+	      "1.000",
+	      "",
+	      "",
+	      "1.000",
+	      "",
+	      "",
+	      "1.000"
+	    ],
+	    [
+	      "36 (58.06)",
+	      "21 (60.00)",
+	      "",
+	      "3 (8.82)",
+	      "14 (22.95)",
+	      "",
+	      "19 (76.00)",
+	      "4 (22.22)",
+	      "",
+	      "2 (13.33)",
+	      "4 (17.39)",
+	      "",
+	      "14 (35.90)",
+	      "6 (33.33)",
+	      "",
+	      "0 (0.00)",
+	      "1 (4.55)",
+	      ""
+	    ],
+	    [
+	      "26 (41.94)",
+	      "14 (40.00)",
+	      "",
+	      "31 (91.18)",
+	      "47 (77.05)",
+	      "",
+	      "6 (24.00)",
+	      "14 (77.78)",
+	      "",
+	      "13 (86.67)",
+	      "19 (82.61)",
+	      "",
+	      "25 (64.10)",
+	      "12 (66.67)",
+	      "",
+	      "17 (100.00)",
+	      "21 (95.45)",
+	      ""
+	    ],
+	    [
+	      "62.39± 8.67",
+	      "62.86± 8.49",
+	      "0.796",
+	      "51.35± 9.63",
+	      "41.69± 12.63",
+	      "< 0.001",
+	      "61.40± 7.80",
+	      "62.78± 7.70",
+	      "0.568",
+	      "49.60± 8.54",
+	      "47.04± 13.30",
+	      "0.475",
+	      "66.87± 8.71",
+	      "61.94± 8.71",
+	      "0.055",
+	      "50.71± 7.94",
+	      "49.91± 11.16",
+	      "0.796"
+	    ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":4,
+      "table_uid":"PMC12495617/t4"
+    }
+  ],
+  "tables_jsonl_sha256":"bd51e9a6e429071c0f82fa58c85fd552c688d5dd0dc7ec5046dd4d6c66e3f149"
+}

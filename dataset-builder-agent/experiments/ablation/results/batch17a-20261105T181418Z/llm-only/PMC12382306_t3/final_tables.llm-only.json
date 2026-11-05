@@ -1,0 +1,127 @@
+{
+  "pmc_id":"PMC12382306",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of the study participants. Data are presented as mean±standard deviation or as median (interquartile range (IQR)) indicated by an asterisk (*). Statistical comparisons were made using the following: a Student t-test, b Fisher exact test, or c Mann-Whitney U test. P-values <0.05 were considered statistically significant.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12382306/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of optimism-corrected diagnostic performance and clinical utility metrics. Metrics (AUC, sensitivity, and specificity) are optimism-corrected values derived from bootstrap internal validation (2,000 resamples), confirming minimal optimism (≤0.002). 95% CIs were calculated from the bootstrap distribution. AUC: area under the curve",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12382306/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Subgroup analysis of diagnostic performance (AUC) with method comparison and interaction testing. This table shows the diagnostic performance (AUC) of both percussion methods across various patient subgroups. The 95% CIs were calculated using the bootstrap method for robustness. 1 p-value (DeLong test): This is the p-value from a direct comparison between the AUCs of manual and hammer percussion. A value <0.05 indicates a statistically significant difference in diagnostic accuracy between the two methods. 2 p-value for interaction: Calculated from a logistic regression model including an interaction term, this tests whether there is a significant difference in diagnostic accuracy between the levels of a characteristic (e.g., male versus female). A value <0.05 suggests that the characteristic influences the diagnostic performance. 3 N/A: Not applicable, indicates that the statistical test could not be performed due to the data structure. AUC: area under the curve; BMI: body mass index",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC12382306/t2"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Sensitivity analysis excluding patients with OA. This analysis assesses the robustness of the findings by excluding patients diagnosed with hip or knee OA (n=6). The AUC, sensitivity, and specificity were determined by ROC analysis. The 95% CIs for all metrics were calculated using the bootstrap method with 2,000 replications. P-values <0.05 were considered statistically significant. OA: osteoarthritis; AUC: area under the curve; ROC: receiver operating characteristic",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 5 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":2,
+	    "last_row":9,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":1,"text":"Manual percussion"},  {"row":5,"text":"Hammer percussion"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Full analysis (n=60)": []},  {"Sensitivity analysis (OA excluded; n=54)": []} ],
+	  "vertical metadata": [
+	    {"AUC (95% CI)": []},
+	    {"Sensitivity (95% CI)": []},
+	    {"Specificity (95% CI)": []},
+	    {"AUC (95% CI)": []},
+	    {"Sensitivity (95% CI)": []},
+	    {"Specificity (95% CI)": []},
+	    {"DeLong test p-value": []}
+	  ],
+	  "data": [
+	    ["0.923 (0.845-0.979)", "0.900 (0.816-0.983)" ],
+	    ["0.975 (0.923-1.000)", "0.974 (0.921-1.000)" ],
+	    ["0.698 (0.500-0.900)", "0.625 (0.375-0.812)" ],
+	    ["0.861 (0.759-0.943)", "0.877 (0.784-0.969)" ],
+	    ["0.900 (0.791-0.978)", "0.895 (0.789-0.974)" ],
+	    ["0.649 (0.438-0.857)", "0.688 (0.438-0.938)" ],
+	    ["0.235", "0.677" ]
+	  ],
+	  "residual_corner": [ {"Metric": []} ]
+	}
+      ],
+      "table_index":3,
+      "table_uid":"PMC12382306/t3"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariate logistic regression models for predicting hip fracture. These models assess the independent diagnostic ability of the acoustic measurements from each percussion method after adjusting for potential clinical confounders (age, sex, BMI, and osteoporosis). Covariates for adjustment were prespecified and selected on the basis of two criteria: baseline characteristics showing a significant difference between groups (i.e., age) and established clinical risk factors for hip fracture (age, sex, BMI, and osteoporosis). P-values for each variable were obtained from multivariate logistic regression analysis; those <0.05 were deemed statistically significant. BMI: body mass index",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC12382306/t4"
+    }
+  ],
+  "tables_jsonl_sha256":"d66359990bfa6d05c360f556baf4ec46b7a4d160922147fd866721e52a05ad2e"
+}

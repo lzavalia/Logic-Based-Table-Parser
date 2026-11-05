@@ -1,0 +1,379 @@
+{
+  "pmc_id":"PMC8407250",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of review results for overview of reviews",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8407250/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Prevention network: summary of findings for key comparisons with foam surfaces as the reference",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC8407250/t1"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC8407250/t2/layout1",
+      "caption":"Time‐to‐event network: summary of findings for key comparisons with foam surfaces as the reference",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"3",
+      "repair":null,
+      "separators": [
+	{"row":0,"text":"Outcome : time to pressure ulcer development"},
+	{
+	  "row":1,
+	  "text":"Patient or population : people at risk of having pressure ulcers Setting : any care settings Intervention : reactive air surfaces; alternating pressure (active) air surfaces; reactive sheepskin surfaces Comparator (reference) : foam surfaces Follow‐up durations : median 14 days (range: 3 days to 12 months)"
+	},
+	{
+	  "row":7,
+	  "text":"* The risk in the intervention group (and its 95% confidence interval) is based on the assumed risk in the comparison group and the relative effect of the intervention (and its 95% CI). CI: confidence interval; HR: hazard ratio"
+	},
+	{
+	  "row":8,
+	  "text":"GRADE Working Group grades of evidence High certainty: we are very confident that the true effect lies close to that of the estimate of the effect. Moderate certainty: we are moderately confident in the effect estimate. The true effect is likely to be close to the estimate of the effect, but there is a possibility that it is substantially different. Low certainty: our confidence in the effect estimate is limited. The true effect may be substantially different from the estimate of the effect. Very low certainty: we have very little confidence in the effect estimate. The true effect is likely to be substantially different from the estimate of effect."
+	}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Anticipated absolute effects * (95% CI)": [
+		{"Risk with foam surfaces": []},
+		{"Risk with a type of support surface": []},
+		{"Difference": []}
+	      ]
+	    },
+	    {"Relative effect from network meta‐analysis (95% CI)": []},
+	    {"Certainty of the evidence (GRADE)": []},
+	    {"SUCRA values": []},
+	    {"Comments": []}
+	  ],
+	  "vertical metadata": [
+	    {"Reactive air surfaces (no analysable data for this direct comparison)": []},
+	    {"Alternating pressure (active) air surfaces (2 RCTs, 2105 participants)": []},
+	    {"Reactive sheepskin surfaces (no analysable data for this direct comparison)": []}
+	  ],
+	  "data": [
+	    [
+	      "106 per 1000",
+	      "22 per 1000 (4 to 111)",
+	      "84 fewer per 1000 (102 fewer to 5 more)",
+	      "HR 0.20 (0.04 to 1.05)",
+	      "⨁⨁◯◯ LOW a",
+	      "89.7% ⨁◯◯◯ VERY LOW a,e,f",
+	      "Reactive air surfaces may reduce the hazard of having new pressure ulcers compared with foam surfaces. It is uncertain how likely it is that reactive air surfaces are the best intervention in reducing pressure ulcer risk."
+	    ],
+	    [
+	      "106 per 1000",
+	      "49 per 1000 (19 to 122)",
+	      "57 fewer per 1000 (87 fewer to 16 more)",
+	      "HR 0.45 (0.17 to 1.16)",
+	      "⨁◯◯◯ VERY LOW a,b,c",
+	      "62.1% ⨁◯◯◯ VERY LOW a,e,f",
+	      "It is uncertain if there is a difference between alternating pressure (active) air surfaces and foam surfaces in reducing the hazard of having new pressure ulcers. It is uncertain how likely it is that alternating pressure (active) air surfaces are the best intervention in reducing pressure ulcer risk."
+	    ],
+	    [
+	      "106 per 1000",
+	      "69 per 1000 (24 to 190)",
+	      "37 fewer per 1000 (82 fewer to 84 more)",
+	      "HR 0.64 (0.22 to 1.88)",
+	      "⨁◯◯◯ VERY LOW c,d",
+	      "50.6% ⨁◯◯◯ VERY LOW a,e,f",
+	      "It is uncertain if there is a difference between reactive sheepskin surfaces and foam surfaces in reducing pressure ulcer risk. It is uncertain how likely it is that reactive sheepskin surfaces are the best intervention in reducing pressure ulcer risk."
+	    ]
+	  ],
+	  "residual_corner": [
+	    {
+	      "Total studies: 10 RCTs Total participants: 7211": [
+		{
+		  "Interventions (numbers of studies and participants comparing the named intervention with foam surfaces)": []
+		}
+	      ]
+	    }
+	  ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC8407250/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"League table for time‐to‐event network: results of network meta‐analysis with GRADE assessment (below diagonal) and available pairwise meta‐analyses (above diagonal) a",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC8407250/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Treatment network: summary of findings for key comparisons with foam surfaces as the reference",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC8407250/t4"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"League table for treatment network: results of network meta‐analysis with GRADE assessment (below diagonal) and available pairwise meta‐analyses (above diagonal) a",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"6",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC8407250/t5"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":6,
+      "table_uid":"PMC8407250/t6"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":7,
+      "table_uid":"PMC8407250/t7"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":8,
+      "table_uid":"PMC8407250/t8"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":9,
+      "table_uid":"PMC8407250/t9"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":10,
+      "table_uid":"PMC8407250/t10"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":11,
+      "table_uid":"PMC8407250/t11"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":12,
+      "table_uid":"PMC8407250/t12"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":13,
+      "table_uid":"PMC8407250/t13"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":14,
+      "table_uid":"PMC8407250/t14"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":15,
+      "table_uid":"PMC8407250/t15"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":16,
+      "table_uid":"PMC8407250/t16"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":17,
+      "table_uid":"PMC8407250/t17"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":18,
+      "table_uid":"PMC8407250/t18"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":19,
+      "table_uid":"PMC8407250/t19"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":20,
+      "table_uid":"PMC8407250/t20"
+    }
+  ],
+  "tables_jsonl_sha256":"de19a4e9cec9f322bbbae29e97c22e928f1d18466470327e8f3a3b92af853a45"
+}

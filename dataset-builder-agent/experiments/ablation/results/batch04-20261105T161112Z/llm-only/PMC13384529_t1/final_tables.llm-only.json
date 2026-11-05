@@ -1,0 +1,115 @@
+{
+  "pmc_id":"PMC13384529",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of study participants by GH status.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13384529/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"Association between TC/HDL-C ratio and GH: logistic regression models and trend tests.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [3 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":9,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":3,"text":"Quantile"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "GH OR (95% CI)": [
+		{"Model 1": []},
+		{"P value": []},
+		{"Model 2": []},
+		{"P value": []},
+		{"Model 3": []},
+		{"P value": []}
+	      ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"Continuous": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"Q5": []},
+	    {"P for trend": []}
+	  ],
+	  "data": [
+	    [
+	      "1.46 (1.18~1.80)",
+	      "<0.001",
+	      "1.46 (1.18~1.80)",
+	      "<0.001",
+	      "1.44 (1.11~1.88)",
+	      "0.006"
+	    ],
+	    [
+	      "1.00 (Reference)",
+	      "1.00 (Reference)",
+	      "1.00 (Reference)",
+	      "1.00 (Reference)",
+	      "1.00 (Reference)",
+	      "1.00 (Reference)"
+	    ],
+	    ["2.11 (1.25~3.57)", "0.005", "2.07 (1.22~3.50)", "0.007", "2.12 (1.21~3.74)", "0.009" ],
+	    [
+	      "2.72 (1.62~4.57)",
+	      "<0.001",
+	      "2.62 (1.56~4.42)",
+	      "<0.001",
+	      "2.89 (1.62~5.15)",
+	      "<0.001"
+	    ],
+	    ["2.33 (1.38~3.92)", "0.001", "2.32 (1.38~3.91)", "0.002", "2.14 (1.18~3.58)", "0.012" ],
+	    [
+	      "2.73 (1.62~4.60)",
+	      "<0.001",
+	      "2.71 (1.61~4.56)",
+	      "<0.001",
+	      "2.82 (1.48~5.37)",
+	      "0.002"
+	    ],
+	    ["", "<0.001", "", "<0.001", "", "0.006" ]
+	  ],
+	  "residual_corner": [ {"TC/HDL-C": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC13384529/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"10d1d2b1e12985959ae2f728ac9e30c4c37e8359bd77044ff28c594c6a5b66ea"
+}

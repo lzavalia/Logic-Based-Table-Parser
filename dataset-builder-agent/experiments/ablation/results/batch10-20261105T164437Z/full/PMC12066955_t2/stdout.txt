@@ -1,0 +1,24 @@
+Type inference done (scorer bit-cost, level family).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC12066955: 4 table(s) reviewed: 3 unreviewed, 1 valid -> papers/PMC12066955/review.jsonl
+Review manifest: /workspace/ablation/batch10/dataset/reviews/review-1793897181889000-0/manifest.json
+Exporting reviewed tables...
+PMC12066955: 1 of 4 table(s) exported -> papers/PMC12066955/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 3393,
+    "outputTokens": 451,
+    "totalTokens": 3844,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/batch10-20261105T164437Z/full/PMC12066955_t2
