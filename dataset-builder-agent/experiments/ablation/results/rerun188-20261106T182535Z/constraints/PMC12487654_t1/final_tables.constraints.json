@@ -1,0 +1,87 @@
+{
+  "pmc_id":"PMC12487654",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of baseline characteristics between married and unmarried groups",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12487654/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate and multivariate analysis of the impact of marital status on survival outcomes in vaginal cancer",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":3,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":8,
+	    "last_row":35,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12487654/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of baseline characteristics between married and unmarried groups after propensity score matching",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC12487654/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate Cox regression analysis of marital status and vaginal cancer patients’ survival outcomes after propensity score matching",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12487654/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"fedbcaaf996cff8aeb36638368af68eb3ac910b03b0fcf80423ff4fb6110fc67"
+}

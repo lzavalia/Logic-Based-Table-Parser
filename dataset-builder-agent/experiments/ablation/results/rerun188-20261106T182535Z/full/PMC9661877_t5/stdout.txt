@@ -1,0 +1,67 @@
+1 paper(s): 18 batch(es), 718 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 18 batch(es) to send
+PMC9661877/1: 40 answered, 0 without an answer
+PMC9661877/2: 40 answered, 0 without an answer
+PMC9661877/3: 40 answered, 0 without an answer
+PMC9661877/4: 40 answered, 0 without an answer
+PMC9661877/5: 40 answered, 0 without an answer
+PMC9661877/6: 40 answered, 0 without an answer
+PMC9661877/7: 40 answered, 0 without an answer
+PMC9661877/8: 40 answered, 0 without an answer
+PMC9661877/9: 40 answered, 0 without an answer
+PMC9661877/10: 40 answered, 0 without an answer
+PMC9661877/11: 40 answered, 0 without an answer
+PMC9661877/12: 40 answered, 0 without an answer
+PMC9661877/13: 40 answered, 0 without an answer
+PMC9661877/14: 40 answered, 0 without an answer
+PMC9661877/15: 40 answered, 0 without an answer
+PMC9661877/16: 40 answered, 0 without an answer
+PMC9661877/17: 40 answered, 0 without an answer
+PMC9661877/18: 38 answered, 0 without an answer
+
+Guideline typing complete: 718 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 3214 routed cell(s), 2941 typed by guidelines, 273 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 18,
+    "inputTokens": 191470,
+    "outputTokens": 29322,
+    "totalTokens": 220792,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC9661877_t5
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC9661877: 84 table(s) reviewed: 83 unreviewed, 1 valid -> papers/PMC9661877/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793991938359000-0/manifest.json
+Exporting reviewed tables...
+PMC9661877: 1 of 84 table(s) exported -> papers/PMC9661877/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC9661877: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4183,
+    "outputTokens": 371,
+    "totalTokens": 4554,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC9661877_t5

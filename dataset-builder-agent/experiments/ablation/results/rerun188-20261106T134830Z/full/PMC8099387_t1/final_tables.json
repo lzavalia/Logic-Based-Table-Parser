@@ -1,0 +1,63 @@
+{
+  "pmc_id":"PMC8099387",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"GA Classification of Open Fractures of the Tibia 6 – 8",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8099387/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of 9 Studies Included in Systematic Review and Meta-analysis (Demographics)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC8099387/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of 9 Studies Included in Systematic Review and Meta-analysis (Surgical Outcomes)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC8099387/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of Findings: Orthoplastic Approach Compared to Nonorthoplastic Approach for Management of Traumatic Lower Extremity Injuries (Surgical Outcomes)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC8099387/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"b4cbab15494304f88dc1699afc82177f309b38db6fdc4410f41ce7fa571bee3e"
+}

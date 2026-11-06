@@ -1,0 +1,10 @@
+Segmenting tables (arm llm-only)...
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC13190168: 6 table(s): 6 unreviewed -> papers/PMC13190168/review.llm-only.jsonl
+
+Ablation review (arm llm-only) complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in papers/PMC<id>/review.llm-only.jsonl, structured tables in final_tables.llm-only.json.

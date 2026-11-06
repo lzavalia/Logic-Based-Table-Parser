@@ -67,6 +67,7 @@
       release_paper_ingest_lock/1,
       final_table_html/3,
       selected_certificates/3,
+      selected_certificate/5,
       write_checked_certificate/2,
       is_certificate_file_name/1,
       explain_boundary/5,
@@ -1240,31 +1241,38 @@ is_certificate_file_name(Name) :-
 % record is the repaired one (reviewed_record/3), whose candidates are
 % rebuilt from tables.jsonl here.
 selected_certificates(Tables, Reviews, Files) :-
-   findall(Name-Facts,
-           ( nth0(I, Tables, Record0), nth0(I, Reviews, Review),
-             Review.final_status == "valid",
-             reviewed_record(Record0, Review, Record),
-             Id = Review.selected_candidate_id,
-             member(Candidate, Record.candidates),
-             Candidate.candidate_id == Id,
-             get_dict(geometric_certificate, Candidate, Certificate),
-             is_dict(Certificate),
-             Certificate.status == "certified",
-             atom_string(Name, Certificate.file),
-             (  expected_certificate(Record, Candidate, Facts)
-             -> true
-             ;  throw(error(invalid_certificate(Name),
-                            context(selected_certificates/3,
-                                    'The record\'s certificate cannot be rebuilt'))) ) ),
-           Files).
+   findall(File, selected_certificate(Tables, Reviews, _, _, File), Files).
+
+% selected_certificate(+Tables, +Reviews, -Record0, -Record, -File): one
+% Name-Facts of selected_certificates/3 on backtracking, with the table's
+% tables.jsonl record Record0 and the record Record it is certified on (the
+% repaired one for a review decided by the repair).
+selected_certificate(Tables, Reviews, Record0, Record, Name-Facts) :-
+   nth0(I, Tables, Record0), nth0(I, Reviews, Review),
+   Review.final_status == "valid",
+   reviewed_record(Record0, Review, Record),
+   Id = Review.selected_candidate_id,
+   member(Candidate, Record.candidates),
+   Candidate.candidate_id == Id,
+   get_dict(geometric_certificate, Candidate, Certificate),
+   is_dict(Certificate),
+   Certificate.status == "certified",
+   atom_string(Name, Certificate.file),
+   (  expected_certificate(Record, Candidate, Facts)
+   -> true
+   ;  throw(error(invalid_certificate(Name),
+                  context(selected_certificates/3,
+                          'The record\'s certificate cannot be rebuilt'))) ).
 
 % write_checked_certificate(+File, +Facts): writes the certificate, then
 % reads it back as data (its directives are never run); it must be exactly
-% Facts and the kernel must accept it.
+% Facts with the embedded kernel (certificate_with_kernel/2) and the kernel
+% must accept it.
 write_checked_certificate(File, Facts) :-
    write_certificate(File, Facts),
+   certificate_with_kernel(Facts, Expected),
    (  catch(read_certificate_file(File, Read), _, fail),
-      Read == Facts,
+      Read == Expected,
       check_certificate(Read)
    -> true
    ;  file_base_name(File, Name),

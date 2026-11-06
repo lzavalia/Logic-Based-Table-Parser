@@ -1,0 +1,50 @@
+1 paper(s): 1 batch(es), 36 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 1 batch(es) to send
+PMC10882683/1: 36 answered, 0 without an answer
+
+Guideline typing complete: 36 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 49 routed cell(s), 49 typed by guidelines, 0 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4753,
+    "outputTokens": 488,
+    "totalTokens": 5241,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC10882683_t0
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC10882683: 3 table(s) reviewed: 2 unreviewed, 1 valid -> papers/PMC10882683/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793993333344000-0/manifest.json
+Exporting reviewed tables...
+PMC10882683: 1 of 3 table(s) exported -> papers/PMC10882683/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC10882683: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4767,
+    "outputTokens": 455,
+    "totalTokens": 5222,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC10882683_t0

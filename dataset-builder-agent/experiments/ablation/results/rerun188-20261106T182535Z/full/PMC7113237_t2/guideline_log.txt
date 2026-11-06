@@ -1,0 +1,5 @@
+1 paper(s): 0 batch(es), 0 cell text(s) to send
+Guideline typing: 0 batch(es) to send
+
+Guideline typing complete: 0 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+1 paper(s): 96 routed cell(s), 96 typed by guidelines, 0 kept ("none"), 0 pending

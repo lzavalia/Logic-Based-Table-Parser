@@ -1,0 +1,96 @@
+1 paper(s): 13 batch(es), 488 cell text(s) to send
+Guideline typing: 13 batch(es) to send
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/1: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/2: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/3: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/4: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/5: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/6: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/7: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/8: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/9: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/10: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/11: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/12: no usable answer (the model call failed or returned nothing)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC5815492/13: no usable answer (the model call failed or returned nothing)
+
+Guideline typing complete: 0 cell(s) answered, 0 left without an answer, 13 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+1 paper(s): 1016 routed cell(s), 0 typed by guidelines, 0 kept ("none"), 1016 pending

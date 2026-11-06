@@ -1,0 +1,21 @@
+{
+  "pmc_id":"PMC12826758",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Basic information of the included reviews and outcomes",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12826758/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"3dbf5e732fe474b0d8f48a569b63cb8c456c420f79b836e029bc40dc654117f8"
+}

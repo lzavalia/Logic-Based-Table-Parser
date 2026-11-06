@@ -1,0 +1,52 @@
+1 paper(s): 2 batch(es), 70 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 2 batch(es) to send
+The first finish call failed because the result wasn't set yet, and I set the result in the same turn. I'm correcting two labels: the Cox model-fitting rows describe how the analysis was done, which fits StudyCharacteristic better than InterventionDescription.
+PMC10694873/1: 40 answered, 0 without an answer
+PMC10694873/2: 30 answered, 0 without an answer
+
+Guideline typing complete: 70 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 197 routed cell(s), 197 typed by guidelines, 0 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 4,
+    "inputTokens": 20432,
+    "outputTokens": 2098,
+    "totalTokens": 22530,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC10694873_t3
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC10694873: 7 table(s) reviewed: 6 unreviewed, 1 valid -> papers/PMC10694873/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793991461992000-0/manifest.json
+Exporting reviewed tables...
+PMC10694873: 1 of 7 table(s) exported -> papers/PMC10694873/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC10694873: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 8951,
+    "outputTokens": 852,
+    "totalTokens": 9803,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC10694873_t3

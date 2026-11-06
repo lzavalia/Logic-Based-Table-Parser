@@ -1,0 +1,90 @@
+{
+  "pmc_id":"PMC12973358",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings of interventions and GRADE assessment.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12973358/t0"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12973358/t1/layout2",
+      "caption":"Summary of interventions in prespecified surgical subgroups.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate1_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"Overall interventions"},
+	{"row":5,"text":"Dexmedetomidine"},
+	{"row":8,"text":"Neuraxial anaesthesia"},
+	{"row":11,"text":"Acupuncture"},
+	{"row":14,"text":"Inhalational anaesthesia"},
+	{"row":16,"text":"Antipsychotics"},
+	{"row":18,"text":"Peripheral nerve block"},
+	{"row":20,"text":"Esketamine"},
+	{"row":22,"text":"Remimazolam"},
+	{"row":24,"text":"Remote ischaemic preconditioning"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"No. of meta‐analyses": []},  {"Odds ratio (95%CI)": []},  {"I 2": []},  {"p value": []} ],
+	  "vertical metadata": [
+	    {"Non‐cardiac": []},
+	    {"Cardiac": []},
+	    {"Orthopaedic": []},
+	    {"Non‐cardiac": []},
+	    {"Cardiac": []},
+	    {"Non‐cardiac": []},
+	    {"Orthopaedic": []},
+	    {"Non‐cardiac": []},
+	    {"Orthopaedic": []},
+	    {"Non‐cardiac": []},
+	    {"Non‐cardiac": []},
+	    {"Orthopaedic": []},
+	    {"Non‐cardiac": []},
+	    {"Non‐cardiac": []},
+	    {"Cardiac": []}
+	  ],
+	  "data": [
+	    ["29", "0.53 (0.48–0.59)", "87%", "< 0.001" ],
+	    ["12", "0.70 (0.56–0.86)", "94%", "0.02" ],
+	    ["14", "0.64 (0.52–0.78)", "93%", "< 0.001" ],
+	    ["9", "0.48 (0.43–0.54)", "81%", "< 0.001" ],
+	    ["8", "0.66 (0.53–0.83)", "90%", "< 0.001" ],
+	    ["3", "0.74 (0.39–1.38)", "95%", "0.12" ],
+	    ["3", "0.88 (0.49–1.58)", "95%", "0.66" ],
+	    ["3", "0.39 (0.31–0.48)", "77%", "< 0.001" ],
+	    ["2", "0.37 (0.32–0.43)", "75%", "< 0.001" ],
+	    ["4", "1.63 (1.37–1.94)", "0%", "< 0.001" ],
+	    ["2", "0.50 (0.36–0.71)", "64%", "< 0.001" ],
+	    ["4", "0.67 (0.54–0.84)", "54%", "< 0.001" ],
+	    ["4", "0.42 (0.35–0.51)", "12%", "< 0.001" ],
+	    ["3", "0.71 (0.60–0.85)", "0%", "< 0.001" ],
+	    ["2", "0.91 (0.67–1.24)", "56%", "0.56" ]
+	  ],
+	  "residual_corner": [ {"Interventions": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC12973358/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"2aa96057251e96d6bc01e84c055f2b4c953aa77cc2490272edecd5df06106aaf"
+}

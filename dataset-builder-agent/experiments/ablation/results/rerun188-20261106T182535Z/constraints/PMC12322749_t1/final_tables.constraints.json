@@ -1,0 +1,53 @@
+{
+  "pmc_id":"PMC12322749",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Crucial characteristics and outcomes of participants categorized by the Neutrophil counts/PNI.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12322749/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The association between Neutrophil counts/PNI and in-hospital and ICU mortality.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2, 8, 14, 20, 26, 32 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":37,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12322749/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"859b2671034ad4486c477520274147e98dc05341fbc1ef05ba5f0ae1d8dbaf37"
+}

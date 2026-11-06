@@ -6,9 +6,11 @@
 :- use_module('../src/dataset_pipeline').
 :- use_module('../src/table_review').
 :- use_module('../src/ablation_review').
+:- use_module('../src/certificate_kernel').
 :- use_module(review_fixtures).
 :- use_module(library(filesex)).
 :- use_module(library(readutil)).
+:- use_module(library(process)).
 :- if(exists_source(library(json))).
 :- use_module(library(json)).
 :- else.
@@ -86,6 +88,16 @@ paper_file(Root, Name, File) :-
     directory_file_path(Dir, Name, File).
 
 read_records(File, Records) :- dataset_pipeline:read_table_jsonl(File, Records).
+
+constraints_certificate(Root, Name, File) :-
+    paper_file(Root, 'certificates.constraints', Dir),
+    directory_file_path(Dir, Name, File).
+
+certificate_names(Root, Names) :-
+    constraints_certificate(Root, '', Dir),
+    directory_files(Dir, Entries),
+    include(is_certificate_file_name, Entries, Names0),
+    msort(Names0, Names).
 
 read_json(File, Json) :-
     setup_call_cleanup(open(File, read, In, [encoding(utf8)]),
@@ -227,9 +239,11 @@ test(published_review_and_export_use_the_arm_files,
     assertion(E1.export_error \== null),
     assertion(E1.subtables == null),
     assertion(E2.final_status == "valid"),
-    % The full pipeline's files are not written.
+    % The full pipeline's files are not written, nor any certificate.
     paper_file(Root, 'review.jsonl', Full),
     assertion(\+ exists_file(Full)),
+    paper_file(Root, 'certificates.constraints', CertDir),
+    assertion(\+ exists_directory(CertDir)),
     % A current review is not redone.
     dataset_dir(Root, Dataset),
     ablation_queue(Dataset, S, Queue, [_-Reason]),
@@ -249,6 +263,64 @@ test(constraints_export_is_that_of_the_matched_candidate,
     assertion(E1.candidate_id == "PMC901/t1/h1_v1"),
     assertion(E1.export_error == null),
     assertion(E2.final_status == "unparseable").
+
+% Arm B certifies every valid table whose matched candidate is labelable,
+% in its own directory, with the checking kernel and no typing.
+test(constraints_arm_writes_checked_certificates_without_types,
+     [setup(ablation_workspace(Root)), cleanup(ablation_cleanup(Root))]) :-
+    settings(Root, "constraints", S),
+    answer(1, 1, 1, 1, A0),
+    answer(2, 2, 1, 1, A1),
+    review_all(Root, S, [0-A0, 1-A1], _),
+    certificate_names(Root, Names),
+    assertion(Names == ['certificate0_h1_v1.pl', 'certificate1_h1_v1.pl']),
+    forall(member(Name, Names),
+           ( constraints_certificate(Root, Name, File),
+             assertion(check_certificate_file(File, accepted)),
+             read_certificate_file(File, Facts),
+             assertion(memberchk(checking_kernel(_, _), Facts)),
+             forall(member(Fact, Facts),
+                    ( functor(Fact, F, _),
+                      assertion(memberchk(F, [certificate_version, table_uid,
+                                              raster, boundary, claim,
+                                              column_path, row_path,
+                                              checking_kernel])) )) )),
+    % None goes where the full pipeline's review keeps (and replaces) its own.
+    paper_file(Root, '', PaperDir),
+    directory_files(PaperDir, Entries),
+    assertion(\+ ( member(E, Entries), is_certificate_file_name(E) )).
+
+test(a_new_constraints_review_removes_the_certificates_it_no_longer_selects,
+     [setup(ablation_workspace(Root)), cleanup(ablation_cleanup(Root))]) :-
+    settings(Root, "constraints", S),
+    answer(1, 1, 1, 1, A0),
+    answer(2, 2, 1, 1, A1),
+    review_all(Root, S, [0-A0, 1-A1], _),
+    ablation_settings(Root, "constraints", none, none, true, none, Again),
+    % Two rows of headers over t0 leave no data: no candidate, unparseable.
+    answer(1, 1, 2, 0, NoData),
+    review_all(Root, Again, [0-NoData, 1-A1], _),
+    certificate_names(Root, Names),
+    assertion(Names == ['certificate1_h1_v1.pl']).
+
+test(published_certificates_are_written_again_without_the_model,
+     [setup(ablation_workspace(Root)), cleanup(ablation_cleanup(Root))]) :-
+    settings(Root, "constraints", S),
+    answer(1, 1, 1, 1, A0),
+    answer(2, 2, 1, 1, A1),
+    review_all(Root, S, [0-A0, 1-A1], _),
+    constraints_certificate(Root, '', Dir),
+    delete_directory_and_contents(Dir),
+    dataset_dir(Root, Dataset),
+    current_prolog_flag(executable, Swipl),
+    absolute_file_name('../src/certify_reviews.pl', Cli, [access(read)]),
+    atom_concat('--dataset=', Dataset, DatasetArg),
+    process_create(Swipl, [Cli, DatasetArg, '--arm=constraints'],
+                   [cwd('../src'), stdout(null), stderr(null), process(Pid)]),
+    process_wait(Pid, exit(Status)),
+    assertion(Status == 0),
+    certificate_names(Root, Names),
+    assertion(Names == ['certificate0_h1_v1.pl', 'certificate1_h1_v1.pl']).
 
 test(a_review_with_a_table_filter_is_never_current,
      [setup(ablation_workspace(Root)), cleanup(ablation_cleanup(Root))]) :-

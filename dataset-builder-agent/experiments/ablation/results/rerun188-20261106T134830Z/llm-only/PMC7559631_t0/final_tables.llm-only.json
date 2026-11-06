@@ -1,0 +1,24 @@
+{
+  "pmc_id":"PMC7559631",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC7559631/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"48c76abe06fb9ebad157b7761e16f9b648aea2caac8080461e5125b9c1bdd5bf"
+}

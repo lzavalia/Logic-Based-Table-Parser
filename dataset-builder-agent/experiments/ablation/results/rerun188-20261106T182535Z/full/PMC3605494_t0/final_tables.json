@@ -1,0 +1,83 @@
+{
+  "pmc_id":"PMC3605494",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC3605494/t0/h2_v1",
+      "caption":"CSF Aβ peptide patterns",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"NDC ( n = 20)": [ {"Mean": []},  {"±SD": []} ]},
+	    {"AD ( n = 22)": [ {"Mean": []},  {"±SD": []} ]},
+	    {"FTD ( n = 17)": [ {"Mean": []},  {"±SD": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Age": []},
+	    {"MMSE": []},
+	    {"Aβ1-37 a": []},
+	    {"Aβ1-38 a": []},
+	    {"Aβ1-38 ox a": []},
+	    {"Aβ1-39 a": []},
+	    {"Aβ1-40 a": []},
+	    {"Aβ1-40 ox a": []},
+	    {"Aβ1-42 a": []},
+	    {"Aβ2-40 a": []},
+	    {"Aβ2-42 a": []},
+	    {"Aβ1-42/Aβ1-40 b": []},
+	    {"Aβ1-42/Aβ1-38 b": []},
+	    {"Aβ2-42/Aβ1-40 b": []},
+	    {"Aβ2-42/Aβ1-38 b": []}
+	  ],
+	  "data": [
+	    ["59.1", "11.7", "70.8", "8.6", "62.8", "5.7" ],
+	    ["28.6", "0.5", "22.5", "4.4", "20.9", "9.9" ],
+	    ["0.926", "0.336", "0.849", "0.255", "0.799", "0.532" ],
+	    ["2.261", "0.787", "2.257", "0.554", "1.433", "0.554" ],
+	    ["0.149", "0.045", "0.146", "0.039", "0.124", "0.040" ],
+	    ["0.959", "0.343", "0.944", "0.312", "0.798", "0.487" ],
+	    ["7.142", "2.868", "6.246", "2.287", "5.108", "2.967" ],
+	    ["0.229", "0.108", "0.209", "0.071", "0.212", "0.103" ],
+	    ["1.521", "0.604", "0.702", "0.302", "1.056", "0.631" ],
+	    ["0.156", "0.026", "0.143", "0.042", "0.124", "0.052" ],
+	    ["0.242", "0.162", "0.091", "0.054", "0.188", "0.097" ],
+	    ["0.228", "0.088", "0.122", "0.050", "0.220", "0.103" ],
+	    ["0.693", "0.222", "0.327", "0.168", "0.727", "0.317" ],
+	    ["0.040", "0.026", "0.014", "0.009", "0.040", "0.015" ],
+	    ["0.108", "0.047", "0.040", "0.017", "0.118", "0.050" ]
+	  ],
+	  "residual_corner": [ {"Diagnosis": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC3605494/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Cut off points, sensitivities and specificities",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC3605494/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"5aca6862f8e721cb599fe6bc83322c52261594aed3c829ce258f47459769242f"
+}

@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC12044418",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of Study Patients by NPAR Quartiles",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12044418/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable Logistic Analysis of NPAR and Hospital Mortality (Post-Interpolation)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12044418/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f04eec8131e85c476cdfb2b0ada5ea3fba01efcc4cfc41a283d697fbc3871c15"
+}

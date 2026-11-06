@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC11288899",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of participants from nine continuous NHANES datasets.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11288899/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Associations between taking oral contraceptive and cervical cancer.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11288899/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f50d1d5f25c7d1464b61207562059f921a43858f8d72d696577e81b0c51980cf"
+}

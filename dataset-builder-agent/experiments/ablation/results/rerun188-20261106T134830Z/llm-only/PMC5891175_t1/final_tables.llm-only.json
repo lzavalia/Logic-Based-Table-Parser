@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC5891175",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Clinicopathologic information of 106 medulloblastomas (MB)",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5891175/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Significance of molecular changes in medulloblastomas",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC5891175/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"dae897cc295089c9da24120336f708ea9583796f900ddc83c5f71b62c19347b0"
+}

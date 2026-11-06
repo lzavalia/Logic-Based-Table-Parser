@@ -1,0 +1,307 @@
+{
+  "pmc_id":"PMC12434915",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":3,"vmd":1},
+      "candidate_id":null,
+      "caption":"Demographic and MR features of the training ( n = 244), validation ( n = 81), and independent external test dataset ( n = 124) presented separately",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [4, 6, 11, 22 ],
+	"subtables": [
+	  {
+	    "column_header_rows":3,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":12,
+	    "last_row":21,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":4,"text":"Demographic"},
+	{"row":6,"text":"Gender, n"},
+	{"row":11,"text":"Conventional MRI features"},
+	{
+	  "row":22,
+	  "text":"WNT wingless, SHH sonic hedgehog, G3 Group 3, and G4 Group 4 P -values for demographic and imaging features were calculated to assess intergroup differences. No significant differences were observed in age or gender distributions across molecular subgroups"
+	}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Development set": [
+		{"Training dataset ( n = 244)": [ {"WNT": []},  {"SHH": []},  {"G3": []},  {"G4": []} ]},
+		{"Validation dataset ( n = 81)": [ {"WNT": []},  {"SHH": []},  {"G3": []},  {"G4": []} ]}
+	      ]
+	    },
+	    {
+	      "Independent external test dataset": [ {"( n = 124)": [ {"WNT": []},  {"SHH": []},  {"G3": []},  {"G4": []} ]} ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"Count, n": []},
+	    {"Age (mean ± SD), y": []},
+	    {"Female-male": []},
+	    {"SHH TP53 (mutant-wild)": []},
+	    {"G3 MYC (amplification-non-amplification)": []},
+	    {"G4 Chromosome 11 (loss-retain)": []},
+	    {"Cerebellar origin (yes–no)": []},
+	    {"Brainstem involvement (yes–no)": []},
+	    {"T1W images foci-hyperintensity (present-absent)": []},
+	    {"Enhancement degree on CE-T1W images (mild-obvious)": []},
+	    {"Enhancement appearance (homogeneous-heterogeneous)": []},
+	    {"T2W images foci-hypointensity (present-absent)": []},
+	    {"Hemorrhage (present-absent)": []},
+	    {"Cyst or necrosis (present-absent)": []},
+	    {"Dissemination/metastasis (yes–no)": []},
+	    {"Tumor volume (cm 3 )": []}
+	  ],
+	  "data": [
+	    ["45", "76", "78", "45", "20", "24", "28", "9", "21", "19", "45", "39" ],
+	    [
+	      "14.42 ± 1.33",
+	      "14.42 ± 1.33",
+	      "14.42 ± 1.33",
+	      "14.42 ± 1.33",
+	      "13.11 ± 2.47",
+	      "13.11 ± 2.47",
+	      "13.11 ± 2.47",
+	      "13.11 ± 2.47",
+	      "12.53 ± 3.21",
+	      "12.53 ± 3.21",
+	      "12.53 ± 3.21",
+	      "12.53 ± 3.21"
+	    ],
+	    [
+	      "22:23",
+	      "40:36",
+	      "29:49",
+	      "12:33",
+	      "8:12",
+	      "15:9",
+	      "8:20",
+	      "2:7",
+	      "9:12",
+	      "10:19",
+	      "28:17",
+	      "17:12"
+	    ],
+	    [
+	      "43:33",
+	      "43:33",
+	      "43:33",
+	      "43:33",
+	      "10:14",
+	      "10:14",
+	      "10:14",
+	      "10:14",
+	      "11:8",
+	      "11:8",
+	      "11:8",
+	      "11:8"
+	    ],
+	    [
+	      "36:42",
+	      "36:42",
+	      "36:42",
+	      "36:42",
+	      "12:16",
+	      "12:16",
+	      "12:16",
+	      "12:16",
+	      "19:26",
+	      "19:26",
+	      "19:26",
+	      "19:26"
+	    ],
+	    [
+	      "18:17",
+	      "18:17",
+	      "18:17",
+	      "18:17",
+	      "3:6",
+	      "3:6",
+	      "3:6",
+	      "3:6",
+	      "22:17",
+	      "22:17",
+	      "22:17",
+	      "22:17"
+	    ],
+	    [
+	      "3:42",
+	      "71:5",
+	      "9:69",
+	      "3:42",
+	      "2:18",
+	      "19:5",
+	      "5:23",
+	      "3:6",
+	      "2:19",
+	      "13:6",
+	      "6:39",
+	      "3:36"
+	    ],
+	    [
+	      "13:32",
+	      "10:66",
+	      "61:17",
+	      "39:6",
+	      "7:13",
+	      "9:15",
+	      "10:18",
+	      "3:6",
+	      "6:15",
+	      "4:15",
+	      "29:16",
+	      "25:14"
+	    ],
+	    [
+	      "29:26",
+	      "36:40",
+	      "40:38",
+	      "25:20",
+	      "11:9",
+	      "11:13",
+	      "11:17",
+	      "5:4",
+	      "11:10",
+	      "12:7",
+	      "24:21",
+	      "22:17"
+	    ],
+	    [
+	      "25:20",
+	      "44:32",
+	      "47:31",
+	      "24:21",
+	      "11:9",
+	      "10:14",
+	      "12:16",
+	      "3:6",
+	      "9:12",
+	      "7:12",
+	      "31:14",
+	      "17:22"
+	    ],
+	    [
+	      "17:28",
+	      "36:40",
+	      "33:45",
+	      "18:27",
+	      "12:8",
+	      "6:18",
+	      "13:15",
+	      "2:7",
+	      "7:14",
+	      "8:11",
+	      "17:28",
+	      "13:26"
+	    ],
+	    [
+	      "14:31",
+	      "49:27",
+	      "55:33",
+	      "31:14",
+	      "11:9",
+	      "17:7",
+	      "16:14",
+	      "6:3",
+	      "12:9",
+	      "13:18",
+	      "22:23",
+	      "19:20"
+	    ],
+	    [
+	      "4:41",
+	      "22:54",
+	      "18:60",
+	      "28:17",
+	      "12:8",
+	      "19:5",
+	      "19:9",
+	      "5:4",
+	      "7:14",
+	      "15:13",
+	      "33:12",
+	      "21:17"
+	    ],
+	    [
+	      "14:31",
+	      "31:45",
+	      "43:35",
+	      "32:13",
+	      "9:11",
+	      "18:6",
+	      "13:15",
+	      "3:6",
+	      "5:16",
+	      "17:11",
+	      "30:15",
+	      "19:20"
+	    ],
+	    [
+	      "12:33",
+	      "18:58",
+	      "23:55",
+	      "19:28",
+	      "5:15",
+	      "7:17",
+	      "8:20",
+	      "2:7",
+	      "4:17",
+	      "5:23",
+	      "12:33",
+	      "5:34"
+	    ],
+	    [
+	      "284.12 ± 13.22",
+	      "198.11 ± 34.31",
+	      "254.69 ± 35.51",
+	      "336.80 ± 16.79",
+	      "190.87 ± 34.21",
+	      "223.01 ± 28.28",
+	      "201.47 ± 21.55",
+	      "240.38 ± 31.7",
+	      "235.00 ± 12.70",
+	      "191.10 ± 19.48",
+	      "276.63 ± 23.14",
+	      "304.26 ± 17.88"
+	    ]
+	  ],
+	  "residual_corner": [ {"": [ {"": [ {"Molecular subgroups": []} ]} ]} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC12434915/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Results of MB-CNN in validation and independent external test datasets and results of MB-CNN_TP53/MYC/Chr11 in different MB molecular subgroups",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12434915/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"5fe4c70cfca207e2f3c3eda2ac76f45df5045782ec8e7b024a719394fdc23c49"
+}

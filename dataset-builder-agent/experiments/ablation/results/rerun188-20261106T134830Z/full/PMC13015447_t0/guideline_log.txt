@@ -1,0 +1,12 @@
+1 paper(s): 1 batch(es), 28 cell text(s) to send
+Guideline typing: 1 batch(es) to send
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC13015447/1: no usable answer (the model call failed or returned nothing)
+
+Guideline typing complete: 0 cell(s) answered, 0 left without an answer, 1 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+1 paper(s): 29 routed cell(s), 0 typed by guidelines, 0 kept ("none"), 29 pending

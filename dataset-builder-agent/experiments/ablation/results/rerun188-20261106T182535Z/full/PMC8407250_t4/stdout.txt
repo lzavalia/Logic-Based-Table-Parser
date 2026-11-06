@@ -1,0 +1,78 @@
+1 paper(s): 29 batch(es), 1138 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 29 batch(es) to send
+PMC8407250/1: 40 answered, 0 without an answer
+PMC8407250/2: 40 answered, 0 without an answer
+PMC8407250/3: 40 answered, 0 without an answer
+PMC8407250/4: 40 answered, 0 without an answer
+PMC8407250/5: 40 answered, 0 without an answer
+PMC8407250/6: 40 answered, 0 without an answer
+PMC8407250/7: 40 answered, 0 without an answer
+PMC8407250/8: 40 answered, 0 without an answer
+PMC8407250/9: 40 answered, 0 without an answer
+PMC8407250/10: 40 answered, 0 without an answer
+PMC8407250/11: 40 answered, 0 without an answer
+PMC8407250/12: 40 answered, 0 without an answer
+PMC8407250/13: 40 answered, 0 without an answer
+PMC8407250/14: 40 answered, 0 without an answer
+PMC8407250/15: 40 answered, 0 without an answer
+PMC8407250/16: 40 answered, 0 without an answer
+PMC8407250/17: 40 answered, 0 without an answer
+PMC8407250/18: 40 answered, 0 without an answer
+PMC8407250/19: 40 answered, 0 without an answer
+PMC8407250/20: 40 answered, 0 without an answer
+PMC8407250/21: 40 answered, 0 without an answer
+PMC8407250/22: 40 answered, 0 without an answer
+PMC8407250/23: 40 answered, 0 without an answer
+PMC8407250/24: 40 answered, 0 without an answer
+PMC8407250/25: 40 answered, 0 without an answer
+PMC8407250/26: 40 answered, 0 without an answer
+PMC8407250/27: 40 answered, 0 without an answer
+PMC8407250/28: 40 answered, 0 without an answer
+PMC8407250/29: 18 answered, 0 without an answer
+
+Guideline typing complete: 1138 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 2581 routed cell(s), 2455 typed by guidelines, 126 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 29,
+    "inputTokens": 185895,
+    "outputTokens": 36682,
+    "totalTokens": 222577,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8407250_t4
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC8407250: 21 table(s) reviewed: 20 unreviewed, 1 valid -> papers/PMC8407250/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793991673248000-0/manifest.json
+Exporting reviewed tables...
+PMC8407250: 1 of 21 table(s) exported -> papers/PMC8407250/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC8407250: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 5443,
+    "outputTokens": 1871,
+    "totalTokens": 7314,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8407250_t4

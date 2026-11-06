@@ -1,0 +1,51 @@
+1 paper(s): 2 batch(es), 68 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 2 batch(es) to send
+PMC7018020/1: 40 answered, 0 without an answer
+PMC7018020/2: 28 answered, 0 without an answer
+
+Guideline typing complete: 68 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 447 routed cell(s), 219 typed by guidelines, 228 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 2,
+    "inputTokens": 8728,
+    "outputTokens": 927,
+    "totalTokens": 9655,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC7018020_t5
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC7018020: 9 table(s) reviewed: 8 unreviewed, 1 valid -> papers/PMC7018020/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793991996904000-0/manifest.json
+Exporting reviewed tables...
+PMC7018020: 1 of 9 table(s) exported -> papers/PMC7018020/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC7018020: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4351,
+    "outputTokens": 842,
+    "totalTokens": 5193,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC7018020_t5

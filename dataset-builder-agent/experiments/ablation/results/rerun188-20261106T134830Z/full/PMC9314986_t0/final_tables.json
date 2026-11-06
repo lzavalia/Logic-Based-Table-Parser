@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC9314986",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of trials analyzed",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC9314986/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"GRADE evaluation: Summary of findings",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC9314986/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"83a47165e330fda375ec2b6e8641c135342de272764871856a80044643d202d7"
+}

@@ -1,0 +1,135 @@
+{
+  "pmc_id":"PMC13627762",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Region‐specific standardized mean differences for plantar loading with an orthosis in Khodaei et al. [ 24 ] ( n = 19; within‐subject, each participant measured in every condition; the two orthosis conditions combined; correlation between paired conditions assumed to be 0.5).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13627762/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings: orthotic interventions for flexible flatfoot, by outcome and comparator.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13627762/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC13627762/t2/h2_v1",
+      "caption":"Summary of findings: orthotic interventions for flexible flatfoot, by outcome and comparator.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":5,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Relative effect (95% CI)": []},
+	    {
+	      "Anticipated absolute effects (95% CI)": [ {"Comparator": []},  {"Orthosis": []},  {"Difference": []} ]
+	    },
+	    {"Certainty": []},
+	    {"What happens": []}
+	  ],
+	  "vertical metadata": [
+	    {
+	      "Balance and postural control (postural stability) Assessed with: Biodex overall stability index, endpoint at 12 weeks, measured barefoot with the orthosis removed Comparator: No orthosis Follow‐up: 12 weeks № of participants: 30 1 trial (Yalfani et al. [ 17 ])": []
+	    },
+	    {
+	      "Plantar loading, by foot region (pressure redistribution) Assessed with: regional plantar pressure, eight foot regions, single session Comparator: The same participants measured without an orthosis Follow‐up: single session № of participants: 19 1 study (Khodaei et al. [ 24 ]), within‐subject": []
+	    },
+	    {
+	      "Pain (pain reduction), against a comparator providing no arch support Assessed with: 100 mm pain visual analog scale at 8 weeks, the trial's designated primary outcome Comparator: Sham insole Follow‐up: 8 weeks № of participants: 67 1 trial (Yurt et al. [ 21 ]), the two active orthosis arms combined": []
+	    },
+	    {
+	      "Pain (pain reduction), for short foot exercise added to an orthosis Assessed with: numeric pain rating scale, 0–10, at 6 weeks Comparator: The same prefabricated insole worn without the exercise program Follow‐up: 6 weeks № of participants: 40 1 trial (Elsayed et al. [ 20 ])": []
+	    }
+	  ],
+	  "data": [
+	    [
+	      "—",
+	      "—",
+	      "—",
+	      "SMD 0.86 SD lower (1.59 lower to 0.13 lower)",
+	      "⨁◯◯◯ Very low a, b, c",
+	      "The evidence for balance is very uncertain. One trial contributes. In taekwondo athletes with flexible flatfoot, the Biodex overall stability index at 12 weeks was 0.93 with an orthosis and 1.46 without one ( g = −0.859, P = 0.02). The post‐test was performed barefoot with the orthosis removed, so this is an adaptation effect after 12 weeks of wear rather than the effect of the device while it is worn. No consensus minimal clinically important difference exists for this index, and none of the included studies measured falls, injuries, or activity limitation directly."
+	    ],
+	    [
+	      "—",
+	      "—",
+	      "—",
+	      "No single estimate Region‐specific SMDs range from 1.93 SD lower at the second metatarsal (2.68 lower to 1.18 lower) to 1.76 SD higher at the medial midfoot (1.05 higher to 2.46 higher); all eight regions are given in Table 1",
+	      "⨁◯◯◯ Very low a, d, e",
+	      "Orthoses redistribute plantar load rather than lowering it uniformly. Loading fell at the second metatarsal, at the third‐to‐fifth metatarsals, and at the heel, and rose at the medial midfoot and the lateral toe, which is the mechanical effect a medial arch support is designed to produce. A single averaged figure would set these reductions against the increases and approach zero, concealing the redistribution, so none is reported. The evidence is very uncertain: One small study that did not randomize allocation contributes, and no study in this review related the size or the direction of pressure change to change in symptoms."
+	    ],
+	    [
+	      "—",
+	      "—",
+	      "—",
+	      "SMD 1.02 SD lower (1.54 lower to 0.49 lower)",
+	      "⨁◯◯◯ Very low a, c, f",
+	      "The evidence for pain reduction is very uncertain. One trial contributes. On its designated primary outcome, a 100 mm pain visual analog scale at 8 weeks, orthoses were 1.02 standard deviations better than a sham insole ( P < 0.001), a between‐group difference of 18.95 mm that approaches but does not reach the predefined minimal clinically important difference of 20 mm. The estimate is not robust to the choice of instrument within that same trial: Its foot function index total gives g = −0.28, a small effect. The pain conclusion of this review therefore rests on a single instrument choice within a single trial, and it should not be read as a stable estimate of how much orthoses reduce pain."
+	    ],
+	    [
+	      "—",
+	      "—",
+	      "—",
+	      "SMD 0.97 SD lower (1.62 lower to 0.33 lower)",
+	      "⨁◯◯◯ Very low a, c, g",
+	      "This row does not estimate the effect of an orthosis. Both arms wore the identical prefabricated insole and only one performed short foot exercises, so the contrast is the added effect of the exercise program: 2.3 versus 3.2 points on a 0‐10 scale at 6 weeks ( P = 0.003), a difference of 0.9 points, below the predefined 2‐point threshold. It is reported in a separate row rather than combined with the row above. That separation is not costless, and the pooled figure it forgoes is reported in full in the results; it is kept separate anyway, because a contrast in which both arms wore the orthosis cannot contribute to an estimate of what the orthosis does."
+	    ]
+	  ],
+	  "residual_corner": [ {"Outcome № of participants (studies)": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC13627762/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"76ce30d995ce6c817246425b4a58028fcadd97e76c05055b045770882186f75d"
+}

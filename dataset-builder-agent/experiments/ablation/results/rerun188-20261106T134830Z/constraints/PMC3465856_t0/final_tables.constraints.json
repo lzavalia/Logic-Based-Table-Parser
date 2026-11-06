@@ -1,0 +1,58 @@
+{
+  "pmc_id":"PMC3465856",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Back pain-related healthcare costs (£) per patient, by treatment and risk group, for patients providing utilisation data at 12 months (n=567). Values are mean (SD) costs unless stated otherwise",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC3465856/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Descriptive and incremental health outcomes over 12 months for the base-case and complete case analyses. Values are mean (SD) scores unless stated otherwise *",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC3465856/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Description of work-related outcomes for participants in paid employment (work status, absence and indirect cost estimates), by treatment and risk group. Values are numbers (percentages) unless stated otherwise *",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC3465856/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"6d08c911508d2c8d18ee275f3d13bd070a23bbbcbb2cca9a426d4eebf19e06cc"
+}

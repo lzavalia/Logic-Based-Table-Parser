@@ -1,0 +1,272 @@
+{
+  "pmc_id":"PMC10694873",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The baseline characteristics of participants",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10694873/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Incidence rate of incident diabetes",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10694873/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate proportional hazard analysis ( n = 24,506)",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10694873/t2"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Relationship between Cre/BW ratio and the incident diabetes in different models",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2, 14, 20, 24, 28 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":37,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":2,"text":"Cre/BW ratio Deciles"},
+	{"row":14,"text":"Gender"},
+	{"row":20,"text":"Smoking status"},
+	{"row":24,"text":"Drinking status"},
+	{"row":28,"text":"Family history of diabetes"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Model I (HR,95%CI,P)": []},
+	    {"Model II (HR,95%CI,P)": []},
+	    {"Model III (HR,95%CI,P)": []},
+	    {"Model IV (HR,95%CI, P)": []}
+	  ],
+	  "vertical metadata": [
+	    {"Cre/BW ratio": []},
+	    {"D1": []},
+	    {"D2": []},
+	    {"D3": []},
+	    {"D4": []},
+	    {"D5": []},
+	    {"D6": []},
+	    {"D7": []},
+	    {"D8": []},
+	    {"D9": []},
+	    {"D10": []},
+	    {"Age": []},
+	    {"Male": []},
+	    {"Female": []},
+	    {"Height(cm)": []},
+	    {"SBP(mmHg)": []},
+	    {"DBP(mmHg)": []},
+	    {"Never smoker": []},
+	    {"Ever smoker": []},
+	    {"Current smoker": []},
+	    {"Never drinker": []},
+	    {"Ever drinker": []},
+	    {"Current drinker": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"FPG(mmol/L)": []},
+	    {"TG(mmol/L)": []},
+	    {"LDL-c(mmol/L)": []},
+	    {"HDL-c(mmol/L)": []},
+	    {"ALT(U/L)": []},
+	    {"AST(U/L)": []},
+	    {"BUN(mmol/L)": []}
+	  ],
+	  "data": [
+	    [
+	      "0.387 (0.321, 0.466) < 0.0001",
+	      "0.235 (0.191, 0.288) < 0.0001",
+	      "0.445 (0.361, 0.548) < 0.0001",
+	      "0.521 (0.420, 0.646) < 0.0001"
+	    ],
+	    ["Ref", "Ref", "Ref", "Ref" ],
+	    [
+	      "0.744 (0.640, 0.864) 0.00011",
+	      "0.695 (0.597, 0.808) < 0.0001",
+	      "0.817 (0.701, 0.951) 0.00902",
+	      "0.819 (0.703, 0.955) 0.01063"
+	    ],
+	    [
+	      "0.704 (0.604, 0.820) < 0.0001",
+	      "0.624 (0.535, 0.728) < 0.0001",
+	      "0.742 (0.635, 0.867) 0.00017",
+	      "0.750 (0.641, 0.877) 0.00032"
+	    ],
+	    [
+	      "0.708 (0.608, 0.825) < 0.0001",
+	      "0.607 (0.519, 0.709) < 0.0001",
+	      "0.768 (0.656, 0.899) 0.00102",
+	      "0.772 (0.659, 0.905) 0.00143"
+	    ],
+	    [
+	      "0.595 (0.507, 0.699) < 0.0001",
+	      "0.508 (0.432, 0.599) < 0.0001",
+	      "0.671 (0.568, 0.792) < 0.0001",
+	      "0.692 (0.585, 0.818) 0.00002"
+	    ],
+	    [
+	      "0.539 (0.458, 0.635) < 0.0001",
+	      "0.450 (0.380, 0.532) < 0.0001",
+	      "0.574 (0.485, 0.680) < 0.0001",
+	      "0.608 (0.512, 0.722) < 0.0001"
+	    ],
+	    [
+	      "0.580 (0.492, 0.685) < 0.0001",
+	      "0.464 (0.392, 0.551) < 0.0001",
+	      "0.666 (0.560, 0.792) < 0.0001",
+	      "0.703 (0.591, 0.837) 0.00007"
+	    ],
+	    [
+	      "0.544 (0.461, 0.643) < 0.0001",
+	      "0.422 (0.355, 0.503) < 0.0001",
+	      "0.614 (0.515, 0.733) < 0.0001",
+	      "0.644 (0.538, 0.770) < 0.0001"
+	    ],
+	    [
+	      "0.533 (0.449, 0.633) < 0.0001",
+	      "0.386 (0.323, 0.462) < 0.0001",
+	      "0.582 (0.484, 0.700) < 0.0001",
+	      "0.643 (0.534, 0.775) < 0.0001"
+	    ],
+	    [
+	      "0.472 (0.394, 0.565) < 0.0001",
+	      "0.319 (0.264, 0.387) < 0.0001",
+	      "0.523 (0.429, 0.637) < 0.0001",
+	      "0.584 (0.477, 0.714) < 0.0001"
+	    ],
+	    ["", "1.031 (1.027, 1.034) < 0.0001", "1.024 (1.020, 1.027) < 0.0001", "" ],
+	    ["", "Ref", "Ref", "" ],
+	    ["", "0.603 (0.527, 0.691) < 0.0001", "0.790 (0.687, 0.908) 0.00088", "" ],
+	    ["", "0.989 (0.982, 0.996) 0.00334", "0.996 (0.988, 1.003) 0.21579", "" ],
+	    ["", "1.005 (1.002, 1.008) 0.00054", "1.001 (0.999, 1.004) 0.33945", "" ],
+	    ["", "1.003 (0.999, 1.008) 0.15860", "1.003 (0.998, 1.007) 0.22657", "" ],
+	    ["", "Ref", "Ref", "" ],
+	    ["", "1.191 (0.987, 1.438) 0.06832", "1.038 (0.860, 1.253) 0.69817", "" ],
+	    ["", "1.134 (1.028, 1.251) 0.01200", "1.117 (1.010, 1.234) 0.03054", "" ],
+	    ["", "Ref", "Ref", "" ],
+	    ["", "0.899 (0.801, 1.010) 0.07255", "0.954 (0.850, 1.071) 0.42675", "" ],
+	    ["", "0.958 (0.801, 1.147) 0.64185", "0.834 (0.694, 1.003) 0.05340", "" ],
+	    ["", "Ref", "Ref", "" ],
+	    ["", "1.687 (1.386, 2.053) < 0.0001", "1.566 (1.286, 1.907) < 0.0001", "" ],
+	    ["", "", "7.333 (6.614, 8.131) < 0.0001", "" ],
+	    ["", "", "1.052 (1.028, 1.077) < 0.0001", "" ],
+	    ["", "", "0.941 (0.890, 0.995) 0.03138", "" ],
+	    ["", "", "1.591 (1.394, 1.816) < 0.0001", "" ],
+	    ["", "", "1.008 (1.005, 1.010) < 0.0001", "" ],
+	    ["", "", "0.994 (0.988, 1.000) 0.04987", "" ],
+	    ["", "", "0.967 (0.935, 1.000) 0.05346", "" ]
+	  ],
+	  "residual_corner": [ {"Exposure": []} ]
+	}
+      ],
+      "table_index":3,
+      "table_uid":"PMC10694873/t3"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Relationship between Cre/BW ratio and diabetes in different sensitivity analyses",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC10694873/t4"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The result of the two-piecewise Cox regression model",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC10694873/t5"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effect size of the Cre/BW ratio on incident diabetes in prespecified and exploratory subgroups",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 7",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":6,
+      "table_uid":"PMC10694873/t6"
+    }
+  ],
+  "tables_jsonl_sha256":"7c6e1f68d26999911d2f795d27587ed9884bab7780d02bbe253eec4cff45d760"
+}

@@ -1,0 +1,276 @@
+{
+  "pmc_id":"PMC4483251",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Characteristics of included trials",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 16 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":4,
+	    "last_row":37,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{
+	  "row":1,
+	  "text":"High dose steroids (>500 mg hydrocortisone or equivalent dose) in experimental intervention group"
+	},
+	{
+	  "row":16,
+	  "text":"Low dose steroids (≤500 mg hydrocortisone or equivalent dose) in experimental intervention group"
+	}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Number of patients": []},
+	    {"Inclusion criteria": []},
+	    {"Treatment": []},
+	    {"Mortality data": []}
+	  ],
+	  "vertical metadata": [
+	    {"Bernard [ 35 ]": []},
+	    {"Bone [ 41 ]": []},
+	    {"De Gans [ 36 ]": []},
+	    {"Hoffman [ 37 ]": []},
+	    {"Hughes [ 28 ]": []},
+	    {"Klastersky [ 29 ]": []},
+	    {"Luce [ 42 ]": []},
+	    {"Marik [ 38 ]": []},
+	    {"Scarborough [ 30 ]": []},
+	    {"Schumer [ 43 ]": []},
+	    {"Sprung [ 44 ]": []},
+	    {"Thwaites [ 20 ]": []},
+	    {"VASSC [ 45 ]": []},
+	    {"Wan [ 31 ]": []},
+	    {"Annane [ 46 ]": []},
+	    {"Arabi [ 47 ]": []},
+	    {"Bollaert [ 48 ]": []},
+	    {"Briegel [ 49 ]": []},
+	    {"Chawla [ 50 ]": []},
+	    {"Cicarelli [ 32 ]": []},
+	    {"Cicarelli [ 51 ]": []},
+	    {"Confalonieri [ 33 ]": []},
+	    {"Gordon [ 52 ]": []},
+	    {"Hu [ 53 ]": []},
+	    {"Kaufmann [ 54 ]": []},
+	    {"Mirea [ 55 ]": []},
+	    {"Meduri [ 56 ]": []},
+	    {"Nafae [ 39 ]": []},
+	    {"Oppert [ 57 ]": []},
+	    {"Rinaldi [ 58 ]": []},
+	    {"Ruolan [ 59 ]": []},
+	    {"Snijders [ 40 ]": []},
+	    {"Sprung [ 60 ]": []},
+	    {"Yildiz [ 61 ]": []},
+	    {"Yildiz [ 62 ]": []}
+	  ],
+	  "data": [
+	    ["99", "Sepsis", "MP 30 mg/kg every 6 h for a total of 4 doses", "45 days" ],
+	    [
+	      "382",
+	      "Severe sepsis",
+	      "MP bolus 30 mg/kg repeated every 6 h up to a total of 4 doses",
+	      "14 days and ICU"
+	    ],
+	    ["301", "Sepsis", "D 10 mg every 6 h for 4 days", "8 weeks" ],
+	    ["38", "Sepsis", "D 3 mg/kg, followed by 1 mg/kg every 6 h for 8 times", "16 months" ],
+	    [
+	      "57",
+	      "Septic shock",
+	      "Group A ( n = 14): bolus N 10 μg/kg and a single dose of 30 mg/kg MP and 30 min later: a second dose of 100 μg/kg N Group B: ( n = 15) single bolus of 30 mg/kg MP Group I ( n = 7): 30 μg/kg bolus of N, followed by 30 μg/kg/h for 1 h plus a single dose of 30 mg/kg MP Group II ( n = 7), bolus 30 μg/kg N, followed by 30 μg/kg/h for 1 h without MP Group III ( n = 7): MP, 30 mg/kg",
+	      "Not reported"
+	    ],
+	    ["85", "Sepsis", "B 0.5 mg/kg every 12 h, during 3 consecutive days", "30 days" ],
+	    [
+	      "87",
+	      "Septic shock",
+	      "MP 30 mg/kg per dose every 6 h, four times MP diluted in 50 ml of 5 % dextrose in water",
+	      "Hospital"
+	    ],
+	    [
+	      "30",
+	      "Sepsis",
+	      "Once HC 10 mg/kg iv 30 min prior to starting antibiotic therapy",
+	      "Not specified"
+	    ],
+	    [
+	      "465",
+	      "Sepsis",
+	      "D 16 mg in 4 ml of sterile water intravenously for 4 days",
+	      "10 days, 40 days, 6 months"
+	    ],
+	    [
+	      "172",
+	      "Septic shock",
+	      "Single bolus infusion of either 3 mg/kg D in 100 ml IS or 30 mg/kg of MP in 100 ml IS. If ‘necessary’ repeated once after 4 h",
+	      "Not specified"
+	    ],
+	    [
+	      "59",
+	      "Septic shock",
+	      "Group 1 ( n = 21): MP 30 mg/kg Group 2 ( n = 22): D 6 mg/kg Dose was repeated once in both groups after 4 h if shock persisted",
+	      "7 days, 14 days and 20 days"
+	    ],
+	    [
+	      "545",
+	      "Sepsis",
+	      "D week 1, 0.4 mg/kg/day; week 2, 0.3 mg/kg/day; week 3, 0.2 mg/kg/day; week 4, 0.1 mg/kg/day; week 5, fixed dose 4 mg/day, decreased by 1 mg each week in following weeks a",
+	      "9 months"
+	    ],
+	    [
+	      "223",
+	      "Sepsis",
+	      "MP 30 mg/kg bolus followed by 5 mg/kg/h for 9 h Maximal dose 10 g",
+	      "14 days"
+	    ],
+	    ["81", "SIRS", "D iv 1 mg/kg 3 times/day for 3 days", "30 days" ],
+	    [
+	      "300",
+	      "Septic shock",
+	      "HC 50 mg every 6 h and FC 50 µg every 24 h Treatment duration 6 days",
+	      "1 year"
+	    ],
+	    [
+	      "75",
+	      "Septic shock and cirrhosis",
+	      "50 mg HC every 6 h. After shock resolution, defined as a MAP > 65 mm Hg without vasopressors for 24 h: dose reduction by 10 mg every 2 days until discontinuation",
+	      "28 days, ICU and hospital"
+	    ],
+	    [
+	      "41",
+	      "Septic shock",
+	      "HC 75 mg every 6 h for 5 or more days. In case of shock reversal after 5 days: for 3 days 150 mg HC, then 75 mg for the next 3 days. Treatment was stopped after 5 days in the absence of shock reversal",
+	      "28 days"
+	    ],
+	    [
+	      "40",
+	      "Septic shock",
+	      "HC bolus of 100 mg, followed by a continuous infusion of 0.18 mg/kg/h. After shock reversal dose reduction to 0.08 mg/kg/h. Dose was kept constant for 6 days. HC was tapered in steps of 24 mg/day after successful treatment of infection or serum [sodium] >155 mmol/l",
+	      "30 days, 90 days, 1 year and ICU"
+	    ],
+	    [
+	      "44",
+	      "Septic shock",
+	      "HC 100 mg every 8 h for 72 h, followed by tapering over 4 days",
+	      "Not reported"
+	    ],
+	    ["29", "SIRS with or without sepsis", "D 0.2 mg/kg (in a single dose)", "7 days" ],
+	    [
+	      "29",
+	      "Septic shock",
+	      "D 0.2 mg/kg given three times at intervals of 36 h",
+	      "7 and 28 days"
+	    ],
+	    [
+	      "46",
+	      "Sepsis",
+	      "HC bolus 200 mg, followed by an infusion rate of 10 mg/h for 7 days",
+	      "7, 28, 60 days and hospital"
+	    ],
+	    [
+	      "61",
+	      "Septic shock",
+	      "HC 50 mg every 6 h for the first 5 days, 50 mg every 12 h for the next 3 days, 50 mg every 24 h for the last 3 days. HC was weaned quicker if shock had resolved",
+	      "28 days, ICU and hospital"
+	    ],
+	    [
+	      "77",
+	      "Septic shock",
+	      "HC 50 mg every 6 h for the first 7 days, 50 mg every 8 h for the next 3 days, 50 mg every 12 h for the next 2 days 50 mg every 24 h for the next 2 days",
+	      "14 days"
+	    ],
+	    [
+	      "30",
+	      "Septic shock",
+	      "HC bolus of 100 mg followed by a continuous infusion of 10 mg/h for 24 h",
+	      "Not reported"
+	    ],
+	    [
+	      "171",
+	      "Septic shock",
+	      "Group A: bolus 200 mg HC every 24 h during 4 days Group B: continuous HC 200 mg/day during 4 days",
+	      "Not reported"
+	    ],
+	    ["80", "Severe sepsis", "HC infusion (10 mg/h) for 7 days", "ICU and hospital" ],
+	    [
+	      "80",
+	      "Sepsis",
+	      "HC 200 mg loading bolus dose followed by a continuous infusion of 240 mg/24 h for 7 days",
+	      "7 days"
+	    ],
+	    [
+	      "48",
+	      "Septic shock",
+	      "HC (500 mg/50 ml) bolus 50 mg, followed by continuous infusion of 0.18 mg/kg/h. 1 h after cessation of vasopressor support: 0.06 mg/kg/h for 24 h, followed by a reduction of 0.02 mg/kg/h every day",
+	      "28 days"
+	    ],
+	    [
+	      "40",
+	      "Severe sepsis",
+	      "Standard therapy and HC 300 mg/day diluted in 50 ml of IS for 6 days via continuous intravenous infusion. After the study period HC therapy was tapered",
+	      "Hospital"
+	    ],
+	    [
+	      "60",
+	      "Sepsis",
+	      "Chinese herb group: 100 ml Sini decoction b every 24 h for 7 days HC group (GOI): 200 mg HC every 24 h for 7 days",
+	      "28 days"
+	    ],
+	    ["213", "Sepsis", "P 40 mg once daily for a total of 7 days", "30 days" ],
+	    [
+	      "499",
+	      "Septic shock",
+	      "HC 50 mg iv bolus every 6 h for 5 days, then tapered to 50 mg iv every 12 h for days 6–8, 50 mg every 24 h for days 9–11, and then stopped",
+	      "Mortality rate at 28 days in patients who did and did not have RC Overall 28 days, ICU, hospital, 1 year"
+	    ],
+	    ["40", "Sepsis", "P iv at 06.00 (5 mg) and 18.00 (2.5 mg) for 10 days", "28 days" ],
+	    [
+	      "55",
+	      "Sepsis",
+	      "P iv 3 times a day at 06.00 (10 mg), 14.00 (5 mg), and 22.00 (5 mg) for 10 days",
+	      "28 days"
+	    ]
+	  ],
+	  "residual_corner": [ {"Trial": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC4483251/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Conventional and trial sequential analysis (TSA)-adjusted relative risks (RR) with 95 % confidence intervals for the primary and secondary outcome of mortality and serious adverse events",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4483251/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"258b4b0940d6f125af782a86d70d6902b3dbdc153f758bd648ac2a76041000f4"
+}

@@ -1,0 +1,50 @@
+1 paper(s): 1 batch(es), 21 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 1 batch(es) to send
+PMC8427842/1: 21 answered, 0 without an answer
+
+Guideline typing complete: 21 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 37 routed cell(s), 37 typed by guidelines, 0 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4145,
+    "outputTokens": 1100,
+    "totalTokens": 5245,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8427842_t1
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC8427842: 2 table(s) reviewed: 1 unreviewed, 1 valid -> papers/PMC8427842/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793992331924000-0/manifest.json
+Exporting reviewed tables...
+PMC8427842: 1 of 2 table(s) exported -> papers/PMC8427842/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC8427842: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 3199,
+    "outputTokens": 347,
+    "totalTokens": 3546,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8427842_t1

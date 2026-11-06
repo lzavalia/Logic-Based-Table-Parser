@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Offline tests for guideline_agent.sh and its step in run_agent.sh.
+"""Offline tests for guideline_agent.sh and its step in run_agent.sh and in
+the full review (review_agent.sh).
 
 The scripts and the Prolog stages are the real ones; a stub deepclause stands
 in for the agents, so no API key or network is needed. SWI-Prolog is required.
@@ -42,14 +43,15 @@ if dml == "type_guidelines.dml":
     args = sys.argv[1:]
     only = next((a[len("papers="):] for a in args if a.startswith("papers=")), None)
     wanted = only.split(",") if only else None
-    os.makedirs("dataset/cache", exist_ok=True)
-    for name in sorted(glob.glob("dataset/papers/*/guideline_requests.json")):
+    dataset = next((a[len("dataset="):] for a in args if a.startswith("dataset=")), "dataset")
+    os.makedirs(dataset + "/cache", exist_ok=True)
+    for name in sorted(glob.glob(dataset + "/papers/*/guideline_requests.json")):
         request = json.load(open(name))
         if wanted is not None and request["paper"] not in wanted:
             continue
         if os.environ.get("STUB_ANSWER", "1") != "1":
             continue
-        with open("dataset/cache/guideline_answers.jsonl", "a") as cache:
+        with open(dataset + "/cache/guideline_answers.jsonl", "a") as cache:
             for batch in request["batches"]:
                 for item in batch["items"]:
                     cache.write(json.dumps({
@@ -210,6 +212,45 @@ class GuidelineAgentTests(unittest.TestCase):
         result = self.run_script("run_agent.sh", "topic", STUB_FAIL="dataset_builder.dml")
         self.assertEqual(result.returncode, 1)
         self.assertEqual(self.steps(), ["dataset_builder.dml"])
+
+    def test_full_review_types_by_guidelines_first(self):
+        result = self.run_script("review_agent.sh")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.steps(), ["type_guidelines.dml", "review_dataset.dml"])
+        self.assertEqual(self.guided("PMC1")["cells"][0]["source"], "guideline")
+        inference = (self.papers / "PMC1/type_inference.jsonl").read_text(encoding="utf-8")
+        self.assertEqual(json.loads(inference.splitlines()[0])["types_file"], "guided_types.jsonl")
+        self.assertIn("Writing the typed certificates", result.stdout)
+        self.assertIn("full: certificates of 0 paper(s) written", result.stdout)
+
+    def test_full_review_without_guidelines(self):
+        result = self.run_script("review_agent.sh", "--no-guidelines")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.steps(), ["review_dataset.dml"])
+        self.assertFalse((self.papers / "PMC1/guided_types.jsonl").exists())
+
+    def test_full_review_guideline_failure_does_not_stop_it(self):
+        result = self.run_script("review_agent.sh", STUB_FAIL="type_guidelines.dml")
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(self.steps(), ["type_guidelines.dml", "review_dataset.dml"])
+
+    def test_full_review_guidelines_use_its_dataset_and_log_dir(self):
+        other = self.agent / "src/ablation/x/dataset/papers"
+        shutil.copytree(self.papers, other)
+        logs = self.root / "logs"
+        result = self.run_script("review_agent.sh", "--dataset", "ablation/x/dataset",
+                                 "--papers", "PMC2", "--log-dir", str(logs))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("dataset=ablation/x/dataset", self.calls()[0])
+        self.assertTrue((other / "PMC2/guided_types.jsonl").exists())
+        self.assertFalse((self.papers / "PMC2/types.jsonl").exists())
+        self.assertTrue((logs / "guideline_log.txt").exists())
+        self.assertTrue((logs / "review_log.txt").exists())
+
+    def test_other_arms_have_no_guideline_step(self):
+        result = self.run_script("review_agent.sh", "--arm", "constraints")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.steps(), ["ablation_review.dml"])
 
     def test_options_reach_every_step(self):
         self.run_script("run_agent.sh", "topic", "--model", "m:x")

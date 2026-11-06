@@ -74,7 +74,10 @@
       guideline_types/2,
       guideline_routes/3,
       guideline_prompt/4,
-      program_sha256/2
+      program_sha256/2,
+      guideline_program/2,
+      guideline_routed_cell/5,
+      guideline_cache_rows/3
    ]).
 
 :- if(exists_source(library(json))).
@@ -352,6 +355,36 @@ cell_raster(Cells, Raster, TypeRaster) :-
 cell_type_pair(Cell, Cell.cell_id-Cell.type).
 
 slot_type(A, Id, Type) :- get_assoc(Id, A, Type).
+
+% --- for typed certificates (typed_certificates.pl) --------------------------
+
+% guideline_program(+TdslFile, -Program): the program as the stages see it,
+% json{path, sha, analyzer, caption_analysis}.
+guideline_program(TdslFile, Program) :-
+   program(TdslFile, Program).
+
+% guideline_routed_cell(+Program, +Record, +TypedCell, -Key, -Allowed): the
+% cell is routed to the guidelines, with its cache key and allowed types.
+guideline_routed_cell(Program, Record, Cell, Key, Allowed) :-
+   routed_cell(Program, Record, Cell, Key, Allowed).
+
+% guideline_cache_rows(+DatasetDir, +Sha, -Rows): as read_cache/3, but each
+% key maps to the whole cache line (answer, batch_id, ...).
+guideline_cache_rows(DatasetDir, Sha, Rows) :-
+   directory_file_path(DatasetDir, 'cache/guideline_answers.jsonl', File),
+   (  exists_file(File)
+   -> read_jsonl(File, Lines)
+   ;  Lines = []
+   ),
+   empty_assoc(E),
+   foldl(cache_line(Sha), Lines, E, Rows).
+
+cache_line(Sha, Row, A0, A) :-
+   (  Row.program_sha256 == Sha
+   -> atom_string(RuleType, Row.rule_type),
+      put_assoc(key(Row.text, RuleType, Row.caption), A0, Row, A)
+   ;  A = A0
+   ).
 
 % --- shared ------------------------------------------------------------------
 

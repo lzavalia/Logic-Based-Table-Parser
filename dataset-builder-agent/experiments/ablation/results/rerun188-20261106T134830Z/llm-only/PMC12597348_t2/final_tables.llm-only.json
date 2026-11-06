@@ -1,0 +1,58 @@
+{
+  "pmc_id":"PMC12597348",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Overview of inclusion and exclusion criteria.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12597348/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of anchoring reviews and further analyses undertaken in this overview. ARDS, acute respiratory distress syndrome; COT, conventional oxygen therapy; CPAP, continuous positive airway pressure; F io 2 , fraction of inspired oxygen; HFNO, high-flow nasal oxygen; LOS, length of stay; NIV, noninvasive ventilation; PPCs, postoperative pulmonary complications.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12597348/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Subgroup analyses for surgical site infection (SSI). CI, confidence interval; N 2 O, nitrous oxide.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC12597348/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"69368d3514347e76f1e3adca7023833819cf9cd92ca607eabd7c40f41385dbf0"
+}

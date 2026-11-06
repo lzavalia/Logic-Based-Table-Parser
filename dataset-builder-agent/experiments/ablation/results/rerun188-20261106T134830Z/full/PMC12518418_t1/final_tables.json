@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC12518418",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12518418/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings and evidence certainties assessed according to GRADE framework",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12518418/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"df18c9d9e39df1bdc8a9f6035f3e391767a1af7d70c6cfcc25a3643791d848fc"
+}

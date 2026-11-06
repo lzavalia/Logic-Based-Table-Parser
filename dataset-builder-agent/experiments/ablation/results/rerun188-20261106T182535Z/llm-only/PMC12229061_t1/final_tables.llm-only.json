@@ -1,0 +1,130 @@
+{
+  "pmc_id":"PMC12229061",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of included systematic reviews",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12229061/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":null,
+      "caption":"Relationships between cardiorespiratory fitness and health outcomes, expressed using statistical measures other than correlation coefficient or mean difference",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1, 5 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":8,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":1,"text":"General population"},  {"row":5,"text":"Clinical populations"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"First author, year": []},
+	    {"Number of studies": []},
+	    {"Sample size total (with a disease)": []},
+	    {"Comparisons": []},
+	    {"Effect measures (95% CI)": []},
+	    {"I 2": []},
+	    {"GRADE assessment": []}
+	  ],
+	  "vertical metadata": [
+	    {"MetS": []},
+	    {"cPWV": []},
+	    {"HRQoL": []},
+	    {"T1D": []},
+	    {"T2D": []},
+	    {"Cystic fibrosis": []}
+	  ],
+	  "data": [
+	    [
+	      "De Oliveira, 2016 22",
+	      "5",
+	      "5231",
+	      "Health outcome in participants with low CRF vs high",
+	      "OR=4.05 (95% CI: 2.09, 7.87)",
+	      "78%",
+	      "Very low"
+	    ],
+	    [
+	      "Lona, 2022 19",
+	      "2",
+	      "1744",
+	      "Association of CRF with health outcomes",
+	      "ES=−0.03 (95% CI: −0.05, –0.01)",
+	      "67%",
+	      "Very low"
+	    ],
+	    [
+	      "Bermejo-Cantarero, 2021 48",
+	      "6",
+	      "7368",
+	      "Association of CRF with health outcomes",
+	      "ES=0.20 (95% CI: 0.12, 0.28)",
+	      "69%",
+	      "Very low"
+	    ],
+	    [
+	      "De Visser, 2024 50",
+	      "22",
+	      "2082 (1,018 T1D)",
+	      "CRF in participants with disease vs healthy controls",
+	      "SMD=−0.39 (95% CI: −0.7, –0.09)",
+	      "89%",
+	      "Very low"
+	    ],
+	    [
+	      "De Visser, 2024 50",
+	      "9",
+	      "755 (286 T2D)",
+	      "CRF in participants with disease vs healthy controls",
+	      "SMD=−1.06 (95% CI: −1.57, –0.56)",
+	      "84%",
+	      "Very low"
+	    ],
+	    [
+	      "Vendrusculo, 2019 47",
+	      "2",
+	      "137",
+	      "Mortality in patients with low CRF vs high",
+	      "RR=4.90 (95% CI: 1.09, 22.07)",
+	      "32%",
+	      "Very low"
+	    ]
+	  ],
+	  "residual_corner": [ {"Outcome": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC12229061/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f4c397a204f390cdb07d595864f8c10baf77cc1aa4aa4de4bd726f0db06ec871"
+}

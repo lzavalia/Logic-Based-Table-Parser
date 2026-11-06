@@ -15,13 +15,18 @@
 #   --arms <list>       comma-separated, from llm-only, constraints, full
 #                       (default all three, in that order)
 #   --model <id>        default anthropic:claude-haiku-5-5
+#   --program <file>    the full arm's type DSL program (default
+#                       type_dsl_examples/sci.tdsl, as in review_agent.sh)
+#   --level <level>     the full arm's type comparison, family (default) or group
 #   --input-price <x>   USD per million input tokens, to report a cost
 #   --output-price <x>  USD per million output tokens
 #   --yes               do not ask for confirmation before the model calls
 #
 # Every arm runs at temperature 0 (review_agent.sh) and with --force, so the
 # run never reuses an earlier review. A table whose call fails is recorded and
-# the run goes on. A local src/budget_guard.mjs, if present, caps each call's
+# the run goes on. The collector reads each call's own copy of the paper's
+# review and export, so a sample may hold several tables of one paper. A
+# local src/budget_guard.mjs, if present, caps each call's
 # spending as in review_agent.sh (BUDGET_USD, default 5).
 
 set -uo pipefail
@@ -33,6 +38,8 @@ sample="$here/smoke_sample.jsonl"
 gold="$here/smoke_gold.jsonl"
 arms="llm-only,constraints,full"
 model="anthropic:claude-haiku-5-5"
+program="$root/type_dsl_examples/sci.tdsl"
+level=family
 prices=()
 yes=false
 while [ "$#" -gt 0 ]; do
@@ -42,10 +49,12 @@ while [ "$#" -gt 0 ]; do
         --gold) gold="$2"; shift 2 ;;
         --arms) arms="$2"; shift 2 ;;
         --model) model="$2"; shift 2 ;;
+        --program) program="$2"; shift 2 ;;
+        --level) level="$2"; shift 2 ;;
         --input-price) prices+=(--input-price "$2"); shift 2 ;;
         --output-price) prices+=(--output-price "$2"); shift 2 ;;
         --yes) yes=true; shift ;;
-        -h|--help) sed -n '2,27p' "$0"; exit 0 ;;
+        -h|--help) sed -n '2,32p' "$0"; exit 0 ;;
         *) echo "error: unknown option $1" >&2; exit 2 ;;
     esac
 done
@@ -53,11 +62,16 @@ done
 case "$name" in
     *[!A-Za-z0-9_-]*|"") echo "error: --name may only use letters, digits, - and _." >&2; exit 2 ;;
 esac
-for f in "$sample" "$gold"; do
+for f in "$sample" "$gold" "$program"; do
     [ -r "$f" ] || { echo "error: cannot read $f" >&2; exit 1; }
 done
 sample="$(cd "$(dirname "$sample")" && pwd)/$(basename "$sample")"
 gold="$(cd "$(dirname "$gold")" && pwd)/$(basename "$gold")"
+program="$(cd "$(dirname "$program")" && pwd)/$(basename "$program")"
+case "$level" in
+    family|group) ;;
+    *) echo "error: --level must be family or group" >&2; exit 2 ;;
+esac
 IFS=',' read -r -a arm_list <<< "$arms"
 for arm in "${arm_list[@]}"; do
     case "$arm" in
@@ -82,6 +96,7 @@ echo "Ablation run '$name'"
 echo "  tables:  ${#uids[@]} (from $sample)"
 echo "  arms:    ${arm_list[*]}"
 echo "  model:   $model"
+echo "  full:    program $(basename "$program"), level $level"
 echo "  runs:    $calls DeepClause runs (one per table and arm)"
 echo "  dataset: src/$dataset_rel (rebuilt)"
 echo "  results: $run_dir"
@@ -94,13 +109,16 @@ python3 "$here/prepare_dataset.py" "$sample" "$root/src/$dataset_rel" || exit 1
 mkdir -p "$run_dir" || exit 1
 cp "$sample" "$run_dir/sample.jsonl"
 cp "$gold" "$run_dir/gold.jsonl"
-python3 - "$run_dir/manifest.json" "$name" "$model" "$arms" "$dataset_rel" <<'EOF'
-import json, subprocess, sys, time
-out, name, model, arms, dataset = sys.argv[1:]
+python3 - "$run_dir/manifest.json" "$name" "$model" "$arms" "$dataset_rel" "$program" "$level" <<'EOF'
+import hashlib, json, os, subprocess, sys, time
+out, name, model, arms, dataset, program, level = sys.argv[1:]
 commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
 dirty = bool(subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout.strip())
 json.dump({"name": name, "model": model, "arms": arms.split(","), "dataset": "src/" + dataset,
-           "started_unix": time.time(), "git_commit": commit, "git_dirty": dirty},
+           "started_unix": time.time(), "git_commit": commit, "git_dirty": dirty,
+           "full_program": os.path.basename(program),
+           "full_program_sha256": hashlib.sha256(open(program, "rb").read()).hexdigest(),
+           "full_level": level},
           open(out, "w"), indent=1)
 EOF
 
@@ -111,9 +129,11 @@ for arm in "${arm_list[@]}"; do
         mkdir -p "$dir"
         echo
         echo "== $arm  $uid"
+        full_opts=()
+        [ "$arm" = full ] && full_opts=(--program "$program" --level "$level")
         "$root/review_agent.sh" --arm "$arm" --dataset "$dataset_rel" \
             --tables "$uid" --force --model "$model" --log-dir "$dir" \
-            > "$dir/stdout.txt" 2>&1
+            ${full_opts[@]+"${full_opts[@]}"} > "$dir/stdout.txt" 2>&1
         status=$?
         echo "$status" > "$dir/exit_status"
         tail -n 12 "$dir/stdout.txt"
@@ -124,20 +144,32 @@ for arm in "${arm_list[@]}"; do
         # Keep the paper's files as this call left them.
         paper="$root/src/$dataset_rel/papers/${uid%%/*}"
         if [ "$arm" = full ]; then
-            files="review.jsonl final_tables.json type_inference.jsonl"
+            files="review.jsonl final_tables.json type_inference.jsonl types.jsonl guided_types.jsonl"
         else
             files="review.$arm.jsonl final_tables.$arm.json"
         fi
         for f in $files; do
             [ -f "$paper/$f" ] && cp "$paper/$f" "$dir/"
         done
+        # Arm C's certificate of this table, with its typing.
+        if [ "$arm" = full ]; then
+            index="${uid##*/t}"
+            for cert in "$paper"/certificate"$index"_*.pl; do
+                [ -f "$cert" ] && cp "$cert" "$dir/"
+            done
+        fi
+        # Arm B's certificates (each carries its checking kernel).
+        if [ "$arm" = constraints ] && [ -d "$paper/certificates.constraints" ]; then
+            rm -rf "$dir/certificates.constraints"
+            cp -R "$paper/certificates.constraints" "$dir/"
+        fi
     done
 done
 
 echo
 echo "Collecting and scoring..."
 (cd "$root/src" && swipl ablation_collect.pl --dataset="$dataset_rel" \
-    --sample="$sample" --gold="$gold" --arms="$arms" \
+    --sample="$sample" --gold="$gold" --arms="$arms" --calls="$run_dir" \
     --output="$run_dir/collected.jsonl" < /dev/null) || exit 1
 python3 "$here/score_ablation.py" "$run_dir/collected.jsonl" \
     "$root/src/$dataset_rel" "$run_dir" ${prices[@]+"${prices[@]}"} || exit 1

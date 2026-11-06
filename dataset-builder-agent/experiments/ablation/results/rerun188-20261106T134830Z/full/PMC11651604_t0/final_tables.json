@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC11651604",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Low-risk subgroups.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11651604/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Medium-risk subgroups.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11651604/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–High-risk subgroups.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11651604/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"c0b8396adec4b6ea2db0e48896b6b3fd075913ace1499e08a4708f7a2adafe5d"
+}

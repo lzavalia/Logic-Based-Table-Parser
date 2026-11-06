@@ -1,0 +1,91 @@
+{
+  "pmc_id":"PMC4802489",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline Study Sample Characteristics",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC4802489/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Age‐Adjusted Pearson Correlation Coefficients Between Baseline Prolactin and Changes in Cardiovascular Disease Risk Factors",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4802489/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Incident Changes in Cardiovascular Disease Risk Factors From Baseline Prolactin (Dichotomous Outcomes)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC4802489/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Incident Changes in Cardiovascular Disease Risk Factors From Baseline Prolactin (Continuous Outcomes)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC4802489/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Age‐Adjusted Pearson Correlation Coefficients With Prolactin",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC4802489/t4"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Changes in BMI, Weight, and VAT and SAT Measurements From Baseline Prolactin",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC4802489/t5"
+    }
+  ],
+  "tables_jsonl_sha256":"2cec9a3fa714fb4b2397bdd892c397856caeab67118750087ee8d80657cca73c"
+}

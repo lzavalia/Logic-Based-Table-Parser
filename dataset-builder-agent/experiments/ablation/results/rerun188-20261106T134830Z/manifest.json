@@ -1,0 +1,16 @@
+{
+ "name": "rerun188",
+ "model": "anthropic:claude-haiku-5-5",
+ "arms": [
+  "llm-only",
+  "constraints",
+  "full"
+ ],
+ "dataset": "src/ablation/rerun188/dataset",
+ "started_unix": 1793972911.156069,
+ "git_commit": "3e1bec54ffaeb3e68bfc6173169365c32060fd6d",
+ "git_dirty": true,
+ "full_program": "sci_text.tdsl",
+ "full_program_sha256": "5ea2aed2adcc1fcaaca6130be7f8eb16ee7f4484829ed7c612542ee4561e43bf",
+ "full_level": "group"
+}

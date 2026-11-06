@@ -16,7 +16,8 @@
 #   3. the review (review_agent.sh, src/review_dataset.dml) selects a candidate
 #      for each table by its types (--scorer bit-cost, the default, or
 #      --scorer purity), has the LLM check that candidate, and writes
-#      src/dataset/papers/PMC<id>/review.jsonl.
+#      src/dataset/papers/PMC<id>/review.jsonl and the certificates of the
+#      selected tables, with the typing of their cells.
 # --no-guidelines skips step 2 and --no-review skips step 3. Both are skipped
 # when the build fails or selects no papers. A failed or skipped step 2 does
 # not stop step 3: type inference then uses the rule types. The exit status is
@@ -146,7 +147,9 @@ fi
 if [ "$review" -eq 1 ]; then
     echo
     echo "Reviewing the selected candidates of this run's papers..."
-    "$script_dir/review_agent.sh" --run "$run_name" --scorer "$scorer" ${build_args[@]+"${build_args[@]}"}
+    # Step 2 has typed the cells already (or was skipped on purpose).
+    "$script_dir/review_agent.sh" --run "$run_name" --scorer "$scorer" --no-guidelines \
+        ${build_args[@]+"${build_args[@]}"}
     review_status=$?
     [ "$status" -ne 0 ] || status="$review_status"
 fi

@@ -1,0 +1,153 @@
+{
+  "pmc_id":"PMC7154833",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Main effects of the experimental factors on the total polyphenol content and antioxidant activity (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC7154833/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Interaction between harvest time and fertilization on TPC (mg GAE·g −1 d.w.) (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC7154833/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Interaction between harvest time and fertilization on antioxidant capacity (mmol Trolox·g −1 d.w.) (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC7154833/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Main effects of the experimental factors on the polyphenol compounds (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC7154833/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Interaction between fertilization type and harvest on the polyphenols composition (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC7154833/t4"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Influence of fertilization on some production indicators (n = 3).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC7154833/t5"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC7154833/t6/h2_v1",
+      "caption":"Interaction between harvest time and fertilization on dynamic yield (kg·ha −1 ) (n = 3).",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate6_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 7",
+      "repair":null,
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Treatment": [ {"Ch": []},  {"Mo": []},  {"Og": []},  {"C": []} ]} ],
+	  "vertical metadata": [
+	    {"R 1": []},
+	    {"R 2": []},
+	    {"R 3": []},
+	    {"R 4": []},
+	    {"R 5": []},
+	    {"R 6": []},
+	    {"R 7": []},
+	    {"R 8": []},
+	    {"R 9": []},
+	    {"R 10": []}
+	  ],
+	  "data": [
+	    ["7278 ± 498.1 b–g", "7838 ± 385.37 b–e", "8665 ± 1005.19 bc", "8398 ± 1018.76 bd" ],
+	    ["5865 ± 332.67 c–i", "5865 ± 487.97 c–i", "7438 ± 654.77 b–f", "8105 ± 634.26 b–e" ],
+	    ["5092 ± 689.69 e–l", "5519 ± 308.34 c–j", "4212 ± 355.01 g–n", "5359 ± 366.77 d–k" ],
+	    ["800 ± 39.33 o–p", "2106 ± 244.31 l–p", "1333 ± 161.71 n–p", "560 ± 31.76 p" ],
+	    ["1013 ± 79.27 o–p", "2266 ± 306.92 k–p", "1600 ± 89.39 m–p", "853 ± 71.89 op" ],
+	    ["3066 ± 209.84 i–p", "2453 ± 120.61 j–p", "3946 ± 328.31 h–o", "2533 ± 222.98 j–p" ],
+	    ["11864 ± 928.43 a", "2853 ± 386.42 i–p", "5199 ± 290.46 e–l", "4932 ± 415.7 e–l" ],
+	    ["6612 ± 452.52 b–h", "5305 ± 260.83 d–k", "2800 ± 324.82 i–p", "5252 ± 637.12 d–l" ],
+	    ["11997 ± 1624.93 a", "6985 ± 390.24 b–h", "9758 ± 822.45 ab", "4532 ± 310.17 f–m" ],
+	    ["5572 ± 273.96 c–j", "7971 ± 924.68 b–e", "7731 ± 937.84 b–e", "6745 ± 382.59 b–h" ]
+	  ],
+	  "residual_corner": [ {"Harvest Time": []} ]
+	}
+      ],
+      "table_index":6,
+      "table_uid":"PMC7154833/t6"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Temperature, rainfall, relative humidity, and sunlight during the experiment.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 8",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":7,
+      "table_uid":"PMC7154833/t7"
+    }
+  ],
+  "tables_jsonl_sha256":"1c128d02ef5f947a1cb8a88cd3123503992fafd1fc17fdeb504501430f48dc2b"
+}

@@ -1,0 +1,67 @@
+{
+  "pmc_id":"PMC8427842",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline Demographics of Patients Included in the Study",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8427842/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"AUC, Sensitivity, and Specificity of the Three Models",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":4,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Training Dataset": [ {"AUC": []},  {"SEN": []},  {"SPE": []} ]},
+	    {"Validation Dataset": [ {"AUC": []},  {"SEN": []},  {"SPE": []} ]}
+	  ],
+	  "vertical metadata": [ {"Model CS": []},  {"Model D": []},  {"Model CSD": []} ],
+	  "data": [
+	    ["0.741", "0.795", "0.601", "0.780", "0.863", "0.662" ],
+	    ["0.815", "0.831", "0.660", "0.832", "0.955", "0.622" ],
+	    ["0.856", "0.831", "0.732", "0.861", "0.909", "0.770" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC8427842/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"6871a2e27b3feac363eb141cc942d839ef6e8da915836bd7c86600cc0e30c117"
+}

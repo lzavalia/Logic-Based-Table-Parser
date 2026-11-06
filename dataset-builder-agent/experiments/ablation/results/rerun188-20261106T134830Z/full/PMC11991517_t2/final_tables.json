@@ -1,0 +1,77 @@
+{
+  "pmc_id":"PMC11991517",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The basic soil properties in the study area.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11991517/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Fertilization application amount in different treatments (kg ha −1 ).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11991517/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"N use efficiency (NUE) and N partial productivity (NPP) under different treatments.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11991517/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Leaching amount of TN, NO 3 − -N and NH 4 + -N (kg·ha −1 ).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC11991517/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"N balance in 0–100 cm depth soil profile under different treatments (kg ha −1 ).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC11991517/t4"
+    }
+  ],
+  "tables_jsonl_sha256":"8c3e84775d69427fabf9416274f27bb23c8246c3c53ecfdd30c26b2cbd3afb26"
+}

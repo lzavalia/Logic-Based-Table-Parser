@@ -5,13 +5,13 @@
 % From dataset-builder-agent/src/:
 %   swipl guideline_steps.pl run-papers <run name>
 %       Prints the comma-separated PMC ids the build run selected.
-%   swipl guideline_steps.pl prepare <program.tdsl> <papers>
+%   swipl guideline_steps.pl prepare <program.tdsl> <papers> [<dataset>]
 %       Types the papers by rule and writes their guideline_requests.json.
-%   swipl guideline_steps.pl apply <program.tdsl> <papers>
+%   swipl guideline_steps.pl apply <program.tdsl> <papers> [<dataset>]
 %       Writes their guided_types.jsonl.
 %
-% <papers> is "all" or comma-separated paper names. The dataset is dataset/ in
-% the working directory.
+% <papers> is "all" or comma-separated paper names. The dataset is <dataset>,
+% by default dataset/ in the working directory.
 
 :- use_module(library(main)).
 :- use_module(library(apply)).
@@ -24,18 +24,23 @@
 main(['run-papers', Run]) :- !,
    review_run_papers("dataset", Run, Papers),
    writeln(Papers).
-main([prepare, Program, Papers0]) :- !,
+main([prepare, Program, Papers0|Rest]) :- !,
    papers(Papers0, Papers),
-   type_dataset(Program, "dataset", Papers),
-   guideline_requests(Program, "dataset", Papers, Summary),
+   dataset(Rest, Dataset),
+   type_dataset(Program, Dataset, Papers),
+   guideline_requests(Program, Dataset, Papers, Summary),
    writeln(Summary).
-main([apply, Program, Papers0]) :- !,
+main([apply, Program, Papers0|Rest]) :- !,
    papers(Papers0, Papers),
-   apply_guidelines(Program, "dataset", Papers, Summary),
+   dataset(Rest, Dataset),
+   apply_guidelines(Program, Dataset, Papers, Summary),
    writeln(Summary).
 main(Argv) :-
    format(user_error, "usage: unknown command ~q~n", [Argv]),
    halt(2).
+
+dataset([], "dataset") :- !.
+dataset([Dataset], Dataset).
 
 papers(all, none) :- !.
 papers(Text, Papers) :-

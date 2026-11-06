@@ -1,0 +1,110 @@
+{
+  "pmc_id":"PMC11972404",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of performance from seven supervised ML algorithms using all ADI-R items and 27 selected ADI-R items from sPLS-DA.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11972404/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Selected ADI-R items from sPLS-DA on component 1.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11972404/t1"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC11972404/t2/layout2",
+      "caption":"Significant diseases and functions of DEGs associated with ASD.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"ASD vs non-ASD"},
+	{"row":7,"text":"ADIR_sub1 vs non-ASD"},
+	{"row":13,"text":"ADIR_sub2 vs non-ASD"},
+	{"row":19,"text":"ADIR_sub3 vs non-ASD"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"p-value": []},  {"# Genes": []} ],
+	  "vertical metadata": [
+	    {"Familial central nervous system disease": []},
+	    {"Progressive neurological disorder": []},
+	    {"Seizure disorder": []},
+	    {"Cognitive impairment": []},
+	    {"Familial mental retardation": []},
+	    {"Neuritogenesis of pheochromocytoma cell lines": []},
+	    {
+	      "Neurodevelopmental disorder with hypotonia and cerebellar atrophy without seizures": []
+	    },
+	    {"Loss of dendritic spines": []},
+	    {"Working memory": []},
+	    {"Movement Disorders": []},
+	    {"Cerebrovascular dysfunction": []},
+	    {"Neurodevelopmental disorder": []},
+	    {"Congenital neurological disorder": []},
+	    {"Cognitive impairment": []},
+	    {"Developmental delay and hypotonia": []},
+	    {"Autism spectrum disorder or intellectual disability": []},
+	    {"Familial mental retardation": []},
+	    {"Pervasive developmental disorder": []},
+	    {"Dysmyelination": []},
+	    {"Mental retardation": []}
+	  ],
+	  "data": [
+	    ["2.10E−05", "57" ],
+	    ["1.52E−04", "57" ],
+	    ["2.71E−04", "25" ],
+	    ["3.36E−04", "34" ],
+	    ["8.62E−03", "16" ],
+	    ["2.06E−03", "2" ],
+	    ["3.76E−03", "1" ],
+	    ["4.62E−03", "2" ],
+	    ["6.85E−03", "2" ],
+	    ["7.71E−03", "19" ],
+	    ["1.85E−03", "14" ],
+	    ["2.81E−03", "14" ],
+	    ["3.04E−03", "18" ],
+	    ["1.32E−02", "17" ],
+	    ["1.42E−02", "2" ],
+	    ["1.90E−04", "28" ],
+	    ["4.61E−03", "14" ],
+	    ["5.10E−03", "13" ],
+	    ["7.65E−03", "15" ],
+	    ["8.87E−03", "18" ]
+	  ],
+	  "residual_corner": [ {"Diseases or functions annotation": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC11972404/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"3dd9748326bfcaab9e2681de0d0db1fd66c23e26923c682e85d03a1d931aa94b"
+}

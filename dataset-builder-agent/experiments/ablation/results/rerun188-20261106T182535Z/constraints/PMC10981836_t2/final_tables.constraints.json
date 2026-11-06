@@ -1,0 +1,236 @@
+{
+  "pmc_id":"PMC10981836",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of participants with or without chest pain",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10981836/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"ORs (95% CIs) for chest pain according to the TyG index",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10981836/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC10981836/t2/h2_v1",
+      "caption":"HRs (95% CIs) for all-cause mortality according to the TyG index",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":25,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"model 1": [ {"HR 1": []},  {"95% CI 1": []},  {"P -value": []} ]},
+	    {"model 2": [ {"HR 1": []},  {"95% CI 1": []},  {"P -value": []} ]},
+	    {"model 3": [ {"HR 1": []},  {"95% CI 1": []},  {"P -value": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"All participants": []},
+	    {"Continous": []},
+	    {"TyG index": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"P for trend": []},
+	    {"Pain": []},
+	    {"Continous": []},
+	    {"TyG index": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"P for trend": []},
+	    {"No pain": []},
+	    {"Continous": []},
+	    {"TyG index": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"P for trend": []}
+	  ],
+	  "data": [
+	    ["", "", "", "", "", "", "", "", "" ],
+	    [
+	      "1.29",
+	      "1.21, 1.37",
+	      "< 0.001",
+	      "1.19",
+	      "1.08, 1.30",
+	      "< 0.001",
+	      "1.21",
+	      "1.09, 1.33",
+	      "< 0.001"
+	    ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    ["—", "—", "", "—", "—", "", "—", "—", "" ],
+	    [
+	      "1.35",
+	      "1.14, 1.60",
+	      "< 0.001",
+	      "0.98",
+	      "0.84, 1.14",
+	      "0.8",
+	      "1.01",
+	      "0.86, 1.18",
+	      "> 0.9"
+	    ],
+	    [
+	      "1.48",
+	      "1.26, 1.73",
+	      "< 0.001",
+	      "1.03",
+	      "0.90, 1.18",
+	      "0.7",
+	      "1.05",
+	      "0.91, 1.21",
+	      "0.5"
+	    ],
+	    [
+	      "1.64",
+	      "1.42, 1.89",
+	      "< 0.001",
+	      "1.18",
+	      "1.02, 1.36",
+	      "0.021",
+	      "1.19",
+	      "1.03, 1.37",
+	      "0.021"
+	    ],
+	    ["", "", "< 0.001", "", "", "< 0.001", "", "", "< 0.001" ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    [
+	      "1.18",
+	      "1.02, 1.36",
+	      "0.029",
+	      "1.13",
+	      "0.96, 1.34",
+	      "0.13",
+	      "1.14",
+	      "0.94, 1.37",
+	      "0.2"
+	    ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    ["—", "—", "", "—", "—", "", "—", "—", "" ],
+	    ["1.14", "0.82, 1.58", "0.4", "0.90", "0.64, 1.26", "0.5", "0.90", "0.65, 1.27", "0.6" ],
+	    ["1.22", "0.92, 1.61", "0.2", "0.88", "0.67, 1.16", "0.4", "0.88", "0.67, 1.15", "0.3" ],
+	    [
+	      "1.45",
+	      "1.09, 1.94",
+	      "0.010",
+	      "1.12",
+	      "0.85, 1.48",
+	      "0.4",
+	      "1.13",
+	      "0.84, 1.50",
+	      "0.4"
+	    ],
+	    ["", "", "0.065", "", "", "0.065", "", "", "0.065" ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    [
+	      "1.33",
+	      "1.21, 1.46",
+	      "< 0.001",
+	      "1.20",
+	      "1.05, 1.37",
+	      "0.007",
+	      "1.25",
+	      "1.09, 1.43",
+	      "0.002"
+	    ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    ["—", "—", "", "—", "—", "", "—", "—", "" ],
+	    [
+	      "1.45",
+	      "1.14, 1.83",
+	      "0.002",
+	      "1.02",
+	      "0.83, 1.25",
+	      "0.9",
+	      "1.06",
+	      "0.86, 1.32",
+	      "0.6"
+	    ],
+	    [
+	      "1.60",
+	      "1.27, 2.01",
+	      "< 0.001",
+	      "1.10",
+	      "0.90, 1.35",
+	      "0.4",
+	      "1.15",
+	      "0.93, 1.42",
+	      "0.2"
+	    ],
+	    [
+	      "1.68",
+	      "1.33, 2.13",
+	      "< 0.001",
+	      "1.18",
+	      "0.94, 1.49",
+	      "0.2",
+	      "1.22",
+	      "0.96, 1.54",
+	      "0.10"
+	    ],
+	    ["", "", "< 0.001", "", "", "< 0.001", "", "", "< 0.001" ]
+	  ],
+	  "residual_corner": [ {"Characteristic": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC10981836/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"866f5664966569746a3c92269c9b3f4ba93cb1c6b6d8d715de338e4087fb0b55"
+}

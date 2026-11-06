@@ -1,0 +1,139 @@
+{
+  "pmc_id":"PMC12518418",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12518418/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"Summary of findings and evidence certainties assessed according to GRADE framework",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":7,
+	    "last_row":8,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"N of studies": [ {"": []} ]},
+	    {"N of participants": [ {"": []} ]},
+	    {"Absolute risk": [ {"Intravenous": []},  {"Oral iron": []} ]},
+	    {"Relative effect (CI)": [ {"": []} ]},
+	    {"Absolute effect (CI)": [ {"": []} ]},
+	    {"GRADE": [ {"": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Gestation length": []},
+	    {"Rate of preterm births": []},
+	    {"Stillbirth rate": []},
+	    {"Neonatal mortality rate": []},
+	    {"Birthweight": []},
+	    {"Cord hemoglobin": []},
+	    {"Cord ferritin": []}
+	  ],
+	  "data": [
+	    [
+	      "9",
+	      "5913",
+	      "Not applicable",
+	      "Not applicable",
+	      "MD 0.3 weeks (0.1 to 0.5)",
+	      "Not applicable",
+	      "Moderate a"
+	    ],
+	    [
+	      "7",
+	      "8431",
+	      "13 per 100",
+	      "14 per 100",
+	      "RR 0.96 (0.86 to 1.07)",
+	      "1 less per 100 (2 less to 1 more)",
+	      "Moderate a"
+	    ],
+	    [
+	      "5",
+	      "8639",
+	      "20 per 1000",
+	      "24 per 1000",
+	      "RR 0.85 (0.64 to 1.13)",
+	      "4 less per 1000 (9 less to 3 more)",
+	      "Low b"
+	    ],
+	    [
+	      "5",
+	      "8312",
+	      "20 per 1000",
+	      "23 per 1000",
+	      "RR 0.90 (0.66 to 1.22)",
+	      "3 less per 1000 (8 less to 5 more)",
+	      "Low b"
+	    ],
+	    [
+	      "13",
+	      "6887",
+	      "Not applicable",
+	      "Not applicable",
+	      "MD 15 g (−7 to 37)",
+	      "Not applicable",
+	      "Moderate a"
+	    ],
+	    [
+	      "8",
+	      "4527",
+	      "Not applicable",
+	      "Not applicable",
+	      "MD −0.05 g/l (−0.33 to 0.24)",
+	      "Not applicable",
+	      "Low c"
+	    ],
+	    [
+	      "8",
+	      "4699",
+	      "Not applicable",
+	      "Not applicable",
+	      "MD 19 µg/l (0.5 to 38)",
+	      "Not applicable",
+	      "Low c"
+	    ]
+	  ],
+	  "residual_corner": [ {"Outcome": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC12518418/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"df18c9d9e39df1bdc8a9f6035f3e391767a1af7d70c6cfcc25a3643791d848fc"
+}

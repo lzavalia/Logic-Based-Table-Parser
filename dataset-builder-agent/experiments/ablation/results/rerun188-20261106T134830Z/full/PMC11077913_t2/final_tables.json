@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC11077913",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Participant characteristics by lifetime suicidal ideation, NSSI and suicide attempt with associated p values",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11077913/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate models by sociodemographic, occupation-specific, and mental health variables for lifetime suicidal ideation, NSSI and suicide attempt",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11077913/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable models for lifetime suicidal ideation, NSSI and suicide attempt (Wald and Likelihood ratio test)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11077913/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"b41fa50e1946d9ebb56d5463ff6d3c0914cf21200a3fa1916e3b8c1c416064d9"
+}

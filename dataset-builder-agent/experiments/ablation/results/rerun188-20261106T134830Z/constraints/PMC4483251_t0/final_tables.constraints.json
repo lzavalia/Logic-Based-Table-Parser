@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC4483251",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of included trials",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC4483251/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Conventional and trial sequential analysis (TSA)-adjusted relative risks (RR) with 95 % confidence intervals for the primary and secondary outcome of mortality and serious adverse events",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4483251/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"258b4b0940d6f125af782a86d70d6902b3dbdc153f758bd648ac2a76041000f4"
+}

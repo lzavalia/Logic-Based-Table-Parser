@@ -1,0 +1,131 @@
+{
+  "pmc_id":"PMC12487654",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of baseline characteristics between married and unmarried groups",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12487654/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate and multivariate analysis of the impact of marital status on survival outcomes in vaginal cancer",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12487654/t1"
+    },
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC12487654/t2/layout1",
+      "caption":"Comparison of baseline characteristics between married and unmarried groups after propensity score matching",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"Age"},
+	{"row":7,"text":"Diagnosis year"},
+	{"row":12,"text":"Race"},
+	{"row":16,"text":"Histology"},
+	{"row":22,"text":"First primary malignancy"},
+	{"row":25,"text":"Radiotherapy"},
+	{"row":28,"text":"Surgery"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Married ( N = 2152)": []},  {"Unmarried ( N = 2152)": []},  {"P -value": []} ],
+	  "vertical metadata": [
+	    {"<50 years": []},
+	    {"50–59 years": []},
+	    {"60–69 years": []},
+	    {"70–79 years": []},
+	    {"≥80 years": []},
+	    {"2000–2005": []},
+	    {"2006–2010": []},
+	    {"2011–2015": []},
+	    {"2016–2020": []},
+	    {"White": []},
+	    {"Black": []},
+	    {"Others": []},
+	    {"Squamous cell": []},
+	    {"Adenocarcinoma": []},
+	    {"Melanoma": []},
+	    {"Epithelial cell": []},
+	    {"Others": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"None/unknown": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []}
+	  ],
+	  "data": [
+	    ["373 (17.3%)", "327 (15.2%)", "0.267" ],
+	    ["414 (19.2%)", "452 (21.0%)", "0.267" ],
+	    ["579 (26.9%)", "598 (27.8%)", "0.267" ],
+	    ["520 (24.2%)", "506 (23.5%)", "0.267" ],
+	    ["266 (12.4%)", "269 (12.5%)", "0.267" ],
+	    ["576 (26.8%)", "565 (26.3%)", "0.329" ],
+	    ["490 (22.8%)", "468 (21.7%)", "0.329" ],
+	    ["573 (26.6%)", "554 (25.7%)", "0.329" ],
+	    ["513 (23.8%)", "565 (26.3%)", "0.329" ],
+	    ["1756 (81.6%)", "1800 (83.6%)", "0.102" ],
+	    ["227 (10.5%)", "217 (10.1%)", "0.102" ],
+	    ["169 (7.85%)", "135 (6.27%)", "0.102" ],
+	    ["1385 (64.4%)", "1421 (66.0%)", "0.838" ],
+	    ["324 (15.1%)", "313 (14.5%)", "0.838" ],
+	    ["132 (6.13%)", "123 (5.72%)", "0.838" ],
+	    ["110 (5.11%)", "102 (4.74%)", "0.838" ],
+	    ["201 (9.34%)", "193 (8.97%)", "0.838" ],
+	    ["702 (32.6%)", "696 (32.3%)", "0.871" ],
+	    ["1450 (67.4%)", "1456 (67.7%)", "0.871" ],
+	    ["723 (33.6%)", "737 (34.2%)", "0.676" ],
+	    ["1429 (66.4%)", "1415 (65.8%)", "0.676" ],
+	    ["1404 (65.2%)", "1356 (63.0%)", "0.135" ],
+	    ["748 (34.8%)", "796 (37.0%)", "0.135" ]
+	  ],
+	  "residual_corner": [ {"Characteristic": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12487654/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate Cox regression analysis of marital status and vaginal cancer patients’ survival outcomes after propensity score matching",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12487654/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"fedbcaaf996cff8aeb36638368af68eb3ac910b03b0fcf80423ff4fb6110fc67"
+}

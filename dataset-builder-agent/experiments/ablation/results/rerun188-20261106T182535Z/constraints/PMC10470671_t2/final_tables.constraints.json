@@ -1,0 +1,70 @@
+{
+  "pmc_id":"PMC10470671",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline demographic characteristics among patients with and without vesicoureteral reflux.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10470671/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Hazard ratios and 95% CIs of chronic kidney disease associated with vesicoureteral reflux patients.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10470671/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"HRs and 95% CIs of chronic kidney disease associated with vesicoureteral reflux stratified by age, gender and comorbidities.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"unparseable",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [4, 8, 11, 12, 15, 18, 21, 24, 27 ],
+	"subtables": [
+	  {
+	    "column_header_rows":3,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":8,
+	    "last_row":29,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10470671/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"b3465cb110905b1210afbaf6f7ad2103c424f7b30b3b961cdc134349a699e715"
+}

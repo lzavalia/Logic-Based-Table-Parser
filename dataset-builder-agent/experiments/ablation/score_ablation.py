@@ -6,7 +6,8 @@
 
 COLLECTED is the output of src/ablation_collect.pl, DATASET_DIR the dataset
 the arms ran on, RUN_DIR the run directory of run_ablation.sh, which holds
-<arm>/<table>/review_token_usage.json for every call. Writes
+<arm>/<table>/review_token_usage.json for every call (and, for the full arm,
+guideline_token_usage.json from its guideline step, counted with it). Writes
 RUN_DIR/scores.json and RUN_DIR/summary.md and prints the summary.
 
 Each table ends in one outcome per arm:
@@ -84,13 +85,17 @@ def outcome(line):
 
 
 def usage(run_dir, arm, uid):
-    path = Path(run_dir, arm, uid.replace("/", "_"), "review_token_usage.json")
+    call_dir = Path(run_dir, arm, uid.replace("/", "_"))
+    paths = [call_dir / name for name in ("review_token_usage.json", "guideline_token_usage.json")]
     totals = {"calls": 0, "inputTokens": 0, "outputTokens": 0}
-    if not path.exists():
+    if not paths[0].exists():
         return None
-    for model_usage in json.loads(path.read_text()).values():
-        for key in totals:
-            totals[key] += model_usage.get(key, 0) or 0
+    for path in paths:
+        if not path.exists():
+            continue
+        for model_usage in json.loads(path.read_text()).values():
+            for key in totals:
+                totals[key] += model_usage.get(key, 0) or 0
     return totals
 
 

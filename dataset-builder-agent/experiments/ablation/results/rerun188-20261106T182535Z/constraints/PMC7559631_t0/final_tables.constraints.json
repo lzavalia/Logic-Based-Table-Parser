@@ -1,0 +1,69 @@
+{
+  "pmc_id":"PMC7559631",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC7559631/t0/h2_v1",
+      "caption":"Summary of findings",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":5,
+	    "last_row":7,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"No of participants (studies)": []},
+	    {"Relative effect OR (95% CI)": []},
+	    {
+	      "Absolute effects per 1,000 (95% CI)": [ {"Risk with control": []},  {"Risk with telestroke": []} ]
+	    },
+	    {"Certainty of the evidence (GRADE)": []}
+	  ],
+	  "vertical metadata": [
+	    {"IVT rate": []},
+	    {"OTT": []},
+	    {"Patients treated ≤ 3 hr": []},
+	    {"In‐hospital mortality": []},
+	    {"3‐month functional outcome rate": []},
+	    {"sICH": []}
+	  ],
+	  "data": [
+	    ["7,665 (4)", "2.60 (0.89 to 7.57)", "49", "118 (44 to 280)", "⨁ Very low" ],
+	    ["8,112 (6)", "–", "–", "MD −27.97 (−35.51 to −20.42)", "⨁⨁ Low" ],
+	    ["629 (3)", "2.15 (1.37 to 3.40)", "593", "758 (666 to 832)", "⨁⨁⨁ Moderate" ],
+	    ["6,919 (4)", "0.67 (0.52 to 0.87)", "53", "36 (29 to 47)", "⨁ Very low" ],
+	    ["3,854 (3)", "1.29 1.01 to 1.63)", "446", "509 (448 to 567)", "⨁ Very low" ],
+	    ["1,437 (6)", "1.27 (0.65 to 2.49)", "25", "32 (17 to 61)", "⨁⨁ Low" ]
+	  ],
+	  "residual_corner": [ {"Outcomes": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC7559631/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"48c76abe06fb9ebad157b7761e16f9b648aea2caac8080461e5125b9c1bdd5bf"
+}

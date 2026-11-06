@@ -21,6 +21,8 @@
 %   cell_type(+Analyzer, +Text, -Type, -Source)
 %   type_family(+Analyzer, +Type, -Family)
 %   type_group(+Analyzer, +Type, -Group)
+%   type_name(+TypeExpr, -Name)
+%       The name a type expression is reported by (see below).
 %
 % --- cell types --------------------------------------------------------------
 %
@@ -75,7 +77,8 @@
       cell_type/4,
       type_family/3,
       type_group/3,
-      type_strict_subtype/3
+      type_strict_subtype/3,
+      type_name/2
    ]).
 
 :- if(exists_source(library(json))).

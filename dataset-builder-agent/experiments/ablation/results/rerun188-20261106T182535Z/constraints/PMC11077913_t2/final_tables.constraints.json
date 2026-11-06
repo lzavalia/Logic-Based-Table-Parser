@@ -1,0 +1,244 @@
+{
+  "pmc_id":"PMC11077913",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Participant characteristics by lifetime suicidal ideation, NSSI and suicide attempt with associated p values",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11077913/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Univariate models by sociodemographic, occupation-specific, and mental health variables for lifetime suicidal ideation, NSSI and suicide attempt",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11077913/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC11077913/t2/layout13",
+      "caption":"Multivariable models for lifetime suicidal ideation, NSSI and suicide attempt (Wald and Likelihood ratio test)",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout13.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [2, 8 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":11,
+	    "last_row":14,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [ {"row":2,"text":"GAD-7 category"},  {"row":8,"text":"PHQ-9 category"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"": [ {"Yes N(%)": []} ]},
+	    {"": [ {"No N(%)": []} ]},
+	    {"Lifetime suicidal ideation a": [ {"IRR d": []},  {"95% CI": []},  {"Wald test": []} ]},
+	    {"Lifetime NSSI b": [ {"OR e": []},  {"95% CI": []},  {"LRT f": []} ]},
+	    {"Lifetime suicide attempt c": [ {"OR": []},  {"95% CI": []},  {"LRT": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Minimal GAD": []},
+	    {"Mild GAD": []},
+	    {"Moderate GAD": []},
+	    {"Severe GAD": []},
+	    {"Trend": []},
+	    {"No depression": []},
+	    {"Mild depression": []},
+	    {"Moderate depression": []},
+	    {"Moderate/ severe depression": []},
+	    {"Severe depression": []},
+	    {"Trend": []}
+	  ],
+	  "data": [
+	    [
+	      "106 (10.5%)",
+	      "902 (89.5%)",
+	      "1.00",
+	      "-",
+	      "< 0.001",
+	      "1.00",
+	      "-",
+	      "< 0.001",
+	      "1.00",
+	      "-",
+	      "0.002"
+	    ],
+	    [
+	      "131 (32.8%)",
+	      "268 (67.2%)",
+	      "1.53",
+	      "1.19–1.97",
+	      "< 0.001",
+	      "2.16",
+	      "1.12–4.17",
+	      "< 0.001",
+	      "1.54",
+	      "0.78–3.05",
+	      "0.002"
+	    ],
+	    [
+	      "85 (54.5%)",
+	      "71 (45.5%)",
+	      "1.89",
+	      "1.43–2.49",
+	      "< 0.001",
+	      "5.38",
+	      "2.53–11.43",
+	      "< 0.001",
+	      "3.23",
+	      "1.50–6.95",
+	      "0.002"
+	    ],
+	    [
+	      "44 (71.0%)",
+	      "18 (29.0%)",
+	      "2.00",
+	      "1.44–2.78",
+	      "< 0.001",
+	      "4.68",
+	      "1.70-12.89",
+	      "< 0.001",
+	      "2.94",
+	      "1.09–7.90",
+	      "0.002"
+	    ],
+	    [
+	      "-",
+	      "-",
+	      "1.30",
+	      "1.17–1.44",
+	      "< 0.001",
+	      "1.89",
+	      "1.42–2.61",
+	      "< 0.001",
+	      "1.65",
+	      "1.51–2.57",
+	      "0.002"
+	    ],
+	    [
+	      "110 (10.9%)",
+	      "901 (89.1%)",
+	      "1.00",
+	      "-",
+	      "< 0.001",
+	      "1.00",
+	      "-",
+	      "0.006",
+	      "1.00",
+	      "-",
+	      "< 0.001"
+	    ],
+	    [
+	      "120 (31.2%)",
+	      "265 (68.8%)",
+	      "1.34",
+	      "1.05–1.72",
+	      "< 0.001",
+	      "3.11",
+	      "1.64–5.90",
+	      "0.006",
+	      "5.15",
+	      "2.50-10.61",
+	      "< 0.001"
+	    ],
+	    [
+	      "80 (53.0%)",
+	      "71 (47.0%)",
+	      "1.49",
+	      "1.11–1.99",
+	      "< 0.001",
+	      "1.48",
+	      "0.61–3.60",
+	      "0.006",
+	      "6.37",
+	      "2.67–15.21",
+	      "< 0.001"
+	    ],
+	    [
+	      "39 (67.2%)",
+	      "19 (32.8%)",
+	      "1.58",
+	      "1.15–2.18",
+	      "< 0.001",
+	      "5.38",
+	      "2.09–13.79",
+	      "0.006",
+	      "11.75",
+	      "4.30-32.12",
+	      "< 0.001"
+	    ],
+	    [
+	      "19 (90.5%)",
+	      "2 (9.5%)",
+	      "1.90",
+	      "1.37–2.64",
+	      "< 0.001",
+	      "5.07",
+	      "1.34–19.12",
+	      "0.006",
+	      "18.79",
+	      "5.09–69.39",
+	      "< 0.001"
+	    ],
+	    [
+	      "-",
+	      "-",
+	      "1.16",
+	      "1.06–1.27",
+	      "< 0.001",
+	      "1.46",
+	      "1.11–1.90",
+	      "0.006",
+	      "1.97",
+	      "1.21–2.25",
+	      "< 0.001"
+	    ]
+	  ],
+	  "residual_corner": [ {"": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC11077913/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"b41fa50e1946d9ebb56d5463ff6d3c0914cf21200a3fa1916e3b8c1c416064d9"
+}

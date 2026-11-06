@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC5829520",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of 44 network meta-analyses and 49 network comparisons of medical interventions included in study. Values are numbers (percentages) unless stated otherwise",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5829520/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Treatment comparisons selected in each network, type of evidence (direct, indirect, or both), and meta-analysis method that provides strong evidence against similarity of treatments for primary outcome studied (see appendix for more detailed version of table)",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC5829520/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Number of comparisons with strong evidence against the null hypothesis from pairwise and network meta-analysis. Values are numbers (percentages) unless stated otherwise",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC5829520/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"989d02a4d4eb5be471300f60b896d5bf083977df311d4b211a427625072a8262"
+}

@@ -44,6 +44,18 @@
 % final_tables.json with each table's segmentation added. tables.jsonl, and
 % the files of the full pipeline, are left unchanged.
 %
+% Arm B also writes the geometric certificate of every valid table whose
+% matched candidate is labelable, as the full pipeline does
+% (dataset_pipeline:selected_certificates/3), into
+% papers/PMC<id>/certificates.constraints/ under the name the candidate's
+% record gives (certificateN_hH_vV.pl or certificateN_layoutK.pl). Each one
+% carries its checking kernel, and no typing: arm B uses no types. The
+% directory keeps them apart from the full pipeline's certificates, which its
+% review replaces in papers/PMC<id>/ itself; a new arm B review removes the
+% certificates it no longer selects. Arm A has no parser candidate and so no
+% certificate. write_arm_certificates/4 writes them again from a published
+% review without asking the model (certify_reviews.pl).
+%
 %   ablation_settings(+WorkspaceDir, +Arm, +Papers, +Tables, +Force, +Model,
 %                     -Settings)
 %   ablation_queue(+DatasetDir, +Settings, -Papers, -Skipped)
@@ -56,6 +68,8 @@
 %   ablation_skip_result(+Item, -Result)
 %   ablation_failed_result(+Item, +Reason, +Attempts, -Result)
 %   publish_ablation_review(+DatasetDir, +Paper, +Settings, +Results, -Line)
+%   write_arm_certificates(+PaperDir, +Arm, +Records, +Reviews)
+%   arm_certificate_dir(+Arm, -DirName)
 %   segmentation_prompt(+Record, -Prompt)
 %   answer_segmentation(+Answer, +Record, -Outcome)
 %       Outcome is ok(Segmentation, UncoveredSlots) or bad(Reason).
@@ -75,6 +89,8 @@
       ablation_skip_result/2,
       ablation_failed_result/4,
       publish_ablation_review/5,
+      write_arm_certificates/4,
+      arm_certificate_dir/2,
       segmentation_prompt/2,
       answer_segmentation/3,
       candidate_segmentation/3,
@@ -98,6 +114,9 @@
                              answer_dict/2, answer_integer/2, answer_problem/2,
                              dict_value/3, shorten/3, read_jsonl/2]).
 :- use_module(table_export, [candidate_structures/4, write_json_atomically/3]).
+:- use_module(dataset_pipeline, [selected_certificates/3,
+                                 write_checked_certificate/2,
+                                 is_certificate_file_name/1]).
 
 % Bump this whenever the prompt text or the reading of answers changes.
 % Both arms share it: they differ only in what is done with the answer.
@@ -110,6 +129,10 @@ arm("constraints", "llm_segmentation_matched_to_candidates").
 arm_files(Arm, ReviewFile, ExportFile) :-
    format(atom(ReviewFile), "review.~s.jsonl", [Arm]),
    format(atom(ExportFile), "final_tables.~s.json", [Arm]).
+
+% arm_certificate_dir(+Arm, -DirName): the directory of papers/PMC<id>/ that
+% holds the arm's certificates; only arm B has one.
+arm_certificate_dir("constraints", 'certificates.constraints').
 
 % --- settings ----------------------------------------------------------------
 
@@ -503,7 +526,8 @@ publish_ablation_review(DatasetDir, ablation_paper(Name, PaperDir, Sha, Items),
    arm_files(Settings.arm, ReviewName, ExportName),
    setup_call_cleanup(
       true,
-      write_review(PaperDir, Name, Sha, ReviewName, ExportName, Results),
+      write_review(PaperDir, Name, Sha, Settings.arm, ReviewName, ExportName,
+                   Results),
       delete_directory(LockDir)),
    findall(S, ( member(R, Results), S = R.final_status ), Statuses),
    msort(Statuses, Sorted),
@@ -514,7 +538,7 @@ publish_ablation_review(DatasetDir, ablation_paper(Name, PaperDir, Sha, Items),
 result_matches_item(ablation_item(Uid, _, _, _), Result) :-
    get_dict(table_uid, Result, Uid).
 
-write_review(PaperDir, Name, Sha, ReviewName, ExportName, Results) :-
+write_review(PaperDir, Name, Sha, Arm, ReviewName, ExportName, Results) :-
    directory_file_path(PaperDir, 'tables.jsonl', TablesFile),
    file_sha256(TablesFile, Hash), atom_string(Hash, Current),
    (  Current == Sha
@@ -523,8 +547,10 @@ write_review(PaperDir, Name, Sha, ReviewName, ExportName, Results) :-
                   context(publish_ablation_review/5, 'tables.jsonl changed; review again'))) ),
    findall(R, ( member(R0, Results), put_dict(tables_jsonl_sha256, R0, Sha, R) ), Reviews),
    read_jsonl(TablesFile, Records),
-   % The export first: review.<arm>.jsonl marks the review as current.
+   % The export and certificates first: review.<arm>.jsonl marks the review
+   % as current.
    write_export(PaperDir, ExportName, Sha, Records, Reviews),
+   write_arm_certificates(PaperDir, Arm, Records, Reviews),
    get_time(Now), Stamp is floor(Now * 1000000),
    format(atom(TempName), ".~w.~d.tmp", [ReviewName, Stamp]),
    directory_file_path(PaperDir, TempName, Temp),
@@ -539,6 +565,43 @@ write_review(PaperDir, Name, Sha, ReviewName, ExportName, Results) :-
          Error,
          ( ( exists_file(Temp) -> delete_file(Temp) ; true ),
            throw(Error) )).
+
+% write_arm_certificates(+PaperDir, +Arm, +Records, +Reviews)
+% Records are the paper's tables.jsonl records and Reviews its review.<arm>
+% records, in the same order. For an arm with a certificate directory
+% (arm_certificate_dir/2), writes there the certificate of every valid table
+% whose selected candidate is labelable, each one into a temporary file,
+% read back and checked by the kernel (write_checked_certificate/2) before
+% any is renamed, and removes the certificates there that are not selected.
+% Any other arm writes nothing.
+write_arm_certificates(PaperDir, Arm0, Records, Reviews) :-
+   text_to_string(Arm0, Arm),
+   (  arm_certificate_dir(Arm, DirName)
+   -> directory_file_path(PaperDir, DirName, Dir),
+      selected_certificates(Records, Reviews, Certificates),
+      (  exists_directory(Dir) -> true ; make_directory(Dir) ),
+      get_time(Now), Stamp is floor(Now * 1000000),
+      catch(findall(Temp-Final,
+                    ( member(Name-Facts, Certificates),
+                      format(atom(TempName), ".~w.~d.tmp", [Name, Stamp]),
+                      directory_file_path(Dir, TempName, Temp),
+                      directory_file_path(Dir, Name, Final),
+                      write_checked_certificate(Temp, Facts) ),
+                    Outputs),
+            Error,
+            ( forall(( member(Name-_, Certificates),
+                       format(atom(TempName), ".~w.~d.tmp", [Name, Stamp]),
+                       directory_file_path(Dir, TempName, Temp),
+                       exists_file(Temp) ),
+                     delete_file(Temp)),
+              throw(Error) )),
+      forall(member(Temp-Final, Outputs), rename_file(Temp, Final)),
+      directory_files(Dir, Entries),
+      forall(( member(Entry, Entries),
+               is_certificate_file_name(Entry),
+               \+ memberchk(Entry-_, Certificates) ),
+             ( directory_file_path(Dir, Entry, Stale), delete_file(Stale) ))
+   ;  true ).
 
 status_counts([], "nothing to review") :- !.
 status_counts(Sorted, Text) :-

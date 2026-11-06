@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC3602089",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The risk of incident dementia during follow-up in 888 participants aged 75 years and older without dementia at baseline.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC3602089/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of individuals with and without depressive symptoms and with and without major depression at baseline according to incident dementia diagnosis (n = 888).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC3602089/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"c4421d69fa88f8db2ddae18fca16403127dbba6a04650cae75e8984330a33338"
+}

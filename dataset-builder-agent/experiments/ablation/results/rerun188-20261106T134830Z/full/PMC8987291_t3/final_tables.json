@@ -1,0 +1,63 @@
+{
+  "pmc_id":"PMC8987291",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Main characteristics of the included systematic reviews or meta-analysis that evaluate the role of HE4 in the diagnosis of diseases.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8987291/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Main characteristics of the included systematic reviews or meta-analysis that evaluate the role of HE4 in the prognosis of diseases.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC8987291/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The results of GRADE assessment of the evidence certainty on the association between the diagnostic accuracy of HE4 and diverse diseases.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC8987291/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The results of GRADE assessment of the evidence certainty on the association between HE4 and diverse diseases in prognosis.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC8987291/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"fbda66206e2d4e824cc040851f7939053c88ee1a52a3c84bb3b374bf31307d1d"
+}

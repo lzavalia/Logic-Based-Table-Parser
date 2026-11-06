@@ -60,6 +60,56 @@
 % So a header cell may head several subtables, but data is never shared, no
 % cell is split between data and metadata, and no slot is left unlabelled.
 %
+% Either version may also carry a typing section, which states the type of
+% every cell of the raster and how it was reached: by the deterministic
+% rules of a type DSL program, or by a model following the program's
+% guidelines (type_dsl_engine.pl, table_type_abstraction.pl and
+% type_guidelines.pl hold the semantics that this kernel checks again):
+%   typing_version(1).
+%   type_program(Name, Sha256).      optional, informational
+%   type_rule(N, Origin, Pattern, Type).  N = 0, 1, ..: the rules in program
+%                                    order; Pattern is equals(S), prefix(S),
+%                                    suffix(S), regex(R), and(P, Q), or(P, Q)
+%                                    or not(P), on the normalized text
+%   type_subtype(Sub, Super).        the declared subtypes, by name
+%   guideline(N, Prompt, Type).      N = 0, 1, ..: the guidelines, in order
+%   cell_text(Id, Text).             the text of every cell of the raster,
+%   synthetic_cell(Id).              or that it is padding (typed empty)
+%   cell_type(Id, Type, Derivation). one per cell of the raster
+% Derivation is one of
+%   rules                  the rules decide Type and the cell is not routed
+%                          to the guidelines
+%   guideline(Batch)       a model chose Type for the routed cell (in the
+%                          guideline batch Batch)
+%   guideline_none(Batch)  a model was asked and kept the rule type
+%   guideline_pending      the cell was routed but has no usable answer yet,
+%                          so the rule type stands
+% The kernel replays the rules: it normalizes each text (trimmed, runs of
+% white space made one space), runs every rule on it (regexes match the
+% whole text, with PCRE) and takes the most specific matched type, the first
+% matching rule deciding between unrelated ones; no match is untyped, empty
+% text empty. From that rule type it decides whether the cell is routed: the
+% rule type is not empty, some guideline type lies strictly below it (or it
+% is untyped and the text has a letter), and the text is not empty. A cell
+% that is not routed must be derived by rules; a routed one must not be, and
+% a model may only have chosen one of its allowed types. So everything the
+% rules decide is proved, and what a model decided is stated as an
+% assumption: which answer it gave is not checked, only that it was allowed.
+% A typing section needs library(pcre); without it the certificate is
+% rejected (typing_needs_pcre).
+%
+% Either version may also carry, at most once,
+%   checking_kernel(Sha256, Source).  the source text of a kernel, and the
+%                                    SHA-256 of its UTF-8 bytes in hex
+% which makes the certificate self-contained: run as a program, it loads
+% this source as its checker, after checking the hash, and prints the hash
+% (table_certify.pl writes the program). The kernel only checks that the
+% hash is that of the source. Whether the embedded kernel is one to trust
+% is for whoever runs the certificate to decide, by comparing the printed
+% hash with that of a kernel they trust, or by checking the certificate as
+% data with such a kernel instead (check_certificate_file/2), which never
+% runs the embedded one.
+%
 % This file is the whole trusted base: it depends only on SWI-Prolog's
 % standard libraries, and checks everything the certificate states rather
 % than trusting the generator (table_certify.pl).
@@ -71,17 +121,25 @@
             read_certificate_file/2,      % +File, -Facts
             check_loaded_certificate/0,
             axis_paths/4,                 % +Raster, +Hmd, +Vmd, -Paths
-            transpose_raster/2            % +Raster, -Transposed
+            transpose_raster/2,           % +Raster, -Transposed
+            text_sha256/2,                % +Text, -Hex
+            typing_report/2,              % +Facts, -Lines
+            typing_explanation/2          % +Facts, -Lines
           ]).
 
 :- use_module(library(lists)).
 :- use_module(library(apply)).
 :- use_module(library(pairs)).
 :- use_module(library(assoc)).
+:- use_module(library(sha)).
+% Only a typing section needs PCRE, so a kernel without it still checks the
+% geometry.
+:- catch(use_module(library(pcre)), _, true).
 
 % certificate_fact(Version, Name, Arity)
 certificate_fact(_, certificate_version, 1).
 certificate_fact(_, table_uid, 1).
+certificate_fact(_, checking_kernel, 2).
 certificate_fact(_, raster, 1).
 certificate_fact(1, boundary, 2).
 certificate_fact(1, claim, 1).
@@ -93,6 +151,16 @@ certificate_fact(2, boundary, 3).
 certificate_fact(2, claim, 2).
 certificate_fact(2, column_path, 3).
 certificate_fact(2, row_path, 3).
+certificate_fact(_, Name, Arity) :- typing_fact_signature(Name, Arity).
+
+typing_fact_signature(typing_version, 1).
+typing_fact_signature(type_program, 2).
+typing_fact_signature(type_rule, 4).
+typing_fact_signature(type_subtype, 2).
+typing_fact_signature(guideline, 3).
+typing_fact_signature(cell_text, 2).
+typing_fact_signature(synthetic_cell, 1).
+typing_fact_signature(cell_type, 3).
 
 % --- entry points ----------------------------------------------------------
 
@@ -144,7 +212,15 @@ check_loaded_certificate :-
            Facts),
    check_certificate(Facts, Verdict),
    (  Verdict == accepted
-   -> format("certificate accepted~n")
+   -> format("certificate accepted~n"),
+      typing_report(Facts, Report),
+      forall(member(Line, Report), format("~s~n", [Line])),
+      current_prolog_flag(argv, Argv),
+      (  memberchk('--explain', Argv)
+      -> typing_explanation(Facts, Lines),
+         forall(member(Line, Lines), format("~s~n", [Line]))
+      ;  true
+      )
    ;  format(user_error, "certificate rejected: ~q~n", [Verdict]),
       fail
    ).
@@ -161,10 +237,14 @@ check_steps(Facts) :-
    one_fact(certificate_version(Version), Facts),
    require(memberchk(Version, [1, 2]), unsupported_version(Version)),
    optional_fact(table_uid(_), Facts),
+   optional_fact(checking_kernel(_, _), Facts),
+   forall(member(checking_kernel(Sha, Source), Facts),
+          check_embedded_kernel(Sha, Source)),
    one_fact(raster(Raster), Facts),
    require(rectangular_raster(Raster, Rows, Cols), raster_not_rectangular),
    rectangular_cells(Raster),
-   check_version(Version, Facts, Raster, Rows, Cols).
+   check_version(Version, Facts, Raster, Rows, Cols),
+   check_typing(Facts, Raster).
 
 check_version(1, Facts, Raster, Rows, Cols) :-
    one_fact(boundary(Hmd, Vmd), Facts),
@@ -223,6 +303,19 @@ one_keyed(Template, Facts) :-
    functor(Template, Name, Arity),
    arg(1, Template, Key),
    require(Found = [Template], expected_one_fact(Name/Arity, Key)).
+
+% --- the embedded kernel ---------------------------------------------------
+
+check_embedded_kernel(Sha, Source) :-
+   require(( string(Source), atom(Sha) ), embedded_kernel_malformed),
+   text_sha256(Source, Actual),
+   require(Actual == Sha, embedded_kernel_hash_mismatch(Sha, Actual)).
+
+% text_sha256(+Text, -Hex): the SHA-256 of Text's UTF-8 bytes, as a
+% lower-case hex atom (the same as `shasum -a 256` of a UTF-8 file).
+text_sha256(Text, Hex) :-
+   sha_hash(Text, Hash, [algorithm(sha256), encoding(utf8)]),
+   hash_atom(Hash, Hex).
 
 % --- version 2: subtables --------------------------------------------------
 
@@ -518,3 +611,276 @@ transpose_rows([_|More], Rows, [Column|Columns]) :-
    transpose_rows(More, Rests, Columns).
 
 split_head([Head|Tail], Head, Tail).
+
+% --- typing ----------------------------------------------------------------
+
+% check_typing(+Facts, +Raster): the typing section, if there is one.
+check_typing(Facts, Raster) :-
+   (  has_typing(Facts)
+   -> one_fact(typing_version(TypingVersion), Facts),
+      require(TypingVersion == 1, unsupported_typing_version(TypingVersion)),
+      optional_fact(type_program(_, _), Facts),
+      require(pcre_available, typing_needs_pcre),
+      cell_derivations(Facts, Raster, _)
+   ;  true
+   ).
+
+has_typing(Facts) :-
+   member(Fact, Facts),
+   functor(Fact, Name, Arity),
+   typing_fact_signature(Name, Arity), !.
+
+pcre_available :-
+   current_predicate(pcre:re_match/2).
+
+% cell_derivations(+Facts, +Raster, -Cells): checks the typing of every cell
+% of Raster, and that every cell fact names one; Cells is
+% cell(Id, Text, Type, Derivation, RuleType, Why, Allowed) for each, in id
+% order. Why is rule(Origin), no_rule, empty_text or synthetic; Allowed the
+% guideline types the cell may take, [] if it is not routed.
+cell_derivations(Facts, Raster, Cells) :-
+   typing_program(Facts, Program),
+   findall(Id, ( member(Row, Raster), member(Id, Row) ), Ids0),
+   sort(Ids0, Ids),
+   forall(( member(Fact, Facts), cell_fact_id(Fact, Id) ),
+          require(ord_memberchk(Id, Ids), typing_fact_for_unknown_cell(Fact))),
+   maplist(cell_derivation(Program, Facts), Ids, Cells).
+
+cell_fact_id(cell_type(Id, _, _), Id).
+cell_fact_id(cell_text(Id, _), Id).
+cell_fact_id(synthetic_cell(Id), Id).
+
+cell_derivation(Program, Facts, Id,
+                cell(Id, Text, Type, Derivation, RuleType, Why, Allowed)) :-
+   findall(T-D, member(cell_type(Id, T, D), Facts), Types),
+   require(Types = [Type-Derivation], expected_one_cell_type(Id)),
+   findall(text(T), member(cell_text(Id, T), Facts), Texts0),
+   findall(synthetic, member(synthetic_cell(Id), Facts), Texts1),
+   append(Texts0, Texts1, Texts),
+   require(Texts = [Source], expected_one_cell_text(Id)),
+   (  Source = text(Text)
+   -> require(string(Text), cell_text_not_a_string(Id))
+   ;  Text = synthetic
+   ),
+   rule_type(Program, Source, RuleType, Why, Normalized),
+   routes(Program, RuleType, Normalized, Allowed),
+   check_derivation(Derivation, Id, Type, RuleType, Allowed).
+
+check_derivation(rules, Id, Type, RuleType, Allowed) :- !,
+   require(Allowed == [], routed_cell_typed_by_rules(Id, RuleType, Allowed)),
+   require(Type == RuleType, rule_type_mismatch(Id, Type, RuleType)).
+check_derivation(guideline(Batch), Id, Type, _, Allowed) :- !,
+   require(string(Batch), derivation_malformed(Id)),
+   require(Allowed \== [], cell_not_routed(Id)),
+   require(memberchk(Type, Allowed), guideline_type_not_allowed(Id, Type, Allowed)).
+check_derivation(guideline_none(Batch), Id, Type, RuleType, Allowed) :- !,
+   require(string(Batch), derivation_malformed(Id)),
+   require(Allowed \== [], cell_not_routed(Id)),
+   require(Type == RuleType, rule_type_mismatch(Id, Type, RuleType)).
+check_derivation(guideline_pending, Id, Type, RuleType, Allowed) :- !,
+   require(Allowed \== [], cell_not_routed(Id)),
+   require(Type == RuleType, rule_type_mismatch(Id, Type, RuleType)).
+check_derivation(Derivation, Id, _, _, _) :-
+   throw(certificate_rejected(unknown_derivation(Id, Derivation))).
+
+% typing_program(+Facts, -Program): program(Rules, Subtypes, GuidelineTypes),
+% Rules the N-rule(Origin, Pattern, Type) in order, Subtypes Sub-Super
+% pairs and GuidelineTypes the guideline types in order of their first
+% guideline.
+typing_program(Facts, program(Rules, Subtypes, GuidelineTypes)) :-
+   findall(N-rule(O, P, T), member(type_rule(N, O, P, T), Facts), Rules0),
+   numbered(Rules0, type_rules_not_numbered, Rules),
+   forall(member(N-rule(O, P, T), Rules),
+          (  require(( string(O), atom(T), valid_pattern(P) ), rule_malformed(N)),
+             forall(sub_regex(P, R),
+                    require(catch(( re_compile_anchored(R), true ), _, fail),
+                            rule_regex_invalid(N))) )),
+   findall(Sub-Super, member(type_subtype(Sub, Super), Facts), Subtypes),
+   forall(member(Sub-Super, Subtypes),
+          require(( atom(Sub), atom(Super) ), type_subtype_malformed(Sub, Super))),
+   findall(N-guideline(Pr, T), member(guideline(N, Pr, T), Facts), Guidelines0),
+   numbered(Guidelines0, guidelines_not_numbered, Guidelines),
+   forall(member(N-guideline(Pr, T), Guidelines),
+          require(( string(Pr), atom(T) ), guideline_malformed(N))),
+   findall(T, member(_-guideline(_, T), Guidelines), Ts),
+   list_to_set(Ts, GuidelineTypes).
+
+% numbered(+Pairs, +Reason, -Sorted): keys 0 .. N-1, each once.
+numbered(Pairs, Reason, Sorted) :-
+   keysort(Pairs, Sorted),
+   pairs_keys(Sorted, Keys),
+   length(Keys, Count),
+   Last is Count - 1,
+   require(numlist_or_empty(0, Last, Keys), Reason).
+
+valid_pattern(equals(S)) :- string(S).
+valid_pattern(prefix(S)) :- string(S).
+valid_pattern(suffix(S)) :- string(S).
+valid_pattern(regex(R)) :- string(R).
+valid_pattern(and(P, Q)) :- valid_pattern(P), valid_pattern(Q).
+valid_pattern(or(P, Q)) :- valid_pattern(P), valid_pattern(Q).
+valid_pattern(not(P)) :- valid_pattern(P).
+
+sub_regex(regex(R), R).
+sub_regex(and(P, Q), R) :- ( sub_regex(P, R) ; sub_regex(Q, R) ).
+sub_regex(or(P, Q), R) :- ( sub_regex(P, R) ; sub_regex(Q, R) ).
+sub_regex(not(P), R) :- sub_regex(P, R).
+
+% A regex must match the whole text, as type_dsl_engine compiles it.
+anchored(R, Anchored) :-
+   string_concat("\\A(?:", R, Open),
+   string_concat(Open, ")\\z", Anchored).
+
+re_compile_anchored(R) :-
+   anchored(R, Anchored),
+   pcre:re_compile(Anchored, _, []).
+
+matches(equals(S), Text) :- Text == S.
+matches(prefix(S), Text) :- string_concat(S, _, Text).
+matches(suffix(S), Text) :- string_concat(_, S, Text).
+matches(regex(R), Text) :-
+   anchored(R, Anchored),
+   pcre:re_match(Anchored, Text).
+matches(and(P, Q), Text) :- matches(P, Text), matches(Q, Text).
+matches(or(P, Q), Text) :- ( matches(P, Text) -> true ; matches(Q, Text) ).
+matches(not(P), Text) :- \+ matches(P, Text).
+
+% rule_type(+Program, +Source, -RuleType, -Why, -Normalized)
+% Source is text(Text) or synthetic.
+rule_type(_, synthetic, empty, synthetic, "") :- !.
+rule_type(program(Rules, Subtypes, _), text(Text), RuleType, Why, Normalized) :-
+   normalize_text(Text, Normalized),
+   (  Normalized == ""
+   -> RuleType = empty, Why = empty_text
+   ;  findall(O-T, ( member(_-rule(O, P, T), Rules), once(matches(P, Normalized)) ),
+              Matched),
+      (  Matched == []
+      -> RuleType = untyped, Why = no_rule
+      ;  pairs_values(Matched, Types),
+         include(most_specific(Subtypes, Types), Matched, Specific),
+         % Types that are subtypes of each other (a cycle) eliminate one
+         % another; the first matching rule then decides.
+         (  Specific = [Origin-RuleType|_]
+         -> true
+         ;  Matched = [Origin-RuleType|_]
+         ),
+         Why = rule(Origin)
+      )
+   ).
+
+normalize_text(Text, Normalized) :-
+   split_string(Text, " \t\n\r\u00A0", " \t\n\r\u00A0", Parts0),
+   exclude(==(""), Parts0, Parts),
+   atomic_list_concat(Parts, ' ', Atom),
+   atom_string(Atom, Normalized).
+
+% A matched type is most specific when no other matched type is a strict
+% subtype of it.
+most_specific(Subtypes, Types, _-Type) :-
+   \+ ( member(Other, Types),
+        Other \== Type,
+        strict_subtype(Subtypes, Other, Type) ).
+
+strict_subtype(Subtypes, Sub, Super) :-
+   strict_subtype(Subtypes, Sub, Super, [Sub]).
+
+strict_subtype(Subtypes, Sub, Super, Seen) :-
+   member(Sub-Mid, Subtypes),
+   \+ memberchk(Mid, Seen),
+   (  Mid == Super
+   -> true
+   ;  strict_subtype(Subtypes, Mid, Super, [Mid|Seen])
+   ),
+   !.
+
+% routes(+Program, +RuleType, +Normalized, -Allowed): the guideline types a
+% cell may take, [] when it is not routed to the guidelines.
+routes(program(_, Subtypes, GuidelineTypes), RuleType, Normalized, Allowed) :-
+   (  RuleType \== empty,
+      Normalized \== "",
+      (  RuleType == untyped
+      -> has_letter(Normalized),
+         Allowed0 = GuidelineTypes
+      ;  include(below(Subtypes, RuleType), GuidelineTypes, Allowed0)
+      )
+   -> Allowed = Allowed0
+   ;  Allowed = []
+   ).
+
+below(Subtypes, RuleType, Type) :-
+   strict_subtype(Subtypes, Type, RuleType).
+
+% A letter: alphanumeric, not a digit, not an underscore.
+has_letter(Text) :-
+   sub_string(Text, _, 1, _, Char),
+   char_type(Char, alpha),
+   \+ char_type(Char, digit(_)),
+   Char \== "_", !.
+
+% --- typing reports --------------------------------------------------------
+
+% typing_report(+Facts, -Lines): for an accepted certificate with a typing
+% section, a summary of how its cells were typed; [] without one.
+typing_report(Facts, Lines) :-
+   (  has_typing(Facts),
+      member(raster(Raster), Facts)
+   -> cell_derivations(Facts, Raster, Cells),
+      length(Cells, Total),
+      aggregate_count(Cells, rule_typed, Rule),
+      aggregate_count(Cells, empty_or_untyped, Plain),
+      aggregate_count(Cells, model_chosen, Chosen),
+      aggregate_count(Cells, model_kept, Kept),
+      aggregate_count(Cells, pending, Pending),
+      format(string(L1), "typing: ~d cell(s), each checked again by this kernel", [Total]),
+      format(string(L2), "  ~d typed by deterministic rules (replayed), ~d empty or untyped by the rules",
+             [Rule, Plain]),
+      format(string(L3), "  ~d typed by a model following the guidelines (assumed; checked to be allowed)",
+             [Chosen]),
+      format(string(L4), "  ~d kept at the rule type by a model, ~d routed to the guidelines without an answer",
+             [Kept, Pending]),
+      Lines = [L1, L2, L3, L4]
+   ;  Lines = []
+   ).
+
+aggregate_count(Cells, Class, Count) :-
+   include(cell_class(Class), Cells, In),
+   length(In, Count).
+
+cell_class(rule_typed, cell(_, _, T, rules, _, _, _)) :- \+ memberchk(T, [empty, untyped]).
+cell_class(empty_or_untyped, cell(_, _, T, rules, _, _, _)) :- memberchk(T, [empty, untyped]).
+cell_class(model_chosen, cell(_, _, _, guideline(_), _, _, _)).
+cell_class(model_kept, cell(_, _, _, guideline_none(_), _, _, _)).
+cell_class(pending, cell(_, _, _, guideline_pending, _, _, _)).
+
+% typing_explanation(+Facts, -Lines): one line per cell of an accepted
+% certificate with a typing section, saying where its type comes from.
+typing_explanation(Facts, Lines) :-
+   (  has_typing(Facts),
+      member(raster(Raster), Facts)
+   -> cell_derivations(Facts, Raster, Cells),
+      maplist(explain_cell, Cells, Lines)
+   ;  Lines = []
+   ).
+
+explain_cell(cell(Id, Text, Type, Derivation, RuleType, Why, Allowed), Line) :-
+   (  Text == synthetic
+   -> Shown = "(padding)"
+   ;  format(string(Shown), "~q", [Text])
+   ),
+   rule_reason(Why, RuleType, Reason),
+   (  Derivation == rules
+   -> format(string(Line), "cell ~w ~s: ~w, deterministic: ~s", [Id, Shown, Type, Reason])
+   ;  Derivation = guideline(Batch)
+   -> format(string(Line), "cell ~w ~s: ~w, chosen by a model (guideline batch ~s) from ~w; deterministic rule type ~w (~s)",
+             [Id, Shown, Type, Batch, Allowed, RuleType, Reason])
+   ;  Derivation = guideline_none(Batch)
+   -> format(string(Line), "cell ~w ~s: ~w, deterministic (~s); a model (guideline batch ~s) kept it over ~w",
+             [Id, Shown, Type, Reason, Batch, Allowed])
+   ;  format(string(Line), "cell ~w ~s: ~w, deterministic (~s); routed to the guidelines (~w), no answer yet",
+             [Id, Shown, Type, Reason, Allowed])
+   ).
+
+rule_reason(rule(Origin), _, Reason) :- format(string(Reason), "rule ~s", [Origin]).
+rule_reason(no_rule, _, "no rule matches").
+rule_reason(empty_text, _, "empty text").
+rule_reason(synthetic, _, "padding cell").

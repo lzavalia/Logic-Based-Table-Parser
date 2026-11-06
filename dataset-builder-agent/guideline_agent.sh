@@ -12,6 +12,11 @@
 #                      src/dataset/runs/<name> (run_agent.sh uses this)
 #   --program <file>   the type DSL program, by default
 #                      type_dsl_examples/sci.tdsl
+#   --dataset <dir>    the dataset, a directory under src/ (default
+#                      src/dataset), since DeepClause sees nothing outside src/;
+#                      its answer cache is <dataset>/cache/
+#   --log-dir <dir>    write guideline_log.txt and guideline_token_usage.json
+#                      there
 # Anything else is passed on to `deepclause run`. The temperature defaults to
 # 0; pass --temperature to change it.
 #
@@ -23,8 +28,8 @@
 # Writes, in src/:
 #   src/guideline_log.txt            everything the stages printed
 #   src/guideline_token_usage.json   tokens used, per model
-#   src/dataset/papers/PMC<id>/types.jsonl, guided_types.jsonl
-#   src/dataset/cache/guideline_answers.jsonl
+#   src/<dataset>/papers/PMC<id>/types.jsonl, guided_types.jsonl
+#   src/<dataset>/cache/guideline_answers.jsonl
 # The two log files are overwritten by each run. With LOG_DIR set, they go
 # instead to a new directory LOG_DIR/<UTC timestamp>-guidelines/ for every run;
 # a relative LOG_DIR is taken from src/ (the Docker image sets
@@ -38,6 +43,8 @@ set -uo pipefail
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 papers=all
 run=
+dataset=
+log_dir_opt=
 program="$script_dir/type_dsl_examples/sci.tdsl"
 passthrough=()
 while [ "$#" -gt 0 ]; do
@@ -55,8 +62,18 @@ while [ "$#" -gt 0 ]; do
             program="$2"; shift 2 ;;
         --program=*)
             program="${1#--program=}"; shift ;;
+        --dataset)
+            [ "$#" -ge 2 ] || { echo "error: --dataset needs a value" >&2; exit 2; }
+            dataset="$2"; shift 2 ;;
+        --dataset=*)
+            dataset="${1#--dataset=}"; shift ;;
+        --log-dir)
+            [ "$#" -ge 2 ] || { echo "error: --log-dir needs a value" >&2; exit 2; }
+            log_dir_opt="$2"; shift 2 ;;
+        --log-dir=*)
+            log_dir_opt="${1#--log-dir=}"; shift ;;
         -h|--help)
-            sed -n '2,34p' "$0"; exit 0 ;;
+            sed -n '2,39p' "$0"; exit 0 ;;
         *)
             passthrough+=("$1"); shift ;;
     esac
@@ -68,15 +85,25 @@ if [ ! -r "$program" ]; then
 fi
 program="$(cd "$(dirname "$program")" && pwd)/$(basename "$program")"
 
+if [ -n "$dataset" ]; then
+    case "$dataset" in
+        /*|..|../*|*/..|*/../*)
+            echo "error: --dataset must be a directory under src/, given relative to it." >&2
+            exit 2 ;;
+    esac
+    dataset="${dataset%/}"
+fi
+dataset_dir="${dataset:-dataset}"
+
 # DeepClause reads its config and the workspace from the current directory.
 cd "$script_dir/src" || exit 1
 
-if [ ! -d dataset/papers ]; then
-    echo "error: $PWD/dataset/papers does not exist; build a dataset first." >&2
+if [ ! -d "$dataset_dir/papers" ]; then
+    echo "error: $PWD/$dataset_dir/papers does not exist; build a dataset first." >&2
     exit 1
 fi
-if [ ! -w dataset/papers ]; then
-    echo "error: $PWD/dataset/papers is not writable by user $(id -u):$(id -g)." >&2
+if [ ! -w "$dataset_dir/papers" ]; then
+    echo "error: $PWD/$dataset_dir/papers is not writable by user $(id -u):$(id -g)." >&2
     echo "With Docker, make the host directory yours:" >&2
     echo "  sudo chown -R \"\$(id -u):\$(id -g)\" <host directory>" >&2
     exit 1
@@ -91,7 +118,13 @@ if [ -n "$run" ]; then
     papers="$("$swipl" guideline_steps.pl run-papers "$run")" || exit 1
 fi
 
-if [ -n "${LOG_DIR:-}" ]; then
+if [ -n "$log_dir_opt" ]; then
+    mkdir -p "$log_dir_opt" || exit 1
+    log_dir="$(cd "$log_dir_opt" && pwd)"
+    log_file="$log_dir/guideline_log.txt"
+    usage_file="$log_dir/guideline_token_usage.json"
+    rm -f "$usage_file"
+elif [ -n "${LOG_DIR:-}" ]; then
     log_dir="$LOG_DIR/$(date -u +%Y%m%dT%H%M%SZ)-guidelines"
     mkdir -p "$log_dir" || exit 1
     log_file="$log_dir/guideline_log.txt"
@@ -111,13 +144,13 @@ fi
 
 # Stage 1 always runs first: it drops from the requests what the cache has
 # answered since they were written, so nothing is paid for twice.
-"$swipl" guideline_steps.pl prepare "$program" "$papers" 2>&1 | tee "$log_file"
+"$swipl" guideline_steps.pl prepare "$program" "$papers" "$dataset_dir" 2>&1 | tee "$log_file"
 if [ "${PIPESTATUS[0]}" -ne 0 ]; then
     echo "Preparing the guideline requests failed." >&2
     exit 1
 fi
 
-params=()
+params=(-P "dataset=$dataset_dir")
 if [ "$papers" != all ]; then
     params+=(-P "papers=$papers")
 fi
@@ -138,7 +171,7 @@ elif [ "$status" -ne 0 ]; then
     echo "deepclause exited with status $status." >&2
 fi
 
-"$swipl" guideline_steps.pl apply "$program" "$papers" 2>&1 | tee -a "$log_file"
+"$swipl" guideline_steps.pl apply "$program" "$papers" "$dataset_dir" 2>&1 | tee -a "$log_file"
 if [ "${PIPESTATUS[0]}" -ne 0 ]; then
     echo "Writing guided_types.jsonl failed." >&2
     [ "$status" -ne 0 ] || status=1

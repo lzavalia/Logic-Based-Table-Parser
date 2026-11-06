@@ -1,0 +1,68 @@
+{
+  "pmc_id":"PMC13015447",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":1,"vmd":0},
+      "candidate_id":null,
+      "caption":"Tentative band assignments of the significant peaks",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1:",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [1 ],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":1,
+	    "last_row":8,
+	    "row_header_columns":0
+	  }
+	]
+      },
+      "separators": [ {"row":1,"text":""} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Raman shift (cm −1 )": []},  {"Assignment": []} ],
+	  "vertical metadata": [],
+	  "data": [
+	    ["830", "Tyrosine ring breathing (protein) 32" ],
+	    ["946", "CCH skeletal stretch or rocking mode (proline, collagen-like) 33" ],
+	    ["1001", "Phenylalanine ring breathing (protein) 34" ],
+	    ["1146, 1299", "CH 2 twisting/rocking (lipids, membrane components) 35" ],
+	    ["1440", "CH 2 bending (lipids, fatty acyl chains) 35" ],
+	    ["1498, 1536", "C=C stretching (Amide II, some protein modes) 36 , 37" ],
+	    ["1570, 1601", "Aromatic C=C stretches (tyrosine, tryptophan) 38 , 39" ]
+	  ],
+	  "residual_corner": []
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC13015447/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Functional Characterization of Differentially Expressed miRNAs in Asian T2DM Subtypes",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2:",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13015447/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"98f7934d0269831944a9f00a9bdda2f8599d40f0ba4803aa87b6d4e51b2fdce8"
+}

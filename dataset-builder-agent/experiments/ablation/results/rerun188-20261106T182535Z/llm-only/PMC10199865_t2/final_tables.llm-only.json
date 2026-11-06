@@ -1,0 +1,548 @@
+{
+  "pmc_id":"PMC10199865",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Quality assessment of the studies included in the systematic review according to the QUADAS-2 tool [ 8 ]",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10199865/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Methodology and outcome summary of the included studies",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10199865/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":null,
+      "caption":"Methodology and outcome summary of the included studies",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":5,
+	    "last_row":59,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Study objectives": [ {"": []} ]},
+	    {"Variables analyzed": [ {"SPECT variables": []},  {"Clinical variables": []} ]},
+	    {"Statistical analysis": [ {"": []} ]},
+	    {"Outcome summary": [ {"": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Ceravolo et al. [ 49 ]": []},
+	    {"Chen et al. [ 15 ]": []},
+	    {"Chiu et al. [ 60 ]": []},
+	    {"Colloby et al. [ 25 ]": []},
+	    {"Colloby et al. [ 27 ]": []},
+	    {"Colloby et al. [ 28 ]": []},
+	    {"Del Sole et al. [ 61 ]": []},
+	    {"Donaghy et al. [ 62 ]": []},
+	    {"Durcan et al. [ 63 ]": []},
+	    {"Gupta et al. [ 9 ]": []},
+	    {"Hansen et al. [ 64 ]": []},
+	    {"Huber et al. [ 10 ]": []},
+	    {"Iizuka et al. [ 11 ]": []},
+	    {"Inagawa et al. [ 16 ]": []},
+	    {"Iwabuchi et al. [ 26 ]": []},
+	    {"Joling et al. [ 29 ]": []},
+	    {"Joling et al. [ 30 ]": []},
+	    {"Kamagata et al. [ 31 ]": []},
+	    {"Kasanuki et al. [ 32 ]": []},
+	    {"Kemp et al.* [ 50 ]": []},
+	    {"Kobayashi et al. [ 17 ]": []},
+	    {"Lamotte et al. [ 33 ]": []},
+	    {"Lim et al. [ 12 ]": []},
+	    {"Lloyd et al. [ 51 ]": []},
+	    {"Maltais et al. [ 52 ]": []},
+	    {"Miyagawa et al. [ 13 ]": []},
+	    {"Miyamoto et al. [ 58 ]": []},
+	    {"Morgan et al. [ 34 ]": []},
+	    {"Nakahara et al. [ 18 ]": []},
+	    {"Nicastro et al. [ 35 ]": []},
+	    {"Nicastro et al. [ 53 ]": []},
+	    {"Nicastro et al. [ 14 ]": []},
+	    {"O’Brien et al. [ 36 ]": []},
+	    {"O’Brien et al.** [ 37 ]": []},
+	    {"Oliveira et al.*** [ 59 ]": []},
+	    {"Pilotto et al. [ 38 ]": []},
+	    {"Ransmayr et al. [ 39 ]": []},
+	    {"Roberts et al. [ 19 ]": []},
+	    {"Roberts et al.**** [ 54 ]": []},
+	    {"Roselli et al. [ 40 ]": []},
+	    {"Sakamoto et al. [ 20 ]": []},
+	    {"Shimizu et al. [ 21 ]": []},
+	    {"Shimizu et al. [ 22 ]": []},
+	    {"Siepel et al. [ 65 ]": []},
+	    {"Siepel et al. [ 41 ]": []},
+	    {"Spehl et al. [ 42 ]": []},
+	    {"Taylor et al. [ 43 ]": []},
+	    {"Thomas et al. [ 55 ]": []},
+	    {"Tiraboschi et al. [ 23 ]": []},
+	    {"Treglia et al. [ 24 ]": []},
+	    {"Van de Beek et al. [ 44 ]": []},
+	    {"Van der Zande et al. [ 45 ]": []},
+	    {"Van der Zande et al. [ 46 ]": []},
+	    {"Walker et al. [ 66 ]": []},
+	    {"Walker et al. [ 47 ]": []},
+	    {"Walker et al. [ 56 ]": []},
+	    {"Walker et al. *****[ 57 ]": []},
+	    {"Ziebell et al. [ 48 ]": []}
+	  ],
+	  "data": [
+	    [
+	      "Assess dopamine transporter function",
+	      "Ratio of specific (bilateral caudate nucleus, putamen) to non-specific (occipital cortex) radiotracer binding",
+	      "Age, sex, MMSE, CAMCOG, NPI, UPDRS",
+	      "NR",
+	      "Decreased specific to non-specific FP-CIT binding in DLB compared to AD"
+	    ],
+	    [
+	      "Determine clinical phenotypes associated with beta-amyloid PET (A +) and DaT imaging (D +) in MCI-LB (higher risk of progression to probable DLB)",
+	      "Putamen z score (cutoff ≤ 0.82), beta-amyloid PET PiB SUVR",
+	      "MMSE, CDR sum of boxes and UPDRS-III scores, visual hallucinations, fluctuations, parkinsonism, probable RBD",
+	      "T test for continuous variables, Chi-squared test for categorical variables; linear or logistic regression models for predictors (factorial modeling approach using continuous A and D); Age adjusted",
+	      "Decreased putaminal z score and lower PiB SUVRs independently associated with higher UPDRS-III scores; More probability of RBD in positive DaTscan group"
+	    ],
+	    [
+	      "Differentiate DLB from AD with motor dysfunction",
+	      "SBR and visual rating",
+	      "Novel designed questionnaire, composite scale with motor dysfunction questionnaire (MDQ) and dopamine transporter imaging",
+	      "Chi-square test for each question in the HAI-MDQ between DLB and non-DLB groups,",
+	      "Higher frequency of motor dysfunction in DLB group; Lower SBR in DLB group; Sensitivity/Specificity (%): 91/72 (MDQ), 91/80 (SBR), 87/93 (composite scale)"
+	    ],
+	    [
+	      "Compare diagnostic accuracy of 99m Tc-exametazime to 123 I-FP-CIT for AD and DLB",
+	      "Normal or Abnormal visual rating of 123I-FP-CIT SPECT Scans (grade 0 = normal, grade 1,2,3 = abnormal)",
+	      "Age, sex, MMSE, CAMCOG, UPDRS-III, duration of illness",
+	      "Shapiro–Wilk test for normality of distribution of continuous variables; one-way ANOVA ( F -Test) for group effects; Nominal data with Chi-square tests; Cohen’s kappa test for inter-observer agreement between raters’ visual assessment; ROC curve analysis for Sn and Sp",
+	      "Excellent Inter-rater agreement ( κ = 0.88) for DaTscan; Superior ROC for DaTscan in diagnosing DLB (AUC 0.83, sensitivity: 78.6%, specificity: 87.9) compared to brain perfusion"
+	    ],
+	    [
+	      "Investigate rate of progression of nigrostriatal dopaminergic loss in DLB, PD, PDD using DaTscan",
+	      "Striatal binding between groups",
+	      "Age, MMSE, UPDRS III, duration of symptoms",
+	      "Shapiro–Wilk test for normality of distribution of continuous variables; Pearson’s r or Spearman’s rho as appropriate for correlations between SPECT and clinical variables; 2-sample dependent t tests for differences in binding rations; ANCOVA (analysis of covariance) for rates of decline in BRs",
+	      "Faster rates of decline in striatal binding in LBD than controls in caudate nucleus and posterior putamen; Faster rates of decline in striatal binding in DLB & PDD than controls in anterior putamen; Similar rates of decline between DLB, PD, and PDD"
+	    ],
+	    [
+	      "Investigate the differences in striatal binding using automated statistical parametric mapping (SPM99) in DLB, AD, PD",
+	      "Voxel-level changes in FPCIT binding",
+	      "Age, MMSE, UPDRS III, duration of symptoms",
+	      "Spatial normalization and smoothening for voxel-wise univariate statistical tests (technique of proportional scaling) with t-statistic for each voxel formed SPM, foci described in terms of spatial extent (k) and peak height (u); Gaussian random field theory; ROC analysis",
+	      "Decreased bilateral uptake in caudate nucleus, anterior and posterior putamen in DLB and PD versus AD and controls and in AD versus controls; No difference between DLB and PD; ROC AUCs > 0.92"
+	    ],
+	    [
+	      "Study the correlations between 123 I-FP-CIT uptake in the striatum and extrapyramidal signs (EPS) in probable DLB patients",
+	      "Specific uptake ratio",
+	      "EPS using UPDRS III score, MMSE",
+	      "Pearson’s r for correlation",
+	      "Negative linear correlation between FP-CIT uptake and UPDRS III score in caudate and putamen; Decreased striatal uptake in patients with mild and severe EPS"
+	    ],
+	    [
+	      "Compare the neuropsychiatric symptoms and cognitive profile of MCI-LB with MCI-AD",
+	      "Normal or abnormal FP-CIT SPECT scans",
+	      "Lewy body Neuropsychiatric Supportive Symptom Count (LBNSSC), calculated based on supportive neuropsychiatric symptoms (non-visual hallucinations, delusions, anxiety, depression, apathy)",
+	      "T -tests, Mann–Whitney U tests, Chi-squared, and Fisher’s exact tests depending on the nature of the data",
+	      "Higher symptoms count in MCI-LB than MCI-AD, using a positive FP-CIT SPECT in the list of diagnostic features of MCI-LB"
+	    ],
+	    [
+	      "Explore whether gastroparesis is early diagnostic marker of prodromal DLB and the relationship with dopaminergic imaging (FP-CIT SPECT)",
+	      "Visually rated FP-CIT SPECT scans (normal vs abnormal)",
+	      "Gastroparesis Cardinal Symptom Index (GSCI), MMSE, ACE-R, CDR, CIRS-G",
+	      "Chi-square, Mann–Whitney, Fisher exact test",
+	      "No difference in gastroparesis symptom prevalence or severity score and FP-CIT uptake"
+	    ],
+	    [
+	      "Study the imaging patterns of PCA and DLB with FDG PET/CT and develop a prediction model",
+	      "Normal vs abnormal TRODAT uptake and 18 F-FDG PET/CT uptake patterns",
+	      "",
+	      "Z score analysis, ROC curve analysis, binary logistic regression analysis to determine the OR",
+	      "Hypometabolism in parieto-temporo-occipital association cortices and cingulate cortices in non-DLB patients; reduced visual vortex uptake in DLB; hypometabolism in both groups in occipital association cortex"
+	    ],
+	    [
+	      "Validating 123 I-FP-CIT SPECT as a method to diagnose probable DLB in patients with psychiatric symptomatology and suspected DLB",
+	      "SBR ratios",
+	      "Clinical and neuropsychological phenotypes via main core and supportive clinical features; supportive biomarkers (EEG slowing posterior, temporal preservation); clinical onset of symptoms (Psych-onset, MCI-onset, Mixed onset)",
+	      "Fisher’s exact test, Student’s t -tests to compare age groups and number of DLB patients with probable DLB before and after 123 I-FP-CIT SPECT. Mann–Whitney U test for non-normally distributed group data; ANOVA for core features, clinical features, supportive biomarkers, demographics; two factorial ANOVA for SBR ration between groups (prodromal DLB, possible and probable DLB) as one factor and binary 123 I-FP CIT SPECT result (nigrostriatal deficit vs no deficit) as the other",
+	      "Higher number of probable DLB patients with psychiatric symptoms post-DaTscan than pre-DaTscan; higher number of prodromal DLB with a psychiatric-phenotype"
+	    ],
+	    [
+	      "Elucidate the link between 18 F-FDG PET and 123 I-ioflupane SPECT in the pathophysiological course of dementia with Lewy bodies",
+	      "DaT-SPECT Z- Score",
+	      "Core features of DLB",
+	      "Pearson’s r for correlation, linear regression analysis (associations between DaT Z -score and FDG-PET SUVr), regression analysis using DaT Z- Scores as predictor and voxel-wise 18 F-FDG-PET SUVr as outcome variable",
+	      "Inverse relationship between striatal dopamine availability and relative glucose hypermetabolism in basal ganglia and limbic regions; increasing dopamine deficiency reflected in metabolic connectivity deteriorations"
+	    ],
+	    [
+	      "Investigation of the relationship between awareness of memory-deficit and glucose metabolism in DLB",
+	      "DaT binding, CIS ratio",
+	      "Clinical characteristics, educational yearls, MMSE, RAVLT, MAC-Q, Awareness index",
+	      "Two-sample t -test; Pearson ‘s R for correlations with Bonferroni correction",
+	      "Decreased Awareness index in DLB than in normal cognition; association with glucose metabolism in bilateral posterior cingulate cortex and right OFC; no correlation between Awareness index and striatal DAT density"
+	    ],
+	    [
+	      "Investigate the efficacy of olfactory (Odor Stick Identification Test for the Japanese) and pareidolia tests (susceptibility to visual hallucinations) to differentiate AD from DLB",
+	      "SBR on DaTscan, MIBG H/M ratio",
+	      "OSIT-J and pareidolia test scores, age, sex, educational history",
+	      "Mann–Whitney test, Chi-squared, Student’s t -test",
+	      "Sensitivity/specificity for differentiating DLB from AD: 86/100 for MIBG scintigraphy; 82/96 for SBR uptake; 77/67 for combined OSIT-J and pareidolia test scores; 73/62 for pareidolia test scores; 77/58 for OSIT-J test scores"
+	    ],
+	    [
+	      "Evaluate the correlation between perfusion SPECT and quantitative indices with DaTscan in patients with DLB, PD, PDD",
+	      "Quantitative indices from DaTscan: specific binding, Putamen-to-caudate, Caudate-to-putamen ratios (SBR, PCR, CPR)",
+	      "Age, sex, MMSE",
+	      "Kruskal–Wallis test to compare age, quantitative indices (e.g., SBR) and MMSE between LBD groups (PD, PDD, DLB; post-hoc analysis with Bonferroni correction; Pearson’s chi-square test to compare sex between groups",
+	      "Correlation between: -decreased PCR and hypoperfusion in the medulla and midbrain; -decreased CPR and hypoperfusion in the right temporoparietal cortex, right precuneus and bilateral temporal cortex; no correlation between decreased SBR index and brain perfusion"
+	    ],
+	    [
+	      "Compare 123 I-FP-CIT binding to striatal dopamine and the extrastriatal serotonin transporter between PD and DLB",
+	      "ROI and voxel-based analysis",
+	      "Age, gender, MMSE",
+	      "Distribution of data with histograms, Q-Q plots and with Kolmogorov–Smirnov tests; clinical variables compared with unpaired t -tests or Mann–Whitney U tests as appropriate; ANOVA between PD and DLB for mean binding ration in each ROI",
+	      "Decreased DAT binding in PD patients than DLB patients (bilateral posterior putamen); decreased Caudate/putamen ratios in DLB"
+	    ],
+	    [
+	      "Study 123 I-FP-CIT binding to striatal dopamine and the extrastriatal serotonin transporter between early-stage PD and DLB compared to healthy controls",
+	      "ROI and voxel-based analysis",
+	      "Age, gender, MMSE, UPDRS-III, Hoehn & Yahr",
+	      "Distribution of data with histograms, Q-Q plots and with Kolmogorov–Smirnov tests; Kruskal–Wallis tests for non-normal distribution. ANCOVA with age as a nuisance covariate",
+	      "Decreased DAT binding ratio in both PD and DLB than HC (bilateral caudate head and bilateral posterior putamen); Lower hypothalamic FP-CIT binding ratios in DLB versus HC; decreased striatal binding in PD and DLB versus HC; Decreased striatal DAT and lower hypothalamic SERT in early-stage PD and early-stage DLB versus HC"
+	    ],
+	    [
+	      "Compare SWI with DaT-SPECT for differentiation of DLB from AD/a-MCI",
+	      "SBR, presence or absence of nigrosome-1 on SWI (visually evaluated)",
+	      "Age, sex, disease duration, MMSE",
+	      "ANOVA with Tukey’s honest significant difference (HSD) test for continuous variables and Chi-square test for categorical variables. Inter-rater variability and reproducibility of visual assessment of SWI and DaTscan with kappa statistic. ANOVA and unpaired t -test to compare contrast ratio and ROI size of nigrosome-1 and assess inter-group differences in SBR for DaTscan. ROC curve analysis for diagnostic utility of normalized signal intensity of nigrosome-1 and SBR from DaTscan, Pearson correlation test for correlations",
+	      "Diagnostic accuracy with SWI of 90% (sensitivity: 93%, specificity: 87%) in detecting nigrosome-1 degeneration versus 88.3% (sensitivity: 93%, specificity: 84%) with DaTscan"
+	    ],
+	    [
+	      "Investigate 123I-FP-CIT SPECT findings and clinical relevance in prodromal DLB",
+	      "Scheltens score on MRI, left and right medial temporal lobe atrophy, occipital hypometabolism, SBR of FP-CIT SPECT",
+	      "Age, sex, duration of cognitive decline, MMSE, UPDRS-III, medications (Levodopa vs choline esterase inhibitor vs SSRI), Core features (cognitive fluctuations, visual hallucinations and parkinsonism = UPDRS > 15), Non-motor symptoms",
+	      "One-way ANOVA and Student’s t -test for differences in age and duration of disease across the three groups, Chi-square and Fisher’s exact test for differences in categorical data; non-parametric Mann–Whitney and Kruskal–Wallis tests to test for differences. Spearman correlation coefficient for correlations between SBR scores and clinical symptoms in DLB groups",
+	      "Decreased mean SBR scores of both prodromal DLB and clinical DLB versus AD; Negative correlations between SBR and UPDRS-III scores in total and clinical DLB groups (not in prodromal DLB); Negative correlation between duration of olfactory dysfunction, RBD and SBR scores in prodromal DLB"
+	    ],
+	    [
+	      "Assess the impact of presynaptic dopaminergic imaging with DaTscan SPECT on the clinical diagnosis and subsequent management of patients with possible DLB, referred for imaging",
+	      "Visually rated DaTscans (normal or abornmal)",
+	      "Core clinical features (fluctuating cognition, VH, spontaneous parkinsonism, REM sleep disorder, neuroleptic sensitivity, diagnosis of dementia, executive dysfunction, visuospatial dysfunction), Age, sex",
+	      "NR",
+	      "Abnormal DaTscan in 20/80 (25%), normal in 60/80 (75%) patients; 18/20 true positives (postscan working clinical diagnosis of DLB) (90%); 58/60 true negatives (alterative clinical diagnosis) (95%); Concordance of DaTscan findings with clinical outcomes in 76/80 cases (95%)"
+	    ],
+	    [
+	      "Evaluate the extent of diagnosis accuracy of combined brain perfusion SPECT, MIBG scintigraphy and DaTscan, and comparison of the 3 tests to determine priority",
+	      "SBR on DAT-SPECT, early and delayed heart-to-mediastinum ratio on MIBG, regional cerebral blood flow quantified by an automated bp-SPECT analysis program",
+	      "Age, sex, MMSE, parkinsonism, VH, cognitive fluctuations, REM sleep behavior disorders",
+	      "Mann–Whitney U -test for relationship between mean MMSE and bp-SPECT, MIBG or DAT-SPECT; Chi-squared or Fishers’ exact test for relationship between clinical features and imaging modalities",
+	      "Better sensitivity for MIBG (79%) and Datscan (79%) than bp-SPECT (53%); Higher ratio of patients with RBD in the MIBG-positive; increased accuracy of diagnosis with the combination of the 3 modalities (sensitivity: 100%)"
+	    ],
+	    [
+	      "Identify if the education level (years of school after first grade) influences cognitive performance and DAT binding in DLB patients",
+	      "DAT binding in the striatum, caudate nucleus and putamen (primary evaluation criteria)",
+	      "MMSE score, scores on executive functions, memory and instrumental functions (secondary criteria), motor and non-motor symptoms",
+	      "Pearson correlation coefficient; Levene’s test for equality of variances for assumption of homogeneity of variance; bi- and multivariate analysis to account for confounding factors",
+	      "Positive correlation between higher education and DAT binding (putamen and caudate nucleus);"
+	    ],
+	    [
+	      "Optimize the interpretation of 18 F-FDG-PET images for differentiation of DLB from AD and comparison with DAT imaging",
+	      "Presence or absence of hypometabolism in the lateral occipital and medial occipital cortices, relative preservation of mid or posterior cingulate region (cingulate island sign)",
+	      "Age, sex, MMSE, CDR, UPDRS",
+	      "Sensitivity and specificity for diagnosis of DLB; ANOVA, ROC curve analysis",
+	      "Higher accuracy and greater size effect for diagnosis of DLB with 123 I-β-CIT SPECT than 18 F-FDG-PET"
+	    ],
+	    [
+	      "Develop a new visual rating scale for 123 I-Ioflupane brain imaging in DLB and validate it against autopsy diagnosis",
+	      "Visual rating scale using the “Newcastle scale” (0 normal, 0.5 very mild/equivocal, 1 mild loss, 2 moderate loss, 3 severe loss)",
+	      "Clinical diagnosis, autopsy diagnosis",
+	      "Inter-operator agreement was measured with the intra-class correlation coefficient (ICC, two-way mixed effects models) for each striatal region (right-left caudate and putamen) and for total score, ROC curve analysis for optimal threshold to optimize combined Sn and Sp",
+	      "Higher sensitivity/specificity of the Newcastle scale (97%/100%) versus standard scale (97%/80%) with autopsy validation; Inter-rater reliability of Newcastle scale (intra-class correlation coefficient 0.93)"
+	    ],
+	    [
+	      "Compare three 123 I-FP-CIT SPECT quantitative methods in patients with neurodegenerative syndromes with neuropathological findings as reference",
+	      "DQ Striatum, Caudate SBRs ( z -score), MIM Striatum, Caudate SBR ( z -score), DAT visual interpretation",
+	      "Age at scan, time between last scan and death (y), clinical diagnosis before death",
+	      "ANOVA for continuous variables and Chi-squared test for categorical variables to test for differences amongst the 3 groups (LBD, LBD/AD, no LBD), AUROCs to test for neuropathology discrimination of the semi-quantitative image analysis programs, ICC for assessing the relationship between image analysis program and ROIs, Box-and-whisker plots to display the distribution of ROIs in z -score and SBR format with the relation to neuropathological diagnosis",
+	      "AUROC values between 0.93 and 1.00 for discrimination between LBD and non-LBD using DaTQUANTm, MIMneuro, and manual ROI methods"
+	    ],
+	    [
+	      "Asses how well 123 I-FP-CIT SPECT can differentiate DLB from AD and whether multimodal imaging has additional value",
+	      "DaTQUANT putamen z -score, PiB-PET global SUVr, FDG-PET CIS ratio",
+	      "Age, sex, education, core symptoms (RBD, VH, fluctuation score), duration of cognitive decline, UPDRS-III, MMSE",
+	      "AD and DLB groups compared with Student’s t -test for continuous variables and Chi-squared for categorical variables. Logistic regressions with 1, 2, or 3 modalities as predictors of AD vs DLB. Pearson correlations between continuous imaging biomarkers",
+	      "C-statistic of 0.916 with DaTQUANT z -scores of the putamen for differentiating DLB from AD; added accuracy with multimodal imaging with 18 F-FDG PET and PiB-PET (c-statistics of 0.968–0.975 adding 1 modality and 0.987–0.996 adding 2 modalities)"
+	    ],
+	    [
+	      "Examine DaTscan in Japanese patients with iRBD as a biomarker for the development of Lewy body disease (PD and DLB)",
+	      "SBR of striatium (L, R, mean; z -score)",
+	      "Age, sex, Odor identification test, MMSE, UPDRS-III",
+	      "Fisher’s exact test and Mann–Whitney U tests for comparison. Wilcoxon matched-pairs signed rank test for changes in SBR and z -score in R, L and average of R and L striatum. ROC curve analysis for cutoff value (Youden’s method). Kaplan–Meier method for plots of estimated proportion of subjects that developed clinically defines LBD over time, compared with log-rank test. Cox proportional hazard for predictive markers, stratified by cutoff values",
+	      "Development of LBD in 33.8%; Difference in ROC curve z -score in iRBD patients; Increased risk of LBD if z- score < 2.5 for striatal DAT binding in Kaplan–Meier survival analysis"
+	    ],
+	    [
+	      "Investigate how well DaTscan differentiates DLB from FTD",
+	      "Visually rated FP-CIT uptake (0 normal uptake, 1 slight reduction, 2 significant reduction), dichotomized to normal (scores of 0 or 1) vs abnormal (score of 2)",
+	      "Sex, age, CDR, CAMCOG-R, MMSE, letter fluency, category fluency, UPDRS, modified Hoehn and Yahr, EPSM (at least one), the presence of tremor, rigidity, bradykinesia, VH",
+	      "Chi-squared, Mann–Whitney, and Kruskal–Wallis as appropriate for comparison between groups",
+	      "Significant decreased of DAT binding (putamen and caudate) in 9/10 DLB patients; abnormal DaTscan with reduced DAT (putamen and caudate) in 1/3 of FTD patients; visually different scans and ROIs between groups"
+	    ],
+	    [
+	      "Investigate the relationship between olfaction and frontal lobe cognition using 123 I-FP-CIT SPECT in PD, PDD, or DLB (LBD)",
+	      "MIBG early and delay, SBR (man, min, average)",
+	      "Age, sex, duration of disease, UPDRS, odor stick identification test score, FAB score",
+	      "Welch’s t -test for differences between groups (continuous variables). Pairwise comparisons using Chi-squared tests for binary variables. Spearman’s rank correlation coefficients for correlations between pairs of datasets (SBR and FAB scores)",
+	      "Correlation between OSIT-J scores and SBR in both groups; correlation between SBR and FAB scores in patients with reduced CBF in frontal lobe (not in normal CBF)"
+	    ],
+	    [
+	      "1) Assess the validity of semi-quantitative DaTscan analysis compared to visual analysis in probable DLB and AD; 2) study DLB specific uptake impartment patterns in DLB and correlation of uptake in the presence or absence of parkinsonism",
+	      "Right and left uptake values via BRASS for caudate, putamen, striatum, as well as Caudate/Putamen (C/P) ratios, striatal asymmetry indices (AIs) for both DLB and AD groups",
+	      "Age, sex, disease duration, visual assessment (clearly abnormal = stage 1–3",
+	      "Shapiro–Wilk test to test continuous variables for normality. Non-parametric, two-sample Wilcoxon Rank Sum (Mann–Whitney U ) test for VOIs uptake, C/P ratio and striatal AI. Kruskal–Wallis test compare more than two independent groups (DLB with and without parkinsonism and AD), post hoc Mann–Whitney analysis to specifically compare two groups (DLB without parkinsonism and AD)",
+	      "Abnormal visual staging in 96.8% of DLB patients; abnormal semi-quantitative analysis in 97.8%; Sensitivity of 100% with combination of visual and semi-quantitative analysis; more pronounced putaminal uptake in DLB patients if associated with parkinsonism"
+	    ],
+	    [
+	      "Determine sensitivity of combined visual and semi-quantitative 123 I-FP-CIT SPECT analysis in a prospective cohort of patients with DLB and degenerative parkinsonisms (PD, MSA, CBS, PSP) to determine the prevalence and clinical significance of Scans Without Evidence of Dopaminergic Deficit (SWEDD)",
+	      "Semi-quantitative parameters values, visual grading system (0-to-3 system)",
+	      "Age, sex, disease duration, clinical diagnosis",
+	      "Shapiro–Wilk test to test continuous variables for normality. Non-parametric, two-sample Wilcoxon Rank Sum (Mann–Whitney U ) when appropriate",
+	      "Normal visual SPECT in only 2.1% of patients with degenerative parkinsonism and 1.9% with DLB; mild striatal uptake impairment with semi-quantitative analysis in only two patients (1 DLB, 1 PD)"
+	    ],
+	    [
+	      "Understanding the metabolic and dopaminergic correlation of presence hallucinations (DH) as well as their relation to a recently defined PH brain network in DLB",
+	      "Mean caudate nucleus ioflupane uptake, ioflupane SBRs",
+	      "Age, Sex, education, disease duration, MMSE, UPDRS-III, LEDD, VH",
+	      "Shapiro–Wilk test to assess continuous variables for normality, t -test of Mann–Whitney U test as appropriate for between-group comparisons, Chi-squared test for discrete variables. Whole brain analysis with a two-sample t -test design (PH + vs PH-) with ANCOVA taking age and sex as covariates. ROI Analysis with Marsbar toolbox for MATLAB and R: linear mixed-effects model. Seed-to-whole-brain analysis with interregional correlation analysis (IRCA) for both groups",
+	      "Decreased 18 F-FDG uptake in superior frontal and parietal gyri in patients with PH + ; involvement of ventral premotor cortex of PH network with reduced functional connectivity; negative correlation between 18 F-FDG vPMC uptake and 123 I-FP-CIT caudate uptake in PH patients"
+	    ],
+	    [
+	      "1) Determine the pattern and clinical correlates of dopamine transporter loss in DLB with Datscan compared with HC and PD, AD, or PDD patients; 2) examine whether FP-CIT changes might discriminate between DLB and AD",
+	      "Main outcome measures = Visual ratings of scans and region of interest analysis (binding ratios: mean caudate, anterior and posterior putamen, left and right caudate, anterior and posterior putamen)",
+	      "Age, Sex, MMSE, CAMCOG, UPDRS-III, duration of illness",
+	      "Analysis of variance with the Gabriel post hoc tests for normally distributed data, nonparametric Mann–Whitney test. Intersubject variability agreement assessed with Cohen weighted kappa test. Pearson r or Spearman p as appropriate for correlations between clinical and SPECT variables",
+	      "Decreased FP-CIT binding in caudate, anterior and posterior putamen in DLB patients versus HC and AD; good discrimination of DLB and AD with visual and ROI analysis (Sn/Sp 78%/94%, PPV 90%); No difference between DLB, PD and PDD"
+	    ],
+	    [
+	      "Determine the accuracy of 123 I-FP-CIT SPECT in diagnosing people with possible DLB, i.e., compare the results of visual assessment in probable DLB or non-DLB as determined by the 12-month follow-up diagnosis (consensus panel)",
+	      "Dichotomized visually rated using 4-point scale (0 normal uptake, 1 unilateral putamen loss, 2 bilateral putamen loss, 3 virtually absent uptake)",
+	      "MMSE, CAMCOG-R, UPDRS, Hoen and Yahr staging, Neuropsychiatric inventory, VH, psycholeptics (hypnotic and antipsychotic drugs), psychoanaleptics (anti-dementia drugs and antidepressants)",
+	      "Chi-squared tests for differences between probable DLB, possible DLB and non-DLB. ANOVA for normally distributed data. Kruskal–Wallis test if non-normal",
+	      "Change of diagnosis from possible to probable DLB in 19/44 (43%) patients and non-DLB in 7/44 (7%); abnormal baseline scan in 12/19 new probable DLB cases (Sn 63%)"
+	    ],
+	    [
+	      "Re-evaluate the differentiation of patients with DLB from AD and PD with quantitative analysis of 123 I-FP-CIT SPECT based on neuropathology diagnoses",
+	      "Visual assessment of scans, Semi-quantitative indices",
+	      "Age, sex, autopsy confirmed diagnosis, clinical diagnosis at baseline",
+	      "Kruskal–Wallis test for comparison of caudate, putamen binding potentials (CBP, PBP), putamen-to-caudate ratio (PCR) across groups, and post hoc analyses using two-tailed Mann–Whitney U test, correction using the Hold-Bonferroni method",
+	      "Decreased CBP and PBP in DLB versus AD patients; higher PCR in DLB versus PD patients; diagnostic accuracies: -visual rating: 88% in all patients and 96% between PD, AD and DLB -Semi-quantitative: 94% (DLB vs AD), 94% (DLB vs PD vs AD), 93% (DLB, AD, PD vs HC)"
+	    ],
+	    [
+	      "Evaluate extra-striatal dopaminergic and serotonergic pathways in PD and DLB with DaTscan",
+	      "Binding in nigrostriatal and extrastriatal ROIs, SBR in the regions",
+	      "Age, sex, disease duration, serotonergic/dopaminergic treatments",
+	      "ANOVA or Mann–Whitney U test for three group (PD vs DLB vs HC) comparisons and two-group (PD vs DLB) comparisons respectively. Chi-squared test for differences in categorical variables. ANOVA with Bonferroni post hoc comparisons adjusted for age and sex for nigrostriatal and extrastriatal FP-CIT SBR values. Post-hoc comparisons between DLB and PD with univariate analysis (adjusted for age, sex, disease duration, SSRI, and LEDD)",
+	      "Decreased 123 I-FP-CIT SBR in both PD and DLB versus HC in insula, cingulate and thalamus; Decreased 123 I-FP-CIT SBR in thalamus in DLB versus HC and PD; Correlation between thalamic and cingulate 123 I-FP-CIT SBR deficits with limbic serotonergic; correlation between cingulate 123 I-FP-CIT and widespread cortical monoaminergic projections"
+	    ],
+	    [
+	      "Compare parkinsonian features and loss of striatal dopamine transporter function in DLB and PD",
+	      "Mean count rates per pixel, striatal (S) to cerebellar (C) ratio, differences between left–right S/C ratios, S/C asymmetry indices",
+	      "Age, sex, disease duration, UPDRS, CAS, CAI",
+	      "Kruskal Wallis ANOVA, Mann–Whitney U test, Spearman rank correlation",
+	      "Decreased S/C ratios in DLB and HC versus PD; higher total UPDRS scores during practical-off in DLB versus PD; lower UPDRS extremity subscores in DLB versus PD"
+	    ],
+	    [
+	      "Provide evidence that MIBG scintigraphy differentiates probable MCI-LB from MCI-AD",
+	      "Dichotomized cardiac MIBG uptake result (H/M ratio)",
+	      "Age, sex, BMI, UDRS, MMSE, ACE, ESS, GDS, IADL, CDR, NPI, Memantine, cholinesterase inhibitor, antiparkinsonian drug, fluctuations (baseline), VH (baseline), Parkinsonism (baseline), RBD (baseline)",
+	      "Levene test, Mann–Whitney U test, Chi-squared test",
+	      "Diagnosis accuracy with core clinical features: -79% for MIBG (95% CI 68–87%) -76% for FP-CIT (95% CI 65–85%)"
+	    ],
+	    [
+	      "Provide evidence of the diagnostic accuracy of dopaminergic imaging at the MCI stage to support or refute its inclusion as a biomarker for MCI with Lewy bodies",
+	      "SBRs",
+	      "Age, sex, BMI, UDRS, MMSE, ACE, Epworth Sleepiness scale, Geriatric Depression scale, IADL, CDR, NPI, Memantine, cholinesterase inhibitor, antiparkinsonian drug, fluctuations (baseline), VH (baseline), Parkinsonism (baseline), RBD (baseline)",
+	      "Student’s t -test or Mann–Whitney U -test; Chi-square; independent samples t -test; Z -scores below − 2 calculated; Likelihood ratios from a 2 × 2 frequency table to estimate the added value of DaTscan",
+	      "Baseline 123I-FP-CIT visual rating for probable MCI-LB sensitivity of 66%, specificity of 88%, accuracy 76%, positive likelihood ratio 5.3"
+	    ],
+	    [
+	      "Explore whether 123I-FP-CIT binding in the putamen, caudate nucleus and nucleus accumbens is related to psychiatric symptoms in DLB",
+	      "Neuropsychiatric symptoms (delusions, hallucinations, depression, apathy), DAT levels",
+	      "Age, sex, disease duration, MMSE, CDR, UPDRS-III, NPI, various subscores: hallucinations, delusions, depression, anxiety, apathy, sleep",
+	      "Spearman’s correlation; Pairwise Pearson’s correlation coefficients; Bonferroni correction",
+	      "Inverse correlation between delusions, apathy, depression, and DAT levels (caudate);"
+	    ],
+	    [
+	      "Determine whether DAT-SPECT or 123I-MIBG myocardial scintigraphy should be examined first; evaluate superiority of the combined use of DAT-SPECT and MIBG versus either modality alone",
+	      "SBR, H/M ratio (early and delayed, and washout rate)",
+	      "Age, sex",
+	      "ROC analysis with delayed H/M ratio yielding Specificity, sensitivity, accuracy and AUC, 2-sided t test for normally distributed data, 2-sided Mann–Whitney U test for non-normally distributed data",
+	      "Sensitivity, Specificity and accuracy of diagnosing LBD: - SBR mean with DAT-SPECT: 59.6%, 71.4%, 67.5% - Delayed H/M ratio with MIBG: 85.1%, 91.4%, and 88.9% -Combined index: 76.6%, 74.3%, and 75.2%"
+	    ],
+	    [
+	      "Compare diagnostic value of DAT SPECT vs MIBG myocardial scintigraphy for supporting the diagnosis of DLB and differentiating it from AD; evaluation the use of the combination of the two modalities",
+	      "SBR, H/M ratio (delayed)",
+	      "Age, sex, disease duration, length of education, MMSE",
+	      "Student’s t test, Chi-squared, one-way ANOVA, ROC curve analysis",
+	      "Sensitivity, Specificity and of differentiating DLB from AD: - DAT-SPECT: 88.2%, 88.9% - Delayed H/M ratio with MIBG: 72.4%, 94.4% -Combined index: 96.1%, 90.7% and higher accuracy than single modality; higher frequency of parkinsonism in the abnormal DAT SPECT group; higher frequency of RBD in the abnormal MIBG group"
+	    ],
+	    [
+	      "Compare the diagnostic value of 123I-FP-CIT DAT-SPECT, MRI, perfusion SPECT and MIBG myocardial scintigraphy in differentiating DLB from AD",
+	      "SBR for DAT-SPECT, H/M ratio (delayed phase) for MIBG, z -scores in the medial occipital lobe for perfusion SPECT, z -scores of hippocampal atrophy for MRI",
+	      "Age, sex, education, duration of disease, MMSE",
+	      "Student’s t -test, Chi-squared test, one-way ANOVA, ROC curve analysis",
+	      "Sensitivity, Specificity and of differentiating DLB from AD: - DAT SPECT: Sn 93.8%, Sp 93.8%), superior accuracy - Delayed H/M ratio with MIBG: Sn 63.5%, Sp 100% - Perfusion SPECT: Sn 71.9%, Sp 59.4% -MRI: Sn 46.9%, Sp 81.3%"
+	    ],
+	    [
+	      "Explore the clinical course of patients with criteria for clinical DLB but normal FP-CIT SPECT (“false negative”) and patients not fulfilling DLB criteria with an abnormal scan (“false positive”)",
+	      "Visually rated FP-CIT SPECT",
+	      "Scores on standardized clinical rating scales for hallucinations, parkinsonism, fluctuations, RBD",
+	      "Two-step cluster analysis with 4 continuous variables (parkinsonism, hallucinations, cognitive fluctuations and RBD) and log-likelihood",
+	      "Increased frequency and severity of parkinsonism and cognitive fluctuation in S + CF- patients (not VH and RBD); fulfillment of probable DLB criteria at baseline and end of follow-up for S-CF + patients"
+	    ],
+	    [
+	      "Explore the association between loss of striatal dopamine transporter binding and DLB symptoms",
+	      "SBR",
+	      "UPDRS, NPI, MMSE",
+	      "Linear regression (DAT SBRs were the dependent variables and cognitive scores the independent variables), corrected for age and sex",
+	      "Association of dopamine deficiency in DLB with severity of motor symptoms; no correlation between dopamine deficiency and ratings of neurobehavioral disturbances nor overall cognition"
+	    ],
+	    [
+	      "Evaluate the role of 123 I-FP-CIT SPECT in the differentiation of DLB, FTD, and AD",
+	      "Binding potential values in caudate nucleus, putamen and whole striatum including caudate/putamen BP ratio and asymmetry indices",
+	      "Age, sex, symptom duration, MMSE, parkinsonism",
+	      "Student t -test (continuous data), Chi-squared test (nominal data), ANOVA with post hoc Tukey–Kramer test for cases of multiple group comparisons",
+	      "Decreased putaminal binding potential in patients with: -DLB versus AD (AUC 0.94) -FTD versus DLB (AUC 0.92); -FTD versus AD (AUC 0.74) Decreased binding potential ration in DLB versus FTD patients (AUC 0.91); High accuracy of combination of putaminal BP and BPR for DLB versus FTD (AUC 0.97); High accuracy in diagnosis of DLB among all patients (AUC 0.95) but not of FTD (AUC 0.81) and AD (AUC 0.80)"
+	    ],
+	    [
+	      "Clarify whether chronic ChEi therapy modulates striatal dopamine transporter binding measured by 123 I-FP-CIT in DLB, AD and PDD patients",
+	      "Striatal binding (caudate, anterior and posterior putamen)",
+	      "ChEi use versus non-use, Age, sex, MMSE, severity of parkinsonism and concurrent anti-depressant use, UPDRS-III, duration of illness, time on ChEi for those on medication",
+	      "Analysis of the effect of ChEi on 123I-FP-CIT SBR with multivariate analysis of covariance (MANCOVA)",
+	      "Decreased striatal 123 I-FP-CIT uptake in DLB and PDD versus AD; no significant change for patients with ChEi"
+	    ],
+	    [
+	      "Investigate the diagnostic value of 123 I-FP-CIT in a prospective study of a cohort followed up over one year",
+	      "Visually rated FP-CIT scans (normal or abnormal),",
+	      "Age, sex, MMSE, ACE-R, CDR, CIRS-G, IADL, UPDRS, H&Y, ESS, NPI, NPI distress, GDS, Medication at baseline (anti-dementia, -parkinsonian, -psychotic, -depressant)",
+	      "Chi-squared, t -test and Mann–Whitney for group comparisons; likelihood ratios for diagnostic value",
+	      "Visually rated FP-CIT scans to detect: -possible or probable MCI-LB: sensitivity of 54.2% (95% CI 39.2–68.6), specificity of 89% (95% CI 70.8–97.6), likelihood ratio of 4.9; -probable MCI-LB only: Sensitivity: 61% (95% CI 42.5–77.4); -possible MCI-LB only: Sensitivity: 40% (95%CI 16–4–67.7)"
+	    ],
+	    [
+	      "Compare the diagnostic value of 123 I-FP-CIT SPECT and MIBG myocardial scintigraphy in differentiating DLB from other dementia subtypes (AD, FTD)",
+	      "Normal or abnormal visual DaTscans, VOI-based semi-quantitative values",
+	      "Age, sex, MMSE, CDR, IADL, CIRS severity and comorbidity, CDS, ESS, MFS, clinical assessment of fluctuations, NPI, North-East Visual Hallucinations Interview",
+	      "Student’s t -test, Pearson chi-square test for dichotomous variables; comparison of semi-quantitative results between the 2 groups. Sensitivity and specificity determined for both visual and semi-quantitative analyses, as well as PPV, NPV. McNemar test to compare sensitivities and specificities. Cohen kappa statistic for inter-rater agreement for visual assessment",
+	      "Sensitivity and specificity for MIBG: 93% and 100%; sensitivity and specificity for FP-CIT: 90% and 76%; decreased FP-CIT uptake in 7 non-DLB patients (3 with parkinsonism)"
+	    ],
+	    [
+	      "Compare myocardial sympathetic imaging using 123 I-MIBG scintigraphy and striatal dopaminergic imaging using 123 I-ioflupane (FP-CIT) SPECT in patients with LBD",
+	      "SBR, H/M ratio",
+	      "Age, sex",
+	      "Chi-square for relationship between 2 modalities; sensitivity, specifitiy, accuracy, PPV, and NPV were calculated with 95% confidence interval; McNemar’s test to compare results, Chi-square with Yates’ correction or Fisher’s test when appropriate to assess relationship between MIBG and FP-CIT",
+	      "MIBG: overall sensitivity of 83%, specificity of 79%, accuracy of 82%, PPV of 86% and NPV of 76%; FP-CIT: 93%, 41%, 73%, 71%, 80%; No difference in the 2 modalities in patients with LBD"
+	    ],
+	    [
+	      "Investigate associations between core and suggestive DLB symptoms and different aspects of disease burden (i.e., IADL, QoL, caregiver burden)",
+	      "Visual assessments as well as age-matched binding ratio’s of DAT binding",
+	      "Core and suggestive symptoms, questionnaires for functional activities, QoL, Zarit Caegiver Burden Interview, age, sex, MMSE",
+	      "Descriptive statistics to characterize core and suggestive features (dichotomized as absent/present), general linear models to evaluate the influence of cognition, core and suggestive symptoms on IADL, univariate and multi-variate models",
+	      "88% abnormal FP-CIT scans; 95% patients with EEG/MEG abnormalities; 53% patients with a CSF AD profile"
+	    ],
+	    [
+	      "Describe clinical and imaging follow-up of patients with probable DLB with a normal baseline scan (compared to those with abnormal baseline scans)",
+	      "Binding ratios of FP-CIT SPECT",
+	      "Usual clinical characteristics",
+	      "Fisher’s exact test for categorical variables, Mann–Whitney U test for continuous variables, Cohen’s kappa statistic for interobserver variation",
+	      "7/67 (10.4%) normally rated FP-CIT scans; abnormal subsequent control in five DLB/S − patients (average second scan after 1.5 years)"
+	    ],
+	    [
+	      "Study the concomitant AD pathology in DLB on DaTscan and serotonin transporter availability using 123 I-FP-CIT SPECT",
+	      "Atrophy corrected ROIs, binding ratios",
+	      "CSF biomarker profile",
+	      "Mann–Whitney U test, Chi-square or Fisher’s exact test as appropriate. Linear regression with Pearson or Spearman correlation between BRs in each ROI (DAT and SERT) and clinical measures (corrected for age and ROI volume)",
+	      "Decreased FP-CIT binding ratios in the left amygdala (trend in the right hippocampus) in patients with DLB + AD co-pathology; negative correlation between motor symptoms and striatal DAT binding ratios;"
+	    ],
+	    [
+	      "Determine if detection of dopaminergic degeneration can help distinguish DLB from AD during life",
+	      "Binding of FP-CIT radioactivity in caudate, anterior and posterior putamen",
+	      "Age, MMSE, CAMCOG, CDR, BEHAVE-AD, UPDRS, Cornell depression scale, CAPE",
+	      "ANOVA and t -test were used to assess the difference between the four groups in ipsilateral and contralateral FP-CIT binding in caudate, anterior and posterior putamen and their basic indices; Cohen’s kappa test for inter-rater reliability",
+	      "Decreased 123 I-FP-CIT uptake in DLB and PD patients versus AD patients and HC (caudate nucleus, anterior and posterior putamen)"
+	    ],
+	    [
+	      "Compare the patterns of dopaminergic disruption in DLB and PD and evaluate the relationship between extrapyramidal signs and severity of dopaminergic dysfunction",
+	      "FP-CIT binding (STR/OCC)",
+	      "MMSE, CAMCOG, CDR, UPDRS, Hoehn and Yahr stage",
+	      "ANOVA and Student’s t -test for differences between groups of FP-CIT binding in caudate nuclei and anterior and posterior putamen; nonparametric Kruskal–Wallis and Mann–Whitney tests for C/P ratios and asymmetry indices; Spearman’s rank correlation for ordinal data",
+	      "Decreased 123 I-FP-CIT striatal binding in DLB and patients versus HC; decreased binding in DLB versus PD patients in caudate nucleus; Increased asymmetry of uptake in posterior putamen of PD versus DLB patients; higher mean C/P ratios of PD versus DLB patients and HC"
+	    ],
+	    [
+	      "Determine in a series of dementia patients with autopsy confirmation whether dopaminergic imaging improves accuracy of diagnosis compared to clinical criteria alone",
+	      "FP-CIT binding (STR/OCC), visual rating of scans",
+	      "Family history, rigidity, akinesia, tremor, VH, fluctuations, age, sex, years of education, Hoehn and Yahr stage, MMSe, UPDRS, CAMCOG, CAPE, GDS, CDR, Behave-AD, Neuropathological diagnostic criteria (i.e., neurofibrillary tangles), alpha-synuclein)",
+	      "Sensitivity and specificity ( autopsy = gold standard) of FP-CIT SPECT and of the Consensus DLB criteria (of 1996)",
+	      "Initial clinical diagnosis of DLB: Sensitivity of 75%, specificity of 42% 123 I-FP-CIT: sensitivity of 88%, specificity of 100% Neuropathological diagnosis over 10 years: -8/20 patients DLB -9/20 patients AD (co-existing with cerebrovascular disease) -3/20 patients with other diagnoses"
+	    ],
+	    [
+	      "Investigate whether doing a DaTscan in patients with possible DLB would to a more certain diagnosis (probable DLB or non-DLB dementia)",
+	      "Visual rating (type 1: asymmetric activity, one putamen with reduced uptake; type 2: absent activity of putamen of both hemispheres; type 3: type 2 + greatly reduced of absent activity in one or more caudate nuclei)",
+	      "Primary outcome measure: proportion of patients with a change in clinical diagnosis (to probable DLB or non-DLB) at 8 weeks, secondary outcome was the same at 24 weeks and change in clinician’s confidence of diagnosis at 8 and 24 weeks",
+	      "Fisher’s exact test; ANCOVA to compare the mean change in clinician’s confidence of diagnosis between baseline and week 8, baseline and week 24 and weeks 8 and 24",
+	      "Abnormal scans in 43% of 114 patients; Higher likelihood for clinical change in diagnosis if abnormal scan (82%) versus normal scan (46%)"
+	    ],
+	    [
+	      "Identify whether any of the core features of DLB were influenced by disturbances of DAT availability",
+	      "DAT availability (Non-displaceable binding potential adjusted to age)",
+	      "Core features of DLB (dementia, hallucinations, fluctuations or parkinsonism)",
+	      "Unpaired Student’s t -test to compare clinical core symptoms and DAT binding; Linear regression analysis for correlation of continuous data",
+	      "No correlation between MMSE, Hoehn & Yahr score, fluctuations or hallucinations and striatal DAT availability as measured with 123 I-PE2I SPECT"
+	    ]
+	  ],
+	  "residual_corner": [ {"Authors": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC10199865/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"e180649f2f495bcf5b5a4e0c53a2457c498e6baba714ce3af54b290970486e13"
+}

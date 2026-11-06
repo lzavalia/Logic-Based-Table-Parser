@@ -1,0 +1,77 @@
+{
+  "pmc_id":"PMC11859888",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Soil characteristics in the experimental field.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11859888/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The irrigation and fertilization levels of each treatment.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11859888/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Sugar beet yield across each treatment (t·ha −1 ).",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11859888/t2"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Sugar yield and root sugar content at the harvest period of each treatment.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC11859888/t3"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Regression analysis for response variables of yield, sugar yield under irrigation, and fertigation in all years.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC11859888/t4"
+    }
+  ],
+  "tables_jsonl_sha256":"a5752e113b4a77cda7c5155c7ead2e08981dc5e2729741fdec298d0fba6fb66b"
+}

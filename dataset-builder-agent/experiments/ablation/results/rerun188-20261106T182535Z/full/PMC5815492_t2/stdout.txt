@@ -1,0 +1,61 @@
+1 paper(s): 12 batch(es), 476 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 12 batch(es) to send
+PMC5815492/1: 40 answered, 0 without an answer
+PMC5815492/2: 40 answered, 0 without an answer
+PMC5815492/3: 40 answered, 0 without an answer
+PMC5815492/4: 40 answered, 0 without an answer
+PMC5815492/5: 40 answered, 0 without an answer
+PMC5815492/6: 40 answered, 0 without an answer
+PMC5815492/7: 40 answered, 0 without an answer
+PMC5815492/8: 40 answered, 0 without an answer
+PMC5815492/9: 40 answered, 0 without an answer
+PMC5815492/10: 40 answered, 0 without an answer
+PMC5815492/11: 40 answered, 0 without an answer
+PMC5815492/12: 36 answered, 0 without an answer
+
+Guideline typing complete: 476 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 1016 routed cell(s), 965 typed by guidelines, 51 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 12,
+    "inputTokens": 77674,
+    "outputTokens": 18607,
+    "totalTokens": 96281,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC5815492_t2
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC5815492: 33 table(s) reviewed: 32 unreviewed, 1 valid -> papers/PMC5815492/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793991817010000-0/manifest.json
+Exporting reviewed tables...
+PMC5815492: 1 of 33 table(s) exported -> papers/PMC5815492/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC5815492: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4423,
+    "outputTokens": 1697,
+    "totalTokens": 6120,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC5815492_t2

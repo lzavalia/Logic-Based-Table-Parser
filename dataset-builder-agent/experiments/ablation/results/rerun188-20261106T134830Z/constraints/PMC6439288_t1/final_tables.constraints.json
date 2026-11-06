@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC6439288",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Distribution (%) of selected risk factors among Black Latina US-born, Black Latina foreign-born, White Latina US-born, White Latina foreign-born, non-Latina White, and non-Latina Black mothers, United States, 2011–2013",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC6439288/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds ratios for the effect of maternal ethnicity, nativity, and race on infant low birth weight among Latina and non-Latina Black and White mothers, adjusting for different sets of risk factors in multivariable logistic regression models, United States, 2011–2013",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC6439288/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"f459c84d128f4d6ef27de1e5f3301047614f872cd9f07a1d8c8fb131d72851a3"
+}

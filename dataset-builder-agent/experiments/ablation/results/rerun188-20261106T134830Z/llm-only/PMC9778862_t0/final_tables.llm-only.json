@@ -1,0 +1,58 @@
+{
+  "pmc_id":"PMC9778862",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effective tillering numbers, grain numbers per spike, 1000-kernel weight, and grain yield induced by water irrigation regime and N fertilization over the rice-growing season.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC9778862/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Correlation analysis between rice yield and yield components.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC9778862/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Two-way ANOVA analysis of rice yield; average CH 4 and N 2 O flux; and seasonal emissions of CH 4 , N 2 O, GWP, and GHGI under N fertilization and water regimes (W), as well as their interactions (n = 3).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC9778862/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"3902dcd52fa235853d1a1ae1ce81bdba0047f96ff9ae61340b190fb216a7e2de"
+}

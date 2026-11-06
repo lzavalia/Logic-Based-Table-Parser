@@ -1,0 +1,10 @@
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC5387038: 10 table(s) reviewed: 9 unreviewed, 1 valid -> papers/PMC5387038/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793992099833000-0/manifest.json
+Exporting reviewed tables...
+PMC5387038: 1 of 10 table(s) exported -> papers/PMC5387038/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+PMC5387038: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected

@@ -1,0 +1,156 @@
+{
+  "pmc_id":"PMC12863919",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of participants.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12863919/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Associations between UHR with AAC with linear regression.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12863919/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC12863919/t2/h2_v1",
+      "caption":"Associations between UHR with severe AAC for logistic regression.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":8,
+	    "last_row":7,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Model 1": [ {"OR (95% CI)": []},  {"P": []} ]},
+	    {"Model 2": [ {"OR (95% CI)": []},  {"P": []} ]},
+	    {"Model 3": [ {"OR (95% CI)": []},  {"P": []} ]},
+	    {"Model 4": [ {"OR (95% CI)": []},  {"P": []} ]}
+	  ],
+	  "vertical metadata": [ {"UHR": []},  {"UHR quantile": []},  {"Q1": []},  {"Q2": []},  {"Q3": []},  {"Q4": []} ],
+	  "data": [
+	    [
+	      "17.93 (2.04–157.42)",
+	      ".009",
+	      "24.74 (1.94–315.34)",
+	      ".013",
+	      "8.34 (0.36–192.24)",
+	      ".185",
+	      "4.48 (0.17–115.47)",
+	      ".365"
+	    ],
+	    ["", "", "", "", "", "", "", "" ],
+	    [
+	      "1.00 (Reference)",
+	      "",
+	      "1.00 (Reference)",
+	      "",
+	      "1.00 (Reference)",
+	      "",
+	      "1.00 (Reference)",
+	      ""
+	    ],
+	    [
+	      "0.96 (0.68–1.37)",
+	      ".840",
+	      "1.06 (0.72–1.55)",
+	      ".769",
+	      "0.95 (0.62–1.46)",
+	      ".818",
+	      "0.95 (0.61–1.48)",
+	      ".820"
+	    ],
+	    [
+	      "1.22 (0.87–1.70)",
+	      ".244",
+	      "1.29 (0.89–1.88)",
+	      ".178",
+	      "1.07 (0.69–1.67)",
+	      ".767",
+	      "1.11 (0.71–1.75)",
+	      ".647"
+	    ],
+	    [
+	      "1.50 (1.08–2.06)",
+	      ".014",
+	      "1.65 (1.13–2.42)",
+	      ".010",
+	      "1.47 (0.92–2.35)",
+	      ".103",
+	      "1.46 (0.90–2.35)",
+	      ".125"
+	    ]
+	  ],
+	  "residual_corner": [ {"Variables": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12863919/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Subgroup analysis of the association between UHR and AAC scores.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12863919/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"4d5358beb58541b1e6285a603e58a73f8a2658711ff224caf57f175d3d417591"
+}

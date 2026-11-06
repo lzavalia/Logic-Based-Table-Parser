@@ -1,0 +1,9 @@
+1 paper(s): 3 batch(es), 105 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 3 batch(es) to send
+PMC5829520/1: 40 answered, 0 without an answer
+PMC5829520/2: 40 answered, 0 without an answer
+PMC5829520/3: 25 answered, 0 without an answer
+
+Guideline typing complete: 105 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+1 paper(s): 255 routed cell(s), 242 typed by guidelines, 13 kept ("none"), 0 pending

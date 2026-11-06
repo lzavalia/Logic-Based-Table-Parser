@@ -8,7 +8,7 @@ a code path selected with `review_agent.sh --arm`:
 |---|---|---|---|---|---|---|
 | A | `llm-only` | The LLM segments the table; its answer is the result | – | – | – | `src/ablation_review.dml` |
 | B | `constraints` | The LLM segments the table blind; valid only if it equals a parser candidate, else `unparseable` | ✓ | – | – | `src/ablation_review.dml` |
-| C | `full` (default) | The type scorer proposes a candidate, the LLM reviews it, the repair runs on disagreements | ✓ | ✓ | ✓ | `src/review_dataset.dml` |
+| C | `full` (default) | The guideline step refines the rule types, the type scorer proposes a candidate, the LLM reviews it, the repair runs on disagreements | ✓ | ✓ | ✓ | `src/review_dataset.dml` |
 
 - **Same input.** All three show the table exactly as the full review does
   (`table_review:table_block/2`: cell texts, merges, `<th>` marks, label,
@@ -30,10 +30,36 @@ a code path selected with `review_agent.sh --arm`:
   forest) is counted as *invalid output*.
 - **C is today's pipeline, unchanged.** Its prompt is byte-identical to
   before (checked on all 2,756 candidates of both datasets).
+- **C now includes the guideline step.** Since 2026-11-05 `review_agent.sh
+  --arm full` runs the guideline step (the LLM refines the cells the rules
+  route to the program's guidelines) before type inference, and its tokens
+  (`guideline_token_usage.json`) count towards C's. The 188-table results
+  below were run before that: C's type scorer saw the rule types only. The
+  guideline step types the whole paper of a sampled table, so in a run with
+  `--tables` C also pays for the paper's other tables.
 
 Outputs per paper: `review.<arm>.jsonl` and `final_tables.<arm>.json` for A
 and B, `review.jsonl` and `final_tables.json` for C. `tables.jsonl` is never
 changed.
+
+**Certificates.** C's certificates (in the paper's directory) carry the
+typing of every cell: which types the rules decide, replayed by the kernel,
+and which a model chose following the guidelines (see the main README).
+`run_ablation.sh` copies each call's certificate, `types.jsonl` and
+`guided_types.jsonl` into its results directory.
+B writes the geometric certificate of every valid table
+whose matched candidate is labelable to `certificates.constraints/` in the
+paper's directory (`certificateN_hH_vV.pl` or `certificateN_layoutK.pl`),
+kept apart from C's certificates, which C's review replaces in the paper's
+directory itself. Like C's, each certificate carries its checking kernel and
+checks itself with `swipl <certificate>`; B's carry no typing, since B uses
+no types. A has no parser candidate and so no certificate. `run_ablation.sh`
+copies B's into each call's results directory. For reviews published before
+B wrote certificates, write them without the model:
+
+```bash
+cd src && swipl certify_reviews.pl --dataset=ablation/<name>/dataset --arm=constraints
+```
 
 ## Files
 
@@ -47,6 +73,7 @@ changed.
 | `data/<source>/papers/<PMC>/` | The smoke sample's papers (`tables.jsonl`, `metadata.json`), copied from `../type_abstraction/data/`, which is downloaded rather than kept in the repository |
 | `prepare_dataset.py` | Copies the sample's papers (`tables.jsonl`, `metadata.json`) into a fresh dataset under `src/`, where DeepClause can see it; each paper comes from `data/` here if present, otherwise from `../type_abstraction/` |
 | `run_ablation.sh` | Runs every arm on every table, one DeepClause run per table and arm, then collects and scores |
+| `../../src/certify_reviews.pl` | Writes B's certificates again from published reviews, without the model |
 | `../../src/ablation_collect.pl` | Turns each arm's verdict into a segmentation comparable with the gold (rebuilding repaired tables) |
 | `score_ablation.py` | Outcomes, cell accuracy and tokens per arm |
 | `run_batch.sh` | Draws one batch of tables no earlier sample holds, copies its papers into `data/`, checks every gold label resolves, then runs `run_ablation.sh` on it |

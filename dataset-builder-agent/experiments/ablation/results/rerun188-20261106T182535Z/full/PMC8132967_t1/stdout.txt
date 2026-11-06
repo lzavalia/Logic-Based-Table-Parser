@@ -1,0 +1,51 @@
+1 paper(s): 1 batch(es), 40 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 1 batch(es) to send
+The result is set, and I'm calling finish again now that the required variable is in place.
+PMC8132967/1: 40 answered, 0 without an answer
+
+Guideline typing complete: 40 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 62 routed cell(s), 62 typed by guidelines, 0 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 2,
+    "inputTokens": 11677,
+    "outputTokens": 632,
+    "totalTokens": 12309,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8132967_t1
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC8132967: 4 table(s) reviewed: 3 unreviewed, 1 valid -> papers/PMC8132967/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793992014118000-0/manifest.json
+Exporting reviewed tables...
+PMC8132967: 1 of 4 table(s) exported -> papers/PMC8132967/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC8132967: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 6215,
+    "outputTokens": 473,
+    "totalTokens": 6688,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC8132967_t1

@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC12434915",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Demographic and MR features of the training ( n = 244), validation ( n = 81), and independent external test dataset ( n = 124) presented separately",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12434915/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Results of MB-CNN in validation and independent external test datasets and results of MB-CNN_TP53/MYC/Chr11 in different MB molecular subgroups",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12434915/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"5fe4c70cfca207e2f3c3eda2ac76f45df5045782ec8e7b024a719394fdc23c49"
+}

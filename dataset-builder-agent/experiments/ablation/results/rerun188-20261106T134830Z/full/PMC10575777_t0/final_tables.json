@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC10575777",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Differences in baseline variables across brain subgroups in patients.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10575777/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multigroup prediction of brain subgroup membership at baseline using sociodemographic and clinical variables.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10575777/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Analyses predicting remission across timepoints using sociodemographic, clinical, and brain subgroup membership variables.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10575777/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"9c40be80b2ddc98f6035254e8cb3d2cc5009d48cf2259734984d8016df011e37"
+}

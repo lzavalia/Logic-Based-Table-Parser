@@ -1,0 +1,244 @@
+{
+  "pmc_id":"PMC11651604",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Low-risk subgroups.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11651604/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":2},
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Medium-risk subgroups.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [0 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":1,
+	    "last_column":6,
+	    "last_row":20,
+	    "row_header_columns":2
+	  }
+	]
+      },
+      "separators": [ {"row":0,"text":"Medium Risk Group"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"TARGET": [ {"Group *": []},  {"Volition Type †": []} ]},
+	    {"": [ {"MOA#": []} ]},
+	    {"INGREDIENTS": [ {"Ingredient": []},  {"Dosing Parameter": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {
+	      "In the first week of participation the participant is provided an information pack detailing what to expect from rehabilitation and their recovery. The therapist discusses the content in the first week (paced and reinforced) with the participant and/or their carer.": [
+		{"Knowledge about rehabilitation and recovery expectations / increase": []},
+		{"Carer knowledge about rehabilitation and recovery expectations / increase": []},
+		{"Knowledge of pain management / increase": []},
+		{"Knowledge of fear of falling / Reduce": []},
+		{"Performance of self-regulation of activity / as directed": []},
+		{"Propensity to engage in discharge planning / increase": []}
+	      ]
+	    },
+	    {
+	      "The therapist sets ambitious mobility programme goals together with participant ±carer(s) and subsequently performs skill practice to engender the capability of the participant and carer to complete the mobility skills training, whilst providing direct supervision as appropriated for mobility specific training.": [
+		{"Participant goal setting ability / increase": []},
+		{"Carer goal setting ability / increase": []},
+		{"Mobility function / Increase": []},
+		{"Propensity to perform physical rehabilitation / increase": []},
+		{"Carer ability to perform mobility training / increase": []},
+		{"Carer knowledge of appropriate mobility involvement / Increase": []}
+	      ]
+	    },
+	    {
+	      "The therapist plans the discharge process with a discussion together with participant ±carer(s) to enable completion of participant-held rehabilitation discharge plan template which includes six questions and a multifactorial falls risk assessment **": [
+		{"Knowledge of community therapy availability / increase": []},
+		{
+		  "Knowledge of appropriate independent/ carer led rehabilitation on discharge / increase": []
+		},
+		{"Knowledge of safe return to previous activity / increase": []},
+		{"Knowledge of upcoming appointments/ increase": []},
+		{"Knowledge of use important of documents / increase": []},
+		{"Knowledge on how to contact care professionals / increase": []}
+	      ]
+	    }
+	  ],
+	  "data": [
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & Affective information processing",
+	      "Written information pack & therapist-led discussion to participant and/or carer on: determining what getting better means, how rehabilitation supports recovery, identifying who is involved in the rehabilitation process, whether there are any changes to participants ability to think or remember clearly, understanding the likely pathway of care and realistic waiting times, understanding the extent of therapy available in the community and the role of charities to support recovery",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & Affective information processing",
+	      "Written information pack & therapist-led discussion to participant and/or carer on: determining what getting better means, how rehabilitation supports recovery, identifying who is involved in the rehabilitation process, whether there are any changes to participants ability to think or remember clearly, understanding the likely pathway of care and realistic waiting times, understanding the extent of therapy available in the community and the role of charities to support recovery",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information pack & therapist-led discussion on: understanding usual care processes for requesting pain management, determining intentions to request pain relief prior to activity, understanding barriers to this and alternatives that can be offered",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: reinforcing fear of falling is normal after a fall, encouraging activity as a positive driver of recovery, providing positive feedback on improvement of movement regularly.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "V",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: understanding the benefits of carrying out activities independently, understanding the rationale of reinforcing activity by exercising outside of supervised rehabilitation to support recovery.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: understanding the advantages of co-created discharge planning and decisions, understanding if decisions have not been shared and if so reflecting on how to be involved in alternative decision making.",
+	      "n/a"
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Collaborative goal setting practise opportunities with therapist, participant and/or carer. Therapist description of difference between outcome goals and behaviour goals to achieve the outcome goal. Outcome goals set should seek to go beyond those set as part of usual care. Behaviour goals should incorporate early supported mobility aid progression and early incorporation of dual task mobility.",
+	      "Duration: 10 minutes"
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Collaborative goal setting practise opportunities with therapist, participant and/or carer. Therapist description of difference between outcome goals and behaviour goals to achieve the outcome goal. Outcome goals set should seek to go beyond those set as part of usual care. Behaviour goals should incorporate early supported mobility aid progression and early incorporation of dual task mobility.",
+	      "Duration: 10 minutes"
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Supervised mobility training opportunities within context of mobility outcome and behaviour goals. e.g. if outcome goal is: I can walk outside on flat ground continuously for 3 minutes with the use of two crutches and accompanied by another person by the time I am leaving the hospital, the therapist will provide tailored mobility skill training ingredients conducive to initial behaviour goal e.g.: walk continuously indoors on flat ground for 3 minutes with the use of two crutches independently.",
+	      "e.g. Frequency: 5 Sets: 5 Duration: 3 minutes. Progression: e.g. walk indoors around a set of obstacles on flat ground while using two crutches independently"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Completion of progress chart documentation, placing of progression chart at end of bed, completion of goal setting including documentation.",
+	      "n/a."
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Therapist-led demonstration of practical skills required to support specified mobility training. Opportunity for carer to practise in presence of therapist, therapist verbal feedback and availability to answer carer questions",
+	      "Duration: 30 minutes"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion of progress chart, Therapist led identification of when carer can practice mobility function practice and when not, identification of how to contact therapist if unsure or unconfident to support activity practice",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of discharge template of physiotherapy and occupational therapy, how to liaise with community professions, encouragement of early liaison, identification of unsuitability if patient not appropriate for service, identification of GP as contact source to arrange further support.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of discharge template of current mobility goals which can be continued in community either independently or in presence of carer and how to safely progress rehabilitation.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of discharge template, patients previously completed activities, identification of safe activities to return to, guidance on how to return to approach return to activity.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of discharge template to identify likely waiting times and upcoming appointments.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of multifactorial falls risk assessment and discharge plan, identify the benefit of showing to community therapist",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion and completion of discharge template to identify who and how to contact community therapist and GP.",
+	      "n/a"
+	    ]
+	  ],
+	  "residual_corner": [
+	    {"": [ {"Description of clinical interaction": []} ]},
+	    {"TARGET": [ {"What / In What Way (Measure)": []} ]}
+	  ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11651604/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–High-risk subgroups.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11651604/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"c0b8396adec4b6ea2db0e48896b6b3fd075913ace1499e08a4708f7a2adafe5d"
+}

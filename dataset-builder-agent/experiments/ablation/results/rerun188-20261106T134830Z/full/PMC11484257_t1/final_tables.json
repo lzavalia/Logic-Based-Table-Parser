@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC11484257",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristic of participants.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11484257/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Associations between NLR and LTBI.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11484257/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Associations of NLR with all-cause mortality in participants with LTBI and non-LTBI.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11484257/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"a6532ec25a718ef8a52362b544b92aa17c01f1d705dbfe196c4085d8be6a88b5"
+}

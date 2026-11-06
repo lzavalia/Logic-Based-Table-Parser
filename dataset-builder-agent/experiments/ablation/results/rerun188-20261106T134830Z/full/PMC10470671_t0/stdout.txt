@@ -1,0 +1,34 @@
+1 paper(s): 1 batch(es), 39 cell text(s) to send
+Guideline typing: 1 batch(es) to send
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC10470671/1: no usable answer (the model call failed or returned nothing)
+
+Guideline typing complete: 0 cell(s) answered, 0 left without an answer, 1 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 114 routed cell(s), 0 typed by guidelines, 0 kept ("none"), 114 pending
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T134830Z/full/PMC10470671_t0
+Type inference done (scorer bit-cost, level group).
+Reviewing the selected candidates...
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC10470671: 3 table(s) reviewed: 3 unreviewed -> papers/PMC10470671/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793981460228000-0/manifest.json
+Exporting reviewed tables...
+PMC10470671: 0 of 3 table(s) exported -> papers/PMC10470671/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC10470671: 0 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T134830Z/full/PMC10470671_t0

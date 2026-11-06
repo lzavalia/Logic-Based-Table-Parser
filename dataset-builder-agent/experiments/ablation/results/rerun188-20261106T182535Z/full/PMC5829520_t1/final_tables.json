@@ -1,0 +1,227 @@
+{
+  "pmc_id":"PMC5829520",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Characteristics of 44 network meta-analyses and 49 network comparisons of medical interventions included in study. Values are numbers (percentages) unless stated otherwise",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC5829520/t0"
+    },
+    {
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC5829520/t1/h2_v1",
+      "caption":"Treatment comparisons selected in each network, type of evidence (direct, indirect, or both), and meta-analysis method that provides strong evidence against similarity of treatments for primary outcome studied (see appendix for more detailed version of table)",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate1_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Comparison of greatest interest": []},
+	    {"Type of evidence": []},
+	    {
+	      "Design providing strong evidence": [ {"Network meta-analysis": []},  {"Meta-analysis": []} ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"Buti 2013": []},
+	    {"Dogliotti 2013": []},
+	    {"Naci 2013": []},
+	    {"Filippini 2013": []},
+	    {"Hon-Yen Wu 2013": []},
+	    {"Lin 2014": []},
+	    {"Castellucci 2014": []},
+	    {"Myers 2014": []},
+	    {"Alfirevic 2014": []},
+	    {"Greco 2015": []},
+	    {"Greco 2015": []},
+	    {"Walsem 2015": []},
+	    {"Singh 2015": []},
+	    {"Singh 2015": []},
+	    {"Linde 2015": []},
+	    {"Sun 2015": []},
+	    {"Leucht 2013": []},
+	    {"Ke-Qing Shi 2013": []},
+	    {"Stagg 2014": []},
+	    {"Tadrous 2014": []},
+	    {"Dong 2013": []},
+	    {"Stevens 2015": []},
+	    {"Lin 2012": []},
+	    {"Fretheim 2012": []},
+	    {"Fretheim 2012": []},
+	    {"Liu 2012": []},
+	    {"Lori 2012": []},
+	    {"Ara 2012": []},
+	    {"Gray 2012": []},
+	    {"Chatterjee 2013": []},
+	    {"Mavranezouli 2013": []},
+	    {"Akshintala 2013": []},
+	    {"Bodalia 2013": []},
+	    {"Kew 2014": []},
+	    {"Windecker 2014": []},
+	    {"Kriston 2014": []},
+	    {"Dong 2015": []},
+	    {"Rotta 2013": []},
+	    {"Murad 2012": []},
+	    {"Ramsberg 2012": []},
+	    {"Haas 2012": []},
+	    {"Shamiliyan 2012": []},
+	    {"Shi 2013": []},
+	    {"Dogliotti 2013": []},
+	    {"Pechlivanoglou 2013": []},
+	    {"Yang 2014": []},
+	    {"Zoccai 2014": []},
+	    {"Samarasekera 2013": []},
+	    {"Terasawa 2012": []}
+	  ],
+	  "data": [
+	    [
+	      "Coronally advanced flap and connective tissue graft versus coronally advanced flap and enamel matrix derivative",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Vitamin K antagonists versus apixaban", "Both", "No", "No" ],
+	    ["Atorvastatin versus rosuvastatin", "Both", "No", "No" ],
+	    ["β interferon-1a (Avonex) versus β interferon-1a (Rebif)", "Both", "No", "No" ],
+	    [
+	      "Angiotensin receptor blockers versus angiotensin converting enzyme inhibitors",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Ferric sulphate versus mineral trioxide aggregate", "Both", "No", "No" ],
+	    [
+	      "Unfractionated heparin and vitamin K antagonist versus low molecular weight heparin and vitamin K antagonist",
+	      "Both",
+	      "Yes",
+	      "Yes"
+	    ],
+	    ["Celecoxib versus tramadol", "Both", "No", "No" ],
+	    ["Vaginal misoprostol versus vaginal prostaglandin E2", "Both", "No", "No" ],
+	    ["Dobutamine versus levosimendan", "Both", "Yes", "No" ],
+	    ["Dobutamine versus milrinone", "Both", "No", "No" ],
+	    ["Diclofenac high dose versus celecoxib", "Both", "Yes", "No" ],
+	    ["5-aminosalicylic acid versus anti-tumour necrosis factor", "Both", "Yes", "No" ],
+	    ["Anti-tumour necrosis factor versus placebo", "Both", "Yes", "No" ],
+	    [
+	      "Selective serotonin reuptake inhibitors versus tricyclic and tetracyclic antidepressants",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Metformin versus sitagliptin", "Both", "Yes", "No" ],
+	    ["Haloperidol versus olanzapine", "Both", "Yes", "No" ],
+	    [
+	      "Endoscopic injection sclerotherapy versus endoscopic banding ligation",
+	      "Both",
+	      "Yes",
+	      "No"
+	    ],
+	    [
+	      "Isoniazid (six months) versus rifampicin and isoniazid (three-four months)",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Alendronate versus risedronate", "Both", "No", "No" ],
+	    [
+	      "Inhaled corticosteroids versus long acting β2 agonists—inhaled corticosteroids",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Standard care or placebo versus diet and exercise", "Both", "Yes", "Yes" ],
+	    ["Chemical occlusion versus physical occlusion", "Both", "No", "No" ],
+	    [
+	      "Angiotensin converting enzyme inhibitors versus calcium channel blockers",
+	      "Both",
+	      "No",
+	      "No"
+	    ],
+	    ["Angiotensin receptor blockers versus calcium channel blockers", "Both", "No", "No" ],
+	    ["Thiazolidinediones versus dipeptidyl peptidase-4 inhibitors", "Both", "No", "No" ],
+	    ["Amiodarone intravenous versus flecainide intravenous", "Both", "No", "No" ],
+	    ["Orlistat versus standard care", "Both", "Yes", "Yes" ],
+	    ["Orlistat versus lifestyle", "Both", "Yes", "Yes" ],
+	    ["Metoprolol versus bisoprolol", "Indirect", "No", "NE" ],
+	    ["Sertraline versus diazepam", "Indirect", "No", "NE" ],
+	    ["Non-steroidal anti-inflammatory drugs versus nafamostat", "Indirect", "No", "NE" ],
+	    ["Pregabalin versus gabapentin", "Indirect", "No", "NE" ],
+	    ["Glycopyrronium bromide versus budesonide", "Indirect", "No", "NE" ],
+	    [
+	      "Everolimus eluting stent versus coronary artery bypass grafting",
+	      "Indirect",
+	      "No",
+	      "NE"
+	    ],
+	    ["Fluoxetine versus escitalopram", "Indirect", "No", "NE" ],
+	    [
+	      "Exercise and non-steroidal anti-inflammatory drugs versus exercise",
+	      "Indirect",
+	      "Yes",
+	      "NE"
+	    ],
+	    ["Terbinafine versus flutrimazole", "Indirect", "No", "NE" ],
+	    ["Alendronate versus denosumab", "Indirect", "No", "NE" ],
+	    ["Amitriptyline versus fluoxetine", "Indirect", "No", "NE" ],
+	    ["Nifedipine versus placebo", "Indirect", "Yes", "NE" ],
+	    ["Candesortom versus topiramate", "Indirect", "Yes", "NE" ],
+	    [
+	      "Endoscopic banding ligation versus endoscopic banding ligation and endoscopic injection sclerotherapy",
+	      "Direct",
+	      "No",
+	      "No"
+	    ],
+	    ["Vitamin K antagonists versus rivaroxab", "Direct", "No", "No" ],
+	    ["Posaconazole versus fluconazole", "Direct", "Yes", "Yes" ],
+	    ["Edaravone versus placebo", "Direct", "Yes", "Yes" ],
+	    ["Iopromide versus iodixanol", "Direct", "No", "No" ],
+	    ["Potent corticosteroid versus placebo", "Direct", "Yes", "Yes" ],
+	    [
+	      "Fludarabine-rituximab-based chemoimmunotherapies versus fludarabine based combination regimens",
+	      "Direct",
+	      "No",
+	      "No"
+	    ]
+	  ],
+	  "residual_corner": [ {"Network": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC5829520/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Number of comparisons with strong evidence against the null hypothesis from pairwise and network meta-analysis. Values are numbers (percentages) unless stated otherwise",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC5829520/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"989d02a4d4eb5be471300f60b896d5bf083977df311d4b211a427625072a8262"
+}

@@ -1,0 +1,395 @@
+{
+  "pmc_id":"PMC8099387",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"GA Classification of Open Fractures of the Tibia 6 – 8",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1.",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8099387/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":4},
+      "candidate_id":null,
+      "caption":"Summary of 9 Studies Included in Systematic Review and Meta-analysis (Demographics)",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 2.",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":15,
+	    "last_row":19,
+	    "row_header_columns":4
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Sample": [ {"IIIC": []} ]},
+	    {"Location": [ {"": []} ]},
+	    {"MTC": [ {"": []} ]},
+	    {"Age": [ {"": []} ]},
+	    {"Sex (M:F)": [ {"": []} ]},
+	    {"Injury Etiologies": [ {"": []} ]},
+	    {"Injury Locations": [ {"": []} ]},
+	    {"GA": [ {"": []},  {"": []},  {"": []},  {"": []},  {"": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {
+	      "Ali et al 12": [ {"2015": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {"Boriani et al 13": [ {"2017": [ {"Prospective cohort": [ {"OP": []},  {"Non-OP": []} ]} ]} ]},
+	    {
+	      "Fernandez et al 14": [
+		{
+		  "2015": [
+		    {
+		      "Prospective/retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Hardwicke et al 15": [ {"2016": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {
+	      "Hay-David et al 16": [ {"2018": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {
+	      "Sommar et al 17": [ {"2015": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {
+	      "Stammers et al 18": [ {"2013": [ {"Prospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {
+	      "Toia et al 19": [ {"2019": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    },
+	    {
+	      "Trickett et al 20": [ {"2015": [ {"Retrospective cohort, before and after": [ {"OP": []},  {"Non-OP": []} ]} ]} ]
+	    }
+	  ],
+	  "data": [
+	    [
+	      "13",
+	      "United Kingdom",
+	      "John Radcliffe Hospital in Oxford",
+	      "Median = 38 (range: 11–79)",
+	      "N/A",
+	      "MVA = 4, MVA vs motorcycle = 20, falls = 15, MVA vs pedestrian = 8, sports = 2, kicked by horse = 1",
+	      "Open lower extremity fractures",
+	      "0",
+	      "0",
+	      "0",
+	      "38",
+	      "4"
+	    ],
+	    [
+	      "22",
+	      "United Kingdom",
+	      "John Radcliffe Hospital in Oxford",
+	      "Median = 38 (range: 11–79)",
+	      "N/A",
+	      "MVA = 4, MVA vs motorcycle = 20, falls = 15, MVA vs pedestrian = 8, sports = 2, kicked by horse = 1",
+	      "Open lower extremity fractures",
+	      "0",
+	      "0",
+	      "0",
+	      "38",
+	      "4"
+	    ],
+	    [
+	      "110",
+	      "United Kingdom, Pakistan",
+	      "Lower Limb Reconstruction Unit, North Bristol NHS Trust, and the Plastic Surgery Department, Jinnah Hospital",
+	      "43 ± 22",
+	      "82:28",
+	      "MVA = 99",
+	      "Open tibia fractures",
+	      "6",
+	      "",
+	      "12",
+	      "86",
+	      "5"
+	    ],
+	    [
+	      "44",
+	      "Italy",
+	      "Orthopedic and Trauma Unit, Maggiore Hospital",
+	      "51 ± 18",
+	      "32:12",
+	      "MVA = 99",
+	      "Open tibia fractures",
+	      "1",
+	      "",
+	      "7",
+	      "33",
+	      "3"
+	    ],
+	    [
+	      "54",
+	      "United Kingdom",
+	      "University Hospitals Coventry and Warwickshire NHS Trust",
+	      "49 ± 2",
+	      "32:22",
+	      "MVA = 28, fall = 18, crush = 5, blow = 2, other = 1",
+	      "Tibia = 36, ankle = 18",
+	      "6",
+	      "5",
+	      "15",
+	      "26",
+	      "2"
+	    ],
+	    [
+	      "51",
+	      "United Kingdom",
+	      "University Hospitals Coventry and Warwickshire NHS Trust",
+	      "44 ± 2",
+	      "35:16",
+	      "MVA = 31, fall = 17, crush = 1, blow = 1, other = 1",
+	      "Tibia = 35, ankle = 16",
+	      "8",
+	      "8",
+	      "15",
+	      "18",
+	      "2"
+	    ],
+	    [
+	      "195",
+	      "United Kingdom",
+	      "University Hospitals Coventry and Warwickshire NHS Trust",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "Open lower extremity fractures",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ],
+	    [
+	      "62",
+	      "United Kingdom",
+	      "University Hospitals Coventry and Warwickshire NHS Trust",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "Open lower extremity fractures",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ],
+	    [
+	      "1189",
+	      "United Kingdom",
+	      "Glasgow Royal Infirmary, Salford Royal NHS Foundation Trust, Morriston Hospital",
+	      "34 ± 61",
+	      "1109:80",
+	      "Motorcycle = 1564, pillion passengers = 64",
+	      "Open lower extremity fractures",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ],
+	    [
+	      "439",
+	      "United Kingdom",
+	      "Glasgow Royal Infirmary, Salford Royal NHS Foundation Trust, Morriston Hospital",
+	      "34 ± 55",
+	      "412:27",
+	      "Motorcycle = 1564, pillion passengers = 64",
+	      "Open lower extremity fractures",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ],
+	    [
+	      "42",
+	      "Sweden",
+	      "Karolinska University Hospital",
+	      "48 ± 18",
+	      "27:15",
+	      "MVA = 16, bike = 2, riding = 1, fall = 11, GSW = 2, MVA vs pedestrian = 2, wheelchair accident = 1, moped accident = 3, work = 2, lawnmower = 1",
+	      "Tibia = 29, patellar = 2, ankle = 3, radius = 1, humerus = 2, ulna = 1, fibula = 2, calcaneus = 1",
+	      "0",
+	      "1",
+	      "6",
+	      "9",
+	      "9"
+	    ],
+	    [
+	      "12",
+	      "Sweden",
+	      "Karolinska University Hospital",
+	      "43 ± 16",
+	      "9:3",
+	      "MVA = 5, fall = 4, climbing = 1, moped accident = 1, excavator accident = 1",
+	      "Tibia = 9, calcaneus = 2, femur = 1",
+	      "0",
+	      "0",
+	      "2",
+	      "6",
+	      "2"
+	    ],
+	    [
+	      "29",
+	      "United Kingdom",
+	      "St. George’s Healthcare NHS Trust London",
+	      "44 ± 70",
+	      "16:13",
+	      "N/A",
+	      "Tibia = 29",
+	      "0",
+	      "4",
+	      "10",
+	      "13",
+	      "2"
+	    ],
+	    [
+	      "15",
+	      "United Kingdom",
+	      "St. George’s Healthcare NHS Trust London",
+	      "37 ± 52",
+	      "12:3",
+	      "N/A",
+	      "Tibia = 15",
+	      "0",
+	      "3",
+	      "3",
+	      "9",
+	      "0"
+	    ],
+	    [
+	      "16",
+	      "Italy",
+	      "University of Palermo",
+	      "49 ± 56",
+	      "12:4",
+	      "N/A",
+	      "Tibia = 16 (open tibia fracture = 6, septic pseudoarthrosis = 10)",
+	      "0",
+	      "0",
+	      "0",
+	      "6",
+	      ""
+	    ],
+	    [
+	      "19",
+	      "Italy",
+	      "University of Palermo",
+	      "52 ± 49",
+	      "16:3",
+	      "N/A",
+	      "Tibia = 19 (open tibia fracture = 10, septic pseudoarthrosis = 9)",
+	      "0",
+	      "0",
+	      "0",
+	      "10",
+	      ""
+	    ],
+	    [
+	      "15",
+	      "United Kingdom",
+	      "Morriston Hospital",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "Tibia = 15",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ],
+	    [
+	      "28",
+	      "United Kingdom",
+	      "Morriston Hospital",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "Tibia = 28",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A",
+	      "N/A"
+	    ]
+	  ],
+	  "residual_corner": [
+	    {"Author": [ {"I": []} ]},
+	    {"Year": [ {"II": []} ]},
+	    {"Study Design": [ {"IIIA": []} ]},
+	    {"Cohort": [ {"IIIB": []} ]}
+	  ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC8099387/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of 9 Studies Included in Systematic Review and Meta-analysis (Surgical Outcomes)",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3.",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC8099387/t2"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of Findings: Orthoplastic Approach Compared to Nonorthoplastic Approach for Management of Traumatic Lower Extremity Injuries (Surgical Outcomes)",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4.",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC8099387/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"b4cbab15494304f88dc1699afc82177f309b38db6fdc4410f41ce7fa571bee3e"
+}

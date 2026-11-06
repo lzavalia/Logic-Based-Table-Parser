@@ -1,0 +1,254 @@
+{
+  "pmc_id":"PMC10470671",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline demographic characteristics among patients with and without vesicoureteral reflux.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10470671/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Hazard ratios and 95% CIs of chronic kidney disease associated with vesicoureteral reflux patients.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10470671/t1"
+    },
+    {
+      "boundary": {"hmd":3,"vmd":1},
+      "candidate_id":"PMC10470671/t2/layout1",
+      "caption":"HRs and 95% CIs of chronic kidney disease associated with vesicoureteral reflux stratified by age, gender and comorbidities.",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate2_layout1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "separators": [
+	{"row":4,"text":"Age, yr"},
+	{"row":8,"text":"Gender"},
+	{"row":11,"text":"Comorbidity"},
+	{"row":15,"text":"Hypertension"},
+	{"row":18,"text":"Kidneys infection"},
+	{"row":21,"text":"Hydronephrosis"},
+	{"row":24,"text":"Cystitis"},
+	{"row":27,"text":"Urinary tract infection"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Vesicoureteral reflux": [
+		{"No": [ {"Event": []},  {"PY": []},  {"IR": []} ]},
+		{"Yes": [ {"Event": []},  {"PY": []},  {"IR": []} ]}
+	      ]
+	    },
+	    {"Crude HR (95% CI)": []},
+	    {"Adjusted HR (95% CI)": []}
+	  ],
+	  "vertical metadata": [
+	    {"All": []},
+	    {"<1": []},
+	    {"1–5": []},
+	    {">5": []},
+	    {"Male": []},
+	    {"Female": []},
+	    {"Diabetes mellitus": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []},
+	    {"No": []},
+	    {"Yes": []}
+	  ],
+	  "data": [
+	    [
+	      "13",
+	      "60,076",
+	      "2.16",
+	      "51",
+	      "63,320",
+	      "8.05",
+	      "3.74 (2.04–6.89) ***",
+	      "3.78 (2.10–7.18) ***"
+	    ],
+	    [
+	      "5",
+	      "25,344",
+	      "1.97",
+	      "16",
+	      "30,442",
+	      "5.26",
+	      "2.66 (1.01–7.25) *",
+	      "2.48 (0.90–6.81)"
+	    ],
+	    [
+	      "5",
+	      "24,319",
+	      "2.06",
+	      "17",
+	      "20,204",
+	      "8.41",
+	      "4.12 (1.52–11.17) **",
+	      "4.43 (1.62–12.09) **"
+	    ],
+	    [
+	      "3",
+	      "10,413",
+	      "2.88",
+	      "18",
+	      "12,673",
+	      "14.20",
+	      "4.94 (1.45–16.82) **",
+	      "5.29 (1.81–17.76) **"
+	    ],
+	    [
+	      "6",
+	      "27,955",
+	      "2.15",
+	      "16",
+	      "30,542",
+	      "5.24",
+	      "2.46 (1.02–6.31) *",
+	      "2.32 (0.90–5.96)"
+	    ],
+	    [
+	      "7",
+	      "32,121",
+	      "2.18",
+	      "35",
+	      "32,778",
+	      "10.68",
+	      "4.90 (2.18–11.04) ***",
+	      "5.15 (2.42–12.42) ***"
+	    ],
+	    ["", "", "", "", "", "", "", "" ],
+	    [
+	      "8",
+	      "40,582",
+	      "1.97",
+	      "24",
+	      "43,328",
+	      "5.54",
+	      "2.81 (1.27–6.27) **",
+	      "2.74 (1.12–6.12) *"
+	    ],
+	    [
+	      "5",
+	      "19,494",
+	      "2.56",
+	      "27",
+	      "19,992",
+	      "13.51",
+	      "5.32 (2.05–13.83) ***",
+	      "5.46 (2.09–14.23) ***"
+	    ],
+	    [
+	      "9",
+	      "36,886",
+	      "2.44",
+	      "28",
+	      "39,269",
+	      "7.13",
+	      "2.91 (1.38–6.18) **",
+	      "2.79 (1.32–5.92) **"
+	    ],
+	    [
+	      "4",
+	      "23,190",
+	      "1.72",
+	      "23",
+	      "24,051",
+	      "9.56",
+	      "5.69 (1.97–16.45) ***",
+	      "5.77 (1.99–16.76) ***"
+	    ],
+	    [
+	      "11",
+	      "56,913",
+	      "1.93",
+	      "41",
+	      "58,473",
+	      "7.01",
+	      "3.65 (1.87–7.10) ***",
+	      "3.64 (1.87–7.10) ***"
+	    ],
+	    ["2", "3163", "6.32", "10", "4847", "20.63", "3.40 (0.75–15.54)", "4.11 (0.88–19.16)" ],
+	    [
+	      "13",
+	      "56,950",
+	      "2.28",
+	      "45",
+	      "58,836",
+	      "7.65",
+	      "3.37 (1.82–6.26) ***",
+	      "3.26 (1.76–6.05) ***"
+	    ],
+	    ["0", "3126", "0.00", "6", "4484", "13.38", "–", "–" ],
+	    [
+	      "13",
+	      "59,761",
+	      "2.18",
+	      "51",
+	      "62,889",
+	      "8.11",
+	      "3.75 (2.04–6.91) ***",
+	      "3.68 (2.00–6.78) ***"
+	    ],
+	    ["0", "315", "0.00", "0", "430", "0.00", "–", "–" ],
+	    [
+	      "3",
+	      "8947",
+	      "3.35",
+	      "12",
+	      "10,162",
+	      "11.81",
+	      "3.51 (1.02–12.46) *",
+	      "3.87 (1.09–13.81) *"
+	    ],
+	    [
+	      "10",
+	      "51,129",
+	      "1.96",
+	      "39",
+	      "53,158",
+	      "7.34",
+	      "3.79 (1.89–7.59) ***",
+	      "3.70 (1.84–7.42) ***"
+	    ]
+	  ],
+	  "residual_corner": [ {"Variables": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC10470671/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"b3465cb110905b1210afbaf6f7ad2103c424f7b30b3b961cdc134349a699e715"
+}

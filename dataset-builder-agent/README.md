@@ -549,7 +549,14 @@ step on the papers it selected; to run it on an existing dataset, use
 ./guideline_agent.sh --papers PMC7293797,PMC5831205   # only these papers
 ./guideline_agent.sh --run <name>                     # the papers of build run dataset/runs/<name>
 ./guideline_agent.sh --program my_types.tdsl --model anthropic:claude-sonnet-4-6
+./guideline_agent.sh --dataset ablation/smoke/dataset --log-dir /tmp/logs
 ```
+
+`review_agent.sh` (the full arm) runs this step itself before type inference,
+on the papers it reviews and with the same `--dataset`, `--program` and
+`--log-dir`; `--no-guidelines` skips it (`run_agent.sh` passes that, since it
+runs the step on its own first). A failed step does not stop the review, which
+then uses the types there are, but the exit status reports it.
 
 It needs SWI-Prolog as well as DeepClause, since the rules use PCRE; the Docker
 image has both. Other options are passed on to `deepclause run`, and the
@@ -567,8 +574,9 @@ calls `set_result` and `finish` in separate turns, which resends the prompt.
 These are estimates at four characters per token.
 
 The logs are `src/guideline_log.txt` and `src/guideline_token_usage.json`,
-replaced by each run. With `LOG_DIR` set, they go to a new
-`LOG_DIR/<UTC timestamp>-guidelines/` directory instead.
+replaced by each run. With `--log-dir`, they go there; with `LOG_DIR` set, to
+a new `LOG_DIR/<UTC timestamp>-guidelines/` directory instead. The answer
+cache is `<dataset>/cache/guideline_answers.jsonl`.
 
 Type inference, the first stage of the review, reads `guided_types.jsonl` when
 it exists. Without it (`--no-guidelines`, or a failed step) it uses the rule
@@ -602,8 +610,8 @@ and the result is matched against the parser's candidates (`constraints`) or
 taken as it is (`llm-only`), without type inference or repair. They write
 `review.<arm>.jsonl` and `final_tables.<arm>.json`.
 
-**Type inference comes first.** `review_agent.sh` starts by running
-`src/type_inference.pl`, which types the cells by rule and, in
+**Type inference comes first.** After the guideline step, `review_agent.sh`
+runs `src/type_inference.pl`, which types the cells by rule and, in
 `src/table_type_scorer.pl`, selects the most viable candidate of every table
 from its cell types. It reads `guided_types.jsonl` when the guideline step has
 run for the table, and `types.jsonl` otherwise, and writes
@@ -1043,7 +1051,10 @@ label for a scientific table.
 | `tests/boundary_regression_tests.pl` | Offline regression tests for boundary domain and structural validation. |
 | `tests/boundary_scaling_regression_tests.pl` | Differential tests for indexed boundary search and streamed renderer. |
 | `tests/paper_output_regression_tests.pl` | Offline regression tests for stable PMC output identity, replacement, and failure rollback. |
-| `guideline_agent.sh` | Runs the guideline step on an existing dataset (see [Typing cells with guidelines](#typing-cells-with-guidelines)). |
+| `guideline_agent.sh` | Runs the guideline step on an existing dataset (see [Typing cells with guidelines](#typing-cells-with-guidelines)); `review_agent.sh` runs it before the full review. |
+| `src/typed_certificates.pl` | Adds the typing section to the full review's certificates (see the geometric certificates section). |
+| `src/certify_reviews.pl` | Writes the certificates of published reviews without a model: typed ones for the full review, arm B's for the ablation. |
+| `tests/typed_certificate_regression_tests.pl` | Offline tests for typed certificates through the whole full pipeline, with given guideline and review answers. |
 | `src/type_guidelines.dml` | The guideline agent: sends each batch of cells to the LLM. |
 | `src/type_guidelines.pl` | Routes cells to the guideline step, writes the request batches, and writes `guided_types.jsonl`. |
 | `src/guideline_answers.pl` | Reads the batches for the agent, checks the answers and appends them to the cache. |
@@ -1052,7 +1063,7 @@ label for a scientific table.
 | `src/type_dsl_parser.pl`, `src/type_dsl_engine.pl` | Parser and engine of the type DSL. |
 | `type_dsl_examples/` | Type DSL programs; `sci.tdsl` is the default, `sci_text.tdsl` leaves text cells to guidelines. |
 | `tests/type_guidelines_regression_tests.pl` | Offline tests for routing, requests, the cache, applying answers and the paper filter, with a simulated model. |
-| `tests/guideline_agent_regression_tests.py` | Offline tests for `guideline_agent.sh` and its step in `run_agent.sh`, with a stub `deepclause`. |
+| `tests/guideline_agent_regression_tests.py` | Offline tests for `guideline_agent.sh` and its step in `run_agent.sh` and `review_agent.sh`, with a stub `deepclause`. |
 | `src/test_driver.pl` | Runs the table logic on a local file, without the agent. |
 | `tests/test_driver_regression_tests.pl` | Offline tests for the local driver: output naming, sanitization, stale-file replacement, strict errors. |
 
@@ -1287,17 +1298,66 @@ a layout. A table that is `unparseable` or `unreviewed` gets none, and a new
 review removes the certificates of candidates it no longer selects. Each
 certificate is generated afresh from the record, written, read back **as
 data** (its directives are never run), compared with what was generated, and
-checked by the kernel before the review is saved. Check a published
-certificate yourself with only the kernel:
+checked by the kernel before the review is saved.
+
+Each certificate is self-contained: it carries the source of its checking
+kernel and that source's SHA-256 (`checking_kernel(Sha256, Source)`). Run
+it with nothing but SWI-Prolog:
 
 ```bash
-swipl -p certificate_kernel=src dataset/papers/PMC123/certificate0_h1_v1.pl
+swipl dataset/papers/PMC123/certificate0_h1_v1.pl
 ```
 
-It prints `certificate accepted` and exits with status 0, or prints the
-reason and exits with status 1. The certificate locates the kernel through
-the `certificate_kernel` search path, so whoever checks it decides which
-kernel to trust. In the Docker image the kernel is in `/app/src`.
+It checks the embedded kernel against the hash, prints `checking kernel
+sha256 <hash>`, loads that kernel and prints `certificate accepted` with
+exit status 0, or the reason with status 1. The hash is what you compare with
+a kernel you trust (`shasum -a 256 src/certificate_kernel.pl`). To check a
+certificate with your own kernel instead, read it as data, which never runs
+the copy it carries:
+
+```bash
+swipl -g "check_certificate_file('dataset/papers/PMC123/certificate0_h1_v1.pl', V), print(V), nl" \
+      -t halt src/certificate_kernel.pl
+```
+
+The kernel accepts the copy only if its hash matches, but judges the
+certificate by its own rules, so a lax embedded kernel cannot pass a wrong
+certificate this way. In the Docker image the kernel is in `/app/src`.
+
+**Typing.** Once the full review (and its repair) is done, `review_agent.sh`
+runs `src/certify_reviews.pl --arm=full`, which writes each selected table's
+certificate again with a typing section (`src/typed_certificates.pl`; it
+needs PCRE, so it runs outside DeepClause). The section holds the type DSL
+program's rules, subtypes and guidelines, every cell's text and its type with
+a derivation: `rules`, `guideline(Batch)` (a model chose the type),
+`guideline_none(Batch)` (a model kept the rule type) or `guideline_pending`
+(routed to the guidelines, no answer yet). The types are those the review
+worked from (the `types_file` of `type_inference.jsonl`); for a repaired table
+they cover the repaired raster. The kernel replays the rules on every cell's
+text with PCRE, so what the rules decide is proved; it checks that each cell
+was routed to the guidelines exactly when the program routes it, and that a
+model only chose a type allowed to that cell. Which answer the model gave is
+an assumption the certificate states, not something the kernel can check.
+Running a typed certificate prints a summary after `certificate accepted`:
+
+```
+typing: 71 cell(s), each checked again by this kernel
+  30 typed by deterministic rules (replayed), 15 empty or untyped by the rules
+  0 typed by a model following the guidelines (assumed; checked to be allowed)
+  0 kept at the rule type by a model, 26 routed to the guidelines without an answer
+```
+
+and `swipl <certificate> --explain` adds one line per cell, e.g.
+`cell 6 "OR (95% CI)": LabelWithUnit, deterministic (rule sci.tdsl:166); ...`.
+A typed certificate needs `library(pcre)` (standard in SWI-Prolog builds);
+without it the kernel rejects it rather than skip the typing. A certificate
+the kernel rejects is left as the review wrote it, and the exit status is 1.
+Arm B's certificates of the ablation carry no typing. To write the typed
+certificates of an existing review without a model:
+
+```bash
+cd src && swipl certify_reviews.pl --dataset=dataset --arm=full
+```
 
 Labelability is checked independently of the ten constraints. On random
 tables every candidate, and every layout, is certifiable. A candidate the

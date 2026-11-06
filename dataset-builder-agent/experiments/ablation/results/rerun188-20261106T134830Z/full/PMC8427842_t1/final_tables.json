@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC8427842",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline Demographics of Patients Included in the Study",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC8427842/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"AUC, Sensitivity, and Specificity of the Three Models",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC8427842/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"6871a2e27b3feac363eb141cc942d839ef6e8da915836bd7c86600cc0e30c117"
+}

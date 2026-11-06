@@ -1,0 +1,132 @@
+{
+  "pmc_id":"PMC11825198",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Climatic condition of the experimental site.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11825198/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":0,"vmd":1},
+      "candidate_id":"PMC11825198/t1/layout0",
+      "caption":"Presoil characterization of the experimental site at 0–30 cm soil depth.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["rows" ],
+	"file":"certificate1_layout0.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [0, 6, 7, 8 ],
+	"subtables": [
+	  {
+	    "column_header_rows":0,
+	    "first_column":0,
+	    "first_row":1,
+	    "last_column":1,
+	    "last_row":16,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [
+	{"row":0,"text":"Physical characteristics"},
+	{"row":6,"text":""},
+	{"row":7,"text":"Chemical characteristic"},
+	{"row":8,"text":""}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [],
+	  "vertical metadata": [
+	    {"Sand (%)": []},
+	    {"Clay (%)": []},
+	    {"Silt (%)": []},
+	    {"Bulk density (g · cm −3 )": []},
+	    {"Porosity (%)": []},
+	    {"pH": []},
+	    {"Organic carbon (%)": []},
+	    {"Available nitrogen (%)": []},
+	    {"Total phosphorus (Mg · kg −1 )": []},
+	    {"Available potassium (Cmol · kg −1 )": []},
+	    {"Available calcium (Cmol · kg −1 )": []},
+	    {"Electrical conductivity (μS · cm −1 )": []},
+	    {"Cation exchange capacity (Cmol · kg −1 )": []}
+	  ],
+	  "data": [
+	    ["56.91" ],
+	    ["13.56" ],
+	    ["29.53" ],
+	    ["1.5" ],
+	    ["47" ],
+	    ["4.93" ],
+	    ["0.57" ],
+	    ["0.06" ],
+	    ["11.07" ],
+	    ["0.58" ],
+	    ["1.89" ],
+	    ["121.00" ],
+	    ["5.34" ]
+	  ],
+	  "residual_corner": []
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC11825198/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Chemical characterization of biochar types.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11825198/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Means of Pearson's correlation coefficient among soil physical and chemical characteristics.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC11825198/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"ab8308e8b8319ec120a45f5f8805bf5eb86e379babf728d42b65510b7523edc7"
+}

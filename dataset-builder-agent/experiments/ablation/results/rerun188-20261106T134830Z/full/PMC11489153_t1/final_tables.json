@@ -1,0 +1,49 @@
+{
+  "pmc_id":"PMC11489153",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Sample Characteristics.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11489153/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable logistic regression of COVID-19 hospitalization.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11489153/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Post-hoc analyses of Model 3.",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC11489153/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"5ef3970782dc7b1d4e00a7cff772cf4e386c1376286b1b72289b71c94fb054c6"
+}

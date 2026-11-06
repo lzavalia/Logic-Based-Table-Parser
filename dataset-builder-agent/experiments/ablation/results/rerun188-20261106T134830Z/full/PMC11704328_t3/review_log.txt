@@ -1,0 +1,15 @@
+Reviewing the selected candidates...
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+Error: invalid x-api-key
+Agent loop reached maximum iterations without completing
+Warning: prompt/2 failed (success=false)
+PMC11704328: 7 table(s) reviewed: 7 unreviewed -> papers/PMC11704328/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793988059387000-0/manifest.json
+Exporting reviewed tables...
+PMC11704328: 0 of 7 table(s) exported -> papers/PMC11704328/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+PMC11704328: 0 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected

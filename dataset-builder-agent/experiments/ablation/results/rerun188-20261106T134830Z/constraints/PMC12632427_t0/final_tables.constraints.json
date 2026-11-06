@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC12632427",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Lattice parameters, cell volumes, and bandgaps of tin‐perovskites with and without DMA. (Lattice parameters and cell volumes were derived from Rietveld refinement of XRD data using the TOPAS, and Bandgaps were derived from Tauc plots).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12632427/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Photovoltaic performance summary of the champion devices and averages.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12632427/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"84948b24e38472aa4f24aa5d86bbc6836f48daf815d51153f747005e70280176"
+}

@@ -1,0 +1,61 @@
+1 paper(s): 4 batch(es), 140 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 4 batch(es) to send
+PMC5891175/1: 40 answered, 0 without an answer
+I can't complete this subtask. The cell texts were not included, only the ids (MB3, MB4, ..., MB59), and I have no tool to look them up. Assigning types to these ids would be guesswork, so I'm stopping here without setting a result.
+Warning: prompt/2 failed (success=false)
+I can't complete this subtask because the cell texts are missing. The prompt gives only the ids (MB3 through MB59) and no text for any of them, and I have no tool to retrieve the table contents. Assigning types without the text would just be guessing, so I'm ending the task as unsuccessful.
+Warning: prompt/2 failed (success=false)
+PMC5891175/2: no usable answer (the model call failed or returned nothing)
+I can't complete this subtask. The cell ids (MB6 through MB95) are listed, but the text of each cell isn't included, and the classification has to be based on that text. I have no tool that can retrieve it, so I won't guess labels for cells I can't see.
+Warning: prompt/2 failed (success=false)
+I can't complete this subtask. The cell list gives only ids (MB6, MB7, …, MB95), not the cell text the classification depends on, and I have no tool that can retrieve it. Guessing types from the ids alone would be fabrication, so I'm not setting an answer.
+Warning: prompt/2 failed (success=false)
+PMC5891175/3: no usable answer (the model call failed or returned nothing)
+PMC5891175/4: 20 answered, 0 without an answer
+
+Guideline typing complete: 60 cell(s) answered, 0 left without an answer, 2 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 455 routed cell(s), 375 typed by guidelines, 0 kept ("none"), 80 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 6,
+    "inputTokens": 25720,
+    "outputTokens": 3518,
+    "totalTokens": 29238,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC5891175_t1
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC5891175: 2 table(s) reviewed: 1 unreviewed, 1 valid -> papers/PMC5891175/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793992740704000-0/manifest.json
+Exporting reviewed tables...
+PMC5891175: 1 of 2 table(s) exported -> papers/PMC5891175/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC5891175: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 5355,
+    "outputTokens": 915,
+    "totalTokens": 6270,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC5891175_t1

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Select a candidate for every table in src/dataset/papers/ by its cell types
-# (src/type_inference.pl), then ask the LLM to check it (see
-# src/review_dataset.dml).
+# Type the cells of every table in src/dataset/papers/ by rule and by the
+# LLM following the type program's guidelines (guideline_agent.sh), select a
+# candidate for every table by its cell types (src/type_inference.pl), ask
+# the LLM to check it (see src/review_dataset.dml), and write each selected
+# table's certificate with its typing (src/certify_reviews.pl).
 #
 #   ./review_agent.sh
 #   ./review_agent.sh --scorer purity
@@ -17,8 +19,14 @@
 #                    or purity; changing it makes the review run again
 #   --program <file> the type DSL program, by default
 #                    type_dsl_examples/sci.tdsl
+#   --level <level>  how type inference compares cell types: family (the
+#                    default) or group (see src/type_inference.pl)
+#   --no-guidelines  (full arm) skip the guideline step: type inference then
+#                    uses whatever guided_types.jsonl is there, else the rule
+#                    types (run_agent.sh passes it, as it runs that step itself)
 #   --arm <arm>      the ablation arm (see experiments/ablation/README.md):
-#                    full (the default): type inference, LLM review, repair
+#                    full (the default): guideline typing, type inference,
+#                      LLM review, repair, typed certificates
 #                    constraints: the LLM segments each table blind and must
 #                      match a parser candidate; no types, no repair
 #                    llm-only: the LLM segments each table, nothing else
@@ -29,7 +37,9 @@
 #   --tables <uids>  send only these tables (PMC<id>/t<index>, comma-separated);
 #                    their papers are reviewed, unless --papers is given, and
 #                    their other tables are recorded as not_selected
-#   --log-dir <dir>  write review_log.txt and review_token_usage.json there
+#   --log-dir <dir>  write review_log.txt and review_token_usage.json there,
+#                    and the guideline step's guideline_log.txt and
+#                    guideline_token_usage.json
 # Anything else is passed on to `deepclause run`. The temperature defaults to
 # 0 so that repeated reviews agree as far as the model allows; pass
 # --temperature to change it. --model is also recorded in every review.
@@ -37,10 +47,15 @@
 # Writes, in src/:
 #   src/review_log.txt            everything the agent printed
 #   src/review_token_usage.json   tokens used, per model
+#   src/dataset/papers/PMC<id>/types.jsonl, guided_types.jsonl and
+#   src/dataset/cache/guideline_answers.jsonl (the guideline step)
 #   src/dataset/papers/PMC<id>/type_inference.jsonl
 #   src/dataset/papers/PMC<id>/review.jsonl, src/dataset/reviews/review-*/
+#   src/dataset/papers/PMC<id>/certificateN_*.pl, each with its checking
+#   kernel and the typing of the table's cells
 #   (with --arm constraints or llm-only: review.<arm>.jsonl and
-#   final_tables.<arm>.json instead, and no type inference)
+#   final_tables.<arm>.json instead, no typing and no type inference; the
+#   constraints arm also writes certificates.constraints/, without typing)
 # The two log files are overwritten by each run. With LOG_DIR set, they go
 # instead to a new directory LOG_DIR/<UTC timestamp>-review/ for every run; a
 # relative LOG_DIR is taken from src/ (the Docker image sets
@@ -59,7 +74,9 @@ arm=full
 dataset=
 tables=
 log_dir_opt=
+guidelines=1
 scorer=bit-cost
+level=family
 program="$script_dir/type_dsl_examples/sci.tdsl"
 params=()
 passthrough=()
@@ -95,11 +112,18 @@ while [ "$#" -gt 0 ]; do
             run="$2"; params+=(-P "run=$2"); shift 2 ;;
         --force)
             params+=(-P "force=true"); shift ;;
+        --no-guidelines)
+            guidelines=0; shift ;;
         --scorer)
             [ "$#" -ge 2 ] || { echo "error: --scorer needs a value" >&2; exit 2; }
             scorer="$2"; shift 2 ;;
         --scorer=*)
             scorer="${1#--scorer=}"; shift ;;
+        --level)
+            [ "$#" -ge 2 ] || { echo "error: --level needs a value" >&2; exit 2; }
+            level="$2"; shift 2 ;;
+        --level=*)
+            level="${1#--level=}"; shift ;;
         --program)
             [ "$#" -ge 2 ] || { echo "error: --program needs a value" >&2; exit 2; }
             program="$2"; shift 2 ;;
@@ -111,12 +135,16 @@ while [ "$#" -gt 0 ]; do
         --model=*)
             passthrough+=("$1"); params+=(-P "model=${1#--model=}"); shift ;;
         -h|--help)
-            sed -n '2,53p' "$0"; exit 0 ;;
+            sed -n '2,65p' "$0"; exit 0 ;;
         *)
             passthrough+=("$1"); shift ;;
     esac
 done
 
+case "$level" in
+    family|group) ;;
+    *) echo "error: --level must be family or group, not '$level'." >&2; exit 2 ;;
+esac
 case "$arm" in
     full|constraints|llm-only) ;;
     *) echo "error: --arm must be full, constraints or llm-only, not '$arm'." >&2; exit 2 ;;
@@ -171,13 +199,26 @@ if ! command -v "$swipl" >/dev/null 2>&1; then
 fi
 
 # The full review works from the output of type inference, so without it
-# there is nothing to review. The other arms use no types.
+# there is nothing to review; the types come from the rules and the guideline
+# step. The other arms use no types.
 # < /dev/null: swipl must never wait at its toplevel.
+guideline_status=0
 if [ "$arm" = full ]; then
     if [ -n "$run" ]; then
         papers="$("$swipl" guideline_steps.pl run-papers "$run" < /dev/null)" || exit 1
     fi
-    "$swipl" type_inference.pl --scorer="$scorer" --papers="$papers" \
+    if [ "$guidelines" -eq 1 ]; then
+        # A failed guideline step does not stop the review: guided_types.jsonl
+        # is written from whatever answers there are (guideline_agent.sh).
+        "$script_dir/guideline_agent.sh" --papers "$papers" --program "$program" \
+            --dataset "$dataset_dir" ${log_dir_opt:+--log-dir "$log_dir_opt"} \
+            ${passthrough[@]+"${passthrough[@]}"} < /dev/null
+        guideline_status=$?
+        if [ "$guideline_status" -ne 0 ]; then
+            echo "The guideline step failed (status $guideline_status); reviewing with the types there are." >&2
+        fi
+    fi
+    "$swipl" type_inference.pl --scorer="$scorer" --level="$level" --papers="$papers" \
         --program="$program" --dataset="$dataset_dir" < /dev/null
     if [ "$?" -ne 0 ]; then
         echo "Type inference failed; the review was not started." >&2
@@ -225,6 +266,23 @@ deepclause run "$agent" --headless --temperature 0 \
     2> >(grep -v "AI SDK Warning" >&2) \
     | tee "$log_file"
 status="${PIPESTATUS[0]}"
+
+# The certificates of the full review, with the typing of every cell: the
+# review has written them without it, since DeepClause has no PCRE.
+if [ "$arm" = full ] && [ "$status" -eq 0 ]; then
+    echo
+    echo "Writing the typed certificates..."
+    "$swipl" certify_reviews.pl --dataset="$dataset_dir" --arm=full \
+        --program="$program" --papers="$papers" < /dev/null 2>&1 | tee -a "$log_file"
+    certify_status="${PIPESTATUS[0]}"
+    if [ "$certify_status" -ne 0 ]; then
+        echo "Writing the typed certificates failed (status $certify_status)." >&2
+        status="$certify_status"
+    fi
+fi
+if [ "$status" -eq 0 ] && [ "$guideline_status" -ne 0 ]; then
+    status="$guideline_status"
+fi
 
 echo
 if [ -f budget_guard.mjs ] && [ "$status" -eq 3 ]; then

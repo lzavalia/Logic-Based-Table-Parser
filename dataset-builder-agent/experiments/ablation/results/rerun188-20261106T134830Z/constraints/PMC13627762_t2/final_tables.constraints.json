@@ -1,0 +1,58 @@
+{
+  "pmc_id":"PMC13627762",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Region‐specific standardized mean differences for plantar loading with an orthosis in Khodaei et al. [ 24 ] ( n = 19; within‐subject, each participant measured in every condition; the two orthosis conditions combined; correlation between paired conditions assumed to be 0.5).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13627762/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings: orthotic interventions for flexible flatfoot, by outcome and comparator.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13627762/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings: orthotic interventions for flexible flatfoot, by outcome and comparator.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC13627762/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"76ce30d995ce6c817246425b4a58028fcadd97e76c05055b045770882186f75d"
+}

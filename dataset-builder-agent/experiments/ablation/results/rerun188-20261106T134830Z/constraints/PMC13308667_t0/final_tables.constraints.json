@@ -1,0 +1,24 @@
+{
+  "pmc_id":"PMC13308667",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Patient characteristics of the study cohort and validation cohorts.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"TABLE 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13308667/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"216e785220b92005857a377ed05ef30285232d73b2c06f210019a6755f4c2248"
+}

@@ -160,7 +160,7 @@ test(sci_text_text_is_left_to_guidelines) :-
    forall(member(Text, [ "Male", "Age, years", "95% CI", "CRF 135", "0–15 cm",
                          "15 May 2023", "Q1 (n = 217)", "100% NPK + HW",
                          "Decreased amplitude responses in the left insula." ]),
-          ( type_of(A, Text, T), assertion(T-Text == 'Text'-Text) )),
+          ( type_of(A, Text, T), assertion(T-Text == untyped-Text) )),
    type_of(A, "(mmHg)", U), assertion(U == 'Unit'),
    type_of(A, "Smith 2017", C), assertion(C == 'Citation'),
    type_of(A, "NR", N), assertion(N == 'NotAvailable').

@@ -1,0 +1,58 @@
+{
+  "pmc_id":"PMC10882683",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Discharge Capacities (at Current Densities of 10, 20, 60, 100, and 200 mA·g –1 ), Coulombic Efficiencies (at 10 mA·g –1 ), and Capacity Retentions of Undoped and Doped NCM Cathodes",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10882683/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Crystal-Structure Parameters and I (003) / I (104) Values of U-NCM, Nb-NCM, Ta-NCM, and La-NCM Estimated by Rietveld Refinement",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10882683/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Impedance Values Were Calculated from the Nyquist Plots for U-NCM, Nb-NCM, Ta-NCM, and La-NCM",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10882683/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"4d7e9f72e427113efd9f9fa22ce5b71fda1a8c3309415c688f3aab87f8b5b4e4"
+}

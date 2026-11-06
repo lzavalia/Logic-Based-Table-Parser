@@ -1,0 +1,184 @@
+{
+  "pmc_id":"PMC11224729",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":3},
+      "candidate_id":null,
+      "caption":"General characteristics of the included studies",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 1.",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":7,
+	    "row_header_columns":3
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"Sample size and medication": [ {"Anabolic agent": []},  {"BP": []} ]},
+	    {"Medication period": []},
+	    {"Age (yr)": [ {"Anabolic agent": []},  {"BP": []} ]},
+	    {"Follow-up": []},
+	    {"Outcomes": []}
+	  ],
+	  "vertical metadata": [
+	    {
+	      "Kendler et al. [ 18 ] (2018)": [
+		{
+		  "Lancet": [
+		    {
+		      "Postmenopausal women > 45 years with BMD T-score ≤ 1.5 and either ≥ 2 moderate or a severe vertebral fracture": []
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Hadji et al. [ 38 ] (2012)": [
+		{
+		  "Osteoporosis International": [
+		    {
+		      "Postmenopausal women ≥ 45 years with BMD T-score ≤ -2.0 and ≥ 1 moderate vertebral fracture": []
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Geusens et al. [ 39 ] (2022)": [
+		{
+		  "Bone": [
+		    {
+		      "Postmenopausal women with BMD T-score ≤ -2.5 and either ≥ 1 moderate or severe vertebral fracture, or BMD T-score of ≤ -2.0 and either ≥ 2 moderate or a severe vertebral fracture": []
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Hagino et al. [ 40 ] (2021)": [
+		{
+		  "Osteoporosis International": [
+		    {
+		      "Postmenopausal women ≥ 75 years with osteoporosis at high fracture risk (BMD T-score < -3.3 and either ≥ 2 vertebral fractures, a grade 3 vertebral fracture, or hip fracture)": []
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Shigenobu et al. [ 41 ] (2019)": [
+		{
+		  "Bone Reports": [
+		    {
+		      "Patients (43; 5 men and 38 women) with fresh osteoporotic vertebral compression fracture": []
+		    }
+		  ]
+		}
+	      ]
+	    },
+	    {
+	      "Ikeda et al. [ 42 ] (2020)": [
+		{
+		  "Journal of Bone and Mineral Metabolism": [ {"Women with fresh osteoporotic vertebral fractures": []} ]
+		}
+	      ]
+	    }
+	  ],
+	  "data": [
+	    [
+	      "N = 680, teriparatide (20 μg, daily SC)",
+	      "N = 680, risedronate (35 mg, weekly PO)",
+	      "24 Months",
+	      "72.6 ± 8.8",
+	      "71.6 ± 8.6",
+	      "24 Months",
+	      "New OVF (morphometric fracture-radiograph)"
+	    ],
+	    [
+	      "N = 360, teriparatide (20 μg, daily SC)",
+	      "N = 350, risedronate (35 mg, weekly PO)",
+	      "18 Months",
+	      "70.5 ± 8.8",
+	      "71.6 ± 8.1",
+	      "18 Months",
+	      "New OVF (morphometric fracture-radiograph)"
+	    ],
+	    [
+	      "N = 2,046, romosozumab (210 mg, monthly SC)",
+	      "N = 2,047, alendronate (70 mg, weekly PO)",
+	      "12 Months",
+	      "74.4 ± 7.5",
+	      "74.2 ± 7.5",
+	      "12 Months",
+	      "New OVF (morphometric fracture-radiograph)"
+	    ],
+	    [
+	      "N = 489, teriparatide (56.6 μg, weekly SC)",
+	      "N = 496, alendronate (5 mg daily PO, 35 mg weekly PO, or 900 μg every 4 weeks IV)",
+	      "72 Weeks",
+	      "81.4 ± 4.5",
+	      "81.5 ± 4.7",
+	      "72 Weeks",
+	      "New OVF (morphometric fracture-radiograph)"
+	    ],
+	    [
+	      "N = 19, teriparatide (56.6 μg, weekly SC)",
+	      "N = 24, alendronate (35 mg weekly PO, risedronate 17.5 mg weekly PO, or 75 mg monthly PO)",
+	      "12 Weeks",
+	      "80.2",
+	      "75.6",
+	      "12 Weeks",
+	      "Fracture healing of OVF (CT scan)"
+	    ],
+	    [
+	      "N = 48, teriparatide (56.6 μg, weekly SC)",
+	      "N = 48, alendronate (35 mg, weekly PO)",
+	      "12 Weeks",
+	      "78.9",
+	      "80.3",
+	      "12 Weeks",
+	      "Fracture healing of OVF (radiograph)"
+	    ]
+	  ],
+	  "residual_corner": [ {"Study": []},  {"Journal": []},  {"Participants": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC11224729/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings in new osteoporotic vertebral fracture and fracture healing",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2.",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11224729/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"3ac656cf1c19ff78567b6ab0ab3e8672eecbed75cea1634490fee72dadd1cba2"
+}

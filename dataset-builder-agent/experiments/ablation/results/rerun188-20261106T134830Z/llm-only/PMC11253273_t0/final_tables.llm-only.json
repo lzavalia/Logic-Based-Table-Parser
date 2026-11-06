@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC11253273",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of randomised controlled trials reporting the effect of azithromycin on pregnancy outcomes (N = 20).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11253273/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Summary of findings table for azithromycin prophylaxis (antenatal or intrapartum) in pregnancy for neonatal, perinatal, and maternal outcomes.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11253273/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"6a3df3dec1f47e3fdda359b77e966fa7d483070d247f89c914ab1a9555afc44d"
+}

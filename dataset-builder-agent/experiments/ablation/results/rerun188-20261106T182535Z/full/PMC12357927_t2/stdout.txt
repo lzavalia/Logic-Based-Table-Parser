@@ -1,0 +1,54 @@
+1 paper(s): 3 batch(es), 88 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 3 batch(es) to send
+The finish call was rejected because the result hadn't been set yet. I've now set the Answer, so I'm calling finish again.
+PMC12357927/1: 40 answered, 0 without an answer
+The result is set, but my first `finish(true)` call was rejected because the Answer hadn't been stored yet. I've now stored it, so I'm calling finish again.
+PMC12357927/2: 40 answered, 0 without an answer
+PMC12357927/3: 8 answered, 0 without an answer
+
+Guideline typing complete: 88 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 166 routed cell(s), 166 typed by guidelines, 0 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 5,
+    "inputTokens": 25053,
+    "outputTokens": 1805,
+    "totalTokens": 26858,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC12357927_t2
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC12357927: 7 table(s) reviewed: 6 unreviewed, 1 valid -> papers/PMC12357927/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793992281961000-0/manifest.json
+Exporting reviewed tables...
+PMC12357927: 1 of 7 table(s) exported -> papers/PMC12357927/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC12357927: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 5851,
+    "outputTokens": 445,
+    "totalTokens": 6296,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC12357927_t2

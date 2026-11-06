@@ -16,6 +16,8 @@
 %
 % Parameters (deepclause run ... -P key=value), all optional:
 %   papers=PMC123,PMC456   only these papers' requests
+%   dataset=<dir>          the dataset, a directory under the workspace
+%                          (default dataset)
 %
 % guideline_agent.sh runs this between the two swipl stages. By hand, from
 % the directory that holds the .pl files:
@@ -36,21 +38,25 @@ agent_main :-
         Papers = Names
     ;   Papers = none
     ),
-    guideline_queue("/workspace/dataset", Papers, Queue),
+    (   param(dataset, Dataset0)
+    ->  atom_concat('/workspace/', Dataset0, Dataset)
+    ;   Dataset = '/workspace/dataset'
+    ),
+    guideline_queue(Dataset, Papers, Queue),
     length(Queue, NumBatches),
     format(string(Start), "Guideline typing: ~d batch(es) to send", [NumBatches]),
     output(Start),
-    send_batches(Queue, 0, Answered, 0, Missing, 0, Failed),
+    send_batches(Queue, Dataset, 0, Answered, 0, Missing, 0, Failed),
     format(string(Summary),
-           "Guideline typing complete: ~d cell(s) answered, ~d left without an answer, ~d batch(es) failed. Answers are in dataset/cache/guideline_answers.jsonl.",
+           "Guideline typing complete: ~d cell(s) answered, ~d left without an answer, ~d batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.",
            [Answered, Missing, Failed]),
     answer(Summary).
 
-send_batches([], A, A, M, M, F, F).
-send_batches([batch(Paper, Sha, Batch)|Rest], A0, A, M0, M, F0, F) :-
+send_batches([], _, A, A, M, M, F, F).
+send_batches([batch(Paper, Sha, Batch)|Rest], Dataset, A0, A, M0, M, F0, F) :-
     ask_model(Batch, 1, Outcome),
     (   Outcome = done(Answers, Missing)
-    ->  (   catch(append_guideline_answers("/workspace/dataset", Sha, Batch, Answers),
+    ->  (   catch(append_guideline_answers(Dataset, Sha, Batch, Answers),
                   Error,
                   ( format(string(Warn), "~w: answers not saved (~w)", [Paper, Error]),
                     output(Warn), fail ))
@@ -68,7 +74,7 @@ send_batches([batch(Paper, Sha, Batch)|Rest], A0, A, M0, M, F0, F) :-
         format(string(Line), "~w: no usable answer (~w)", [Id, Why]),
         output(Line)
     ),
-    send_batches(Rest, A1, A, M1, M, F1, F).
+    send_batches(Rest, Dataset, A1, A, M1, M, F1, F).
 
 % ask_model(+Batch, +Attempt, -Outcome): one retry when the answer is missing
 % or unusable, then failed(Reason).

@@ -1,0 +1,190 @@
+{
+  "pmc_id":"PMC11651604",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Low-risk subgroups.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC11651604/t0"
+    },
+    {
+      "arm":"llm-only",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–Medium-risk subgroups.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC11651604/t1"
+    },
+    {
+      "arm":"llm-only",
+      "boundary": {"hmd":2,"vmd":2},
+      "candidate_id":null,
+      "caption":"STRATIFY Treatment Specification (RTSS)–High-risk subgroups.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [0 ],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":1,
+	    "last_column":6,
+	    "last_row":14,
+	    "row_header_columns":2
+	  }
+	]
+      },
+      "separators": [ {"row":0,"text":"High Risk Group"} ],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"TARGET": [ {"Group *": []},  {"Volition Type †": []} ]},
+	    {"": [ {"MOA#": []} ]},
+	    {"INGREDIENTS": [ {"Ingredient": []},  {"Dosing Parameter": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {
+	      "In the first week of participation the participant is provided an information pack detailing what to expect from rehabilitation and their recovery. The therapist discusses the content in the first week (paced and reinforced) with the participant and/or their carer.": [
+		{"Knowledge of rehabilitation process / increase": []},
+		{"Knowledge of pain management / increase": []},
+		{"Knowledge of Fear of falling / reduce": []},
+		{"Performance of self-regulation of activity / as directed": []}
+	      ]
+	    },
+	    {
+	      "Participants and/or carers (as available) requested by therapist to bring memoir materials for bedside.": [ {"Carer and patient knowledge of orientation risk and strategies / increase": []} ]
+	    },
+	    {
+	      "Enhanced assessment and onward referral as required **": [ {"n/a (assessment based referral process)": []} ]
+	    },
+	    {
+	      "The therapist sets ADL programme goals together with participant ±carer(s) and subsequently performs skill practice to engender the capability of the participant and carer to complete the ADL skills training whilst providing direct supervision as appropriate for ADL specific training.": [
+		{"Participant goal setting ability / increase": []},
+		{"Carer goal setting ability / increase": []},
+		{"ADL function / increase": []},
+		{"Propensity to perform physical rehabilitation / increase": []},
+		{"Carer ability to perform ADL training / increase": []},
+		{"Carer knowledge of appropriate ADL involvement / Increase": []}
+	      ]
+	    }
+	  ],
+	  "data": [
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: What does getting better mean to patient, how rehabilitation supports recovery, identification of who is involved in process.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information pack & therapist-led discussion on: understanding usual care processes for requesting pain management, determining intentions to request pain relief prior to activity, understanding barriers to this and alternatives that can be offered.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: reinforcing fear of falling is normal after a fall, encouraging activity as a positive driver of recovery, providing positive feedback on improvement of movement regularly.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Written information document & therapist-led discussion on: benefits of carrying out activities independently, rationale of reinforcement of activity outside of supervised rehabilitation to support recovery, identification of limited therapy time.",
+	      "n/a"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion on features of disorientation, whether there are current features of disorientation as well as the rationale and instruction of providing memoir materials (e.g. framed photographs of family and friends, photo album, music device, reading materials, pillowcase/blanket) to promote orientation.",
+	      "n/a"
+	    ],
+	    ["–", "–", "–", "–", "" ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Therapist description of difference between outcome and behaviour goals and their interrelationship. Collaborative goal setting practise opportunities with therapist, participant and/or carer.",
+	      "Duration: 15 minutes"
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Therapist description of difference between outcome and behaviour goals and their interrelationship. Collaborative goal setting practise opportunities with therapist, participant and/or carer.",
+	      "Duration: 15 minutes"
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Supervised ADL training opportunities within context of ADL outcome and behaviour goals. e.g. if outcome goal is: with verbal direction and provision of a soaped sponge, I can wash myself in a seated shower chair by the time I am leaving the hospital, the therapist will provide tailored ADL training ingredients conducive to initial behaviour goal e.g.: In a seated position, lift left thigh without use of hands.",
+	      "Frequency: 3 Duration: 15minutes Progressions including but not limited to: addition of controlled lowering of thigh after lift, then progressive thigh lift holds from 1, to 3 and finally 5s."
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Completion of progress chart, placing of progression chart at end of bed, completion of goal setting.",
+	      "n/a."
+	    ],
+	    [
+	      "S&H",
+	      "DV",
+	      "Learning by doing",
+	      "Therapist-led demonstration of practical skills required to support specified ADL training. Opportunity for carer to practise in presence of therapist, therapist verbal feedback and availability to answer carer questions",
+	      "Duration: 30 minutes"
+	    ],
+	    [
+	      "R",
+	      "DV",
+	      "Cognitive & affective information processing",
+	      "Therapist-led discussion of progress chart, Therapist led identification of when carer can practice ADLs and when not, identification of how to contact therapist if unsure or unconfident to support activity practice",
+	      "n/a"
+	    ]
+	  ],
+	  "residual_corner": [
+	    {
+	      "": [ {"Description of clinical interaction and/or physical assessment dependencies": []} ]
+	    },
+	    {"TARGET": [ {"What / In What Way": []} ]}
+	  ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC11651604/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"c0b8396adec4b6ea2db0e48896b6b3fd075913ace1499e08a4708f7a2adafe5d"
+}

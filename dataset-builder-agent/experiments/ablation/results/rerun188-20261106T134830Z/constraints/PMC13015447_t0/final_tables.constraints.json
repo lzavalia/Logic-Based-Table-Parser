@@ -1,0 +1,41 @@
+{
+  "pmc_id":"PMC13015447",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Tentative band assignments of the significant peaks",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1:",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC13015447/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Functional Characterization of Differentially Expressed miRNAs in Asian T2DM Subtypes",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2:",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC13015447/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"98f7934d0269831944a9f00a9bdda2f8599d40f0ba4803aa87b6d4e51b2fdce8"
+}

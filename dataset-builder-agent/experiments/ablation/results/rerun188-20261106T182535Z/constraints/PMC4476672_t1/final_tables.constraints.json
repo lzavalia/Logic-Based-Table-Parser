@@ -1,0 +1,114 @@
+{
+  "pmc_id":"PMC4476672",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Initial soil properties along the root zone profile before tillage treatments in 2011.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC4476672/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":2},
+      "candidate_id":"PMC4476672/t1/h2_v2",
+      "caption":"Soil conditions (soil bulk density and soil moisture)before the tillage treatment in 2012.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate1_h2_v2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":7,
+	    "row_header_columns":2
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "Soil depth (cm)": [ {"0–10": []},  {"10–20": []},  {"20–30": []},  {"30–40": []},  {"40–50": []} ]
+	    }
+	  ],
+	  "vertical metadata": [
+	    {"SS": [ {"Bulk density (t/m 3 )": []},  {"Soil moisture (g/g)": []} ]},
+	    {"RT": [ {"Bulk density (t/m 3 )": []},  {"Soil moisture (g/g)": []} ]},
+	    {"NT": [ {"Bulk density (t/m 3 )": []},  {"Soil moisture (g/g)": []} ]}
+	  ],
+	  "data": [
+	    ["1.36", "1.34", "1.45", "1.46", "1.42" ],
+	    ["0.11", "0.11", "0.12", "0.12", "0.16" ],
+	    ["1.35", "1.34", "1.56", "1.46", "1.43" ],
+	    ["0.09", "0.11", "0.12", "0.12", "0.16" ],
+	    ["1.36", "1.36", "1.56", "1.45", "1.42" ],
+	    ["0.11", "0.12", "0.11", "0.12", "0.16" ]
+	  ],
+	  "residual_corner": [ {"Treatment": []},  {"Soil properties": [ {"": []} ]} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC4476672/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effects of tillage managements on maize yield in two years.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC4476672/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Effects of tillage managements on maize dry matter in two years.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC4476672/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"45095164b649ec4be16b839f17ae85f52eb704e789c6f184796c6706198cb976"
+}

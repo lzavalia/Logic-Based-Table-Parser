@@ -1,0 +1,91 @@
+{
+  "pmc_id":"PMC4563231",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC4563231/t0/layout2",
+      "caption":"Characteristics of the selected meta-analysis within physical therapy areas",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim": ["columns" ],
+	"file":"certificate0_layout2.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "separators": [
+	{"row":1,"text":"Characteristics"},
+	{"row":6,"text":"Main intervention"},
+	{"row":12,"text":"Outcomes"}
+      ],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Musculoskeletal": []},  {"Cardio respiratory": []},  {"Neurology": []},  {"Other": []} ],
+	  "vertical metadata": [
+	    {"Number of meta-analyses": []},
+	    {"Median year of publication": []},
+	    {"Total number of trials included": []},
+	    {"Total number of patients included": []},
+	    {"Exercise": []},
+	    {"Physical agents": []},
+	    {"Acupuncture": []},
+	    {"Manual therapy": []},
+	    {"Other": []},
+	    {"Clinician-assessed outcome": []},
+	    {"Self-reported outcome": []},
+	    {"Administrative data or automated outcome": []}
+	  ],
+	  "data": [
+	    ["22", "9", "6", "6" ],
+	    ["2009", "2010", "2009", "2009" ],
+	    ["194", "78", "52", "69" ],
+	    ["19 861", "9015", "2138", "13 608" ],
+	    ["13", "7", "3", "5" ],
+	    ["1", "0", "1", "0" ],
+	    ["2", "0", "0", "0" ],
+	    ["1", "0", "0", "0" ],
+	    ["1", "2", "2", "1" ],
+	    ["8", "4", "6", "3" ],
+	    ["11", "4", "0", "2" ],
+	    ["3", "1", "0", "1" ]
+	  ],
+	  "residual_corner": [ {"": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC4563231/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Methods of sequence generation in physical therapy trials",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC4563231/t1"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Methods of allocation concealment in physical therapy trials",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC4563231/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"d138b49ac1d7baebf20b85b58247b232a0568506ef721e9e7c2f8d7e2569ca4d"
+}

@@ -61,13 +61,27 @@ free_width(Grid, I, J, Cols, Max, Width0, Width) :-
    ;  Width = Width0
    ).
 
+% Runs the certificate with nothing but swipl, from the temporary directory,
+% so that no kernel can be found but the one the certificate carries.
 run_certificate_file(File, Status) :-
+   run_certificate_file(File, Status, _).
+
+run_certificate_file(File, Status, Output) :-
    current_prolog_flag(executable, Swipl),
-   absolute_file_name('../src', Src, [file_type(directory)]),
-   atom_concat('certificate_kernel=', Src, Alias),
-   process_create(Swipl, ['-q', '-p', Alias, File],
-                  [stdout(null), stderr(null), process(Pid)]),
-   process_wait(Pid, exit(Status)).
+   tmp_file(dir, Scratch), make_directory(Scratch),
+   process_create(Swipl, ['-q', File],
+                  [cwd(Scratch), stdout(pipe(Out)), stderr(null), process(Pid)]),
+   read_string(Out, _, Output), close(Out),
+   process_wait(Pid, exit(Status)),
+   delete_directory(Scratch).
+
+% Writes Facts as they are, with no kernel added or replaced.
+with_raw_certificate_file(Facts, Goal) :-
+   tmp_file_stream(text, File, Stream),
+   setup_call_cleanup(true,
+                      ( write_certificate_stream(Stream, Facts), close(Stream),
+                        call(Goal, File) ),
+                      delete_file(File)).
 
 with_certificate_file(Facts, Goal) :-
    tmp_file_stream(text, File, Stream),
@@ -217,6 +231,57 @@ test(tampered_certificate_fails_when_run) :-
    replace_fact(column_path(1, [0,2]), column_path(1, [0]), Facts, Bad),
    with_certificate_file(Bad,
       [File]>>run_certificate_file(File, 1)).
+
+% --- the embedded kernel -----------------------------------------------------
+
+test(written_certificate_carries_the_kernel_source) :-
+   certified([[0,1],[2,3]], 1, 1, Facts),
+   with_certificate_file(Facts, [File]>>(
+      read_certificate_file(File, Read),
+      memberchk(checking_kernel(Sha, Source), Read),
+      read_file_to_string('../src/certificate_kernel.pl', Kernel, [encoding(utf8)]),
+      Source == Kernel,
+      text_sha256(Kernel, Sha),
+      run_certificate_file(File, 0, Output),
+      once(sub_string(Output, _, _, _, Sha)),
+      once(sub_string(Output, _, _, _, "certificate accepted")) )).
+
+test(one_embedded_kernel_however_often_written) :-
+   certified([[0,1],[2,3]], 1, 1, Facts),
+   certificate_with_kernel(Facts, Once),
+   certificate_with_kernel(Once, Twice),
+   Once == Twice,
+   with_raw_certificate_file(Once, [File]>>check_certificate_file(File, accepted)).
+
+test(embedded_kernel_must_match_its_hash) :-
+   certified([[0,1],[2,3]], 1, 1, Facts),
+   certificate_with_kernel(Facts, WithKernel),
+   memberchk(checking_kernel(Sha, Source), WithKernel),
+   string_concat(Source, "% edited\n", Edited),
+   replace_fact(checking_kernel(Sha, Source), checking_kernel(Sha, Edited),
+                WithKernel, Bad),
+   rejected_for(Bad, embedded_kernel_hash_mismatch(Sha, _)),
+   with_raw_certificate_file(Bad, [File]>>run_certificate_file(File, 1)).
+
+% An embedded kernel that accepts anything, with its own hash, fools the
+% certificate run as a program, but not a check as data with a kernel one
+% trusts; the run prints a hash that is not the trusted kernel's.
+test(a_lax_embedded_kernel_does_not_fool_a_trusted_one) :-
+   certified([[0,0],[1,2],[3,4]], 2, 0, Facts),
+   replace_fact(column_path(1, [0,2]), column_path(1, [0]), Facts, Bad0),
+   Lax = ":- module(certificate_kernel, [check_loaded_certificate/0]).\n\c
+          check_loaded_certificate :- format(\"certificate accepted~n\").\n",
+   text_sha256(Lax, LaxSha),
+   append(Bad0, [checking_kernel(LaxSha, Lax)], Bad),
+   with_raw_certificate_file(Bad, [File]>>(
+      run_certificate_file(File, 0, Output),
+      once(sub_string(Output, _, _, _, LaxSha)),
+      check_certificate_file(File, rejected(paths_do_not_match_raster)) )).
+
+test(certificate_without_a_kernel_still_checks_as_data) :-
+   certified([[0,1],[2,3]], 1, 1, Facts),
+   \+ memberchk(checking_kernel(_, _), Facts),
+   check_certificate(Facts, accepted).
 
 test(reading_a_certificate_never_runs_its_directives) :-
    tmp_file_stream(text, File, Stream),
@@ -467,3 +532,143 @@ test(layouts_are_certifiable) :-
             layout_labels(Raster, Layout, CertLabels) )).
 
 :- end_tests(layout_certificates).
+
+% --- typing ------------------------------------------------------------------
+
+% A table typed by a small program:
+%   [[0, 1, 2],     "Arm"  "Dose"  "Note x"
+%    [3, 4, 5]]     "Placebo"  " 12 "  "3-4%"
+% Rules: Integer and Numeric both match " 12 " (Integer is more specific);
+% Word matches the one-word texts. Label lies below Word, so the Word cells
+% are routed to the guidelines with [Label]; "Note x" matches no rule but
+% has a letter, so it is routed with every guideline type; "3-4%" matches
+% none and has no letter, so it stays untyped by the rules.
+typing_program([
+   typing_version(1),
+   type_program("t.tdsl", "0000"),
+   type_rule(0, "t.tdsl:1", regex("[0-9]+"), 'Integer'),
+   type_rule(1, "t.tdsl:2", regex("[0-9]+(?:\\.[0-9]+)?"), 'Numeric'),
+   type_rule(2, "t.tdsl:3", and(regex("\\p{L}+"), not(equals("none"))), 'Word'),
+   type_subtype('Integer', 'Numeric'),
+   type_subtype('Label', 'Word'),
+   guideline(0, "a label", 'Label'),
+   guideline(1, "an arm", 'Arm')
+]).
+
+typing_cells([
+   cell_text(0, "Arm"),     cell_type(0, 'Label', guideline("B/1")),
+   cell_text(1, "Dose"),    cell_type(1, 'Word', guideline_none("B/1")),
+   cell_text(2, "Note  x"), cell_type(2, 'Arm', guideline("B/2")),
+   cell_text(3, "Placebo"), cell_type(3, 'Word', guideline_pending),
+   cell_text(4, " 12 "),    cell_type(4, 'Integer', rules),
+   cell_text(5, "3-4%"),    cell_type(5, untyped, rules)
+]).
+
+typed_certificate(Facts) :-
+   certified([[0,1,2],[3,4,5]], 1, 1, Geometric),
+   typing_program(Program),
+   typing_cells(Cells),
+   append([Geometric, Program, Cells], Facts).
+
+replace_typing(Old, New, Bad) :-
+   typed_certificate(Facts),
+   replace_fact(Old, New, Facts, Bad).
+
+:- begin_tests(typing_certificates).
+
+test(typing_section_is_accepted) :-
+   typed_certificate(Facts),
+   check_certificate(Facts, accepted).
+
+test(rule_type_must_be_the_replayed_one) :-
+   replace_typing(cell_type(4, 'Integer', rules), cell_type(4, 'Numeric', rules), Bad),
+   rejected_for(Bad, rule_type_mismatch(4, 'Numeric', 'Integer')).
+
+test(changed_text_changes_the_rule_type) :-
+   replace_typing(cell_text(4, " 12 "), cell_text(4, "12.5"), Bad),
+   rejected_for(Bad, rule_type_mismatch(4, 'Integer', 'Numeric')).
+
+test(changed_rule_changes_the_rule_type) :-
+   replace_typing(type_rule(0, "t.tdsl:1", regex("[0-9]+"), 'Integer'),
+                  type_rule(0, "t.tdsl:1", regex("[0-9]"), 'Integer'), Bad),
+   rejected_for(Bad, rule_type_mismatch(4, 'Integer', 'Numeric')).
+
+test(routed_cell_cannot_be_typed_by_rules) :-
+   replace_typing(cell_type(3, 'Word', guideline_pending), cell_type(3, 'Word', rules), Bad),
+   rejected_for(Bad, routed_cell_typed_by_rules(3, 'Word', ['Label'])).
+
+test(model_may_only_choose_an_allowed_type) :-
+   replace_typing(cell_type(0, 'Label', guideline("B/1")), cell_type(0, 'Arm', guideline("B/1")), Bad),
+   rejected_for(Bad, guideline_type_not_allowed(0, 'Arm', ['Label'])).
+
+test(a_cell_not_routed_has_no_model_answer) :-
+   replace_typing(cell_type(5, untyped, rules), cell_type(5, 'Arm', guideline("B/3")), Bad),
+   rejected_for(Bad, cell_not_routed(5)).
+
+test(kept_answer_keeps_the_rule_type) :-
+   replace_typing(cell_type(1, 'Word', guideline_none("B/1")),
+                  cell_type(1, 'Label', guideline_none("B/1")), Bad),
+   rejected_for(Bad, rule_type_mismatch(1, 'Label', 'Word')).
+
+test(every_cell_has_one_type_and_one_text) :-
+   typed_certificate(Facts),
+   selectchk(cell_type(5, untyped, rules), Facts, NoType),
+   rejected_for(NoType, expected_one_cell_type(5)),
+   selectchk(cell_text(5, "3-4%"), Facts, NoText),
+   rejected_for(NoText, expected_one_cell_text(5)),
+   rejected_for([synthetic_cell(5)|Facts], expected_one_cell_text(5)),
+   rejected_for([cell_type(9, untyped, rules)|Facts],
+                typing_fact_for_unknown_cell(cell_type(9, untyped, rules))).
+
+test(synthetic_cells_are_empty) :-
+   replace_typing(cell_text(5, "3-4%"), synthetic_cell(5), Bad0),
+   rejected_for(Bad0, rule_type_mismatch(5, untyped, empty)),
+   replace_fact(cell_type(5, untyped, rules), cell_type(5, empty, rules), Bad0, Good),
+   check_certificate(Good, accepted).
+
+test(typing_facts_need_the_typing_version) :-
+   typed_certificate(Facts),
+   selectchk(typing_version(1), Facts, Bad),
+   rejected_for(Bad, expected_one_fact(typing_version/1)),
+   replace_fact(typing_version(1), typing_version(2), Facts, Later),
+   rejected_for(Later, unsupported_typing_version(2)).
+
+test(rules_and_guidelines_are_numbered_and_well_formed) :-
+   replace_typing(type_rule(1, "t.tdsl:2", regex("[0-9]+(?:\\.[0-9]+)?"), 'Numeric'),
+                  type_rule(3, "t.tdsl:2", regex("[0-9]+(?:\\.[0-9]+)?"), 'Numeric'), Gap),
+   rejected_for(Gap, type_rules_not_numbered),
+   replace_typing(type_rule(1, "t.tdsl:2", regex("[0-9]+(?:\\.[0-9]+)?"), 'Numeric'),
+                  type_rule(1, "t.tdsl:2", regex("[0-9"), 'Numeric'), BadRegex),
+   rejected_for(BadRegex, rule_regex_invalid(1)),
+   replace_typing(guideline(1, "an arm", 'Arm'), guideline(1, an_arm, 'Arm'), BadGuideline),
+   rejected_for(BadGuideline, guideline_malformed(1)),
+   replace_typing(cell_type(1, 'Word', guideline_none("B/1")),
+                  cell_type(1, 'Word', guessed), Unknown),
+   rejected_for(Unknown, unknown_derivation(1, guessed)).
+
+test(typing_report_counts_rules_and_models) :-
+   typed_certificate(Facts),
+   typing_report(Facts, [Total, Rules, Chosen, Kept]),
+   sub_string(Total, _, _, _, "6 cell(s)"), !,
+   sub_string(Rules, _, _, _, "1 typed by deterministic rules"), !,
+   sub_string(Rules, _, _, _, "1 empty or untyped"), !,
+   sub_string(Chosen, _, _, _, "2 typed by a model"), !,
+   sub_string(Kept, _, _, _, "1 kept at the rule type by a model, 1 routed"), !,
+   typing_explanation(Facts, Lines),
+   length(Lines, 6),
+   nth0(2, Lines, Line2),
+   sub_string(Line2, _, _, _, "chosen by a model (guideline batch B/2)"), !,
+   nth0(4, Lines, Line4),
+   sub_string(Line4, _, _, _, "deterministic: rule t.tdsl:1"), !,
+   certified([[0,1],[2,3]], 1, 1, Plain),
+   typing_report(Plain, []).
+
+test(typed_certificate_checks_itself_and_explains_when_run) :-
+   typed_certificate(Facts),
+   with_certificate_file(Facts, [File]>>(
+      run_certificate_file(File, 0, Output),
+      once(sub_string(Output, _, _, _, "2 typed by a model")) )),
+   replace_fact(cell_type(4, 'Integer', rules), cell_type(4, 'Numeric', rules), Facts, Bad),
+   with_certificate_file(Bad, [File]>>run_certificate_file(File, 1)).
+
+:- end_tests(typing_certificates).

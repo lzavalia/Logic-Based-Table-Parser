@@ -1,0 +1,132 @@
+{
+  "pmc_id":"PMC10981836",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline characteristics of participants with or without chest pain",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10981836/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC10981836/t1/h2_v1",
+      "caption":"ORs (95% CIs) for chest pain according to the TyG index",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate1_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 2",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":9,
+	    "last_row":8,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {"model 1": [ {"OR 1": []},  {"95% CI": []},  {"P -value": []} ]},
+	    {"model 2": [ {"OR 1": []},  {"95% CI": []},  {"P -value": []} ]},
+	    {"model 3": [ {"OR 1": []},  {"95% CI": []},  {"P -value": []} ]}
+	  ],
+	  "vertical metadata": [
+	    {"Continuous": []},
+	    {"TyG index": []},
+	    {"Q1": []},
+	    {"Q2": []},
+	    {"Q3": []},
+	    {"Q4": []},
+	    {"P for trend": []}
+	  ],
+	  "data": [
+	    [
+	      "1.28",
+	      "1.17, 1.40",
+	      "< 0.001",
+	      "1.23",
+	      "1.12, 1.36",
+	      "< 0.001",
+	      "1.23",
+	      "1.10, 1.39",
+	      "< 0.001"
+	    ],
+	    ["", "", "", "", "", "", "", "", "" ],
+	    ["—", "—", "", "—", "—", "", "—", "—", "" ],
+	    ["1.12", "0.92, 1.35", "0.3", "1.08", "0.89, 1.31", "0.4", "1.10", "0.91, 1.35", "0.3" ],
+	    [
+	      "1.18",
+	      "0.98, 1.43",
+	      "0.086",
+	      "1.12",
+	      "0.92, 1.36",
+	      "0.3",
+	      "1.13",
+	      "0.91, 1.39",
+	      "0.3"
+	    ],
+	    [
+	      "1.52",
+	      "1.26, 1.84",
+	      "< 0.001",
+	      "1.42",
+	      "1.16, 1.74",
+	      "0.001",
+	      "1.42",
+	      "1.14, 1.77",
+	      "0.002"
+	    ],
+	    ["", "", "< 0.001", "", "", "< 0.001", "", "", "< 0.001" ]
+	  ],
+	  "residual_corner": [ {"Characteristic": []} ]
+	}
+      ],
+      "table_index":1,
+      "table_uid":"PMC10981836/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"HRs (95% CIs) for all-cause mortality according to the TyG index",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC10981836/t2"
+    }
+  ],
+  "tables_jsonl_sha256":"866f5664966569746a3c92269c9b3f4ba93cb1c6b6d8d715de338e4087fb0b55"
+}

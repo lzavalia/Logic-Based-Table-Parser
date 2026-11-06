@@ -1,0 +1,255 @@
+{
+  "pmc_id":"PMC12357927",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of characteristics between two groups of case and control.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC12357927/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The characteristics at baseline across quartile of the DAI score in the case group.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC12357927/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":2,"vmd":1},
+      "candidate_id":"PMC12357927/t2/h2_v1",
+      "caption":"The characteristics at baseline across quartile of the DAI score in the control group.",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate2_h2_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 3",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":2,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":6,
+	    "last_row":12,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [
+	    {
+	      "DAI quartiles": [
+		{"Q1 ( N = 45)": []},
+		{"Q2 ( N = 44)": []},
+		{"Q3 ( N = 34)": []},
+		{"Q4 ( N = 32)": []},
+		{"Total ( N = 155)": []}
+	      ]
+	    },
+	    {"P – value*": []}
+	  ],
+	  "vertical metadata": [
+	    {"DAI score": []},
+	    {"Age (years)": []},
+	    {"BMI (kg/m 2 )": []},
+	    {"P.A (metmin/week)": []},
+	    {"Energy (kcal/d)": []},
+	    {"Magnesium (mg)": []},
+	    {"Vitamin C (mg)": []},
+	    {"Vitamin A (RE)": []},
+	    {"Vitamin E (mg)": []},
+	    {"Zinc (mg)": []},
+	    {"Selenium (µg)": []}
+	  ],
+	  "data": [
+	    [
+	      "-1.01 ± 1.73 a, b,c",
+	      "5.02 ± 1.62 d, e",
+	      "11.25 ± 1.69 f",
+	      "25.66 ± 12.10",
+	      "8.89 ± 11.15",
+	      "< 0.001"
+	    ],
+	    [
+	      "51.93 ± 12.27 a, b,c",
+	      "46.59 ± 11.33 e",
+	      "45.15 ± 8.12",
+	      "40.97 ± 8.89",
+	      "46.66 ± 11.15",
+	      "< 0.001"
+	    ],
+	    ["25.78 ± 4.34", "25.86 ± 3.90", "26.63 ± 3.97", "25.44 ± 5.32", "25.92 ± 4.34", "0.72" ],
+	    [
+	      "702.25 ± 744.10 a",
+	      "1032.71 ± 987.26 e",
+	      "769.41 ± 703.12",
+	      "540.45 ± 339.29",
+	      "777.39 ± 769.04",
+	      "0.03"
+	    ],
+	    [
+	      "1640.16 ± 306.75 a, b,c",
+	      "2028.16 ± 244.72 d, e",
+	      "2615.08 ± 351.00 f",
+	      "3185.88 ± 616.47",
+	      "2283.27 ± 692.50",
+	      "< 0.001"
+	    ],
+	    [
+	      "252.90 ± 50.93 a, b,c",
+	      "327.90 ± 66.95 d, e",
+	      "409.28 ± 87.21 f",
+	      "478.16 ± 179.37",
+	      "355.00 ± 130.98",
+	      "< 0.001"
+	    ],
+	    [
+	      "70.93 ± 48.48 b, c",
+	      "95.39 ± 39.68 e",
+	      "121.54 ± 46.08 f",
+	      "162.27 ± 111.99",
+	      "107.83 ± 72.04",
+	      "< 0.001"
+	    ],
+	    [
+	      "388.15 ± 114.16 a, b,c",
+	      "586.21 ± 313.47 e",
+	      "736.48 ± 268.06 f",
+	      "905.69 ± 555.98",
+	      "627.63 ± 380.41",
+	      "< 0.001"
+	    ],
+	    [
+	      "11.64 ± 2.73 a, b,c",
+	      "15.43 ± 3.61 d, e",
+	      "19.69 ± 4.54 f",
+	      "36.47 ± 16.93",
+	      "19.61 ± 12.27",
+	      "< 0.001"
+	    ],
+	    [
+	      "8.71 ± 1.73 a, b,c",
+	      "11.34 ± 1.75 d, e",
+	      "13.99 ± 2.51 f",
+	      "15.88 ± 3.95",
+	      "12.09 ± 3.67",
+	      "< 0.001"
+	    ],
+	    [
+	      "71.74 ± 21.72 a, b,c",
+	      "92.20 ± 28.59 d, e",
+	      "109.37 ± 25.03",
+	      "122.58 ± 45.86",
+	      "96.30 ± 35.82",
+	      "< 0.001"
+	    ]
+	  ],
+	  "residual_corner": [ {"Characteristics (mean (SD)": []} ]
+	}
+      ],
+      "table_index":2,
+      "table_uid":"PMC12357927/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Comparison of daily intake of energy and components of the DAI with the global average daily consumption in the two case and control groups data are means ± sd for quantitative variables. *. One sample t-test to compare the intake of the case group with the global consumption. **. One sample t-test to compare the intake of the control group with the global consumption.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC12357927/t3"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"The association between DAI score (independent variable) and Pathobiological markers of breast cancer such as tumor size and Ki-67 marker (dependent variables).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 5",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":4,
+      "table_uid":"PMC12357927/t4"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds rations (95%CI) of breast cancer (dependent variables) according to quartile of the DAI score (independent variable).",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 6",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":5,
+      "table_uid":"PMC12357927/t5"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Odds rations (95%CI) of breast cancer (dependent variables) according to quartile of the DAI score (independent variable) in the pre and post menopause status.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 7",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":6,
+      "table_uid":"PMC12357927/t6"
+    }
+  ],
+  "tables_jsonl_sha256":"fd8fe0322a3dd5f6b6732401117b9d643a09db1018c1778dc363b1a258e6ebde"
+}

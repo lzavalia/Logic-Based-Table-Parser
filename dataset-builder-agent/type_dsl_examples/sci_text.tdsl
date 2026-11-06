@@ -255,7 +255,7 @@ if regex "%|\( ?(?:%|[µμ°]?[\p{L}]{1,4}(?: ?[-−–]?[0-9])?(?:[ /·][µμ]?
 % Everything else with a letter in it. The form of text says little, so this
 % is the only other rule: the guidelines decide what the cell is. It comes
 % last, so every rule above keeps precedence over it.
-if regex ".*\p{L}.*" decide Text
+% if regex ".*\p{L}.*" decide Text
 
 % --- guidelines: what a text cell is, decided by a model -------------------
 %

@@ -1,0 +1,35 @@
+{
+  "pmc_id":"PMC10152309",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Baseline Participant Characteristics",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC10152309/t0"
+    },
+    {
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Multivariable Analysis of Factors Associated With Progression of Calcification",
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2.",
+      "repair":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC10152309/t1"
+    }
+  ],
+  "tables_jsonl_sha256":"754867d56e68ddb430ecfe3dca2919b0944e3bb75261c68b835fee37c0348f87"
+}

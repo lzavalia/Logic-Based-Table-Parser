@@ -1,0 +1,24 @@
+{
+  "pmc_id":"PMC9035189",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Interactive effect of irrigation regime and P fertilizer form on chickpea macro and micronutrient uptake.",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 1",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":0,
+      "table_uid":"PMC9035189/t0"
+    }
+  ],
+  "tables_jsonl_sha256":"909b11adff0d4e79b3e1e9d2e79774b568a92f4926e924bcdd63a201583fd9b7"
+}

@@ -4,13 +4,18 @@
 %
 % From dataset-builder-agent/src/:
 %   swipl ablation_collect.pl --dataset=<dir> --sample=<jsonl> --gold=<jsonl>
-%                             [--arms=llm-only,constraints,full] --output=<jsonl>
+%                             [--arms=llm-only,constraints,full] [--calls=<dir>]
+%                             --output=<jsonl>
 %
 %   --dataset  the dataset the arms were run on (src/ablation/<name>/dataset)
 %   --sample   the sample (experiments/ablation/make_sample.py)
 %   --gold     one line per table: table_uid and gold_candidate, a candidate id
 %              of the table's tables.jsonl
 %   --arms     the arms to collect, by default all three
+%   --calls    the run's results directory: read each table's review and
+%              export from its call's copy, <dir>/<arm>/<PMC>_t<N>/, rather
+%              than from the paper's directory, where a later call on
+%              another table of the paper replaces them
 %   --output   one JSON line per table and arm
 %
 % Each line has the arm's verdict (final_status, decided_by, the selected
@@ -51,6 +56,7 @@ opt_type(dataset, dataset, atom).
 opt_type(sample, sample, atom).
 opt_type(gold, gold, atom).
 opt_type(arms, arms, atom).
+opt_type(calls, calls, atom).
 opt_type(output, output, atom).
 
 main(Argv) :-
@@ -61,12 +67,13 @@ main(Argv) :-
    required(Options, output, Output),
    ( memberchk(arms(ArmsText), Options) -> true ; ArmsText = 'llm-only,constraints,full' ),
    split_string(ArmsText, ",", " ", Arms),
+   ( memberchk(calls(Calls), Options) -> true ; Calls = none ),
    read_jsonl(SampleFile, Sample),
    read_jsonl(GoldFile, Gold),
    setup_call_cleanup(
       open(Output, write, Out, [encoding(utf8)]),
       forall(( member(Row, Sample), member(Arm, Arms) ),
-             ( collect(Dataset, Gold, Row, Arm, Line),
+             ( collect(Dataset, Calls, Gold, Row, Arm, Line),
                json_write_dict(Out, Line, [width(0)]), nl(Out) )),
       close(Out)),
    length(Sample, N), length(Arms, A),
@@ -78,8 +85,8 @@ required(Options, Name, Value) :-
    -> true
    ;  format(user_error, "error: --~w is required~n", [Name]), halt(2) ).
 
-% collect(+Dataset, +Gold, +SampleRow, +Arm, -Line)
-collect(Dataset, Gold, Row, Arm, Line) :-
+% collect(+Dataset, +Calls, +Gold, +SampleRow, +Arm, -Line)
+collect(Dataset, Calls, Gold, Row, Arm, Line) :-
    get_dict(table_uid, Row, Uid),
    paper_dir(Dataset, Row, PaperDir),
    directory_file_path(PaperDir, 'tables.jsonl', TablesFile),
@@ -87,12 +94,13 @@ collect(Dataset, Gold, Row, Arm, Line) :-
    member(Record, Records), get_dict(table_uid, Record, Uid), !,
    gold_segmentation(Gold, Uid, Record, GoldId, GoldSeg),
    arm_review_files(Arm, ReviewName, ExportName),
-   directory_file_path(PaperDir, ReviewName, ReviewFile),
+   review_dir(Calls, PaperDir, Arm, Uid, ReviewDir),
+   directory_file_path(ReviewDir, ReviewName, ReviewFile),
    (  exists_file(ReviewFile),
       read_jsonl(ReviewFile, Reviews),
       member(Review, Reviews), get_dict(table_uid, Review, Uid)
    -> arm_segmentations(Arm, Record, Review, Accepted, Llm),
-      export_error(PaperDir, ExportName, Record, ExportError),
+      export_error(ReviewDir, ExportName, Record, ExportError),
       Fields = json{review_status:Review.review_status,
                     final_status:Review.final_status,
                     decided_by:Review.decided_by,
@@ -123,6 +131,14 @@ paper_dir(Dataset, Row, PaperDir) :-
    directory_file_path(Dataset, papers, PapersDir),
    get_dict(pmc_id, Row, Pmc0), atom_string(Pmc, Pmc0),
    directory_file_path(PapersDir, Pmc, PaperDir).
+
+% review_dir(+Calls, +PaperDir, +Arm, +Uid, -Dir): where the table's review
+% and export are read from.
+review_dir(none, PaperDir, _, _, PaperDir) :- !.
+review_dir(Calls, _, Arm, Uid, Dir) :-
+   split_string(Uid, "/", "", Parts),
+   atomic_list_concat(Parts, '_', Call),
+   atomic_list_concat([Calls, Arm, Call], '/', Dir).
 
 gold_segmentation(Gold, Uid, Record, GoldId, Seg) :-
    (  member(G, Gold), get_dict(table_uid, G, Uid),

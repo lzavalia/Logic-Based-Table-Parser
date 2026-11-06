@@ -1,0 +1,121 @@
+{
+  "pmc_id":"PMC1361785",
+  "schema_version":"1.0",
+  "tables": [
+    {
+      "arm":"constraints",
+      "boundary": {"hmd":1,"vmd":1},
+      "candidate_id":"PMC1361785/t0/h1_v1",
+      "caption":"Demographic Characteristics of hypertensive subjects and controls",
+      "decided_by":"llm",
+      "export_error":null,
+      "final_status":"valid",
+      "geometric_certificate": {
+	"claim":"columns",
+	"file":"certificate0_h1_v1.pl",
+	"rejections":null,
+	"status":"certified"
+      },
+      "label":"Table 1",
+      "repair":null,
+      "segmentation": {
+	"separator_rows": [],
+	"subtables": [
+	  {
+	    "column_header_rows":1,
+	    "first_column":0,
+	    "first_row":0,
+	    "last_column":3,
+	    "last_row":10,
+	    "row_header_columns":1
+	  }
+	]
+      },
+      "separators": [],
+      "subtables": [
+	{
+	  "horizontal metadata": [ {"Hypertensives (n = 100)": []},  {"Controls (n = 100)": []},  {"P value": []} ],
+	  "vertical metadata": [
+	    {"Age (years)": []},
+	    {"Sex (Male/Female)": []},
+	    {"Heart Rate (bpm)": []},
+	    {"Weight (Kg)": []},
+	    {"Height (m)": []},
+	    {"BMI (Kg/m2)": []},
+	    {"BSA (m2)": []},
+	    {"SBP (mmHg)": []},
+	    {"DBP (mmHg)": []},
+	    {"Pulse Pressure (mmHg)": []}
+	  ],
+	  "data": [
+	    ["56.06 (7.68)", "56.10 (7.68)", "0.971" ],
+	    ["53/47", "53/47", "" ],
+	    ["82.32 (13.43)", "80.69 (12.64)", "0.38" ],
+	    ["71.74 (12.32)", "67.27 (8.57)", "0.003*" ],
+	    ["1.63 (0.09)", "1.66 (0.08)", "0.005*" ],
+	    ["27.29 (4.87)", "24.45 (2.70)", "<0.0001*" ],
+	    ["1.76 (0.16)", "1.75 (0.14)", "0.382" ],
+	    ["164.54 (15.27)", "118.22 (8.10)", "<0.0001*" ],
+	    ["101.74 (7.13)", "70.30 (6.70)", "<0.0001*" ],
+	    ["62.95 (14.57)", "47.93 (8.80)", "<0.001*" ]
+	  ],
+	  "residual_corner": [ {"Variable": []} ]
+	}
+      ],
+      "table_index":0,
+      "table_uid":"PMC1361785/t0"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Echocardiographic Characteristics in hypertensive subjects and controls",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 2",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":1,
+      "table_uid":"PMC1361785/t1"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Demographic characteristics of different geometric patterns",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 3",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":2,
+      "table_uid":"PMC1361785/t2"
+    },
+    {
+      "arm":"constraints",
+      "boundary":null,
+      "candidate_id":null,
+      "caption":"Echo characteristics of different geometric patterns",
+      "decided_by":null,
+      "export_error":null,
+      "final_status":"unreviewed",
+      "geometric_certificate":null,
+      "label":"Table 4",
+      "repair":null,
+      "segmentation":null,
+      "separators":null,
+      "subtables":null,
+      "table_index":3,
+      "table_uid":"PMC1361785/t3"
+    }
+  ],
+  "tables_jsonl_sha256":"7910cc57ba2568fda68a4172948b5d90df02f278c2e44e9d431692ee50bb926c"
+}

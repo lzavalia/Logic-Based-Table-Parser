@@ -1,0 +1,53 @@
+1 paper(s): 4 batch(es), 156 cell text(s) to send
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Guideline typing: 4 batch(es) to send
+PMC7154833/1: 40 answered, 0 without an answer
+PMC7154833/2: 40 answered, 0 without an answer
+PMC7154833/3: 40 answered, 0 without an answer
+PMC7154833/4: 36 answered, 0 without an answer
+
+Guideline typing complete: 156 cell(s) answered, 0 left without an answer, 0 batch(es) failed. Answers are in <dataset>/cache/guideline_answers.jsonl.
+
+1 paper(s): 234 routed cell(s), 155 typed by guidelines, 79 kept ("none"), 0 pending
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 4,
+    "inputTokens": 19402,
+    "outputTokens": 3150,
+    "totalTokens": 22552,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC7154833_t6
+Type inference done (scorer bit-cost, level group).
+AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+Reviewing the selected candidates...
+PMC7154833: 8 table(s) reviewed: 7 unreviewed, 1 valid -> papers/PMC7154833/review.jsonl
+Review manifest: /workspace/ablation/rerun188/dataset/reviews/review-1793993023549000-0/manifest.json
+Exporting reviewed tables...
+PMC7154833: 1 of 8 table(s) exported -> papers/PMC7154833/final_tables.json
+
+Review complete: 1 paper(s) reviewed, 0 skipped. Verdicts are in dataset/papers/PMC<id>/review.jsonl, structured tables in final_tables.json.
+
+Writing the typed certificates...
+PMC7154833: 1 typed certificate(s)
+full: certificates of 1 paper(s) written, 0 paper(s) not current or rejected
+
+Token usage:
+{
+  "anthropic:claude-haiku-5-5": {
+    "calls": 1,
+    "inputTokens": 4699,
+    "outputTokens": 475,
+    "totalTokens": 5174,
+    "cacheReadTokens": 0,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 0
+  }
+}
+
+Logs: /Users/noname/Desktop/Type-Inference-Table-Parser/dataset-builder-agent/experiments/ablation/results/rerun188-20261106T182535Z/full/PMC7154833_t6
